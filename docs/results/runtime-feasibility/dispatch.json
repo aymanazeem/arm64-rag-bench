@@ -1,0 +1,162 @@
+{
+  "timings_valid": false,
+  "purpose": "Kernel dispatch evidence only; stderr tracing changes timing.",
+  "source": {
+    "repository": "https://github.com/ggml-org/llama.cpp.git",
+    "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5"
+  },
+  "kleidiai": {
+    "version": "v1.32.0",
+    "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+    "url": "https://github.com/ARM-software/kleidiai/releases/download/v1.32.0/kleidiai-v1.32.0-src.tar.gz",
+    "filename": "kleidiai-v1.32.0-src.tar.gz",
+    "size": 4701556,
+    "sha256": "a48d373e7c5d721a0aecbf5ddaf0bdf245bc8064e6b84086f13db0e102b553a6"
+  },
+  "model": {
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "filename": "qwen2.5-1.5b-instruct-q4_0.gguf",
+    "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_0.gguf",
+    "size": 1066227232,
+    "sha256": "dcd819ff094852c38faba6873d8ff0c9d51eadb2844539e52042ae5d647bbfdb",
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/blob/91cad51170dc346986eccefdc2dd33a9da36ead9/LICENSE",
+    "purpose": "Small Q4_0 model for runtime checks; not the final answer-quality baseline."
+  },
+  "patch": {
+    "original_tree_sha256": "c5d093f5592b216dc5802569cb80eae2bb9037d50ba82b5d0119ffed34eb715f",
+    "traced_tree_sha256": "0faf845bbdf20f600fdbea208dbb8cac6ec20c258df0c7f84c61f9ebd31a6f3f",
+    "patch_sha256": "8c65ee4522d8e1c5877894c3fadf8791d7480647e4c8d8aab2623f57d8fdcb0c",
+    "files": {
+      "kai/ukernels/matmul/matmul_clamp_f32_qsi8d32p_qsi4c32p/kai_matmul_clamp_f32_qsi8d32p4x4_qsi4c32p4x4_16x4_neon_dotprod.c": {
+        "original_sha256": "8817e83091e7495e2d93485cbc891340f8d34e80750e011ef75e8c61eb2afbb2",
+        "traced_sha256": "03515696f81347924a083911b97bb67e4b0cf50b6adf24a92fe0fd86b0f5d9c0"
+      },
+      "kai/ukernels/matmul/matmul_clamp_f32_qsi8d32p_qsi4c32p/kai_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod.c": {
+        "original_sha256": "a131721eea403bf66480562ca7f8eff762c43667ff503c89aef12bf53846b470",
+        "traced_sha256": "f71e87c7ce06101b8ba914b525608d8c4cd40c332de4b6f346f11e95b13cbe33"
+      }
+    }
+  },
+  "flags": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "GGML_CPU": "ON",
+    "GGML_CPU_REPACK": "ON",
+    "GGML_METAL": "OFF",
+    "GGML_BLAS": "OFF",
+    "GGML_ACCELERATE": "OFF",
+    "GGML_OPENMP": "OFF",
+    "LLAMA_OPENSSL": "OFF",
+    "LLAMA_BUILD_APP": "OFF",
+    "LLAMA_BUILD_TESTS": "OFF",
+    "LLAMA_BUILD_EXAMPLES": "OFF",
+    "LLAMA_BUILD_TOOLS": "ON",
+    "LLAMA_BUILD_SERVER": "ON",
+    "GGML_CPU_KLEIDIAI": "ON"
+  },
+  "executable_sha256": "671eb11f762b151d5aa124a4859d56a10ed563fc055e4bed7b1d6a8d47909be3",
+  "libraries": {
+    "libggml-base.0.29.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+    "libllama-bench-impl.dylib": "4db6a02a4839821c8864ab8158954a5af4097c6b9f2020e5752c6bf8f436dabd",
+    "libllama.0.9.0.dylib": "cd38566888cd28e44205e73995b9ff3d03874c3f6c73fa587d994e484b9cef24",
+    "libllama-common.0.9.0.dylib": "331774fd8a110ba191908babc99416e2788d7c2eb0bae11a41289e6a799b9e06",
+    "libggml.0.29.0.dylib": "7a47646bb9376923e4360abac959ac5f7106486838dae2166d999d3fed8fe1cb",
+    "libggml-cpu.0.29.0.dylib": "9c7e9e50fc4674ab044154987bf7fb3a1d3b6d307ed057ced5a92cbeaa1ca01f"
+  },
+  "probes": {
+    "prefill": {
+      "command": [
+        "build/kleidiai-trace/bin/llama-bench",
+        "-m",
+        "models/qwen2.5-1.5b-instruct-q4_0.gguf",
+        "--no-warmup",
+        "-p",
+        "32",
+        "-n",
+        "0",
+        "-r",
+        "1",
+        "-ngl",
+        "0",
+        "-t",
+        "1",
+        "-b",
+        "32",
+        "-ub",
+        "32"
+      ],
+      "kernel": "kai_run_matmul_clamp_f32_qsi8d32p4x4_qsi4c32p4x4_16x4_neon_dotprod",
+      "calls": 193,
+      "shapes_m_n_k": [
+        [
+          32,
+          256,
+          1536
+        ],
+        [
+          32,
+          1536,
+          1536
+        ],
+        [
+          32,
+          1536,
+          8960
+        ],
+        [
+          32,
+          8960,
+          1536
+        ]
+      ]
+    },
+    "decode": {
+      "command": [
+        "build/kleidiai-trace/bin/llama-bench",
+        "-m",
+        "models/qwen2.5-1.5b-instruct-q4_0.gguf",
+        "--no-warmup",
+        "-p",
+        "0",
+        "-n",
+        "8",
+        "-r",
+        "1",
+        "-ngl",
+        "0",
+        "-t",
+        "1",
+        "-b",
+        "32",
+        "-ub",
+        "32"
+      ],
+      "kernel": "kai_run_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod",
+      "calls": 1568,
+      "shapes_m_n_k": [
+        [
+          1,
+          256,
+          1536
+        ],
+        [
+          1,
+          1536,
+          1536
+        ],
+        [
+          1,
+          1536,
+          8960
+        ],
+        [
+          1,
+          8960,
+          1536
+        ]
+      ]
+    }
+  }
+}

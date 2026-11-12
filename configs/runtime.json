@@ -1,0 +1,41 @@
+{
+  "llama_cpp": {
+    "repository": "https://github.com/ggml-org/llama.cpp.git",
+    "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5"
+  },
+  "kleidiai": {
+    "version": "v1.32.0",
+    "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+    "url": "https://github.com/ARM-software/kleidiai/releases/download/v1.32.0/kleidiai-v1.32.0-src.tar.gz",
+    "filename": "kleidiai-v1.32.0-src.tar.gz",
+    "size": 4701556,
+    "sha256": "a48d373e7c5d721a0aecbf5ddaf0bdf245bc8064e6b84086f13db0e102b553a6"
+  },
+  "model": {
+    "repository": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+    "revision": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "filename": "qwen2.5-1.5b-instruct-q4_0.gguf",
+    "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/91cad51170dc346986eccefdc2dd33a9da36ead9/qwen2.5-1.5b-instruct-q4_0.gguf",
+    "size": 1066227232,
+    "sha256": "dcd819ff094852c38faba6873d8ff0c9d51eadb2844539e52042ae5d647bbfdb",
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/blob/91cad51170dc346986eccefdc2dd33a9da36ead9/LICENSE",
+    "purpose": "Small Q4_0 model for runtime checks; not the final answer-quality baseline."
+  },
+  "cmake": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "GGML_CPU": "ON",
+    "GGML_CPU_REPACK": "ON",
+    "GGML_METAL": "OFF",
+    "GGML_BLAS": "OFF",
+    "GGML_ACCELERATE": "OFF",
+    "GGML_OPENMP": "OFF",
+    "LLAMA_OPENSSL": "OFF",
+    "LLAMA_BUILD_APP": "OFF",
+    "LLAMA_BUILD_TESTS": "OFF",
+    "LLAMA_BUILD_EXAMPLES": "OFF",
+    "LLAMA_BUILD_TOOLS": "ON",
+    "LLAMA_BUILD_SERVER": "ON"
+  }
+}

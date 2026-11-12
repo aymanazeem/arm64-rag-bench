@@ -1,0 +1,28 @@
+{
+  "hardware": {
+    "cpu_model": "Apple M1 Max",
+    "efficiency_cores": 2,
+    "features": {
+      "dotprod": 1,
+      "i8mm": 0,
+      "sme": 0
+    },
+    "logical_cores": 10,
+    "memory_bytes": 34359738368,
+    "performance_cores": 8
+  },
+  "platform": {
+    "architecture": "arm64",
+    "system": "Darwin",
+    "version": "26.7.1"
+  },
+  "schema_version": 1,
+  "tools": {
+    "clang": "21.0.0",
+    "cmake": "4.4.4",
+    "git": "2.54.0",
+    "ninja": "1.13.2",
+    "python": "3.12.15",
+    "uv": "0.12.23"
+  }
+}
