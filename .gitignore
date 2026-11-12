@@ -21,5 +21,8 @@ __pycache__/
 *.safetensors
 *.pem
 *.key
-/.codex/*
-!/.codex/config.toml
+AGENTS.md
+AGENTS.override.md
+PLANS.md
+.codex/
+.agents/

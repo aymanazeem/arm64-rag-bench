@@ -20,3 +20,10 @@ for role in GIT_AUTHOR_IDENT GIT_COMMITTER_IDENT; do
             ;;
     esac
 done
+
+if [ -n "$(git diff --cached --name-only --diff-filter=ACMR -- \
+    ':(glob)**/AGENTS.md' ':(glob)**/AGENTS.override.md' ':(glob)**/PLANS.md' \
+    ':(glob)**/.codex/**' ':(glob)**/.agents/**')" ]; then
+    echo "Keep agent instructions, settings and working plans local." >&2
+    exit 1
+fi
