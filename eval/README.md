@@ -2,6 +2,8 @@
 
 This is a small development set, not a held-out benchmark or a quality result. Cases are agent-authored and independently checked by another agent against the named sources. They have not been validated by humans.
 
+`retrieval-validation.json` adds 18 questions with separate families and evidence spans. They share the source documents. Its reviewed bytes were frozen in `configs/retrieval-comparison.json` before comparing retrieval methods; no settings were tuned to its results. See the [comparison guide](../docs/embeddings.md).
+
 `development.json` defines questions, evidence and scoring requirements. `data/manifests/corpus.json` pins four upstream documents and three synthetic fixtures. Each case names its complete corpus scope; absence and conflict labels apply only to that scope. Upstream text stays outside Git. The manifest records immutable URLs, byte hashes and license references. Preserve upstream license notices when materializing the corpus.
 
 ## Source and span format

@@ -1,0 +1,71 @@
+{
+  "search": [
+    {
+      "command": [
+        ".venv/bin/arm64-rag",
+        "search",
+        "Which build option enables KleidiAI?",
+        "--db",
+        "data/private/development.sqlite",
+        "--method",
+        "lexical"
+      ],
+      "method": "fts5-bm25",
+      "result_count": 5
+    },
+    {
+      "command": [
+        ".venv/bin/arm64-rag",
+        "search",
+        "Which build option enables KleidiAI?",
+        "--db",
+        "data/private/development.sqlite",
+        "--method",
+        "dense"
+      ],
+      "method": "dense-cosine",
+      "result_count": 5
+    },
+    {
+      "command": [
+        ".venv/bin/arm64-rag",
+        "search",
+        "Which build option enables KleidiAI?",
+        "--db",
+        "data/private/development.sqlite",
+        "--method",
+        "hybrid"
+      ],
+      "method": "hybrid-rrf",
+      "result_count": 5
+    }
+  ],
+  "evaluation": {
+    "command": [
+      ".venv/bin/arm64-rag",
+      "evaluate",
+      "--db",
+      "data/private/development.sqlite",
+      "--dataset",
+      "eval/retrieval-validation.json",
+      "--method",
+      "hybrid",
+      "--token-budget",
+      "1024"
+    ],
+    "summary": {
+      "all_covered_rate": 0.8888888888888888,
+      "cases_all_covered": 16,
+      "cases_any_hit": 16,
+      "cases_failed": 0,
+      "cases_total": 18,
+      "cases_with_evidence": 18,
+      "cases_without_evidence": 0,
+      "evidence_coverage_rate": 0.9090909090909091,
+      "evidence_units_covered": 20,
+      "evidence_units_total": 22,
+      "hit_rate": 0.8888888888888888
+    }
+  },
+  "legacy_keyword_results": "identical scores, spans, coverage and index identity"
+}

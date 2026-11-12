@@ -1,0 +1,4315 @@
+{
+  "comparisons": [
+    {
+      "dataset": "arm64-qa-development-v1",
+      "fully_covered_losses": [
+        "dev-003",
+        "dev-007",
+        "dev-011"
+      ],
+      "fully_covered_wins": [
+        "dev-001"
+      ],
+      "method": "dense"
+    },
+    {
+      "dataset": "arm64-qa-development-v1",
+      "fully_covered_losses": [],
+      "fully_covered_wins": [
+        "dev-009"
+      ],
+      "method": "hybrid"
+    },
+    {
+      "dataset": "arm64-retrieval-validation-v1",
+      "fully_covered_losses": [
+        "val-005",
+        "val-006",
+        "val-007",
+        "val-018"
+      ],
+      "fully_covered_wins": [
+        "val-008",
+        "val-016",
+        "val-017"
+      ],
+      "method": "dense"
+    },
+    {
+      "dataset": "arm64-retrieval-validation-v1",
+      "fully_covered_losses": [
+        "val-006"
+      ],
+      "fully_covered_wins": [
+        "val-008",
+        "val-016",
+        "val-017"
+      ],
+      "method": "hybrid"
+    }
+  ],
+  "date": "2026-11-12",
+  "embedding": {
+    "chunks": 383,
+    "config": {
+      "chunk_score": "maximum-window-cosine",
+      "dtype": "float32-le",
+      "encoder": {
+        "assets": {
+          "1_Pooling/config.json": "d1caf60c96f5fba2157c0c26b76d80818fad6cf0b8eb5e73ec372ff9818eba5c",
+          "README.md": "ddb964361a55c6e5dfca6361615854b260c9c960205d04c7520151aaa1d75837",
+          "config.json": "094f8e891b932f2000c92cfc663bac4c62069f5d8af5b5278c4306aef3084750",
+          "config_sentence_transformers.json": "940d5f50db195fa6e5e6a4f122c095f77880de259d74b14a65779ed48bdd7c56",
+          "modules.json": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+          "onnx/model.onnx": "828e1496d7fabb79cfa4dcd84fa38625c0d3d21da474a00f08db0f559940cf35",
+          "sentence_bert_config.json": "84e39fda68ccbff05bfa723ae9c0e70e23e2ec373b76e0f8c6e71af72a693cbf",
+          "special_tokens_map.json": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+          "tokenizer.json": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+          "tokenizer_config.json": "9261e7d79b44c8195c1cada2b453e55b00aeb81e907a6664974b4d7776172ab3",
+          "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+        },
+        "batch_size": 8,
+        "chunk_score": "maximum-window-cosine",
+        "dimension": 384,
+        "document_prefix": "",
+        "document_text": "heading-path-newline-body-v1",
+        "dtype": "float32",
+        "inter_op_threads": 1,
+        "intra_op_threads": 4,
+        "max_tokens": 512,
+        "model": "BAAI/bge-small-en-v1.5",
+        "normalization": "L2",
+        "packages": {
+          "numpy": "2.5.4",
+          "onnxruntime": "1.31.1",
+          "tokenizers": "0.22.2"
+        },
+        "pooling": "CLS",
+        "provider": "CPUExecutionProvider",
+        "query_prefix": "Represent this sentence for searching relevant passages: ",
+        "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+        "version": "bge-onnx-windows-v1",
+        "window_overlap": 0,
+        "window_tokens": 510
+      },
+      "input_text": "heading-path-newline-body-v1",
+      "normalization": "l2",
+      "version": 1
+    },
+    "config_hash": "537b67bc9806e2daac86c3ef6b80807a46adbb0dd80f558ddcfc5938ded57e15",
+    "fingerprint": "7b3406dad059a73ff67d6f5648a41882357237a3fd85f4475c4c9f69673932a4",
+    "source_fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+    "source_generation": 1,
+    "version": 1,
+    "windows": 383
+  },
+  "encoder_load_seconds": 0.7604689579457045,
+  "implementation_sha256": {
+    "configs/embeddings.json": "f0d424bd6593628224d9a6ddc2661b4220c457b3e1e6d4e4015bf10e17d35f89",
+    "configs/retrieval-comparison.json": "5ffc93dd470d0738a0a27eed0f8a140a10a1c3cc93f1bbd84ae2b4c6736b621c",
+    "pyproject.toml": "281dfe748f23780c2db4ff41bbfd2ec3ba6ad5e08785c8a7138e4b522e889e30",
+    "scripts/check_embeddings.py": "657e4d8a2fd2cd0fb646b9109b7fece4b9a9ed32acddb02956e083c9270cdbe9",
+    "scripts/compare_retrieval.py": "d02c27b16786c8117d6100e40062574b05708f06a227fdde79eefac6c662893b",
+    "src/arm64_rag/cli.py": "7b33ef408fa14e0b6ca198513077bf72eac84538c9ed94abc101d294ca6d8cc4",
+    "src/arm64_rag/dense.py": "e0b5b02da5d5d21ee4743a268a41e9f114e407c75a25da935197b7ba7886ec43",
+    "src/arm64_rag/embeddings.py": "60648f7e9bf605175aa6f09f375ceab3ebcdb0781682d82e8d7d95d7b6001340",
+    "src/arm64_rag/evaluation.py": "2b154ba2bb357af149dab780bce21ed5c405d80ef388c7ea7c0ae1ead774c4d2",
+    "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
+    "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
+  },
+  "protocol": {
+    "budget_tokenizer": "Pinned BGE tokenizer; heading paths and bodies, no generation template.",
+    "candidate_depth": 20,
+    "datasets": [
+      {
+        "path": "eval/development.json",
+        "sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7"
+      },
+      {
+        "path": "eval/retrieval-validation.json",
+        "sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc"
+      }
+    ],
+    "freeze": "Questions and settings fixed before comparison; validation shares source documents with development.",
+    "manifest": "data/manifests/corpus.json",
+    "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+    "methods": [
+      "lexical",
+      "dense",
+      "hybrid"
+    ],
+    "passage_limit": 5,
+    "rrf_constant": 60,
+    "schema_version": 1,
+    "selection_policy": "Keep keyword search as the default until retrieval gains and answer quality justify a change. Report every per-case win and loss.",
+    "token_budget": 1024
+  },
+  "protocol_sha256": "5ffc93dd470d0738a0a27eed0f8a140a10a1c3cc93f1bbd84ae2b4c6736b621c",
+  "raw_report_local_path": "artifacts/retrieval/embedding-comparison.json",
+  "raw_report_sha256": "bc798d8205fe4b6bb1854415ce60bf0fe4a18997a7ef566fe2a7d74becb5159a",
+  "result_format": "Selected spans use [source ID, start, end]. Full candidates and passage text remain in the local raw report.",
+  "runs": [
+    {
+      "cases": [
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-001",
+          "missing_evidence_ids": [
+            "native-build"
+          ],
+          "seconds": 0.009316917043179274,
+          "selected_spans": [
+            [
+              "llama-build",
+              34908,
+              35982
+            ],
+            [
+              "llama-build",
+              20179,
+              20752
+            ],
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "llama-build",
+              33955,
+              34118
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ]
+          ],
+          "used_tokens": 865
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "failure": null,
+          "id": "dev-002",
+          "missing_evidence_ids": [],
+          "seconds": 0.01847145799547434,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ]
+          ],
+          "used_tokens": 997
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "force-cpu"
+          ],
+          "covered_evidence_ids": [
+            "force-cpu"
+          ],
+          "failure": null,
+          "id": "dev-003",
+          "missing_evidence_ids": [],
+          "seconds": 0.006099166115745902,
+          "selected_spans": [
+            [
+              "llama-build",
+              7573,
+              7887
+            ],
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              553,
+              960
+            ],
+            [
+              "llama-build",
+              3092,
+              4085
+            ],
+            [
+              "kleidiai-readme",
+              8877,
+              9197
+            ]
+          ],
+          "used_tokens": 960
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-004",
+          "missing_evidence_ids": [
+            "bench-modes"
+          ],
+          "seconds": 0.006124249892309308,
+          "selected_spans": [
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-build",
+              2080,
+              3092
+            ],
+            [
+              "llama-bench",
+              72,
+              655
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ],
+            [
+              "llama-build",
+              4481,
+              4796
+            ]
+          ],
+          "used_tokens": 904
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "failure": null,
+          "id": "dev-005",
+          "missing_evidence_ids": [],
+          "seconds": 0.004433708963915706,
+          "selected_spans": [
+            [
+              "llama-bench",
+              5614,
+              5819
+            ],
+            [
+              "llama-bench",
+              19250,
+              20350
+            ],
+            [
+              "llama-server",
+              107092,
+              107177
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-server",
+              74260,
+              74866
+            ]
+          ],
+          "used_tokens": 947
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "bench-repeats"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-006",
+          "missing_evidence_ids": [
+            "bench-repeats"
+          ],
+          "seconds": 0.016310250153765082,
+          "selected_spans": [
+            [
+              "llama-server",
+              55981,
+              57017
+            ],
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-bench",
+              655,
+              1736
+            ],
+            [
+              "llama-bench",
+              12432,
+              12585
+            ],
+            [
+              "llama-bench",
+              14349,
+              14394
+            ]
+          ],
+          "used_tokens": 1011
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "prompt-cache"
+          ],
+          "covered_evidence_ids": [
+            "prompt-cache"
+          ],
+          "failure": null,
+          "id": "dev-007",
+          "missing_evidence_ids": [],
+          "seconds": 0.010209040949121118,
+          "selected_spans": [
+            [
+              "llama-server",
+              59506,
+              60523
+            ],
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-build",
+              17955,
+              18839
+            ],
+            [
+              "llama-bench",
+              12432,
+              12585
+            ],
+            [
+              "llama-server",
+              75864,
+              76058
+            ]
+          ],
+          "used_tokens": 946
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "health"
+          ],
+          "covered_evidence_ids": [
+            "health"
+          ],
+          "failure": null,
+          "id": "dev-008",
+          "missing_evidence_ids": [],
+          "seconds": 0.0071107919793576,
+          "selected_spans": [
+            [
+              "llama-server",
+              50886,
+              51321
+            ],
+            [
+              "llama-server",
+              87959,
+              88573
+            ],
+            [
+              "llama-server",
+              129739,
+              130684
+            ],
+            [
+              "llama-server",
+              124437,
+              125079
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ]
+          ],
+          "used_tokens": 905
+        },
+        {
+          "all_covered": false,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "template",
+            "tokenize"
+          ],
+          "covered_evidence_ids": [
+            "template"
+          ],
+          "failure": null,
+          "id": "dev-009",
+          "missing_evidence_ids": [
+            "tokenize"
+          ],
+          "seconds": 0.0265088330488652,
+          "selected_spans": [
+            [
+              "llama-server",
+              114932,
+              115933
+            ],
+            [
+              "llama-server",
+              115933,
+              116846
+            ],
+            [
+              "llama-server",
+              111878,
+              112367
+            ],
+            [
+              "llama-server",
+              67254,
+              68013
+            ]
+          ],
+          "used_tokens": 1004
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-010",
+          "missing_evidence_ids": [
+            "kai-scheduling"
+          ],
+          "seconds": 0.006367583060637116,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              960,
+              2055
+            ],
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "llama-server",
+              119341,
+              120017
+            ]
+          ],
+          "used_tokens": 1015
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof",
+            "bench-omissions"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof",
+            "bench-omissions"
+          ],
+          "failure": null,
+          "id": "dev-011",
+          "missing_evidence_ids": [],
+          "seconds": 0.005306208040565252,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-server",
+              12399,
+              12979
+            ],
+            [
+              "llama-build",
+              11163,
+              11782
+            ],
+            [
+              "llama-build",
+              15712,
+              16291
+            ],
+            [
+              "llama-bench",
+              5614,
+              5819
+            ]
+          ],
+          "used_tokens": 917
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "failure": null,
+          "id": "dev-012",
+          "missing_evidence_ids": [],
+          "seconds": 0.0012869169004261494,
+          "selected_spans": [
+            [
+              "run-note-a",
+              0,
+              154
+            ],
+            [
+              "run-note-b",
+              0,
+              155
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": null,
+          "any_hit": null,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-013",
+          "missing_evidence_ids": [],
+          "seconds": 0.000795750180259347,
+          "selected_spans": [
+            [
+              "run-note-a",
+              0,
+              154
+            ],
+            [
+              "run-note-b",
+              0,
+              155
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "failure": null,
+          "id": "dev-014",
+          "missing_evidence_ids": [],
+          "seconds": 0.0007206250447779894,
+          "selected_spans": [
+            [
+              "document-instruction",
+              0,
+              67
+            ],
+            [
+              "document-instruction",
+              67,
+              245
+            ]
+          ],
+          "used_tokens": 61
+        }
+      ],
+      "dataset_id": "arm64-qa-development-v1",
+      "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "fts5-bm25",
+      "split": "development",
+      "summary": {
+        "all_covered_rate": 0.6153846153846154,
+        "cases_all_covered": 8,
+        "cases_any_hit": 9,
+        "cases_failed": 0,
+        "cases_total": 14,
+        "cases_with_evidence": 13,
+        "cases_without_evidence": 1,
+        "evidence_coverage_rate": 0.6875,
+        "evidence_units_covered": 11,
+        "evidence_units_total": 16,
+        "hit_rate": 0.6923076923076923
+      }
+    },
+    {
+      "cases": [
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "native-build"
+          ],
+          "covered_evidence_ids": [
+            "native-build"
+          ],
+          "failure": null,
+          "id": "dev-001",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.013543083099648356,
+          "seconds": 0.02408670913428068,
+          "selected_spans": [
+            [
+              "llama-build",
+              33955,
+              34118
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-build",
+              34908,
+              35982
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ],
+            [
+              "llama-build",
+              35982,
+              36819
+            ]
+          ],
+          "used_tokens": 998
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "failure": null,
+          "id": "dev-002",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.011314500123262405,
+          "seconds": 0.020597917027771473,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "kleidiai-readme",
+              960,
+              2055
+            ]
+          ],
+          "used_tokens": 913
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "force-cpu"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-003",
+          "missing_evidence_ids": [
+            "force-cpu"
+          ],
+          "query_embedding_seconds": 0.010094083845615387,
+          "seconds": 0.017683957936242223,
+          "selected_spans": [
+            [
+              "llama-build",
+              7573,
+              7887
+            ],
+            [
+              "llama-build",
+              960,
+              1083
+            ],
+            [
+              "llama-build",
+              45491,
+              46331
+            ],
+            [
+              "llama-build",
+              553,
+              960
+            ],
+            [
+              "llama-build",
+              30693,
+              30877
+            ]
+          ],
+          "used_tokens": 668
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "bench-modes"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-004",
+          "missing_evidence_ids": [
+            "bench-modes"
+          ],
+          "query_embedding_seconds": 0.009280833881348372,
+          "seconds": 0.017441457835957408,
+          "selected_spans": [
+            [
+              "llama-bench",
+              6888,
+              6998
+            ],
+            [
+              "llama-bench",
+              6998,
+              7623
+            ],
+            [
+              "llama-bench",
+              7623,
+              7749
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-bench",
+              72,
+              655
+            ]
+          ],
+          "used_tokens": 879
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "failure": null,
+          "id": "dev-005",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009613458067178726,
+          "seconds": 0.021654666867107153,
+          "selected_spans": [
+            [
+              "llama-bench",
+              5614,
+              5819
+            ],
+            [
+              "llama-bench",
+              18918,
+              19250
+            ],
+            [
+              "llama-bench",
+              17823,
+              18137
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-bench",
+              72,
+              655
+            ]
+          ],
+          "used_tokens": 943
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-006",
+          "missing_evidence_ids": [
+            "bench-repeats"
+          ],
+          "query_embedding_seconds": 0.009683916112408042,
+          "seconds": 0.017942875158041716,
+          "selected_spans": [
+            [
+              "llama-bench",
+              12585,
+              13081
+            ],
+            [
+              "llama-bench",
+              12432,
+              12585
+            ],
+            [
+              "llama-bench",
+              18918,
+              19250
+            ],
+            [
+              "llama-bench",
+              17823,
+              18137
+            ],
+            [
+              "llama-bench",
+              655,
+              1736
+            ]
+          ],
+          "used_tokens": 980
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "prompt-cache"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-007",
+          "missing_evidence_ids": [
+            "prompt-cache"
+          ],
+          "query_embedding_seconds": 0.009595916839316487,
+          "seconds": 0.039724665926769376,
+          "selected_spans": [
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-server",
+              51321,
+              52338
+            ],
+            [
+              "llama-server",
+              52338,
+              52718
+            ],
+            [
+              "llama-server",
+              65097,
+              65937
+            ]
+          ],
+          "used_tokens": 1015
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "health"
+          ],
+          "covered_evidence_ids": [
+            "health"
+          ],
+          "failure": null,
+          "id": "dev-008",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.00919495802372694,
+          "seconds": 0.022294667083770037,
+          "selected_spans": [
+            [
+              "llama-server",
+              50886,
+              51321
+            ],
+            [
+              "llama-server",
+              129739,
+              130684
+            ],
+            [
+              "llama-server",
+              124437,
+              125079
+            ],
+            [
+              "llama-server",
+              130684,
+              131640
+            ],
+            [
+              "llama-server",
+              127342,
+              127822
+            ]
+          ],
+          "used_tokens": 1003
+        },
+        {
+          "all_covered": false,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "template",
+            "tokenize"
+          ],
+          "covered_evidence_ids": [
+            "template"
+          ],
+          "failure": null,
+          "id": "dev-009",
+          "missing_evidence_ids": [
+            "tokenize"
+          ],
+          "query_embedding_seconds": 0.009516790974885225,
+          "seconds": 0.022554999915882945,
+          "selected_spans": [
+            [
+              "llama-server",
+              68013,
+              68638
+            ],
+            [
+              "llama-server",
+              66843,
+              67153
+            ],
+            [
+              "llama-server",
+              109711,
+              110163
+            ],
+            [
+              "llama-server",
+              67254,
+              68013
+            ],
+            [
+              "llama-server",
+              97077,
+              97615
+            ]
+          ],
+          "used_tokens": 939
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-010",
+          "missing_evidence_ids": [
+            "kai-scheduling"
+          ],
+          "query_embedding_seconds": 0.010191916022449732,
+          "seconds": 0.017835959093645215,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8116,
+              8153
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              820,
+              960
+            ],
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ]
+          ],
+          "used_tokens": 592
+        },
+        {
+          "all_covered": false,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "failure": null,
+          "id": "dev-011",
+          "missing_evidence_ids": [
+            "bench-omissions"
+          ],
+          "query_embedding_seconds": 0.011519374791532755,
+          "seconds": 0.038078707875683904,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-bench",
+              7844,
+              8558
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ],
+            [
+              "llama-bench",
+              7623,
+              7749
+            ]
+          ],
+          "used_tokens": 941
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "failure": null,
+          "id": "dev-012",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.007657584035769105,
+          "seconds": 0.01280470797792077,
+          "selected_spans": [
+            [
+              "run-note-b",
+              0,
+              155
+            ],
+            [
+              "run-note-a",
+              0,
+              154
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": null,
+          "any_hit": null,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-013",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.0073460000567138195,
+          "seconds": 0.012032167054712772,
+          "selected_spans": [
+            [
+              "run-note-b",
+              0,
+              155
+            ],
+            [
+              "run-note-a",
+              0,
+              154
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "failure": null,
+          "id": "dev-014",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.006875166203826666,
+          "seconds": 0.011640209006145597,
+          "selected_spans": [
+            [
+              "document-instruction",
+              0,
+              67
+            ],
+            [
+              "document-instruction",
+              67,
+              245
+            ]
+          ],
+          "used_tokens": 61
+        }
+      ],
+      "dataset_id": "arm64-qa-development-v1",
+      "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "dense-cosine",
+      "split": "development",
+      "summary": {
+        "all_covered_rate": 0.46153846153846156,
+        "cases_all_covered": 6,
+        "cases_any_hit": 8,
+        "cases_failed": 0,
+        "cases_total": 14,
+        "cases_with_evidence": 13,
+        "cases_without_evidence": 1,
+        "evidence_coverage_rate": 0.5625,
+        "evidence_units_covered": 9,
+        "evidence_units_total": 16,
+        "hit_rate": 0.6153846153846154
+      }
+    },
+    {
+      "cases": [
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "native-build"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-001",
+          "missing_evidence_ids": [
+            "native-build"
+          ],
+          "query_embedding_seconds": 0.011984125012531877,
+          "seconds": 0.027652624994516373,
+          "selected_spans": [
+            [
+              "llama-build",
+              34908,
+              35982
+            ],
+            [
+              "llama-build",
+              33955,
+              34118
+            ],
+            [
+              "llama-build",
+              34118,
+              34908
+            ],
+            [
+              "llama-build",
+              10791,
+              11163
+            ],
+            [
+              "llama-build",
+              20179,
+              20752
+            ]
+          ],
+          "used_tokens": 1010
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof"
+          ],
+          "failure": null,
+          "id": "dev-002",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.011317875003442168,
+          "seconds": 0.02836979180574417,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ]
+          ],
+          "used_tokens": 997
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "force-cpu"
+          ],
+          "covered_evidence_ids": [
+            "force-cpu"
+          ],
+          "failure": null,
+          "id": "dev-003",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010511709144338965,
+          "seconds": 0.01980362506583333,
+          "selected_spans": [
+            [
+              "llama-build",
+              7573,
+              7887
+            ],
+            [
+              "llama-build",
+              553,
+              960
+            ],
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              45491,
+              46331
+            ],
+            [
+              "llama-build",
+              960,
+              1083
+            ]
+          ],
+          "used_tokens": 833
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-004",
+          "missing_evidence_ids": [
+            "bench-modes"
+          ],
+          "query_embedding_seconds": 0.009020874975249171,
+          "seconds": 0.01838504197075963,
+          "selected_spans": [
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ],
+            [
+              "llama-bench",
+              72,
+              655
+            ],
+            [
+              "llama-bench",
+              7623,
+              7749
+            ],
+            [
+              "llama-bench",
+              6998,
+              7623
+            ]
+          ],
+          "used_tokens": 879
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "covered_evidence_ids": [
+            "bench-omissions"
+          ],
+          "failure": null,
+          "id": "dev-005",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009594375034794211,
+          "seconds": 0.01940508303232491,
+          "selected_spans": [
+            [
+              "llama-bench",
+              5614,
+              5819
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-bench",
+              19250,
+              20350
+            ],
+            [
+              "llama-bench",
+              72,
+              655
+            ],
+            [
+              "llama-bench",
+              12432,
+              12585
+            ]
+          ],
+          "used_tokens": 926
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "bench-repeats"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-006",
+          "missing_evidence_ids": [
+            "bench-repeats"
+          ],
+          "query_embedding_seconds": 0.009338334202766418,
+          "seconds": 0.01821008394472301,
+          "selected_spans": [
+            [
+              "llama-bench",
+              12432,
+              12585
+            ],
+            [
+              "llama-bench",
+              655,
+              1736
+            ],
+            [
+              "llama-bench",
+              3793,
+              4638
+            ],
+            [
+              "llama-bench",
+              16981,
+              17042
+            ],
+            [
+              "llama-bench",
+              14349,
+              14394
+            ]
+          ],
+          "used_tokens": 690
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "prompt-cache"
+          ],
+          "covered_evidence_ids": [
+            "prompt-cache"
+          ],
+          "failure": null,
+          "id": "dev-007",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.008987375069409609,
+          "seconds": 0.03389912494458258,
+          "selected_spans": [
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-server",
+              59506,
+              60523
+            ],
+            [
+              "llama-server",
+              51321,
+              52338
+            ],
+            [
+              "llama-bench",
+              12432,
+              12585
+            ],
+            [
+              "llama-build",
+              4796,
+              4936
+            ]
+          ],
+          "used_tokens": 1001
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "health"
+          ],
+          "covered_evidence_ids": [
+            "health"
+          ],
+          "failure": null,
+          "id": "dev-008",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009244041983038187,
+          "seconds": 0.02627962501719594,
+          "selected_spans": [
+            [
+              "llama-server",
+              50886,
+              51321
+            ],
+            [
+              "llama-server",
+              129739,
+              130684
+            ],
+            [
+              "llama-server",
+              124437,
+              125079
+            ],
+            [
+              "llama-server",
+              137507,
+              138433
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ]
+          ],
+          "used_tokens": 961
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "template",
+            "tokenize"
+          ],
+          "covered_evidence_ids": [
+            "template",
+            "tokenize"
+          ],
+          "failure": null,
+          "id": "dev-009",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009414708008989692,
+          "seconds": 0.03858004207722843,
+          "selected_spans": [
+            [
+              "llama-server",
+              66843,
+              67153
+            ],
+            [
+              "llama-server",
+              67254,
+              68013
+            ],
+            [
+              "llama-server",
+              65937,
+              66843
+            ],
+            [
+              "llama-server",
+              114932,
+              115933
+            ]
+          ],
+          "used_tokens": 949
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "kai-scheduling"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-010",
+          "missing_evidence_ids": [
+            "kai-scheduling"
+          ],
+          "query_embedding_seconds": 0.01008558296598494,
+          "seconds": 0.02036462491378188,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-build",
+              38334,
+              39176
+            ]
+          ],
+          "used_tokens": 1009
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "allocation-proof",
+            "bench-omissions"
+          ],
+          "covered_evidence_ids": [
+            "allocation-proof",
+            "bench-omissions"
+          ],
+          "failure": null,
+          "id": "dev-011",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.011754499981179833,
+          "seconds": 0.025720665929839015,
+          "selected_spans": [
+            [
+              "llama-build",
+              35982,
+              36819
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-server",
+              12399,
+              12979
+            ],
+            [
+              "llama-build",
+              11163,
+              11782
+            ],
+            [
+              "llama-bench",
+              5614,
+              5819
+            ]
+          ],
+          "used_tokens": 1006
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "covered_evidence_ids": [
+            "run-note-a",
+            "run-note-b"
+          ],
+          "failure": null,
+          "id": "dev-012",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.007797374855726957,
+          "seconds": 0.01341045810841024,
+          "selected_spans": [
+            [
+              "run-note-a",
+              0,
+              154
+            ],
+            [
+              "run-note-b",
+              0,
+              155
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": null,
+          "any_hit": null,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "dev-013",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.007817500038072467,
+          "seconds": 0.01373058301396668,
+          "selected_spans": [
+            [
+              "run-note-a",
+              0,
+              154
+            ],
+            [
+              "run-note-b",
+              0,
+              155
+            ]
+          ],
+          "used_tokens": 86
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "covered_evidence_ids": [
+            "document-instruction"
+          ],
+          "failure": null,
+          "id": "dev-014",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.007434124825522304,
+          "seconds": 0.012789417058229446,
+          "selected_spans": [
+            [
+              "document-instruction",
+              0,
+              67
+            ],
+            [
+              "document-instruction",
+              67,
+              245
+            ]
+          ],
+          "used_tokens": 61
+        }
+      ],
+      "dataset_id": "arm64-qa-development-v1",
+      "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "hybrid-rrf",
+      "split": "development",
+      "summary": {
+        "all_covered_rate": 0.6923076923076923,
+        "cases_all_covered": 9,
+        "cases_any_hit": 9,
+        "cases_failed": 0,
+        "cases_total": 14,
+        "cases_with_evidence": 13,
+        "cases_without_evidence": 1,
+        "evidence_coverage_rate": 0.75,
+        "evidence_units_covered": 12,
+        "evidence_units_total": 16,
+        "hit_rate": 0.6923076923076923
+      }
+    },
+    {
+      "cases": [
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "failure": null,
+          "id": "val-001",
+          "missing_evidence_ids": [],
+          "seconds": 0.006629209034144878,
+          "selected_spans": [
+            [
+              "llama-build",
+              1083,
+              2080
+            ],
+            [
+              "llama-build",
+              25674,
+              26574
+            ],
+            [
+              "llama-build",
+              16601,
+              16975
+            ],
+            [
+              "kleidiai-readme",
+              8877,
+              9197
+            ],
+            [
+              "kleidiai-readme",
+              6380,
+              6821
+            ]
+          ],
+          "used_tokens": 989
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-002",
+          "missing_evidence_ids": [
+            "static-library"
+          ],
+          "seconds": 0.004500875016674399,
+          "selected_spans": [
+            [
+              "llama-build",
+              7328,
+              7573
+            ],
+            [
+              "llama-build",
+              32171,
+              32652
+            ],
+            [
+              "llama-build",
+              34908,
+              35982
+            ],
+            [
+              "llama-build",
+              4085,
+              4481
+            ],
+            [
+              "llama-build",
+              1083,
+              2080
+            ]
+          ],
+          "used_tokens": 1024
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "blas-work"
+          ],
+          "covered_evidence_ids": [
+            "blas-work"
+          ],
+          "failure": null,
+          "id": "val-003",
+          "missing_evidence_ids": [],
+          "seconds": 0.0040390829090029,
+          "selected_spans": [
+            [
+              "llama-build",
+              4481,
+              4796
+            ],
+            [
+              "llama-build",
+              32171,
+              32652
+            ],
+            [
+              "llama-server",
+              59506,
+              60523
+            ],
+            [
+              "llama-build",
+              7328,
+              7573
+            ],
+            [
+              "llama-build",
+              5947,
+              6257
+            ]
+          ],
+          "used_tokens": 716
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "failure": null,
+          "id": "val-004",
+          "missing_evidence_ids": [],
+          "seconds": 0.006141583900898695,
+          "selected_spans": [
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ]
+          ],
+          "used_tokens": 933
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "covered_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "failure": null,
+          "id": "val-005",
+          "missing_evidence_ids": [],
+          "seconds": 0.025129999965429306,
+          "selected_spans": [
+            [
+              "llama-server",
+              88573,
+              89423
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-server",
+              68013,
+              68638
+            ],
+            [
+              "llama-server",
+              113316,
+              114036
+            ]
+          ],
+          "used_tokens": 992
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "benchmark-context-depth"
+          ],
+          "covered_evidence_ids": [
+            "benchmark-context-depth"
+          ],
+          "failure": null,
+          "id": "val-006",
+          "missing_evidence_ids": [],
+          "seconds": 0.018161999993026257,
+          "selected_spans": [
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-server",
+              18777,
+              19573
+            ],
+            [
+              "llama-server",
+              135873,
+              136505
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ],
+            [
+              "llama-server",
+              13754,
+              14009
+            ]
+          ],
+          "used_tokens": 990
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "covered_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "failure": null,
+          "id": "val-007",
+          "missing_evidence_ids": [],
+          "seconds": 0.026007541920989752,
+          "selected_spans": [
+            [
+              "llama-bench",
+              655,
+              1736
+            ],
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-server",
+              9385,
+              10235
+            ],
+            [
+              "llama-server",
+              125972,
+              126298
+            ]
+          ],
+          "used_tokens": 1013
+        },
+        {
+          "all_covered": false,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "kernel-folder-name",
+            "kernel-variant-name"
+          ],
+          "covered_evidence_ids": [
+            "kernel-variant-name"
+          ],
+          "failure": null,
+          "id": "val-008",
+          "missing_evidence_ids": [
+            "kernel-folder-name"
+          ],
+          "seconds": 0.00498020788654685,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ],
+            [
+              "kleidiai-readme",
+              4328,
+              4983
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "kleidiai-readme",
+              960,
+              2055
+            ],
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ]
+          ],
+          "used_tokens": 874
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "failure": null,
+          "id": "val-009",
+          "missing_evidence_ids": [],
+          "seconds": 0.006150707835331559,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ],
+            [
+              "kleidiai-readme",
+              7507,
+              7997
+            ],
+            [
+              "llama-build",
+              34908,
+              35982
+            ],
+            [
+              "kleidiai-readme",
+              5553,
+              6145
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ]
+          ],
+          "used_tokens": 1000
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "failure": null,
+          "id": "val-010",
+          "missing_evidence_ids": [],
+          "seconds": 0.006888417061418295,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "llama-build",
+              17955,
+              18839
+            ],
+            [
+              "kleidiai-readme",
+              2055,
+              2740
+            ],
+            [
+              "kleidiai-readme",
+              9862,
+              10817
+            ]
+          ],
+          "used_tokens": 976
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "failure": null,
+          "id": "val-011",
+          "missing_evidence_ids": [],
+          "seconds": 0.006300208158791065,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "llama-build",
+              38334,
+              39176
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ],
+            [
+              "kleidiai-readme",
+              9862,
+              10817
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ]
+          ],
+          "used_tokens": 821
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "failure": null,
+          "id": "val-012",
+          "missing_evidence_ids": [],
+          "seconds": 0.004955417010933161,
+          "selected_spans": [
+            [
+              "llama-server",
+              79106,
+              79656
+            ],
+            [
+              "llama-server",
+              107177,
+              107657
+            ],
+            [
+              "llama-server",
+              68013,
+              68638
+            ],
+            [
+              "kleidiai-readme",
+              8877,
+              9197
+            ],
+            [
+              "llama-server",
+              108268,
+              109042
+            ]
+          ],
+          "used_tokens": 996
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "failure": null,
+          "id": "val-013",
+          "missing_evidence_ids": [],
+          "seconds": 0.0049142909701913595,
+          "selected_spans": [
+            [
+              "llama-server",
+              83737,
+              84024
+            ],
+            [
+              "llama-server",
+              137507,
+              138433
+            ],
+            [
+              "llama-server",
+              120419,
+              120773
+            ],
+            [
+              "llama-server",
+              85067,
+              85677
+            ],
+            [
+              "llama-server",
+              34279,
+              35205
+            ]
+          ],
+          "used_tokens": 965
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "failure": null,
+          "id": "val-014",
+          "missing_evidence_ids": [],
+          "seconds": 0.0055660828948020935,
+          "selected_spans": [
+            [
+              "llama-server",
+              78949,
+              79106
+            ],
+            [
+              "llama-server",
+              75864,
+              76058
+            ],
+            [
+              "llama-server",
+              28643,
+              29463
+            ],
+            [
+              "llama-server",
+              77987,
+              78949
+            ],
+            [
+              "llama-server",
+              95262,
+              96002
+            ]
+          ],
+          "used_tokens": 1000
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "failure": null,
+          "id": "val-015",
+          "missing_evidence_ids": [],
+          "seconds": 0.0043672919273376465,
+          "selected_spans": [
+            [
+              "llama-server",
+              120419,
+              120773
+            ],
+            [
+              "kleidiai-readme",
+              8877,
+              9197
+            ],
+            [
+              "llama-server",
+              120773,
+              121588
+            ],
+            [
+              "llama-server",
+              121588,
+              122372
+            ],
+            [
+              "llama-server",
+              49870,
+              50162
+            ]
+          ],
+          "used_tokens": 865
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-016",
+          "missing_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "seconds": 0.005615167086943984,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ],
+            [
+              "llama-server",
+              129739,
+              130684
+            ],
+            [
+              "kleidiai-readme",
+              9862,
+              10817
+            ],
+            [
+              "llama-server",
+              85067,
+              85677
+            ],
+            [
+              "llama-server",
+              83737,
+              84024
+            ]
+          ],
+          "used_tokens": 984
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "context-retention"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-017",
+          "missing_evidence_ids": [
+            "context-retention"
+          ],
+          "seconds": 0.0049730411265045404,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "llama-server",
+              88573,
+              89423
+            ],
+            [
+              "llama-server",
+              87959,
+              88573
+            ],
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ]
+          ],
+          "used_tokens": 904
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "stopping-strings"
+          ],
+          "covered_evidence_ids": [
+            "stopping-strings"
+          ],
+          "failure": null,
+          "id": "val-018",
+          "missing_evidence_ids": [],
+          "seconds": 0.02563299983739853,
+          "selected_spans": [
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-server",
+              64101,
+              65097
+            ],
+            [
+              "llama-server",
+              51321,
+              52338
+            ]
+          ],
+          "used_tokens": 905
+        }
+      ],
+      "dataset_id": "arm64-retrieval-validation-v1",
+      "dataset_sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "fts5-bm25",
+      "split": "validation",
+      "summary": {
+        "all_covered_rate": 0.7777777777777778,
+        "cases_all_covered": 14,
+        "cases_any_hit": 15,
+        "cases_failed": 0,
+        "cases_total": 18,
+        "cases_with_evidence": 18,
+        "cases_without_evidence": 0,
+        "evidence_coverage_rate": 0.7727272727272727,
+        "evidence_units_covered": 17,
+        "evidence_units_total": 22,
+        "hit_rate": 0.8333333333333334
+      }
+    },
+    {
+      "cases": [
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "failure": null,
+          "id": "val-001",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010581917129456997,
+          "seconds": 0.03738029091618955,
+          "selected_spans": [
+            [
+              "llama-build",
+              1083,
+              2080
+            ],
+            [
+              "llama-build",
+              3092,
+              4085
+            ],
+            [
+              "llama-build",
+              2080,
+              3092
+            ],
+            [
+              "llama-build",
+              20082,
+              20179
+            ]
+          ],
+          "used_tokens": 972
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "static-library"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-002",
+          "missing_evidence_ids": [
+            "static-library"
+          ],
+          "query_embedding_seconds": 0.007686541881412268,
+          "seconds": 0.014615208841860294,
+          "selected_spans": [
+            [
+              "llama-build",
+              960,
+              1083
+            ],
+            [
+              "llama-server",
+              49177,
+              49417
+            ],
+            [
+              "llama-build",
+              26574,
+              26925
+            ],
+            [
+              "llama-build",
+              30693,
+              30877
+            ],
+            [
+              "llama-build",
+              41463,
+              41717
+            ]
+          ],
+          "used_tokens": 511
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "blas-work"
+          ],
+          "covered_evidence_ids": [
+            "blas-work"
+          ],
+          "failure": null,
+          "id": "val-003",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009512500138953328,
+          "seconds": 0.01778491702862084,
+          "selected_spans": [
+            [
+              "llama-build",
+              4481,
+              4796
+            ],
+            [
+              "llama-build",
+              4936,
+              5208
+            ],
+            [
+              "llama-build",
+              5276,
+              5947
+            ],
+            [
+              "llama-build",
+              6257,
+              7328
+            ],
+            [
+              "llama-build",
+              7328,
+              7573
+            ]
+          ],
+          "used_tokens": 879
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "failure": null,
+          "id": "val-004",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.011935875052586198,
+          "seconds": 0.02581408293917775,
+          "selected_spans": [
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              820,
+              960
+            ]
+          ],
+          "used_tokens": 948
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-005",
+          "missing_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "query_embedding_seconds": 0.009672709042206407,
+          "seconds": 0.02409274992533028,
+          "selected_spans": [
+            [
+              "llama-bench",
+              3793,
+              4638
+            ],
+            [
+              "llama-bench",
+              7844,
+              8558
+            ],
+            [
+              "llama-bench",
+              11705,
+              12432
+            ],
+            [
+              "llama-bench",
+              7749,
+              7844
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ]
+          ],
+          "used_tokens": 990
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-006",
+          "missing_evidence_ids": [
+            "benchmark-context-depth"
+          ],
+          "query_embedding_seconds": 0.009296958101913333,
+          "seconds": 0.036401333985850215,
+          "selected_spans": [
+            [
+              "llama-server",
+              5063,
+              5808
+            ],
+            [
+              "llama-server",
+              18777,
+              19573
+            ],
+            [
+              "llama-server",
+              59506,
+              60523
+            ]
+          ],
+          "used_tokens": 969
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-007",
+          "missing_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "query_embedding_seconds": 0.00867575011216104,
+          "seconds": 0.033958334010094404,
+          "selected_spans": [
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-bench",
+              6998,
+              7623
+            ],
+            [
+              "llama-bench",
+              11705,
+              12432
+            ],
+            [
+              "llama-bench",
+              7623,
+              7749
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ]
+          ],
+          "used_tokens": 1009
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "kernel-folder-name",
+            "kernel-variant-name"
+          ],
+          "covered_evidence_ids": [
+            "kernel-folder-name",
+            "kernel-variant-name"
+          ],
+          "failure": null,
+          "id": "val-008",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.00987295899540186,
+          "seconds": 0.019805916119366884,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              4328,
+              4983
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              4983,
+              5536
+            ],
+            [
+              "kleidiai-readme",
+              2055,
+              2740
+            ]
+          ],
+          "used_tokens": 909
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "failure": null,
+          "id": "val-009",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009949041996151209,
+          "seconds": 0.018239166820421815,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ],
+            [
+              "kleidiai-readme",
+              7507,
+              7997
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              820,
+              960
+            ],
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ]
+          ],
+          "used_tokens": 552
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "failure": null,
+          "id": "val-010",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010532750049605966,
+          "seconds": 0.019651749869808555,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "kleidiai-readme",
+              820,
+              960
+            ],
+            [
+              "kleidiai-readme",
+              960,
+              2055
+            ]
+          ],
+          "used_tokens": 668
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "failure": null,
+          "id": "val-011",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010934334015473723,
+          "seconds": 0.02109945798292756,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ]
+          ],
+          "used_tokens": 963
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "failure": null,
+          "id": "val-012",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.01205745805054903,
+          "seconds": 0.027428000001236796,
+          "selected_spans": [
+            [
+              "llama-server",
+              79106,
+              79656
+            ],
+            [
+              "llama-server",
+              107177,
+              107657
+            ],
+            [
+              "llama-server",
+              68013,
+              68638
+            ],
+            [
+              "llama-bench",
+              3793,
+              4638
+            ],
+            [
+              "llama-server",
+              109042,
+              109403
+            ]
+          ],
+          "used_tokens": 1003
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "failure": null,
+          "id": "val-013",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009452875005081296,
+          "seconds": 0.03803841699846089,
+          "selected_spans": [
+            [
+              "llama-server",
+              83737,
+              84024
+            ],
+            [
+              "llama-server",
+              28643,
+              29463
+            ],
+            [
+              "llama-server",
+              47817,
+              48667
+            ],
+            [
+              "llama-server",
+              138451,
+              139326
+            ]
+          ],
+          "used_tokens": 972
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "failure": null,
+          "id": "val-014",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010196958901360631,
+          "seconds": 0.018692875048145652,
+          "selected_spans": [
+            [
+              "llama-server",
+              78949,
+              79106
+            ],
+            [
+              "llama-server",
+              75864,
+              76058
+            ],
+            [
+              "llama-server",
+              77043,
+              77987
+            ],
+            [
+              "llama-server",
+              76058,
+              77043
+            ],
+            [
+              "llama-server",
+              75775,
+              75864
+            ]
+          ],
+          "used_tokens": 1008
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "failure": null,
+          "id": "val-015",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009317832998931408,
+          "seconds": 0.018162375083193183,
+          "selected_spans": [
+            [
+              "llama-server",
+              120773,
+              121588
+            ],
+            [
+              "llama-server",
+              120419,
+              120773
+            ],
+            [
+              "llama-server",
+              49629,
+              49760
+            ],
+            [
+              "llama-server",
+              121588,
+              122372
+            ],
+            [
+              "llama-server",
+              89423,
+              89939
+            ]
+          ],
+          "used_tokens": 858
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "covered_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "failure": null,
+          "id": "val-016",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009319167118519545,
+          "seconds": 0.039638624992221594,
+          "selected_spans": [
+            [
+              "llama-server",
+              35205,
+              35929
+            ],
+            [
+              "llama-server",
+              137507,
+              138433
+            ],
+            [
+              "llama-server",
+              2084,
+              2792
+            ],
+            [
+              "llama-server",
+              60523,
+              61329
+            ]
+          ],
+          "used_tokens": 1015
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "context-retention"
+          ],
+          "covered_evidence_ids": [
+            "context-retention"
+          ],
+          "failure": null,
+          "id": "val-017",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010364416055381298,
+          "seconds": 0.04230675008147955,
+          "selected_spans": [
+            [
+              "llama-server",
+              65097,
+              65937
+            ],
+            [
+              "llama-server",
+              53834,
+              54917
+            ],
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-server",
+              127822,
+              128571
+            ]
+          ],
+          "used_tokens": 1019
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "stopping-strings"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-018",
+          "missing_evidence_ids": [
+            "stopping-strings"
+          ],
+          "query_embedding_seconds": 0.010591416852548718,
+          "seconds": 0.04210283304564655,
+          "selected_spans": [
+            [
+              "llama-server",
+              64101,
+              65097
+            ],
+            [
+              "llama-server",
+              65097,
+              65937
+            ],
+            [
+              "llama-server",
+              52338,
+              52718
+            ],
+            [
+              "llama-server",
+              51321,
+              52338
+            ]
+          ],
+          "used_tokens": 997
+        }
+      ],
+      "dataset_id": "arm64-retrieval-validation-v1",
+      "dataset_sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "dense-cosine",
+      "split": "validation",
+      "summary": {
+        "all_covered_rate": 0.7222222222222222,
+        "cases_all_covered": 13,
+        "cases_any_hit": 13,
+        "cases_failed": 0,
+        "cases_total": 18,
+        "cases_with_evidence": 18,
+        "cases_without_evidence": 0,
+        "evidence_coverage_rate": 0.7727272727272727,
+        "evidence_units_covered": 17,
+        "evidence_units_total": 22,
+        "hit_rate": 0.7222222222222222
+      }
+    },
+    {
+      "cases": [
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "covered_evidence_ids": [
+            "debug-generators"
+          ],
+          "failure": null,
+          "id": "val-001",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009750750148668885,
+          "seconds": 0.038407834013924,
+          "selected_spans": [
+            [
+              "llama-build",
+              1083,
+              2080
+            ],
+            [
+              "kleidiai-readme",
+              6145,
+              6380
+            ],
+            [
+              "llama-build",
+              3092,
+              4085
+            ],
+            [
+              "llama-build",
+              2080,
+              3092
+            ]
+          ],
+          "used_tokens": 1016
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "static-library"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-002",
+          "missing_evidence_ids": [
+            "static-library"
+          ],
+          "query_embedding_seconds": 0.00820845807902515,
+          "seconds": 0.017596666933968663,
+          "selected_spans": [
+            [
+              "llama-build",
+              4085,
+              4481
+            ],
+            [
+              "llama-build",
+              10791,
+              11163
+            ],
+            [
+              "llama-build",
+              1083,
+              2080
+            ],
+            [
+              "llama-build",
+              20752,
+              21159
+            ],
+            [
+              "llama-build",
+              960,
+              1083
+            ]
+          ],
+          "used_tokens": 757
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "blas-work"
+          ],
+          "covered_evidence_ids": [
+            "blas-work"
+          ],
+          "failure": null,
+          "id": "val-003",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009343332843855023,
+          "seconds": 0.018271459033712745,
+          "selected_spans": [
+            [
+              "llama-build",
+              4481,
+              4796
+            ],
+            [
+              "llama-build",
+              7328,
+              7573
+            ],
+            [
+              "llama-build",
+              5276,
+              5947
+            ],
+            [
+              "llama-build",
+              4936,
+              5208
+            ],
+            [
+              "llama-build",
+              5947,
+              6257
+            ]
+          ],
+          "used_tokens": 645
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "covered_evidence_ids": [
+            "sve-vector-length"
+          ],
+          "failure": null,
+          "id": "val-004",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.01141008292324841,
+          "seconds": 0.02530975011177361,
+          "selected_spans": [
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "llama-build",
+              32946,
+              33955
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ]
+          ],
+          "used_tokens": 933
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "covered_evidence_ids": [
+            "benchmark-sweep"
+          ],
+          "failure": null,
+          "id": "val-005",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009801666950806975,
+          "seconds": 0.036523541901260614,
+          "selected_spans": [
+            [
+              "llama-bench",
+              3793,
+              4638
+            ],
+            [
+              "llama-bench",
+              4638,
+              5614
+            ],
+            [
+              "llama-server",
+              130684,
+              131640
+            ],
+            [
+              "llama-bench",
+              7749,
+              7844
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ]
+          ],
+          "used_tokens": 934
+        },
+        {
+          "all_covered": false,
+          "any_hit": false,
+          "candidate_covered_evidence_ids": [
+            "benchmark-context-depth"
+          ],
+          "covered_evidence_ids": [],
+          "failure": null,
+          "id": "val-006",
+          "missing_evidence_ids": [
+            "benchmark-context-depth"
+          ],
+          "query_embedding_seconds": 0.009472500067204237,
+          "seconds": 0.03675129101611674,
+          "selected_spans": [
+            [
+              "llama-server",
+              18777,
+              19573
+            ],
+            [
+              "llama-server",
+              5063,
+              5808
+            ],
+            [
+              "llama-bench",
+              2960,
+              3793
+            ],
+            [
+              "llama-bench",
+              6888,
+              6998
+            ]
+          ],
+          "used_tokens": 1020
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "covered_evidence_ids": [
+            "benchmark-memory-fit"
+          ],
+          "failure": null,
+          "id": "val-007",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.00958370789885521,
+          "seconds": 0.04058758309110999,
+          "selected_spans": [
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-server",
+              9385,
+              10235
+            ],
+            [
+              "llama-server",
+              125972,
+              126298
+            ],
+            [
+              "llama-bench",
+              655,
+              1736
+            ]
+          ],
+          "used_tokens": 1013
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "kernel-folder-name",
+            "kernel-variant-name"
+          ],
+          "covered_evidence_ids": [
+            "kernel-folder-name",
+            "kernel-variant-name"
+          ],
+          "failure": null,
+          "id": "val-008",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009709666948765516,
+          "seconds": 0.020161750027909875,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              4328,
+              4983
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "kleidiai-readme",
+              9197,
+              9862
+            ],
+            [
+              "kleidiai-readme",
+              4983,
+              5536
+            ],
+            [
+              "kleidiai-readme",
+              960,
+              2055
+            ]
+          ],
+          "used_tokens": 1012
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "covered_evidence_ids": [
+            "release-archive-hashes"
+          ],
+          "failure": null,
+          "id": "val-009",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.00927062495611608,
+          "seconds": 0.019386457977816463,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              11476,
+              11857
+            ],
+            [
+              "kleidiai-readme",
+              7507,
+              7997
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "kleidiai-readme",
+              5553,
+              6145
+            ],
+            [
+              "llama-build",
+              34908,
+              35982
+            ]
+          ],
+          "used_tokens": 917
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "covered_evidence_ids": [
+            "x86-exclusion"
+          ],
+          "failure": null,
+          "id": "val-010",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009865832980722189,
+          "seconds": 0.021403083112090826,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              8153,
+              8489
+            ],
+            [
+              "kleidiai-readme",
+              3431,
+              4328
+            ],
+            [
+              "kleidiai-readme",
+              162,
+              820
+            ],
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "kleidiai-readme",
+              2055,
+              2740
+            ]
+          ],
+          "used_tokens": 984
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "covered_evidence_ids": [
+            "sme-abi-support"
+          ],
+          "failure": null,
+          "id": "val-011",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010650458978489041,
+          "seconds": 0.021126125007867813,
+          "selected_spans": [
+            [
+              "kleidiai-readme",
+              2740,
+              3268
+            ],
+            [
+              "llama-build",
+              38334,
+              39176
+            ],
+            [
+              "llama-build",
+              36819,
+              38132
+            ],
+            [
+              "llama-build",
+              38132,
+              38334
+            ],
+            [
+              "kleidiai-readme",
+              8489,
+              8877
+            ]
+          ],
+          "used_tokens": 897
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "covered_evidence_ids": [
+            "embedding-all-poolings",
+            "embedding-openai-pooling"
+          ],
+          "failure": null,
+          "id": "val-012",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.011608000146225095,
+          "seconds": 0.02158612501807511,
+          "selected_spans": [
+            [
+              "llama-server",
+              79106,
+              79656
+            ],
+            [
+              "llama-server",
+              107177,
+              107657
+            ],
+            [
+              "llama-server",
+              68013,
+              68638
+            ],
+            [
+              "llama-server",
+              8665,
+              9385
+            ],
+            [
+              "llama-server",
+              109042,
+              109403
+            ]
+          ],
+          "used_tokens": 1021
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "covered_evidence_ids": [
+            "metrics-access"
+          ],
+          "failure": null,
+          "id": "val-013",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.0089822500012815,
+          "seconds": 0.03578420798294246,
+          "selected_spans": [
+            [
+              "llama-server",
+              83737,
+              84024
+            ],
+            [
+              "llama-server",
+              138451,
+              139326
+            ],
+            [
+              "llama-server",
+              28643,
+              29463
+            ],
+            [
+              "llama-server",
+              125079,
+              125720
+            ]
+          ],
+          "used_tokens": 976
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "covered_evidence_ids": [
+            "server-property-changes"
+          ],
+          "failure": null,
+          "id": "val-014",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009506125003099442,
+          "seconds": 0.02219474990852177,
+          "selected_spans": [
+            [
+              "llama-server",
+              78949,
+              79106
+            ],
+            [
+              "llama-server",
+              75864,
+              76058
+            ],
+            [
+              "llama-server",
+              77043,
+              77987
+            ],
+            [
+              "llama-server",
+              76058,
+              77043
+            ],
+            [
+              "llama-server",
+              75775,
+              75864
+            ]
+          ],
+          "used_tokens": 1008
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "covered_evidence_ids": [
+            "router-start",
+            "router-sources"
+          ],
+          "failure": null,
+          "id": "val-015",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010030958103016019,
+          "seconds": 0.0264031661208719,
+          "selected_spans": [
+            [
+              "llama-server",
+              120419,
+              120773
+            ],
+            [
+              "llama-server",
+              120773,
+              121588
+            ],
+            [
+              "llama-server",
+              121588,
+              122372
+            ],
+            [
+              "llama-server",
+              29463,
+              30356
+            ],
+            [
+              "llama-server",
+              49629,
+              49760
+            ]
+          ],
+          "used_tokens": 999
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "covered_evidence_ids": [
+            "idle-release",
+            "idle-monitoring"
+          ],
+          "failure": null,
+          "id": "val-016",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.008764083962887526,
+          "seconds": 0.03953091683797538,
+          "selected_spans": [
+            [
+              "llama-server",
+              137507,
+              138433
+            ],
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-server",
+              2084,
+              2792
+            ],
+            [
+              "llama-server",
+              127822,
+              128571
+            ]
+          ],
+          "used_tokens": 1003
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "context-retention"
+          ],
+          "covered_evidence_ids": [
+            "context-retention"
+          ],
+          "failure": null,
+          "id": "val-017",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.009928999934345484,
+          "seconds": 0.04077358287759125,
+          "selected_spans": [
+            [
+              "llama-server",
+              53834,
+              54917
+            ],
+            [
+              "llama-server",
+              126298,
+              127342
+            ],
+            [
+              "llama-server",
+              130684,
+              131640
+            ],
+            [
+              "llama-server",
+              32062,
+              32427
+            ]
+          ],
+          "used_tokens": 982
+        },
+        {
+          "all_covered": true,
+          "any_hit": true,
+          "candidate_covered_evidence_ids": [
+            "stopping-strings"
+          ],
+          "covered_evidence_ids": [
+            "stopping-strings"
+          ],
+          "failure": null,
+          "id": "val-018",
+          "missing_evidence_ids": [],
+          "query_embedding_seconds": 0.010575750144198537,
+          "seconds": 0.04219866590574384,
+          "selected_spans": [
+            [
+              "llama-server",
+              64101,
+              65097
+            ],
+            [
+              "llama-server",
+              54917,
+              55981
+            ],
+            [
+              "llama-server",
+              65097,
+              65937
+            ],
+            [
+              "llama-server",
+              52338,
+              52718
+            ]
+          ],
+          "used_tokens": 989
+        }
+      ],
+      "dataset_id": "arm64-retrieval-validation-v1",
+      "dataset_sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc",
+      "index": {
+        "config": {
+          "canonical_format": "utf8-lf-v1",
+          "chunking": {
+            "canonical_format": "utf8-lf-v1",
+            "enabled_rules": [
+              "table"
+            ],
+            "max_lexical_tokens": 256,
+            "overlap": 0,
+            "parser": "markdown-it-py",
+            "parser_version": "4.0.0",
+            "preset": "commonmark",
+            "token_pattern": "\\w+|[^\\w\\s]",
+            "version": "structure-lexical-v1"
+          },
+          "query": "quoted-or-identifier-phrases-v1",
+          "schema_version": 1,
+          "search_text": "heading-path-newline-body-v1",
+          "tokenizer": "unicode61 tokenchars '_'"
+        },
+        "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+        "generation": 1,
+        "sqlite_version": "3.53.1"
+      },
+      "limit": 5,
+      "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+      "method": "hybrid-rrf",
+      "split": "validation",
+      "summary": {
+        "all_covered_rate": 0.8888888888888888,
+        "cases_all_covered": 16,
+        "cases_any_hit": 16,
+        "cases_failed": 0,
+        "cases_total": 18,
+        "cases_with_evidence": 18,
+        "cases_without_evidence": 0,
+        "evidence_coverage_rate": 0.9090909090909091,
+        "evidence_units_covered": 20,
+        "evidence_units_total": 22,
+        "hit_rate": 0.8888888888888888
+      }
+    }
+  ],
+  "schema_version": 1
+}

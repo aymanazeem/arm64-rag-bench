@@ -31,7 +31,10 @@ def _records_by_id(records: list[dict], label: str) -> dict[str, dict]:
 
 def _validate_contract(dataset: dict, manifest: dict, inventory: dict) -> dict:
     _require(dataset.get("schema_version") == 1, "Unsupported dataset schema.")
-    _require(dataset.get("split") == "development", "Expected a development dataset.")
+    _require(
+        dataset.get("split") in {"development", "validation"},
+        "Expected a development dataset or validation dataset.",
+    )
     _require(manifest.get("schema_version") == 1, "Unsupported manifest schema.")
     _require(
         manifest.get("canonical_format") == "utf8-lf-v1",
@@ -166,6 +169,11 @@ def _validate_results(results: list[dict], documents: dict, scope: list[str]) ->
             "Search returned a missing or duplicate chunk ID.",
         )
         _require(item.get("rank") == rank, "Search returned invalid ranks.")
+        _require(
+            isinstance(item.get("headings"), (list, tuple))
+            and all(isinstance(heading, str) for heading in item["headings"]),
+            "Search returned invalid headings.",
+        )
         seen.add(chunk_id)
 
 
@@ -185,14 +193,44 @@ def _covered(span: dict, results: list[dict]) -> bool:
     return False
 
 
+def _pack_results(results, limit, token_budget, count_tokens):
+    selected, omitted, texts = [], [], []
+    for result in results:
+        text = "\n".join((*result["headings"], result["text"]))
+        if len(selected) == limit:
+            reason = "passage_limit"
+        elif count_tokens("\n\n".join([*texts, text])) > token_budget:
+            reason = "token_budget"
+        else:
+            selected.append(
+                {**result, "retrieval_rank": result["rank"], "rank": len(selected) + 1}
+            )
+            texts.append(text)
+            continue
+        omitted.append({"chunk_id": result["chunk_id"], "reason": reason})
+    return selected, omitted, count_tokens("\n\n".join(texts))
+
+
 def evaluate_retrieval(
     index_path: Path,
     dataset_path: Path,
     manifest_path: Path,
     *,
     limit: int = 5,
+    method: str = "lexical",
+    encoder=None,
+    token_budget: int | None = None,
 ) -> dict:
     _require(type(limit) is int and 1 <= limit <= 100, "Limit must be from 1 to 100.")
+    _require(method in {"lexical", "dense", "hybrid"}, "Unknown retrieval method.")
+    if method != "lexical" or token_budget is not None:
+        _require(encoder is not None, "This comparison needs an embedding encoder.")
+        _require(limit <= 20, "Comparison passage limit must be at most 20.")
+    if token_budget is not None:
+        _require(
+            type(token_budget) is int and token_budget > 0,
+            "Token budget must be positive.",
+        )
     dataset_raw = dataset_path.read_bytes()
     manifest_raw = manifest_path.read_bytes()
     dataset, manifest = json.loads(dataset_raw), json.loads(manifest_raw)
@@ -206,31 +244,75 @@ def evaluate_retrieval(
     documents = _validate_contract(dataset, manifest, inventory)
     scopes = {item["id"]: item["source_ids"] for item in manifest["corpora"]}
     snapshot = (inventory["generation"], inventory["fingerprint"])
+    embedding = None
+    expected_method = {
+        "lexical": "fts5-bm25",
+        "dense": "dense-cosine",
+        "hybrid": "hybrid-rrf",
+    }[method]
+    if method != "lexical":
+        from arm64_rag.dense import embedding_info, search_vectors
+
+        embedding = embedding_info(index_path, encoder.config)
+        _require(
+            (embedding["source_generation"], embedding["source_fingerprint"])
+            == snapshot,
+            "The index changed before evaluation; rerun on one snapshot.",
+        )
+    retrieval_limit = 20 if token_budget is not None else limit
     cases = []
     for case in dataset["cases"]:
         started = time.perf_counter()
         failure, results, response = None, [], None
         try:
-            response = search_index(
-                index_path,
-                case["question"],
-                limit=limit,
-                source_ids=scopes[case["corpus_id"]],
-            )
+            arguments = {
+                "limit": retrieval_limit,
+                "source_ids": scopes[case["corpus_id"]],
+            }
+            if method == "lexical":
+                response = search_index(index_path, case["question"], **arguments)
+            else:
+                response = search_vectors(
+                    index_path,
+                    case["question"],
+                    encoder.encode_queries,
+                    encoder.config,
+                    method=method,
+                    **arguments,
+                )
             _require(isinstance(response, dict), "Invalid search response.")
-            _require(response.get("method") == "fts5-bm25", "Unexpected search method.")
-        except (OSError, sqlite3.Error, ValueError) as exc:
+            _require(
+                response.get("method") == expected_method, "Unexpected search method."
+            )
+        except (OSError, sqlite3.Error, ValueError, RuntimeError) as exc:
             failure, response = str(exc), None
         if response is not None:
             _require(
                 (response.get("generation"), response.get("fingerprint")) == snapshot,
                 "The index changed during evaluation; rerun on one snapshot.",
             )
+            if embedding is not None:
+                _require(
+                    response.get("embedding_fingerprint") == embedding["fingerprint"]
+                    and response.get("embedding_config_hash")
+                    == embedding["config_hash"],
+                    "Embeddings changed during evaluation; rerun on one snapshot.",
+                )
             try:
                 results = response["results"]
-                _require(len(results) <= limit, "Search exceeded the result limit.")
+                _require(
+                    len(results) <= retrieval_limit, "Search exceeded the result limit."
+                )
                 _validate_results(results, documents, scopes[case["corpus_id"]])
             except (KeyError, TypeError, ValueError) as exc:
+                failure, results = str(exc), []
+        omitted, used_tokens, candidates = [], None, results
+        if token_budget is not None:
+            try:
+                results, omitted, used_tokens = _pack_results(
+                    results, limit, token_budget, encoder.token_count
+                )
+            except (ValueError, RuntimeError, KeyError, TypeError) as exc:
                 failure, results = str(exc), []
         units = []
         for key in case["evidence_ids"]:
@@ -274,19 +356,40 @@ def evaluate_retrieval(
                 "seconds": time.perf_counter() - started,
             }
         )
+        if token_budget is not None:
+            cases[-1].update(
+                {
+                    "candidates": candidates,
+                    "omitted": omitted,
+                    "used_tokens": used_tokens,
+                }
+            )
+            cases[-1]["candidate_covered_evidence_ids"] = [
+                key
+                for key in case["evidence_ids"]
+                if _covered(dataset["evidence"][key], candidates)
+            ]
+        if response is not None and "query_embedding_seconds" in response:
+            cases[-1]["query_embedding_seconds"] = response["query_embedding_seconds"]
     final = index_inventory(index_path)
     _require(
         (final["generation"], final["fingerprint"]) == snapshot,
         "The index changed during evaluation; rerun on one snapshot.",
     )
+    if embedding is not None:
+        _require(
+            embedding_info(index_path, encoder.config)["fingerprint"]
+            == embedding["fingerprint"],
+            "Embeddings changed during evaluation; rerun on one snapshot.",
+        )
     supported = [case for case in cases if case["evidence"]]
     total_units = sum(len(case["evidence"]) for case in supported)
     covered_units = sum(len(case["covered_evidence_ids"]) for case in supported)
     hits = sum(case["any_hit"] for case in supported)
     complete = sum(case["all_covered"] for case in supported)
-    return {
+    report = {
         "schema_version": 1,
-        "kind": "retrieval-development",
+        "kind": f"retrieval-{dataset['split']}",
         "dataset_id": dataset.get("id"),
         "split": dataset["split"],
         "provenance": dataset.get("provenance"),
@@ -298,7 +401,7 @@ def evaluate_retrieval(
             "config": inventory["config"],
             "sqlite_version": sqlite3.sqlite_version,
         },
-        "method": "fts5-bm25",
+        "method": expected_method,
         "limit": limit,
         "scoring": "Retrieved spans must jointly cover each complete evidence span.",
         "timing": "Per-case wall time includes search and coverage scoring.",
@@ -320,3 +423,19 @@ def evaluate_retrieval(
         },
         "cases": cases,
     }
+    if embedding is not None:
+        report["embedding"] = embedding
+    if token_budget is not None:
+        report["scoring"] = (
+            "Selected spans must cover complete evidence after the common text budget."
+        )
+        report["budget"] = {
+            "tokens": token_budget,
+            "candidate_depth": retrieval_limit,
+            "tokenizer": encoder.config,
+            "policy": "Rank order; skip over-budget passages; no truncation.",
+            "text": "Heading paths and bodies; blank separators; no chat template.",
+        }
+    if method == "hybrid":
+        report["fusion"] = {"constant": 60, "candidate_depth_per_method": 20}
+    return report

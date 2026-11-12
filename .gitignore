@@ -19,6 +19,7 @@ __pycache__/
 /vendor/
 *.gguf
 *.safetensors
+*.onnx
 *.pem
 *.key
 *.sqlite

@@ -36,7 +36,22 @@ def main() -> None:
     evaluate.add_argument(
         "--manifest", type=Path, default=Path("data/manifests/corpus.json")
     )
-    for command in (indexing, search, evaluate):
+    evaluate.add_argument("--token-budget", type=int, help="Budget in BGE text tokens.")
+    embedding = commands.add_parser(
+        "embed", help="Add embeddings to the document index."
+    )
+    for command in (search, evaluate):
+        command.add_argument(
+            "--method", choices=("lexical", "dense", "hybrid"), default="lexical"
+        )
+    for command in (embedding, search, evaluate):
+        command.add_argument(
+            "--model-dir", type=Path, default=Path("models/bge-small-en-v1.5")
+        )
+        command.add_argument(
+            "--embedding-config", type=Path, default=Path("configs/embeddings.json")
+        )
+    for command in (indexing, embedding, search, evaluate):
         command.add_argument(
             "--db", type=Path, default=Path("data/private/index.sqlite")
         )
@@ -44,6 +59,17 @@ def main() -> None:
         command.add_argument("--limit", type=int, default=5, help="Maximum passages.")
     args = parser.parse_args()
     try:
+        encoder = None
+        if args.command == "embed" or (
+            args.command in {"search", "evaluate"}
+            and (
+                args.method != "lexical"
+                or getattr(args, "token_budget", None) is not None
+            )
+        ):
+            from arm64_rag.embeddings import BGEEncoder
+
+            encoder = BGEEncoder(args.model_dir, args.embedding_config)
         if args.command == "doctor":
             result = collect_inventory()
         elif args.command == "index":
@@ -55,13 +81,36 @@ def main() -> None:
                 else load_paths(args.paths, args.root)
             )
             result = update_index(args.db, documents, sync=args.sync)
+        elif args.command == "embed":
+            from arm64_rag.dense import embed_index
+
+            result = embed_index(args.db, encoder.encode_documents, encoder.config)
         elif args.command == "search":
-            result = search_index(
-                args.db, args.query, limit=args.limit, source_ids=args.source
-            )
+            if args.method == "lexical":
+                result = search_index(
+                    args.db, args.query, limit=args.limit, source_ids=args.source
+                )
+            else:
+                from arm64_rag.dense import search_vectors
+
+                result = search_vectors(
+                    args.db,
+                    args.query,
+                    encoder.encode_queries,
+                    encoder.config,
+                    method=args.method,
+                    limit=args.limit,
+                    source_ids=args.source,
+                )
         else:
             result = evaluate_retrieval(
-                args.db, args.dataset, args.manifest, limit=args.limit
+                args.db,
+                args.dataset,
+                args.manifest,
+                limit=args.limit,
+                method=args.method,
+                encoder=encoder,
+                token_budget=args.token_budget,
             )
     except (OSError, ValueError, RuntimeError, sqlite3.Error) as error:
         parser.exit(1, f"Error: {error}\n")
