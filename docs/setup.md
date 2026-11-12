@@ -2,7 +2,7 @@
 
 ## Current state
 
-The repository starts on `chore/project-bootstrap`. An empty commit was created on this branch, and local `main` points to that empty commit. Project files belong to the setup branch and will enter `main` through the first PR.
+The repository was bootstrapped on `chore/project-bootstrap`. An empty commit was created on this branch, and `main` initially pointed to that empty commit. Project files were prepared on the setup branch for introduction through the first PR.
 
 Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), verified private. Personal authentication is connected. The empty base was published as `main`; project files are delivered through [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
 
