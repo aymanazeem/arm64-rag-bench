@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "id": "arm64-docs-dev-v1",
+  "canonical_format": "utf8-lf-v1",
+  "licenses": {
+    "MIT": {
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/LICENSE",
+      "local_path": "vendor/llama.cpp/LICENSE",
+      "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+      "review": "License text and selected source headers checked; preserve notices when copying source text."
+    },
+    "Apache-2.0": {
+      "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/LICENSES/Apache-2.0.txt",
+      "local_path": "vendor/kleidiai-v1.32.0/LICENSES/Apache-2.0.txt",
+      "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+      "review": "License text and selected source headers checked; preserve notices when copying source text."
+    },
+    "project-fixture": {
+      "provenance": "Original synthetic text for this project; no third-party content. No new project-wide license is declared here."
+    }
+  },
+  "sources": [
+    {
+      "id": "llama-build",
+      "kind": "upstream",
+      "local_path": "vendor/llama.cpp/docs/build.md",
+      "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/docs/build.md",
+      "license_id": "MIT",
+      "sha256": "eee33d5549db002540704813766f75f2f9e86205a4bbfd9fd9a72cf9446fbc5e",
+      "bytes": 46342,
+      "canonical_sha256": "eee33d5549db002540704813766f75f2f9e86205a4bbfd9fd9a72cf9446fbc5e",
+      "canonical_chars": 46331
+    },
+    {
+      "id": "llama-bench",
+      "kind": "upstream",
+      "local_path": "vendor/llama.cpp/tools/llama-bench/README.md",
+      "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+      "license_id": "MIT",
+      "sha256": "147d63dc5a1b257dd776a62f1da56dd85da5ae6556616de4e94b2dc0b7fdb49b",
+      "bytes": 22289,
+      "canonical_sha256": "147d63dc5a1b257dd776a62f1da56dd85da5ae6556616de4e94b2dc0b7fdb49b",
+      "canonical_chars": 22245
+    },
+    {
+      "id": "llama-server",
+      "kind": "upstream",
+      "local_path": "vendor/llama.cpp/tools/server/README.md",
+      "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+      "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+      "license_id": "MIT",
+      "sha256": "aa825de7fde1b1a5432e871f612f6fe1e9b18d0137627b73501db1abd1aec834",
+      "bytes": 140024,
+      "canonical_sha256": "aa825de7fde1b1a5432e871f612f6fe1e9b18d0137627b73501db1abd1aec834",
+      "canonical_chars": 139959
+    },
+    {
+      "id": "kleidiai-readme",
+      "kind": "upstream",
+      "local_path": "vendor/kleidiai-v1.32.0/README.md",
+      "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+      "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+      "license_id": "Apache-2.0",
+      "sha256": "0b44267ff7a8b14f2f99142dfb5512637f9c69850eaeca25a772f38f23b6600b",
+      "bytes": 12190,
+      "canonical_sha256": "0b44267ff7a8b14f2f99142dfb5512637f9c69850eaeca25a772f38f23b6600b",
+      "canonical_chars": 12151
+    },
+    {
+      "id": "run-note-a",
+      "kind": "fixture",
+      "local_path": "eval/fixtures/run-note-a.md",
+      "revision": "1",
+      "license_id": "project-fixture",
+      "sha256": "999d8041780bcb192c5b2baa413b761342a5ae8d37419efd20e5f3a648aca177",
+      "bytes": 154,
+      "canonical_sha256": "999d8041780bcb192c5b2baa413b761342a5ae8d37419efd20e5f3a648aca177",
+      "canonical_chars": 154
+    },
+    {
+      "id": "run-note-b",
+      "kind": "fixture",
+      "local_path": "eval/fixtures/run-note-b.md",
+      "revision": "1",
+      "license_id": "project-fixture",
+      "sha256": "dee5c6a3dcaf8ff5f6f15db2b31daee827e3e591604c52667e07044594b57902",
+      "bytes": 155,
+      "canonical_sha256": "dee5c6a3dcaf8ff5f6f15db2b31daee827e3e591604c52667e07044594b57902",
+      "canonical_chars": 155
+    },
+    {
+      "id": "document-instruction",
+      "kind": "fixture",
+      "local_path": "eval/fixtures/document-instruction.md",
+      "revision": "1",
+      "license_id": "project-fixture",
+      "sha256": "0282f68770bd8556b525a8b9f7cdea77cd79eb9a0343a7c7b1ef3e01858fe19f",
+      "bytes": 245,
+      "canonical_sha256": "0282f68770bd8556b525a8b9f7cdea77cd79eb9a0343a7c7b1ef3e01858fe19f",
+      "canonical_chars": 245
+    }
+  ],
+  "corpora": [
+    {
+      "id": "technical-docs",
+      "source_ids": [
+        "llama-build",
+        "llama-bench",
+        "llama-server",
+        "kleidiai-readme"
+      ]
+    },
+    {
+      "id": "conflicting-run-notes",
+      "source_ids": [
+        "run-note-a",
+        "run-note-b"
+      ]
+    },
+    {
+      "id": "untrusted-document",
+      "source_ids": [
+        "document-instruction"
+      ]
+    }
+  ]
+}
