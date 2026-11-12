@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+branch=$(git symbolic-ref --quiet --short HEAD || true)
+case "$branch" in
+    main|master)
+        echo "Commit on a feature branch, then merge through a reviewed PR." >&2
+        exit 1
+        ;;
+esac
+
+expected='Azeem Ayman <110621518+aymanazeem@users.noreply.github.com>'
+for role in GIT_AUTHOR_IDENT GIT_COMMITTER_IDENT; do
+    identity=$(git var "$role")
+    case "$identity" in
+        "$expected "*) ;;
+        *)
+            echo "Use the owner's personal Git author and committer identity." >&2
+            exit 1
+            ;;
+    esac
+done
