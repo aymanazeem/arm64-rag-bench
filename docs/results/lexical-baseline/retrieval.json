@@ -1,0 +1,1107 @@
+{
+  "cases": [
+    {
+      "all_covered": false,
+      "all_evidence_rank": null,
+      "answerability": "answerable",
+      "any_hit": false,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [],
+      "evidence": [
+        {
+          "covered": false,
+          "first_covered_rank": null,
+          "id": "native-build"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": null,
+      "id": "dev-001",
+      "missing_evidence_ids": [
+        "native-build"
+      ],
+      "question": "Which CMake option enables KleidiAI in a native llama.cpp build, and which target architecture is required?",
+      "results": [
+        {
+          "chunk_id": "9f7e30269aee957694e8097187e4805302826f590de23d06ae968b1760071509",
+          "end": 35982,
+          "line_end": 701,
+          "line_start": 692,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -28.79207736670064,
+          "source_id": "llama-build",
+          "start": 34908
+        },
+        {
+          "chunk_id": "b62f6b261246beca6c112768f8536f6ce97a5beed93a874a50f2d6616ad865d5",
+          "end": 20752,
+          "line_end": 362,
+          "line_start": 352,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -17.829210859142048,
+          "source_id": "llama-build",
+          "start": 20179
+        },
+        {
+          "chunk_id": "decce40b253ecb33e2066f8099c45fa8f783439243489d731223554acb83afb2",
+          "end": 8489,
+          "line_end": 168,
+          "line_start": 165,
+          "rank": 3,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -15.462194566152222,
+          "source_id": "kleidiai-readme",
+          "start": 8153
+        },
+        {
+          "chunk_id": "e07aa489aff1178d9cd14da130e0ded98b6bd5525625588b44c817f4d04bb9cf",
+          "end": 34118,
+          "line_end": 670,
+          "line_start": 662,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -13.968668940633679,
+          "source_id": "llama-build",
+          "start": 33955
+        },
+        {
+          "chunk_id": "9bdecc19cc78fde725e4672be802c6dfc64cd0944f57b48720273844d6478dc8",
+          "end": 9862,
+          "line_end": 182,
+          "line_start": 177,
+          "rank": 5,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -13.249487858348964,
+          "source_id": "kleidiai-readme",
+          "start": 9197
+        }
+      ],
+      "seconds": 0.0030299590434879065
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 1,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "allocation-proof"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "allocation-proof"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-002",
+      "missing_evidence_ids": [],
+      "question": "A log says tensors use CPU_KLEIDIAI buffers. Does that show every operation ran a KleidiAI microkernel?",
+      "results": [
+        {
+          "chunk_id": "46cd23ca742c9d91f876dbdc3ceea7153974371b0c32c358591dbfb0663638b3",
+          "end": 36819,
+          "line_end": 719,
+          "line_start": 702,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -30.291220457561558,
+          "source_id": "llama-build",
+          "start": 35982
+        },
+        {
+          "chunk_id": "9dd10115c051863a89de75be7f40246a0e200dffb22dde012e72f9c23c40828e",
+          "end": 33955,
+          "line_end": 661,
+          "line_start": 648,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -14.81521376193768,
+          "source_id": "llama-build",
+          "start": 32946
+        },
+        {
+          "chunk_id": "9bdecc19cc78fde725e4672be802c6dfc64cd0944f57b48720273844d6478dc8",
+          "end": 9862,
+          "line_end": 182,
+          "line_start": 177,
+          "rank": 3,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -12.82159784672162,
+          "source_id": "kleidiai-readme",
+          "start": 9197
+        },
+        {
+          "chunk_id": "38407a7ff7a33fe7381e7828abfb04464fb65bc3a8435d84879182304c2684ca",
+          "end": 4328,
+          "line_end": 88,
+          "line_start": 76,
+          "rank": 4,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -11.646865476176757,
+          "source_id": "kleidiai-readme",
+          "start": 3431
+        },
+        {
+          "chunk_id": "0d047aeddf44fe550a362455efae95357a51d603bc3d92f366b489c483568c6c",
+          "end": 38132,
+          "line_end": 727,
+          "line_start": 720,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.190650044474378,
+          "source_id": "llama-build",
+          "start": 36819
+        }
+      ],
+      "seconds": 0.0010822091717272997
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 2,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "force-cpu"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 2,
+          "id": "force-cpu"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 2,
+      "id": "dev-003",
+      "missing_evidence_ids": [],
+      "question": "How can I disable Metal while building llama.cpp so it cannot take priority over the CPU path?",
+      "results": [
+        {
+          "chunk_id": "0f558b68ca55bfb3d03b5deb6bfaabbbaf9e481334ee1d5c7c735e68d83dade1",
+          "end": 7887,
+          "line_end": 160,
+          "line_start": 154,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -15.453915880516977,
+          "source_id": "llama-build",
+          "start": 7573
+        },
+        {
+          "chunk_id": "46cd23ca742c9d91f876dbdc3ceea7153974371b0c32c358591dbfb0663638b3",
+          "end": 36819,
+          "line_end": 719,
+          "line_start": 702,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.167479065816028,
+          "source_id": "llama-build",
+          "start": 35982
+        },
+        {
+          "chunk_id": "356be5a87a583bdab44bf303690a72dde6ee36b930dbd35626c496af0fbc056f",
+          "end": 960,
+          "line_end": 32,
+          "line_start": 16,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.839910827699061,
+          "source_id": "llama-build",
+          "start": 553
+        },
+        {
+          "chunk_id": "d24213329b5d2079687d263cd3e98eeb0e3194ea81c3f5079e71be6c8c5b67a4",
+          "end": 4085,
+          "line_end": 88,
+          "line_start": 80,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.572654754926504,
+          "source_id": "llama-build",
+          "start": 3092
+        },
+        {
+          "chunk_id": "9dd10115c051863a89de75be7f40246a0e200dffb22dde012e72f9c23c40828e",
+          "end": 33955,
+          "line_end": 661,
+          "line_start": 648,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.005586293333263,
+          "source_id": "llama-build",
+          "start": 32946
+        }
+      ],
+      "seconds": 0.001050458988174796
+    },
+    {
+      "all_covered": false,
+      "all_evidence_rank": null,
+      "answerability": "answerable",
+      "any_hit": false,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [],
+      "evidence": [
+        {
+          "covered": false,
+          "first_covered_rank": null,
+          "id": "bench-modes"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": null,
+      "id": "dev-004",
+      "missing_evidence_ids": [
+        "bench-modes"
+      ],
+      "question": "Which llama-bench options select prompt processing, generation, and their combined workload?",
+      "results": [
+        {
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "end": 5614,
+          "line_end": 97,
+          "line_start": 88,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -14.086372238546485,
+          "source_id": "llama-bench",
+          "start": 4638
+        },
+        {
+          "chunk_id": "1765f45cdb88170c91da7691a01e168b896a3df0c59c58fd11967a08de69d803",
+          "end": 3092,
+          "line_end": 79,
+          "line_start": 66,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -13.045070850381542,
+          "source_id": "llama-build",
+          "start": 2080
+        },
+        {
+          "chunk_id": "e7dd5da57e4f5d5392d36f38cf7a0e71b0757255c2a338028ec1e8e3ce8f6557",
+          "end": 655,
+          "line_end": 19,
+          "line_start": 5,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.265181991281823,
+          "source_id": "llama-bench",
+          "start": 72
+        },
+        {
+          "chunk_id": "21b2f96032dcb0617702009ed71575212dba32109d6a4a7f8d80b8bf6ba756ba",
+          "end": 6998,
+          "line_end": 125,
+          "line_start": 120,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.273905821909963,
+          "source_id": "llama-bench",
+          "start": 6888
+        },
+        {
+          "chunk_id": "e4c7adaa2381ab716ab178a3c3ffb3b04a1f9a4bf84c1a8788fc0158319a8588",
+          "end": 4796,
+          "line_end": 99,
+          "line_start": 96,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -9.176159712182272,
+          "source_id": "llama-build",
+          "start": 4481
+        }
+      ],
+      "seconds": 0.0007768750656396151
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 1,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "bench-omissions"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "bench-omissions"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-005",
+      "missing_evidence_ids": [],
+      "question": "Do llama-bench timings include converting input text into tokens and sampling output tokens?",
+      "results": [
+        {
+          "chunk_id": "1dc0cd474630b947856e1b029ad543c587ba6a257a6105462812aec63d2856de",
+          "end": 5819,
+          "line_end": 102,
+          "line_start": 98,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -16.141590052572287,
+          "source_id": "llama-bench",
+          "start": 5614
+        },
+        {
+          "chunk_id": "05b63a6fdcc2d93406d5c1b56e8d426b2377295a494fa9461b503241c6bd46d3",
+          "end": 20350,
+          "line_end": 388,
+          "line_start": 335,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.843990942362963,
+          "source_id": "llama-bench",
+          "start": 19250
+        },
+        {
+          "chunk_id": "06025eab036071ca246d38fa9c2c41d2d953ba8f00076cf98ce7b6365dadf416",
+          "end": 107177,
+          "line_end": 1731,
+          "line_start": 1729,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.020874841293645,
+          "source_id": "llama-server",
+          "start": 107092
+        },
+        {
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "end": 5614,
+          "line_end": 97,
+          "line_start": 88,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.010840764918283,
+          "source_id": "llama-bench",
+          "start": 4638
+        },
+        {
+          "chunk_id": "b3ccb3d2e82a293c32062c7147ff31c6f7e86cab0e27c4f8ca9c1bd8fcdd1cc9",
+          "end": 74866,
+          "line_end": 902,
+          "line_start": 883,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.315606109356873,
+          "source_id": "llama-server",
+          "start": 74260
+        }
+      ],
+      "seconds": 0.0007082079537212849
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 4,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "bench-repeats"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 4,
+          "id": "bench-repeats"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 4,
+      "id": "dev-006",
+      "missing_evidence_ids": [],
+      "question": "How does llama-bench repeat tests, and which documented output format can retain each repetition?",
+      "results": [
+        {
+          "chunk_id": "aedaff27e63151f8841a1b043c37d0e8c2e56f4a08cc3b697218ca8ef4fb5489",
+          "end": 57017,
+          "line_end": 577,
+          "line_start": 562,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -16.391027015915128,
+          "source_id": "llama-server",
+          "start": 55981
+        },
+        {
+          "chunk_id": "2c3f3d18b9b55d80a06aa11f139926cdfcbd95417e616cf64984ecb8a21071cb",
+          "end": 55981,
+          "line_end": 561,
+          "line_start": 545,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -15.975574813367992,
+          "source_id": "llama-server",
+          "start": 54917
+        },
+        {
+          "chunk_id": "81fdf313f1fc75c35b5adfe5234469b89ee739f11f3fd066957facc539beb23b",
+          "end": 1736,
+          "line_end": 38,
+          "line_start": 20,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -15.43485110462853,
+          "source_id": "llama-bench",
+          "start": 655
+        },
+        {
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "end": 5614,
+          "line_end": 97,
+          "line_start": 88,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -15.076806491726943,
+          "source_id": "llama-bench",
+          "start": 4638
+        },
+        {
+          "chunk_id": "835b1b2ec7eee428dcd1e8c3d61b7e9bbda3b7fd11c8547f672841df9bc8e966",
+          "end": 12585,
+          "line_end": 195,
+          "line_start": 192,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.163490254147865,
+          "source_id": "llama-bench",
+          "start": 12432
+        }
+      ],
+      "seconds": 0.0007460408378392458
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 1,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "prompt-cache"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "prompt-cache"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-007",
+      "missing_evidence_ids": [],
+      "question": "Is prompt reuse enabled by default in the completion API, and can it change numerical results?",
+      "results": [
+        {
+          "chunk_id": "29067c087c813ac71a8ed1754f71cf4adeda448e61cbdab465416bacc7c8c582",
+          "end": 60523,
+          "line_end": 609,
+          "line_start": 602,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -13.189755865745758,
+          "source_id": "llama-server",
+          "start": 59506
+        },
+        {
+          "chunk_id": "2c3f3d18b9b55d80a06aa11f139926cdfcbd95417e616cf64984ecb8a21071cb",
+          "end": 55981,
+          "line_end": 561,
+          "line_start": 545,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.777011074478779,
+          "source_id": "llama-server",
+          "start": 54917
+        },
+        {
+          "chunk_id": "0227115be08762ac32e479e0753cc53184f49db014b2438913c91c279b9866c9",
+          "end": 18839,
+          "line_end": 333,
+          "line_start": 332,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.770923932148822,
+          "source_id": "llama-build",
+          "start": 17955
+        },
+        {
+          "chunk_id": "9c285f42e70a4c5b76521d6c29f52a88caf04aac10cc3af4a0e361de66e37d16",
+          "end": 29463,
+          "line_end": 229,
+          "line_start": 224,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.466490049659875,
+          "source_id": "llama-server",
+          "start": 28643
+        },
+        {
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "end": 5614,
+          "line_end": 97,
+          "line_start": 88,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.38489390756547,
+          "source_id": "llama-bench",
+          "start": 4638
+        }
+      ],
+      "seconds": 0.0009532088879495859
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 1,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "health"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "health"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-008",
+      "missing_evidence_ids": [],
+      "question": "What does GET /health return while the model loads and when the server is ready?",
+      "results": [
+        {
+          "chunk_id": "8cd8e754493a511c980a58494f9fe0a681ae34ca9a857f8b020beb29a59b13de",
+          "end": 51321,
+          "line_end": 497,
+          "line_start": 485,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -20.432942885196802,
+          "source_id": "llama-server",
+          "start": 50886
+        },
+        {
+          "chunk_id": "cd7c4874fab938248956fb1eeb4cb00ea848f0f0ba4ac2e183f57363a8294964",
+          "end": 88573,
+          "line_end": 1365,
+          "line_start": 1353,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.465502575703118,
+          "source_id": "llama-server",
+          "start": 87959
+        },
+        {
+          "chunk_id": "ccff2167590b3c35949a1a29a2ad0becf433fed05547cbd2bd8409d2b30004da",
+          "end": 130684,
+          "line_end": 2269,
+          "line_start": 2263,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.89586974614477,
+          "source_id": "llama-server",
+          "start": 129739
+        },
+        {
+          "chunk_id": "bb6363838a33b7160794472fe400863549534d108cfbd548244718b60ad32139",
+          "end": 125079,
+          "line_end": 2172,
+          "line_start": 2169,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.97362189578583,
+          "source_id": "llama-server",
+          "start": 124437
+        },
+        {
+          "chunk_id": "b6e180c6205d766ba50d4956fdc825008ed046579b718591dbfb80ac9741d18f",
+          "end": 138433,
+          "line_end": 2598,
+          "line_start": 2585,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -10.575356309920016,
+          "source_id": "llama-server",
+          "start": 137507
+        }
+      ],
+      "seconds": 0.0008570000063627958
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 5,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "template",
+        "tokenize"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 4,
+          "id": "template"
+        },
+        {
+          "covered": true,
+          "first_covered_rank": 5,
+          "id": "tokenize"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 4,
+      "id": "dev-009",
+      "missing_evidence_ids": [],
+      "question": "Which endpoints can render chat messages and then tokenize the rendered text without generating an answer?",
+      "results": [
+        {
+          "chunk_id": "1b8021160f7004cab48a19aeb1e8b5bb60b588a2a35f2e734be646f3be18d9c7",
+          "end": 115933,
+          "line_end": 1935,
+          "line_start": 1930,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -16.58256827445987,
+          "source_id": "llama-server",
+          "start": 114932
+        },
+        {
+          "chunk_id": "c0a2c6d0a4dec62062d55cf87c3181c37840dabef98284dc3c29464497cd25ac",
+          "end": 116846,
+          "line_end": 1948,
+          "line_start": 1936,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -14.418856027911856,
+          "source_id": "llama-server",
+          "start": 115933
+        },
+        {
+          "chunk_id": "04757b25e2fb0b37f3a5c63c1aad337aac59e90527dda46004113bcaae3341b2",
+          "end": 112367,
+          "line_end": 1898,
+          "line_start": 1874,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -13.985746125676538,
+          "source_id": "llama-server",
+          "start": 111878
+        },
+        {
+          "chunk_id": "c5fb290d1d972cd0c167c5f827efd2ef2a03cac6cac76da8293718aec73af342",
+          "end": 68013,
+          "line_end": 754,
+          "line_start": 743,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.917805184009948,
+          "source_id": "llama-server",
+          "start": 67254
+        },
+        {
+          "chunk_id": "801939ef0127d8b3de8677594772f8cfffbce43ab28bad191539c02d49af8542",
+          "end": 66843,
+          "line_end": 716,
+          "line_start": 692,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.982487298008184,
+          "source_id": "llama-server",
+          "start": 65937
+        }
+      ],
+      "seconds": 0.0008597499690949917
+    },
+    {
+      "all_covered": false,
+      "all_evidence_rank": null,
+      "answerability": "answerable",
+      "any_hit": false,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [],
+      "evidence": [
+        {
+          "covered": false,
+          "first_covered_rank": null,
+          "id": "kai-scheduling"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": null,
+      "id": "dev-010",
+      "missing_evidence_ids": [
+        "kai-scheduling"
+      ],
+      "question": "Does KleidiAI schedule the application work itself, or does its caller control which portion to process?",
+      "results": [
+        {
+          "chunk_id": "2aa3ca69c4b3517ef975d784df8400955de77d1427d5afd349f77a99ef63c331",
+          "end": 2055,
+          "line_end": 35,
+          "line_start": 19,
+          "rank": 1,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -17.846995383981596,
+          "source_id": "kleidiai-readme",
+          "start": 960
+        },
+        {
+          "chunk_id": "46cd23ca742c9d91f876dbdc3ceea7153974371b0c32c358591dbfb0663638b3",
+          "end": 36819,
+          "line_end": 719,
+          "line_start": 702,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -12.376566070781527,
+          "source_id": "llama-build",
+          "start": 35982
+        },
+        {
+          "chunk_id": "a2a0e2402fc7aee637ff68a37937eeee7332d76385b8a2a54f0a8e6e396cef4e",
+          "end": 8877,
+          "line_end": 172,
+          "line_start": 169,
+          "rank": 3,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -11.755626840980637,
+          "source_id": "kleidiai-readme",
+          "start": 8489
+        },
+        {
+          "chunk_id": "9bdecc19cc78fde725e4672be802c6dfc64cd0944f57b48720273844d6478dc8",
+          "end": 9862,
+          "line_end": 182,
+          "line_start": 177,
+          "rank": 4,
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "score": -11.676696964723135,
+          "source_id": "kleidiai-readme",
+          "start": 9197
+        },
+        {
+          "chunk_id": "a222d927c90b39dde5ed8cec294853b95349bab847f92b94c4efd775e7916f17",
+          "end": 120017,
+          "line_end": 2042,
+          "line_start": 2026,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.058671540869268,
+          "source_id": "llama-server",
+          "start": 119341
+        }
+      ],
+      "seconds": 0.0007804580964148045
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 5,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "technical-docs",
+      "covered_evidence_ids": [
+        "allocation-proof",
+        "bench-omissions"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "allocation-proof"
+        },
+        {
+          "covered": true,
+          "first_covered_rank": 5,
+          "id": "bench-omissions"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-011",
+      "missing_evidence_ids": [],
+      "question": "Why do a CPU_KLEIDIAI allocation log and a llama-bench result alone fail to prove that a complete RAG request is faster?",
+      "results": [
+        {
+          "chunk_id": "46cd23ca742c9d91f876dbdc3ceea7153974371b0c32c358591dbfb0663638b3",
+          "end": 36819,
+          "line_end": 719,
+          "line_start": 702,
+          "rank": 1,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -11.734042934562682,
+          "source_id": "llama-build",
+          "start": 35982
+        },
+        {
+          "chunk_id": "4a75a64ab16798a324f7645ba8be1fd26be3283ff52670d071c88cb72d205d46",
+          "end": 12979,
+          "line_end": 112,
+          "line_start": 109,
+          "rank": 2,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -8.817359282045246,
+          "source_id": "llama-server",
+          "start": 12399
+        },
+        {
+          "chunk_id": "c1e5115c7295882212f78ffeca9508b839a312dd8649a1fbb669700896b51545",
+          "end": 11782,
+          "line_end": 232,
+          "line_start": 219,
+          "rank": 3,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -8.764275951740043,
+          "source_id": "llama-build",
+          "start": 11163
+        },
+        {
+          "chunk_id": "685b8147ffd793590eab3df6b124940a0681e805952e03758d8a914055cae5dd",
+          "end": 16291,
+          "line_end": 315,
+          "line_start": 309,
+          "rank": 4,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -8.588269175934835,
+          "source_id": "llama-build",
+          "start": 15712
+        },
+        {
+          "chunk_id": "1dc0cd474630b947856e1b029ad543c587ba6a257a6105462812aec63d2856de",
+          "end": 5819,
+          "line_end": 102,
+          "line_start": 98,
+          "rank": 5,
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "score": -8.38069942017861,
+          "source_id": "llama-bench",
+          "start": 5614
+        }
+      ],
+      "seconds": 0.0008601672016084194
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 2,
+      "answerability": "conflicting",
+      "any_hit": true,
+      "corpus_id": "conflicting-run-notes",
+      "covered_evidence_ids": [
+        "run-note-a",
+        "run-note-b"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 1,
+          "id": "run-note-a"
+        },
+        {
+          "covered": true,
+          "first_covered_rank": 2,
+          "id": "run-note-b"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 1,
+      "id": "dev-012",
+      "missing_evidence_ids": [],
+      "question": "How many CPU threads did demo-17 use, according to these records?",
+      "results": [
+        {
+          "chunk_id": "b89a900598f72554dd03734a6161930f127a052601077747cecaaca20406b555",
+          "end": 154,
+          "line_end": 6,
+          "line_start": 1,
+          "rank": 1,
+          "revision": "1",
+          "score": -14.23040106121835,
+          "source_id": "run-note-a",
+          "start": 0
+        },
+        {
+          "chunk_id": "8ee8961ac106b3079c0d62088e2ef0a651a32ff0dbf61ba7f3679b7139d45369",
+          "end": 155,
+          "line_end": 6,
+          "line_start": 1,
+          "rank": 2,
+          "revision": "1",
+          "score": -14.23040106121835,
+          "source_id": "run-note-b",
+          "start": 0
+        }
+      ],
+      "seconds": 0.0006202079821377993
+    },
+    {
+      "all_covered": null,
+      "all_evidence_rank": null,
+      "answerability": "unanswerable",
+      "any_hit": null,
+      "corpus_id": "conflicting-run-notes",
+      "covered_evidence_ids": [],
+      "evidence": [],
+      "failure": null,
+      "first_evidence_rank": null,
+      "id": "dev-013",
+      "missing_evidence_ids": [],
+      "question": "What peak memory usage in MiB was measured for demo-17?",
+      "results": [
+        {
+          "chunk_id": "b89a900598f72554dd03734a6161930f127a052601077747cecaaca20406b555",
+          "end": 154,
+          "line_end": 6,
+          "line_start": 1,
+          "rank": 1,
+          "revision": "1",
+          "score": -12.045311227118257,
+          "source_id": "run-note-a",
+          "start": 0
+        },
+        {
+          "chunk_id": "8ee8961ac106b3079c0d62088e2ef0a651a32ff0dbf61ba7f3679b7139d45369",
+          "end": 155,
+          "line_end": 6,
+          "line_start": 1,
+          "rank": 2,
+          "revision": "1",
+          "score": -12.045311227118257,
+          "source_id": "run-note-b",
+          "start": 0
+        }
+      ],
+      "seconds": 0.0006012909580022097
+    },
+    {
+      "all_covered": true,
+      "all_evidence_rank": 2,
+      "answerability": "answerable",
+      "any_hit": true,
+      "corpus_id": "untrusted-document",
+      "covered_evidence_ids": [
+        "document-instruction"
+      ],
+      "evidence": [
+        {
+          "covered": true,
+          "first_covered_rank": 2,
+          "id": "document-instruction"
+        }
+      ],
+      "failure": null,
+      "first_evidence_rank": 2,
+      "id": "dev-014",
+      "missing_evidence_ids": [],
+      "question": "What batch size is recorded in the batching note?",
+      "results": [
+        {
+          "chunk_id": "6b7535e084d2ce9543c243d0ce7be2b382ce565cce5c716f3d91b43c9c7f0d28",
+          "end": 67,
+          "line_end": 4,
+          "line_start": 1,
+          "rank": 1,
+          "revision": "1",
+          "score": -28.613778639993896,
+          "source_id": "document-instruction",
+          "start": 0
+        },
+        {
+          "chunk_id": "908af85342319cb15cce28126185c790ccfa286ba7ed1b9807af65a23ba70166",
+          "end": 245,
+          "line_end": 9,
+          "line_start": 5,
+          "rank": 2,
+          "revision": "1",
+          "score": -9.170623851937155,
+          "source_id": "document-instruction",
+          "start": 67
+        }
+      ],
+      "seconds": 0.000561458058655262
+    }
+  ],
+  "dataset_id": "arm64-qa-development-v1",
+  "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
+  "date": "2026-11-12",
+  "implementation_sha256": {
+    "pyproject.toml": "5f992e4882bbddba392761d68906de212dcacb82fa0b49650e2cc3c8ce9cec46",
+    "src/arm64_rag/cli.py": "111293e3de82bcc709099184d965da419e30aac1be5338452f23a6da31dd1b3e",
+    "src/arm64_rag/corpus.py": "39aeaf644079b8047e475620c840646b1b06f9242866b932a1f59835e3765854",
+    "src/arm64_rag/documents.py": "0519bff882f74d97f1135389884b3efe261466edce04681d0b0406eb76ed1899",
+    "src/arm64_rag/evaluation.py": "f319a333d56dedb67a82474c9ba4f2cb0845516d70199bb2d4af176d267a97a6",
+    "src/arm64_rag/index.py": "3e47dcaa10dc8891e0556a3d37a64d6b10a6a8fb92b245cc832598a6c699938b",
+    "uv.lock": "4e20bed7e246aacdb6de8b2a6140bb5cd3a429fd9d7bc1fbd75558f5150901e9"
+  },
+  "index": {
+    "config": {
+      "canonical_format": "utf8-lf-v1",
+      "chunking": {
+        "canonical_format": "utf8-lf-v1",
+        "enabled_rules": [
+          "table"
+        ],
+        "max_lexical_tokens": 256,
+        "overlap": 0,
+        "parser": "markdown-it-py",
+        "parser_version": "4.0.0",
+        "preset": "commonmark",
+        "token_pattern": "\\w+|[^\\w\\s]",
+        "version": "structure-lexical-v1"
+      },
+      "query": "quoted-or-identifier-phrases-v1",
+      "schema_version": 1,
+      "search_text": "heading-path-newline-body-v1",
+      "tokenizer": "unicode61 tokenchars '_'"
+    },
+    "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f",
+    "generation": 1,
+    "sqlite_version": "3.53.1"
+  },
+  "kind": "retrieval-development",
+  "limit": 5,
+  "limits": "Retrieval only; no answer, citation or abstention score.",
+  "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+  "method": "fts5-bm25",
+  "provenance": {
+    "authored_by": "agent",
+    "date": "2026-11-12",
+    "human_validated": false,
+    "review": "independent_agent_source_checked"
+  },
+  "raw_report_local_path": "artifacts/retrieval/lexical-baseline.json",
+  "raw_report_sha256": "4951213d85f796c4b00c8dd5bd1300707befcc0a1d7e1cb17cd24e41203efbdf",
+  "reproduction_checks": {
+    "fresh_reversed_import": "identical results, scores, spans and fingerprint",
+    "unchanged_import": "passed"
+  },
+  "result_format": "Source locators only; complete passage text stays in the local raw report.",
+  "schema_version": 1,
+  "scoring": "Retrieved spans must jointly cover each complete evidence span.",
+  "split": "development",
+  "summary": {
+    "all_covered_rate": 0.7692307692307693,
+    "cases_all_covered": 10,
+    "cases_any_hit": 10,
+    "cases_failed": 0,
+    "cases_total": 14,
+    "cases_with_evidence": 13,
+    "cases_without_evidence": 1,
+    "evidence_coverage_rate": 0.8125,
+    "evidence_units_covered": 13,
+    "evidence_units_total": 16,
+    "hit_rate": 0.7692307692307693
+  },
+  "timing": "Per-case wall time includes search and coverage scoring."
+}

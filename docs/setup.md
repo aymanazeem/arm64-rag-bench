@@ -32,7 +32,7 @@ The original private-repository bootstrap was:
 5. Set the default branch to `main`; open the setup PR, perform a review and merge only after its checks pass. Use a merge strategy and commit message that preserve the owner's identity and omit co-author trailers. Inspect the resulting commit identity; do not claim GitHub platform metadata is configurable in every merge method.
 6. Enable server-side PR and status-check requirements if supported by the account's private-repository plan. Disable force pushes and deletion of `main`. Do not require a second human approval in this solo workflow; a PR author cannot approve their own PR. Report any unavailable enforcement rather than claiming protection is active.
 
-Normal changes are committed and pushed on feature branches, reviewed, then merged through PRs. The local pre-push hook blocks updates to existing `main` and `master`; its sole initialization allowance is creating an absent `main` at the one empty root commit.
+Normal changes are committed and pushed on feature branches, reviewed, then merged through PRs. Prefer one tested commit per complete feature and squash-merge its PR. Group small steps and review fixes before committing. The local pre-push hook blocks updates to existing `main` and `master`; its sole initialization allowance is creating an absent `main` at the one empty root commit.
 
 The owner made the repository public on 2026-11-12. Branch protection requires PRs, resolved review conversations and the successful GitHub Actions `checks` job, including for administrators. Branches must be up to date before merge. Force pushes and branch deletion are blocked. Reviews are recorded without requiring a second person's approval.
 
