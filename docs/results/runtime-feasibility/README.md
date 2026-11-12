@@ -19,6 +19,8 @@ The [hardware inventory](hardware.json) excludes personal identifiers. Build rec
 
 Debugger attachment was unavailable. The diagnostic script instead patched a separate copy of the verified KleidiAI source to log entry into the two named kernels. The [patch](kernels.patch) adds only logging; the normal source and builds are unchanged.
 
+The patch contains source context from KleidiAI v1.32.0, copyright 2024–2026 Arm Limited and/or its affiliates (`open-source-office@arm.com`), under [Apache-2.0](LICENSE-KleidiAI.txt). This project's modification adds `stdio.h` and kernel-entry logging. This notice applies to that third-party context, not a new project-wide license.
+
 Each probe used one thread, no GPU layers and no warm-up. Prompt processing used 32 prompt tokens and no generated tokens. Generation used eight generated tokens. The parser required the exact kernel name and positive workload dimensions. Both processes exited successfully. Valid calls in these wrappers proceed to the named assembly kernels.
 
 The dispatch record includes source-tree, patch, executable and library hashes. The text files contain clearly labelled excerpts; full stderr logs remain under `artifacts/feasibility/dispatch/` locally. Reproduce them with [the diagnostic command](../../runtime.md#prove-kernel-execution-without-debugger-access).

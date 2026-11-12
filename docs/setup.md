@@ -34,7 +34,7 @@ The original private-repository bootstrap was:
 
 Normal changes are committed and pushed on feature branches, reviewed, then merged through PRs. The local pre-push hook blocks updates to existing `main` and `master`; its sole initialization allowance is creating an absent `main` at the one empty root commit.
 
-The owner made the repository public on 2026-11-12. Branch protection is now enabled: `main` requires PRs and resolved review conversations, including for administrators. Force pushes and branch deletion are blocked. Reviews are recorded without requiring a second person's approval. CI checks will become required once the first workflow runs.
+The owner made the repository public on 2026-11-12. Branch protection requires PRs, resolved review conversations and the successful GitHub Actions `checks` job, including for administrators. Branches must be up to date before merge. Force pushes and branch deletion are blocked. Reviews are recorded without requiring a second person's approval.
 
 ## Codex and local safeguards
 
