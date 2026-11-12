@@ -38,7 +38,9 @@ The owner made the repository public on 2026-11-12. Branch protection is now ena
 
 ## Codex and local safeguards
 
-`AGENTS.md` contains the durable working rules. `.codex/config.toml` sets a high reasoning-effort default for compatible models. It does not change sandbox permissions, select a model or store credentials. Project configuration loads only when the client trusts the project; managed client policies still apply. Start a new session in this directory after setup to load the new rules and configuration.
+Working rules (`AGENTS.md`), plans (`PLANS.md`) and agent settings (`.codex/`, `.agents/`) stay local and are ignored by Git. The commit hook also blocks them if force-added. They are not included in a fresh clone.
+
+Local configuration can set reasoning effort without changing permissions or storing credentials. Project configuration loads only for trusted projects; managed client policies still apply.
 
 The tracked Git hooks refuse commits on `main`/`master`, commits using another identity, and co-author/generated-by commit attribution. A pre-push hook refuses ordinary direct updates to protected branches. These are local safeguards and must be enabled in each clone; they are not a substitute for GitHub branch rules. PR descriptions also need review for the attribution rule.
 
