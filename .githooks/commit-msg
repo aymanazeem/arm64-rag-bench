@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+
+if grep -Eiq '^[[:space:]]*(co-authored-by|generated-by|assisted-by|assistant|ai-generated-by|ai-assisted-by)[[:space:]]*:' "$1"; then
+    echo "Commit messages must not contain co-author or assistant attribution." >&2
+    exit 1
+fi
