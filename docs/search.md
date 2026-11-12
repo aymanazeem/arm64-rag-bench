@@ -62,3 +62,5 @@ Operational failures produce a nonzero exit status. Retrieval misses remain in t
 This measures retrieval only. It does not measure answer accuracy, citations, abstention or inference speed. Keep this baseline unchanged for the later dense-search comparison; freeze separate evaluation cases before tuning.
 
 See the [first keyword baseline](results/lexical-baseline/README.md) for measured coverage and known misses.
+
+[Embedding retrieval](embeddings.md) adds optional dense and hybrid methods. Keyword search and the original evaluation defaults remain unchanged.

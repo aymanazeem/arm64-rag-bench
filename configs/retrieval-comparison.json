@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "manifest": "data/manifests/corpus.json",
+  "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+  "datasets": [
+    {
+      "path": "eval/development.json",
+      "sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7"
+    },
+    {
+      "path": "eval/retrieval-validation.json",
+      "sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc"
+    }
+  ],
+  "methods": [
+    "lexical",
+    "dense",
+    "hybrid"
+  ],
+  "passage_limit": 5,
+  "candidate_depth": 20,
+  "token_budget": 1024,
+  "budget_tokenizer": "Pinned BGE tokenizer; heading paths and bodies, no generation template.",
+  "rrf_constant": 60,
+  "selection_policy": "Keep keyword search as the default until retrieval gains and answer quality justify a change. Report every per-case win and loss.",
+  "freeze": "Questions and settings fixed before comparison; validation shares source documents with development."
+}

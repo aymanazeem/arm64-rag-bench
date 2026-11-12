@@ -3,9 +3,11 @@ import json
 import sqlite3
 from dataclasses import replace
 
+import numpy as np
 import pytest
 
 from arm64_rag import evaluation
+from arm64_rag.dense import embed_index, embedding_info
 from arm64_rag.documents import Document
 from arm64_rag.index import index_inventory, update_index
 
@@ -116,6 +118,7 @@ def result(document, start, end, rank):
         "start": start,
         "end": end,
         "text": document.text[start:end],
+        "headings": [],
         "rank": rank,
         "score": -1.0,
     }
@@ -356,3 +359,187 @@ def test_index_change_after_last_search_is_rejected(corpus, monkeypatch):
     monkeypatch.setattr(evaluation, "search_index", changing_search)
     with pytest.raises(ValueError, match="index changed"):
         evaluate(corpus)
+
+
+class SyntheticEncoder:
+    config = {"dimension": 2, "model": "test", "revision": "1"}
+
+    def encode_documents(self, texts):
+        return [np.array([[1, 0] if "four" in text else [0, 1]]) for text in texts]
+
+    def encode_queries(self, texts):
+        return np.array([[1, 0] if "four" in text else [1, 1] for text in texts])
+
+    def token_count(self, text):
+        return len(text)
+
+
+@pytest.mark.parametrize("method", ["dense", "hybrid"])
+def test_dense_and_hybrid_evaluate_real_stored_vectors(corpus, method):
+    encoder = SyntheticEncoder()
+    state = embed_index(corpus[0], encoder.encode_documents, encoder.config)
+    report = evaluate(corpus, method=method, encoder=encoder)
+    assert report["method"] == {"dense": "dense-cosine", "hybrid": "hybrid-rrf"}[method]
+    assert report["embedding"]["fingerprint"] == state["fingerprint"]
+    assert report["embedding"]["config_hash"] == state["config_hash"]
+    assert report["summary"]["cases_all_covered"] == 2
+    assert report["summary"]["evidence_units_covered"] == 3
+    assert report["summary"]["cases_failed"] == 0
+    assert report["cases"][0]["results"][0]["source_id"] == "a"
+    assert all(case["query_embedding_seconds"] >= 0 for case in report["cases"])
+    assert report["cases"][2]["any_hit"] is None
+    if method == "hybrid":
+        assert report["fusion"] == {"constant": 60, "candidate_depth_per_method": 20}
+
+
+@pytest.mark.parametrize("when", ["during", "after_last"])
+def test_embedding_republication_is_detected_without_source_changes(
+    corpus, monkeypatch, when
+):
+    from arm64_rag import dense
+
+    encoder = SyntheticEncoder()
+    state = embed_index(corpus[0], encoder.encode_documents, encoder.config)
+    source_snapshot = index_inventory(corpus[0])
+    original = dense.search_vectors
+
+    def republishing_search(path, query, *args, **kwargs):
+        response = original(path, query, *args, **kwargs)
+        if query == ("four" if when == "during" else "memory"):
+            embed_index(
+                path,
+                lambda texts: [
+                    np.array([[0, 1] if "four" in text else [1, 0]]) for text in texts
+                ],
+                encoder.config,
+            )
+        return response
+
+    monkeypatch.setattr(dense, "search_vectors", republishing_search)
+    with pytest.raises(ValueError, match="Embeddings changed"):
+        evaluate(corpus, method="dense", encoder=encoder)
+    assert index_inventory(corpus[0]) == source_snapshot
+    assert embedding_info(corpus[0])["fingerprint"] != state["fingerprint"]
+
+
+def test_budget_skips_large_passages_without_truncating_or_losing_rank(
+    corpus, monkeypatch
+):
+    first, second = corpus[-1]
+    candidates = [
+        result(second, 0, len(second.text), 1),
+        result(first, 0, len(first.text), 2),
+    ]
+    stub_search(monkeypatch, corpus, candidates)
+    report = evaluate(
+        corpus, encoder=SyntheticEncoder(), token_budget=len(first.text), limit=2
+    )
+    case = report["cases"][0]
+    assert case["results"][0]["source_id"] == "a"
+    assert case["results"][0]["text"] == first.text
+    assert case["results"][0]["retrieval_rank"] == 2
+    assert case["results"][0]["rank"] == 1
+    assert case["used_tokens"] == len(first.text)
+    assert case["omitted"] == [
+        {"chunk_id": candidates[0]["chunk_id"], "reason": "token_budget"}
+    ]
+    assert case["candidates"] == candidates
+    conflict = report["cases"][1]
+    assert conflict["candidate_covered_evidence_ids"] == ["a", "b"]
+    assert conflict["covered_evidence_ids"] == ["a"]
+    assert conflict["missing_evidence_ids"] == ["b"]
+    assert report["summary"]["cases_with_evidence"] == 2
+    assert report["summary"]["evidence_units_total"] == 3
+    assert report["summary"]["evidence_units_covered"] == 2
+
+
+def test_common_budget_counts_headings_and_separators(corpus, monkeypatch):
+    first, second = corpus[-1]
+    candidates = [
+        {**result(first, 0, len(first.text), 1), "headings": ["Heading"]},
+        {**result(second, 0, len(second.text), 2), "headings": ["Other"]},
+    ]
+    stub_search(monkeypatch, corpus, candidates)
+    full_text = f"Heading\n{first.text}\n\nOther\n{second.text}"
+    report = evaluate(
+        corpus, encoder=SyntheticEncoder(), token_budget=len(full_text), limit=2
+    )
+    assert report["cases"][1]["used_tokens"] == len(full_text)
+    assert report["cases"][1]["all_covered"] is True
+    smaller = evaluate(
+        corpus, encoder=SyntheticEncoder(), token_budget=len(full_text) - 1, limit=2
+    )
+    assert smaller["cases"][1]["missing_evidence_ids"] == ["b"]
+    assert smaller["cases"][1]["omitted"][0]["reason"] == "token_budget"
+
+
+def test_passage_limit_is_distinct_from_budget(corpus, monkeypatch):
+    first, second = corpus[-1]
+    candidates = [
+        result(first, 0, len(first.text), 1),
+        result(second, 0, len(second.text), 2),
+    ]
+    stub_search(monkeypatch, corpus, candidates)
+    report = evaluate(corpus, encoder=SyntheticEncoder(), token_budget=100, limit=1)
+    assert report["cases"][1]["omitted"] == [
+        {"chunk_id": candidates[1]["chunk_id"], "reason": "passage_limit"}
+    ]
+    assert report["budget"]["candidate_depth"] == 20
+    assert report["cases"][1]["all_evidence_rank"] is None
+
+
+def test_tokenizer_failure_stays_in_denominators(corpus):
+    encoder = SyntheticEncoder()
+
+    def fail_on_evidence(text):
+        if "four" in text:
+            raise RuntimeError("Token counting failed.")
+        return len(text)
+
+    encoder.token_count = fail_on_evidence
+    report = evaluate(corpus, encoder=encoder, token_budget=100)
+    assert report["summary"]["cases_failed"] == 2
+    assert report["summary"]["cases_with_evidence"] == 2
+    assert report["summary"]["evidence_units_total"] == 3
+    assert report["summary"]["evidence_units_covered"] == 0
+    assert report["cases"][0]["results"] == []
+    assert report["cases"][0]["failure"] == "Token counting failed."
+
+
+def test_dense_encoder_failure_stays_in_denominators(corpus):
+    encoder = SyntheticEncoder()
+    embed_index(corpus[0], encoder.encode_documents, encoder.config)
+
+    def unavailable(_):
+        raise RuntimeError("Embedding runtime failed.")
+
+    encoder.encode_queries = unavailable
+    report = evaluate(corpus, method="dense", encoder=encoder)
+    assert report["summary"]["cases_failed"] == 3
+    assert report["summary"]["cases_with_evidence"] == 2
+    assert report["summary"]["evidence_units_total"] == 3
+    assert report["summary"]["evidence_units_covered"] == 0
+
+
+def test_missing_result_headings_are_failure_not_budget_crash(corpus, monkeypatch):
+    first = corpus[-1][0]
+    malformed = result(first, 0, len(first.text), 1)
+    malformed.pop("headings")
+    stub_search(monkeypatch, corpus, [malformed])
+    report = evaluate(corpus, encoder=SyntheticEncoder(), token_budget=100)
+    assert report["summary"]["cases_failed"] == 3
+    assert report["summary"]["evidence_units_covered"] == 0
+
+
+def test_validation_split_keeps_its_identity(corpus):
+    corpus[3]["split"] = "validation"
+    write_json(corpus[1], corpus[3])
+    report = evaluate(corpus)
+    assert report["kind"] == "retrieval-validation"
+    assert report["split"] == "validation"
+
+
+@pytest.mark.parametrize("budget", [0, -1, True])
+def test_invalid_common_budgets_are_rejected(corpus, budget):
+    with pytest.raises(ValueError, match="budget"):
+        evaluate(corpus, encoder=SyntheticEncoder(), token_budget=budget)

@@ -194,6 +194,20 @@ def update_index(path: Path, documents: list[Document], *, sync: bool = False) -
         for source_id in sorted(changed):
             _insert_source(connection, *prepared[source_id])
         if removed or changed:
+            embedding_tables = {
+                row[0]
+                for row in connection.execute(
+                    "SELECT name FROM sqlite_master WHERE type = 'table' "
+                    "AND name IN ('embedding_state', 'chunk_vectors')"
+                )
+            }
+            if embedding_tables:
+                if len(embedding_tables) != 2:
+                    raise ValueError(
+                        "Embedding tables are incomplete; rebuild the index."
+                    )
+                connection.execute("DELETE FROM chunk_vectors")
+                connection.execute("DELETE FROM embedding_state")
             state["generation"] += 1
             state["fingerprint"] = _fingerprint(connection)
             connection.executemany(
@@ -251,42 +265,51 @@ def search_index(
     expression = _query_expression(query)
     with _connection(path) as connection:
         state = _state(connection)
-        scope = sorted(set(source_ids)) if source_ids is not None else None
-        if scope is not None:
-            known = {
-                row[0] for row in connection.execute("SELECT source_id FROM documents")
-            }
-            unknown = set(scope) - known
-            if unknown:
-                raise ValueError("Unknown source IDs: " + ", ".join(sorted(unknown)))
-        output = {
+        scope = _validated_scope(connection, source_ids)
+        return {
             "generation": state["generation"],
             "fingerprint": state["fingerprint"],
             "method": "fts5-bm25",
-            "results": [],
+            "results": _lexical_results(connection, expression, limit, scope),
         }
-        if not expression or scope == []:
-            return output
-        parameters = [expression]
-        scope_sql = ""
-        if scope is not None:
-            scope_sql = " AND c.source_id IN (" + ",".join("?" for _ in scope) + ")"
-            parameters.extend(scope)
-        parameters.append(limit)
-        rows = connection.execute(
-            "SELECT c.chunk_id, c.source_id, d.revision, d.title, d.url, d.license_id, "
-            "c.start, c.end, c.line_start, c.line_end, c.text, c.headings, "
-            "bm25(chunk_fts) AS score FROM chunk_fts "
-            "JOIN chunks c ON c.rowid = chunk_fts.rowid "
-            "JOIN documents d ON d.source_id = c.source_id "
-            "WHERE chunk_fts MATCH ?"
-            + scope_sql
-            + " ORDER BY score, c.source_id, c.start, c.chunk_id LIMIT ?",
-            parameters,
-        )
-        for rank, row in enumerate(rows, start=1):
-            result = dict(row)
-            result["headings"] = json.loads(result["headings"])
-            result["rank"] = rank
-            output["results"].append(result)
-        return output
+
+
+def _validated_scope(connection, source_ids):
+    scope = sorted(set(source_ids)) if source_ids is not None else None
+    if scope is not None:
+        known = {
+            row[0] for row in connection.execute("SELECT source_id FROM documents")
+        }
+        unknown = set(scope) - known
+        if unknown:
+            raise ValueError("Unknown source IDs: " + ", ".join(sorted(unknown)))
+    return scope
+
+
+def _lexical_results(connection, expression: str, limit: int, scope) -> list[dict]:
+    if not expression or scope == []:
+        return []
+    parameters = [expression]
+    scope_sql = ""
+    if scope is not None:
+        scope_sql = " AND c.source_id IN (" + ",".join("?" for _ in scope) + ")"
+        parameters.extend(scope)
+    parameters.append(limit)
+    rows = connection.execute(
+        "SELECT c.chunk_id, c.source_id, d.revision, d.title, d.url, d.license_id, "
+        "c.start, c.end, c.line_start, c.line_end, c.text, c.headings, "
+        "bm25(chunk_fts) AS score FROM chunk_fts "
+        "JOIN chunks c ON c.rowid = chunk_fts.rowid "
+        "JOIN documents d ON d.source_id = c.source_id "
+        "WHERE chunk_fts MATCH ?"
+        + scope_sql
+        + " ORDER BY score, c.source_id, c.start, c.chunk_id LIMIT ?",
+        parameters,
+    )
+    output = []
+    for rank, row in enumerate(rows, start=1):
+        result = dict(row)
+        result["headings"] = json.loads(result["headings"])
+        result["rank"] = rank
+        output.append(result)
+    return output

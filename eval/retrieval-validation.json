@@ -1,0 +1,657 @@
+{
+  "schema_version": 1,
+  "id": "arm64-retrieval-validation-v1",
+  "split": "validation",
+  "manifest_path": "data/manifests/corpus.json",
+  "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+  "provenance": {
+    "authored_by": "agent",
+    "review": "independent_agent_source_checked",
+    "human_validated": false,
+    "date": "2026-11-12",
+    "selection": "New question families and nonoverlapping evidence spans; the corpus documents are shared with development.",
+    "freeze": "Created before dense retrieval comparison. Do not tune against these questions.",
+    "limits": "Question validation on a small shared corpus, not a held-out document benchmark. All cases are answerable; this set does not evaluate abstention or conflicts."
+  },
+  "evidence": {
+    "debug-generators": {
+      "source_id": "llama-build",
+      "start": 1387,
+      "end": 1823,
+      "lines": [
+        46,
+        60
+      ],
+      "sha256": "d792392b4bb9458df70927e0a8834184dbe5218d48cf0c91808fac6cb1b5098e"
+    },
+    "static-library": {
+      "source_id": "llama-build",
+      "start": 1981,
+      "end": 2124,
+      "lines": [
+        63,
+        67
+      ],
+      "sha256": "300294feabd10569f3ccf506f493ebda30a6883cda606f084879b0b614381f18"
+    },
+    "blas-work": {
+      "source_id": "llama-build",
+      "start": 4496,
+      "end": 4794,
+      "lines": [
+        98,
+        98
+      ],
+      "sha256": "e1ee10819fcefa41661986e543e6b04b4bff88d3f5ea26ca15c6f07f321650be"
+    },
+    "sve-vector-length": {
+      "source_id": "llama-build",
+      "start": 37562,
+      "end": 38130,
+      "lines": [
+        726,
+        726
+      ],
+      "sha256": "0f11be1efe6c5541fc5615fd9684afc213296ef873073b68c6bbc8affafd9d3e"
+    },
+    "benchmark-sweep": {
+      "source_id": "llama-bench",
+      "start": 4882,
+      "end": 5233,
+      "lines": [
+        92,
+        92
+      ],
+      "sha256": "3a1086347d91c90f235e944b0ea5d4cf0b9d1fddbeff6801c04031d62d58b3f0"
+    },
+    "benchmark-context-depth": {
+      "source_id": "llama-bench",
+      "start": 5492,
+      "end": 5612,
+      "lines": [
+        96,
+        96
+      ],
+      "sha256": "ab8823bc0ee3b6e52882cc5a1eb7f874c521cca0d4dd7d7685f648d793aecf5a"
+    },
+    "benchmark-memory-fit": {
+      "source_id": "llama-bench",
+      "start": 1524,
+      "end": 1735,
+      "lines": [
+        37,
+        38
+      ],
+      "sha256": "858c2e3558734c090dcf9a461170ea3e00d958f669cc710af2567b95c7923a3c"
+    },
+    "kernel-folder-name": {
+      "source_id": "kleidiai-readme",
+      "start": 4058,
+      "end": 4326,
+      "lines": [
+        85,
+        87
+      ],
+      "sha256": "6532a3830a96da27456c65e3b3562eddca6b45aaa99bb1d2fe7219d67ce119ca"
+    },
+    "kernel-variant-name": {
+      "source_id": "kleidiai-readme",
+      "start": 4328,
+      "end": 4770,
+      "lines": [
+        89,
+        91
+      ],
+      "sha256": "8af011fa57738de57e2b1eb9c7fa173420bcbcd16bd6b2d5eae8478a298a4d6f"
+    },
+    "release-archive-hashes": {
+      "source_id": "kleidiai-readme",
+      "start": 11537,
+      "end": 11855,
+      "lines": [
+        205,
+        205
+      ],
+      "sha256": "e38073e9f2ec62ee35c73e45d224c99b282e40dc0d01ad70b022991ca6ee6450"
+    },
+    "x86-exclusion": {
+      "source_id": "kleidiai-readme",
+      "start": 8176,
+      "end": 8487,
+      "lines": [
+        167,
+        167
+      ],
+      "sha256": "17c2c5479bd9d5554b2fb1940ae08c7b1c41bc5fdb54a10d3affeeb5892c4a07"
+    },
+    "sme-abi-support": {
+      "source_id": "kleidiai-readme",
+      "start": 2917,
+      "end": 3266,
+      "lines": [
+        67,
+        70
+      ],
+      "sha256": "26e42356e06dbc4dc506915559a6e68658a4b78ea5bf25e2e8c8cb093c1a2e00"
+    },
+    "embedding-all-poolings": {
+      "source_id": "llama-server",
+      "start": 79106,
+      "end": 79444,
+      "lines": [
+        1042,
+        1044
+      ],
+      "sha256": "877eb4eb4360bf3acc5b49a95337682fdb7897bc9e57ae27cc1b89e622fd8bc7"
+    },
+    "embedding-openai-pooling": {
+      "source_id": "llama-server",
+      "start": 107177,
+      "end": 107374,
+      "lines": [
+        1732,
+        1734
+      ],
+      "sha256": "c0a2f8d926071fc3a2fd8dd71fb915e1a17c0fa9a83ff72747de773f840da569"
+    },
+    "metrics-access": {
+      "source_id": "llama-server",
+      "start": 83737,
+      "end": 84022,
+      "lines": [
+        1230,
+        1234
+      ],
+      "sha256": "85df8c8b592c754f4c127281a8ff36a52c7a6e7ac74d30a93b3f80d8a6df3b8d"
+    },
+    "server-property-changes": {
+      "source_id": "llama-server",
+      "start": 75864,
+      "end": 76035,
+      "lines": [
+        937,
+        939
+      ],
+      "sha256": "7bc532b2943b7d7db6ee7ad3abf81e9077c3f394c0a36d53be1a78fee6ecec9b"
+    },
+    "router-start": {
+      "source_id": "llama-server",
+      "start": 120445,
+      "end": 120771,
+      "lines": [
+        2053,
+        2059
+      ],
+      "sha256": "bda95fc62a66c8ce3395b5d7c2e3b5c4a47c17d6146aa3b772ed7a5b3afd1cc8"
+    },
+    "router-sources": {
+      "source_id": "llama-server",
+      "start": 120792,
+      "end": 121031,
+      "lines": [
+        2063,
+        2066
+      ],
+      "sha256": "5e773f42b808f91337b0d5c89db0d11418711301148ec7a239cba67556ad07f7"
+    },
+    "idle-release": {
+      "source_id": "llama-server",
+      "start": 137883,
+      "end": 138093,
+      "lines": [
+        2589,
+        2589
+      ],
+      "sha256": "b15825d9f436370ac0b62765e966bc53b0300b86539270e83c9fe9b7f36b5167"
+    },
+    "idle-monitoring": {
+      "source_id": "llama-server",
+      "start": 138213,
+      "end": 138431,
+      "lines": [
+        2593,
+        2597
+      ],
+      "sha256": "a9dffa1cd7acf1d407a989009d80b8ea7b4ff43cb6be64ec4311b75b7beeaef7"
+    },
+    "context-retention": {
+      "source_id": "llama-server",
+      "start": 54636,
+      "end": 54915,
+      "lines": [
+        542,
+        543
+      ],
+      "sha256": "174220c6307cadbe41649fd23730a3bbde84ebcff0a3e7a0dee9e005192d9eb0"
+    },
+    "stopping-strings": {
+      "source_id": "llama-server",
+      "start": 55407,
+      "end": 55585,
+      "lines": [
+        551,
+        552
+      ],
+      "sha256": "085059011294b1af1b55eddca42dd648f7f94a931007d6634d10ba7761bfe10b"
+    }
+  },
+  "cases": [
+    {
+      "id": "val-001",
+      "family": "debug-build-generators",
+      "origin": "source_derived",
+      "tags": [
+        "literal_flag",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How do Debug build settings differ between single-config CMake generators and Xcode?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "debug-generators"
+      ],
+      "required_facts": [
+        "Single-config generators use CMAKE_BUILD_TYPE=Debug when configuring and ignore the --config flag.",
+        "A multi-config generator such as Xcode selects Debug with --config Debug when building."
+      ],
+      "unacceptable_claims": [
+        "Passing only --config Debug changes a single-config build to Debug."
+      ]
+    },
+    {
+      "id": "val-002",
+      "family": "static-library-build",
+      "origin": "source_derived",
+      "tags": [
+        "literal_flag",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Which CMake setting builds llama.cpp without shared libraries?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "static-library"
+      ],
+      "required_facts": [
+        "Configure with -DBUILD_SHARED_LIBS=OFF."
+      ],
+      "unacceptable_claims": [
+        "BUILD_SHARED_LIBS must be ON to build static libraries."
+      ]
+    },
+    {
+      "id": "val-003",
+      "family": "blas-workload-effect",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "performance_scope"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Which workload can benefit from BLAS, and does the build guide claim faster token generation?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "blas-work"
+      ],
+      "required_facts": [
+        "BLAS may improve prompt processing with batch sizes greater than 32.",
+        "The guide says BLAS does not affect generation performance."
+      ],
+      "unacceptable_claims": [
+        "BLAS is documented to accelerate token generation.",
+        "BLAS guarantees faster prompt processing for every batch size."
+      ]
+    },
+    {
+      "id": "val-004",
+      "family": "sve-vector-length-gate",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "platform_limit"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "What vector length does the KleidiAI SVE selector require, and why is it not selected from Apple SVE capability alone?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "sve-vector-length"
+      ],
+      "required_facts": [
+        "The selector requires a known runtime SVE vector length of QK8_0 bytes, currently 32 bytes.",
+        "Apple reports SVE capability separately from userspace non-streaming availability, so this selector treats the length as unknown there."
+      ],
+      "unacceptable_claims": [
+        "Any reported SVE capability is sufficient regardless of vector length.",
+        "The selector assumes a 32-byte SVE length on Apple."
+      ]
+    },
+    {
+      "id": "val-005",
+      "family": "benchmark-parameter-grid",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How can llama-bench receive several values for one test parameter, and does it test their combinations?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "benchmark-sweep"
+      ],
+      "required_facts": [
+        "Values can be comma-separated or supplied by repeating the option.",
+        "Each prompt-processing and text-generation test uses all combinations of specified options."
+      ],
+      "unacceptable_claims": [
+        "Only the first supplied parameter value is tested.",
+        "The values are paired by position instead of testing all combinations."
+      ]
+    },
+    {
+      "id": "val-006",
+      "family": "benchmark-prefilled-context",
+      "origin": "source_derived",
+      "tags": [
+        "literal_flag",
+        "paraphrase"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How can a llama-bench test start with 512 tokens already in its KV cache?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "benchmark-context-depth"
+      ],
+      "required_facts": [
+        "Use -d 512 to set the context depth and prefill the KV cache with 512 tokens."
+      ],
+      "unacceptable_claims": [
+        "The -d option sets only the number of generated tokens.",
+        "Context depth leaves the KV cache empty."
+      ]
+    },
+    {
+      "id": "val-007",
+      "family": "benchmark-device-memory-fit",
+      "origin": "source_derived",
+      "tags": [
+        "literal_flag",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Which llama-bench options set the memory margin for model fitting and its minimum context size?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "benchmark-memory-fit"
+      ],
+      "required_facts": [
+        "--fit-target, or -fitt, specifies the per-device memory margin in MiB.",
+        "--fit-ctx, or -fitc, specifies the minimum context size for --fit-target."
+      ],
+      "unacceptable_claims": [
+        "The memory margin is specified in tokens.",
+        "--fit-ctx sets the generation token count."
+      ]
+    },
+    {
+      "id": "val-008",
+      "family": "kernel-name-structure",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "multi_evidence"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "What information belongs in a KleidiAI kernel folder name, and what distinguishes variant filenames?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "kernel-folder-name",
+        "kernel-variant-name"
+      ],
+      "required_facts": [
+        "The folder name describes the operation and destination/source data types.",
+        "Variant filenames add computational parameters, the Arm technology and the architecture feature."
+      ],
+      "unacceptable_claims": [
+        "Folder names encode only the operating system.",
+        "Variant filenames identify different operators without architecture details."
+      ]
+    },
+    {
+      "id": "val-009",
+      "family": "release-archive-integrity",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "reproducibility"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Which KleidiAI source downloads are recommended when the archive hash must remain unchanged?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "release-archive-hashes"
+      ],
+      "required_facts": [
+        "Use released source archives, identified under Packages on the official release page or by a hash digest on GitHub.",
+        "Dynamically generated source archives can have changed hash digests."
+      ],
+      "unacceptable_claims": [
+        "Dynamically generated archives always retain the same digest.",
+        "Any GitHub archive is guaranteed to be immutable."
+      ]
+    },
+    {
+      "id": "val-010",
+      "family": "non-arm-kernel-support",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "platform_limit"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Can KleidiAI packing and quantization kernels be compiled for x86 even if its main compute kernels cannot?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "x86-exclusion"
+      ],
+      "required_facts": [
+        "No; the architecture restriction applies to all micro-kernels, including packing and quantization.",
+        "They depend on Arm instruction set features."
+      ],
+      "unacceptable_claims": [
+        "Packing and quantization are portable x86 exceptions."
+      ]
+    },
+    {
+      "id": "val-011",
+      "family": "sme-call-chain-abi",
+      "origin": "source_derived",
+      "tags": [
+        "literal_flag",
+        "platform_limit"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "What is needed for KleidiAI SME kernels to work safely in a call chain that already uses ZA?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "sme-abi-support"
+      ],
+      "required_facts": [
+        "Compiler support must generate SME ABI-compliant code for SME and SME2 kernels.",
+        "The support is not automatically detected and is enabled with KLEIDIAI_INTERNAL_EXTRA_ARCH=+sme.",
+        "Without compiler support, the documented fallback is not valid inside a call chain that already uses ZA."
+      ],
+      "unacceptable_claims": [
+        "No compiler support or build setting is needed when the call chain already uses ZA.",
+        "The build detects this support automatically."
+      ]
+    },
+    {
+      "id": "val-012",
+      "family": "embedding-response-contract",
+      "origin": "source_derived",
+      "tags": [
+        "literal_endpoint",
+        "multi_evidence"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How do /embeddings and /v1/embeddings differ when pooling is none, and how are pooled vectors normalized?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "embedding-all-poolings",
+        "embedding-openai-pooling"
+      ],
+      "required_facts": [
+        "/embeddings supports pooling none and returns unnormalized embeddings for every input token.",
+        "/v1/embeddings requires a pooling type other than none.",
+        "For supported pooled output, the documented normalization is Euclidean, or L2."
+      ],
+      "unacceptable_claims": [
+        "/v1/embeddings accepts pooling none.",
+        "Unpooled token embeddings are always L2-normalized."
+      ]
+    },
+    {
+      "id": "val-013",
+      "family": "metrics-router-access",
+      "origin": "source_derived",
+      "tags": [
+        "literal_endpoint",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How is /metrics enabled, and what must a request include when the server is in router mode?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "metrics-access"
+      ],
+      "required_facts": [
+        "Start the server with --metrics.",
+        "In router mode, supply the model query parameter.",
+        "Omitting that parameter in router mode produces HTTP 400."
+      ],
+      "unacceptable_claims": [
+        "/metrics is always enabled.",
+        "The router silently picks a model when the model parameter is absent."
+      ]
+    },
+    {
+      "id": "val-014",
+      "family": "server-property-mutation",
+      "origin": "source_derived",
+      "tags": [
+        "literal_endpoint",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Can a default llama-server accept POST requests that change global properties, and which flag permits them?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "server-property-changes"
+      ],
+      "required_facts": [
+        "Global properties are read-only by default.",
+        "Start the server with --props to permit POST requests that change them."
+      ],
+      "unacceptable_claims": [
+        "Global properties can be changed by POST without enabling --props."
+      ]
+    },
+    {
+      "id": "val-015",
+      "family": "multi-model-routing",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "multi_evidence"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How do I start llama-server as a model router, and where can it discover model files?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "router-start",
+        "router-sources"
+      ],
+      "required_facts": [
+        "Launch llama-server without specifying a model to start router mode.",
+        "Sources include the model cache controlled by LLAMA_CACHE, --models-dir and --models-preset."
+      ],
+      "unacceptable_claims": [
+        "A model must be specified to start router mode.",
+        "Router mode can use only models already loaded in RAM."
+      ]
+    },
+    {
+      "id": "val-016",
+      "family": "idle-memory-release",
+      "origin": "source_derived",
+      "tags": [
+        "paraphrase",
+        "multi_evidence"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "When the server sleeps, what memory is released, and will polling /metrics wake it?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "idle-release",
+        "idle-monitoring"
+      ],
+      "required_facts": [
+        "Sleep unloads the model and associated memory, including the KV cache, from RAM.",
+        "A new incoming task reloads the model.",
+        "GET /metrics does not trigger reloading or reset the idle timer."
+      ],
+      "unacceptable_claims": [
+        "Sleep retains all model and KV cache memory.",
+        "Polling GET /metrics reloads the model or resets the idle timer."
+      ]
+    },
+    {
+      "id": "val-017",
+      "family": "context-token-retention",
+      "origin": "source_derived",
+      "tags": [
+        "literal_parameter",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "What does n_keep preserve when the context overflows, and what do its values 0 and -1 mean?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "context-retention"
+      ],
+      "required_facts": [
+        "n_keep counts prompt tokens to retain, excluding the BOS token.",
+        "The default 0 keeps no prompt tokens.",
+        "-1 retains all prompt tokens."
+      ],
+      "unacceptable_claims": [
+        "n_keep includes the BOS token in its count.",
+        "-1 discards all prompt tokens."
+      ]
+    },
+    {
+      "id": "val-018",
+      "family": "completion-stop-text",
+      "origin": "source_derived",
+      "tags": [
+        "literal_parameter",
+        "paraphrase"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Are stopping strings returned in completion text, and what must a client do if it needs them in the next prompt?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "stopping-strings"
+      ],
+      "required_facts": [
+        "Stopping strings are not included in the completion.",
+        "The client must add them to the prompt for the next iteration if needed."
+      ],
+      "unacceptable_claims": [
+        "Stopping strings are always included in the generated text.",
+        "The client never needs to add stopping strings to later prompts."
+      ]
+    }
+  ]
+}
