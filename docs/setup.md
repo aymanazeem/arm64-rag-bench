@@ -4,7 +4,7 @@
 
 The repository was bootstrapped on `chore/project-bootstrap`. An empty commit was created on this branch, and `main` initially pointed to that empty commit. Project files were prepared on the setup branch for introduction through the first PR.
 
-Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), verified private. Personal authentication is connected. The empty base was published as `main`; project files are delivered through [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
+Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), now public. Personal authentication is connected. Initial files entered `main` through [PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
 
 Setup verification: 22 Git-hook behavior checks in disposable repositories, shell syntax, local Markdown links, whitespace, original-brief fidelity, a configuration-loading check and staged diff validation passed. A separate review's identity-wording and index-location findings were resolved before merge. Application CI starts with the first executable implementation.
 
@@ -23,7 +23,7 @@ The second command must print `aymanazeem` before repository creation. If both a
 
 ## First publication
 
-The bootstrap procedure is:
+The original private-repository bootstrap was:
 
 1. Check whether `aymanazeem/arm64-rag-bench` already exists. Reuse it only if it is the intended private repository; do not overwrite unrelated history.
 2. Create the private repository without generated README, license or other competing history, and add its URL as `origin`.
@@ -34,7 +34,7 @@ The bootstrap procedure is:
 
 Normal changes are committed and pushed on feature branches, reviewed, then merged through PRs. The local pre-push hook blocks updates to existing `main` and `master`; its sole initialization allowance is creating an absent `main` at the one empty root commit.
 
-On 2026-11-12, GitHub rejected enabling branch protection with HTTP 403: the current account plan requires an upgrade for protected branches in a private repository. The repository remains private. Local safeguards and the reviewed-PR workflow are active; server-side branch protection is **not enabled**. This limitation does not prevent development. [GitHub's availability documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
+The owner made the repository public on 2026-11-12. Branch protection is now enabled: `main` requires PRs and resolved review conversations, including for administrators. Force pushes and branch deletion are blocked. Reviews are recorded without requiring a second person's approval. CI checks will become required once the first workflow runs.
 
 ## Codex and local safeguards
 

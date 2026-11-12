@@ -1,12 +1,12 @@
 # Arm64 RAG implementation plan
 
-Updated: 2026-11-12. Owner: Azeem Ayman. Intended repository: private `aymanazeem/arm64-rag-bench`.
+Updated: 2026-11-12. Owner: Azeem Ayman. Public repository: `aymanazeem/arm64-rag-bench`.
 
 ## Outcome and boundaries
 
 Build a useful, fully local document-Q&A application with source citations, then measure what KleidiAI changes on the actual machine. Deliver reproducible code, versioned evaluation cases, raw experimental evidence and a concise report. The initial target is the observed **M1 Max, 32 GB unified memory, 8 performance plus 2 efficiency cores**, not the generic 8/16 GB M1 assumption in the reference brief.
 
-The user's request controls scope: private repository; autonomous feature branches, commits, pushes, reviews and PR merges; minimal code and comments; preserved behavior and answer quality. Public publication and paid cloud hardware are not part of this setup. No application, native build or performance result is claimed complete.
+The owner made the repository public. Work uses feature branches, reviewed PRs, minimal code and comments, and concise English. Preserve behavior and answer quality. Paid cloud hardware requires approval. No application, native build or performance result is complete yet.
 
 ## Critical assessment
 
@@ -123,7 +123,7 @@ Branch: `docs/benchmark-report`.
 - Separate observed conclusions from hypotheses; limit generalization to measured hardware/workloads. Explain discrepancies and any failed runs.
 - Add a minimal UI only if it demonstrably helps use the completed Q&A application and can reuse the existing interfaces; keep it outside benchmark timing.
 
-Acceptance: another developer can run the documented example and reproduce the experimental procedure; conclusions are supported by retained evidence. The repository remains private unless the owner later requests public publication.
+Acceptance: another developer can run the example and reproduce the experiments. Retained evidence supports each conclusion; published data has clear provenance and licensing.
 
 ## Execution, review and status
 
@@ -131,7 +131,7 @@ For each milestone: branch → implement the smallest complete increment → run
 
 | Milestone | Status | Evidence / next action |
 | --- | --- | --- |
-| 0: foundation | Implemented in [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1) | Personal authentication/private ownership verified; independent review findings resolved; 22 hook checks, shell syntax, local links and diff checks passed. GitHub plan does not support private branch protection. |
+| 0: foundation | Complete: [PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1) | Setup checks passed. The owner made the repository public; branch protection now requires PRs, including for administrators. |
 | 1: feasibility | Not started | Pin toolchain/runtime/model, build controlled CPU pair and establish dispatch evidence |
 | 2–6 | Not started | Begin in dependency order after the preceding acceptance gates |
 
