@@ -6,7 +6,7 @@ The repository was bootstrapped on `chore/project-bootstrap`. An empty commit wa
 
 Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), now public. Personal authentication is connected. Initial files entered `main` through [PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
 
-Setup verification: 22 Git-hook behavior checks in disposable repositories, shell syntax, local Markdown links, whitespace, original-brief fidelity, a configuration-loading check and staged diff validation passed. A separate review's identity-wording and index-location findings were resolved before merge. Application CI starts with the first executable implementation.
+Initial setup checks passed, including 22 Git-hook cases. The [runtime guide](runtime.md) covers the current environment and tests.
 
 Only this repository's Git identity is configured. The existing global work identity is not changed. The personal GitHub profile ID was checked through GitHub's API; the repository uses `110621518+aymanazeem@users.noreply.github.com` to avoid publishing a work or personal email address.
 
@@ -67,4 +67,4 @@ Inventory checked on 2026-11-12:
 | CMake / Ninja | Not found on the current PATH |
 | Free disk | Approximately 700 GiB at inspection |
 
-The first implementation milestone will provision a project Python environment and pinned build tools, without replacing the system Python. Save reproducible hardware/build manifests without machine serial numbers, hardware UUIDs or user paths. No paid account or hosted model API is required for the planned local application.
+The runtime environment now uses Python 3.12.15, CMake 4.4.4 and Ninja 1.13.2 through uv. System Python is unchanged. See the [current inventory](results/runtime-feasibility/hardware.json). No paid account or hosted model API is required.

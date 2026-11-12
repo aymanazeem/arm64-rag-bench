@@ -1,0 +1,116 @@
+{
+  "created_at": "2026-11-12T20:58:13.475462+00:00",
+  "backend": "kleidiai",
+  "source": {
+    "repository": "https://github.com/ggml-org/llama.cpp.git",
+    "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5"
+  },
+  "kleidiai": {
+    "version": "v1.32.0",
+    "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+    "url": "https://github.com/ARM-software/kleidiai/releases/download/v1.32.0/kleidiai-v1.32.0-src.tar.gz",
+    "filename": "kleidiai-v1.32.0-src.tar.gz",
+    "size": 4701556,
+    "sha256": "a48d373e7c5d721a0aecbf5ddaf0bdf245bc8064e6b84086f13db0e102b553a6"
+  },
+  "flags": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "GGML_CPU": "ON",
+    "GGML_CPU_REPACK": "ON",
+    "GGML_METAL": "OFF",
+    "GGML_BLAS": "OFF",
+    "GGML_ACCELERATE": "OFF",
+    "GGML_OPENMP": "OFF",
+    "LLAMA_OPENSSL": "OFF",
+    "LLAMA_BUILD_APP": "OFF",
+    "LLAMA_BUILD_TESTS": "OFF",
+    "LLAMA_BUILD_EXAMPLES": "OFF",
+    "LLAMA_BUILD_TOOLS": "ON",
+    "LLAMA_BUILD_SERVER": "ON",
+    "GGML_CPU_KLEIDIAI": "ON"
+  },
+  "compiler_flags": {
+    "CMAKE_ASM_FLAGS": "",
+    "CMAKE_ASM_FLAGS_DEBUG": "-g",
+    "CMAKE_ASM_FLAGS_MINSIZEREL": "-Os -DNDEBUG",
+    "CMAKE_ASM_FLAGS_RELEASE": "-O3 -DNDEBUG",
+    "CMAKE_ASM_FLAGS_RELWITHDEBINFO": "-O2 -g -DNDEBUG",
+    "CMAKE_CXX_FLAGS": "",
+    "CMAKE_CXX_FLAGS_DEBUG": "-g",
+    "CMAKE_CXX_FLAGS_MINSIZEREL": "-Os -DNDEBUG",
+    "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+    "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "-O2 -g -DNDEBUG",
+    "CMAKE_C_FLAGS": "",
+    "CMAKE_C_FLAGS_DEBUG": "-g",
+    "CMAKE_C_FLAGS_MINSIZEREL": "-Os -DNDEBUG",
+    "CMAKE_C_FLAGS_RELEASE": "-O3 -DNDEBUG",
+    "CMAKE_C_FLAGS_RELWITHDEBINFO": "-O2 -g -DNDEBUG",
+    "CMAKE_EXE_LINKER_FLAGS": "",
+    "CMAKE_EXE_LINKER_FLAGS_DEBUG": "",
+    "CMAKE_EXE_LINKER_FLAGS_MINSIZEREL": "",
+    "CMAKE_EXE_LINKER_FLAGS_RELEASE": "",
+    "CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO": "",
+    "CMAKE_MODULE_LINKER_FLAGS": "",
+    "CMAKE_MODULE_LINKER_FLAGS_DEBUG": "",
+    "CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL": "",
+    "CMAKE_MODULE_LINKER_FLAGS_RELEASE": "",
+    "CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO": "",
+    "CMAKE_SHARED_LINKER_FLAGS": "",
+    "CMAKE_SHARED_LINKER_FLAGS_DEBUG": "",
+    "CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL": "",
+    "CMAKE_SHARED_LINKER_FLAGS_RELEASE": "",
+    "CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO": "",
+    "CMAKE_STATIC_LINKER_FLAGS": "",
+    "CMAKE_STATIC_LINKER_FLAGS_DEBUG": "",
+    "CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL": "",
+    "CMAKE_STATIC_LINKER_FLAGS_RELEASE": "",
+    "CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO": ""
+  },
+  "backends": [
+    "ggml-cpu"
+  ],
+  "cache_sha256": "4107b91e56ade8698d5d8143488308cc85ccc2bba6d1e5edde60fd6008bfd508",
+  "compile_commands_sha256": "28ea4c588bcbc5ad367c5d54dc7844fcbed754898560ef725c9ca33fc45c8494",
+  "system": {
+    "os": "Darwin",
+    "release": "25.6.0",
+    "arch": "arm64"
+  },
+  "tools": {
+    "cmake": "cmake version 4.4.4",
+    "ninja": "1.13.2.git.kitware.jobserver-pipe-1"
+  },
+  "compilers": {
+    "C": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+    "CXX": "Apple clang version 21.0.0 (clang-2100.3.34.2)"
+  },
+  "targets": {
+    "llama-bench": "b65698050c2ff0d64931d651594d65741e3c2d3cf94993afa157f237ba7c4060",
+    "llama-server": "478454af8a7ca1644ea584e28c332ac42ae0daed4f3eabda06453f20147f0ee6",
+    "llama-completion": "81a7d8b07811a96cf14cc9036a57bf2d1d5f705089bf0fe21b7a0bfd0dcf4b82"
+  },
+  "libraries": {
+    "libggml-base.0.29.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+    "libllama.0.dylib": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910",
+    "libmtmd.0.dylib": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9",
+    "libggml.dylib": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b",
+    "libggml.0.dylib": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b",
+    "libmtmd.dylib": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9",
+    "libllama-server-impl.dylib": "e2d4276ec8ed916e7f13aace1dd540e506efd9142b15a49f7cf0c9569739d5ba",
+    "libggml-base.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+    "libllama-completion-impl.dylib": "b1eeb659d3b2b8c2d5d33b4cd63b0eb3834b29314f8cadae4b0d7688a3e36e39",
+    "libllama-bench-impl.dylib": "3ee4c2d2e036d5c50b742b954d3138fb2bab2bb61e67fc6de275609c0ff25dbe",
+    "libllama-common.0.dylib": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e",
+    "libllama.dylib": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910",
+    "libggml-cpu.dylib": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2",
+    "libllama.0.9.0.dylib": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910",
+    "libmtmd.0.9.0.dylib": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9",
+    "libllama-common.0.9.0.dylib": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e",
+    "libggml.0.29.0.dylib": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b",
+    "libggml-cpu.0.29.0.dylib": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2",
+    "libllama-common.dylib": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e",
+    "libggml-base.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+    "libggml-cpu.0.dylib": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2"
+  }
+}

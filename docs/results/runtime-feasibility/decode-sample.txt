@@ -1,0 +1,5 @@
+First 4 marker lines; full counts and hashes are in dispatch.json.
+KAI_TRACE kai_run_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod m=1 n=1536 k=1536
+KAI_TRACE kai_run_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod m=1 n=256 k=1536
+KAI_TRACE kai_run_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod m=1 n=256 k=1536
+KAI_TRACE kai_run_matmul_clamp_f32_qsi8d32p1x4_qsi4c32p4x4_1x4_neon_dotprod m=1 n=1536 k=1536

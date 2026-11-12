@@ -4,9 +4,12 @@ A local document question-answering application and an engineering investigation
 
 The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
 
-**Status:** repository setup is complete. The repository is public and `main` requires pull requests. Architecture research comes before application development. The application and benchmark suite are not built yet.
+**Status:** the evaluation contract and runtime foundation work. Both CPU variants generate answers, and diagnostic probes confirm KleidiAI kernel execution. The document-Q&A application and full benchmark suite are not built yet.
 
 - [Development and GitHub setup](docs/setup.md)
+- [Build and test the runtime](docs/runtime.md)
+- [Runtime evidence and limits](docs/results/runtime-feasibility/README.md)
+- [Evaluation cases and scoring](eval/README.md)
 - [Original reference brief](docs/project-brief.md)
 
 ## Planned approach
@@ -26,4 +29,11 @@ git config --local user.email '110621518+aymanazeem@users.noreply.github.com'
 git config --local user.useConfigOnly true
 ```
 
-Work on feature branches and merge reviewed PRs. The setup guide explains the one-time empty repository bootstrap. Runtime installation commands will be added with the first tested implementation; there are no application commands to run yet.
+Work on feature branches and merge reviewed PRs. To install the pinned tools and inspect the machine:
+
+```sh
+uv sync --locked --group build
+uv run --locked --group build arm64-rag doctor
+```
+
+The runtime guide includes build, generation and diagnostic checks. Plans and agent settings remain local and ignored.

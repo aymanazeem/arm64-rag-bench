@@ -1,0 +1,69 @@
+{
+  "purpose": "Harness validation only; not a final performance comparison.",
+  "runs": [
+    {
+      "backend": "cpu",
+      "command": [
+        "build/cpu/bin/llama-bench",
+        "-m",
+        "models/qwen2.5-1.5b-instruct-q4_0.gguf",
+        "-p",
+        "128",
+        "-n",
+        "32",
+        "-r",
+        "3",
+        "-t",
+        "4",
+        "-b",
+        "128",
+        "-ub",
+        "128",
+        "-ngl",
+        "0",
+        "-fa",
+        "off",
+        "-ctk",
+        "f16",
+        "-ctv",
+        "f16",
+        "-o",
+        "json"
+      ],
+      "rows": 2,
+      "valid_samples": 6
+    },
+    {
+      "backend": "kleidiai",
+      "command": [
+        "build/kleidiai/bin/llama-bench",
+        "-m",
+        "models/qwen2.5-1.5b-instruct-q4_0.gguf",
+        "-p",
+        "128",
+        "-n",
+        "32",
+        "-r",
+        "3",
+        "-t",
+        "4",
+        "-b",
+        "128",
+        "-ub",
+        "128",
+        "-ngl",
+        "0",
+        "-fa",
+        "off",
+        "-ctk",
+        "f16",
+        "-ctv",
+        "f16",
+        "-o",
+        "json"
+      ],
+      "rows": 2,
+      "valid_samples": 6
+    }
+  ]
+}
