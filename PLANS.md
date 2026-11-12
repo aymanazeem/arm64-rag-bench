@@ -131,7 +131,7 @@ For each milestone: branch → implement the smallest complete increment → run
 
 | Milestone | Status | Evidence / next action |
 | --- | --- | --- |
-| 0: foundation | Private remote created; setup PR pending | Personal authentication and private ownership verified; local review and 22 hook checks passed; publish setup PR |
+| 0: foundation | Implemented in [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1) | Personal authentication/private ownership verified; independent review findings resolved; 22 hook checks, shell syntax, local links and diff checks passed. GitHub plan does not support private branch protection. |
 | 1: feasibility | Not started | Pin toolchain/runtime/model, build controlled CPU pair and establish dispatch evidence |
 | 2–6 | Not started | Begin in dependency order after the preceding acceptance gates |
 

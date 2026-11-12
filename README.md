@@ -4,7 +4,7 @@ A local document question-answering application and an engineering investigation
 
 The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
 
-**Status:** repository setup and researched implementation plan. The application, inference builds and benchmarks are not implemented yet. The intended GitHub repository is private: `aymanazeem/arm64-rag-bench`.
+**Status:** repository foundation and researched implementation plan, delivered through [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1). The application, inference builds and benchmarks are not implemented yet. The [GitHub repository](https://github.com/aymanazeem/arm64-rag-bench) is private. Next: the reproducible runtime and KleidiAI feasibility probe.
 
 - [Implementation plan and acceptance gates](PLANS.md)
 - [Development and GitHub setup](docs/setup.md)

@@ -4,7 +4,9 @@
 
 The repository starts on `chore/project-bootstrap`. An empty commit was created on this branch, and local `main` points to that empty commit. Project files belong to the setup branch and will enter `main` through the first PR.
 
-Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), verified private. Personal authentication is connected, and the empty base has been published as `main`. The project files are ready for the setup PR.
+Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), verified private. Personal authentication is connected. The empty base was published as `main`; project files are delivered through [setup PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
+
+Setup verification: 22 Git-hook behavior checks in disposable repositories, shell syntax, local Markdown links, whitespace, original-brief fidelity, a configuration-loading check and staged diff validation passed. A separate review's identity-wording and index-location findings were resolved before merge. Application CI starts with the first executable implementation.
 
 Only this repository's Git identity is configured. The existing global work identity is not changed. The personal GitHub profile ID was checked through GitHub's API; the repository uses `110621518+aymanazeem@users.noreply.github.com` to avoid publishing a work or personal email address.
 
