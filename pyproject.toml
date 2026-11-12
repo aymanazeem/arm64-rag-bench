@@ -3,7 +3,7 @@ name = "arm64-rag-bench"
 version = "0.1.0"
 description = "Local RAG and reproducible Arm64 inference benchmarks"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = ["markdown-it-py==4.0.0"]
 
 [project.scripts]
 arm64-rag = "arm64_rag.cli:main"
