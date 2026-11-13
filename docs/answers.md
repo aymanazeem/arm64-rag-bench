@@ -47,7 +47,9 @@ uv run --locked --group build python scripts/check_answers.py --split regression
 uv run --locked --group build python scripts/check_answers.py --split validation --output artifacts/answers/validation-01
 ```
 
-Each run requires a new output directory. It saves the prompt and protocol, model/runtime hashes, attempted cases, individual outputs, failures and completion state. Interrupted attempts remain visible. These runs use the controlled CPU build; they are not speed comparisons.
+Each run requires a new output directory. It saves the prompt and protocol, model/runtime hashes, attempted cases, individual outputs, failures and completion state. Interrupted attempts remain visible. These runs use the controlled CPU build by default; they are not speed comparisons.
+
+Add `--backend kleidiai` to check the second build. The optional `--baseline PATH` flag expects the original local CPU run whose hashes appear in the published baseline. It requires one split and checks unchanged sources, prompt text, token IDs and settings. Those original raw records stay local. Changed answers still need factual and citation review; verification time is not latency evidence. All 40 questions now serve as fixed backend regressions. The `ask` command continues to use CPU. See the separate [benchmark method](benchmarks.md) for performance checks.
 
 [answers-protocol.json](../eval/answers-protocol.json) defines three question roles:
 
@@ -59,4 +61,4 @@ Each run requires a new output directory. It saves the prompt and protocol, mode
 
 Use `--split all` to run all three in order. Keep validation separate from tuning. Facts, citation support, abstention, conflicts and document instructions require independent source review. The questions and reviews are agent-authored, not human validation. Structural checks alone are not an accuracy score. In the frozen fresh check, all 15 claims had supporting citations and six of eight answers were complete. The [results](results/grounded-answers/README.md) retain missing facts, retrieval gaps and earlier failed candidates.
 
-The answer model differs from the Q4_0 runtime probe. Its KleidiAI dispatch, numerical effects and performance need separate checks; the CPU answer runs establish none of those results.
+The answer model differs from the Q4_0 runtime probe. Its separate [KleidiAI checks](results/controlled-cpu/README.md) confirmed the intended kernel dispatch but failed the answer-quality comparison. CPU remains the application backend; controlled performance results are pending.

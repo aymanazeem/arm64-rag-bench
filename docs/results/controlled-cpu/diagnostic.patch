@@ -1,0 +1,518 @@
+--- a/vendor/llama.cpp/tools/llama-bench/llama-bench.cpp
++++ b/vendor/llama.cpp/tools/llama-bench/llama-bench.cpp
+@@ -35,6 +35,148 @@
+ #    endif
+ #    include <windows.h>
+ #endif
++
++#include <inttypes.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++static inline int q35_trace_enabled(void) {
++    const char * enabled = getenv("Q35_TRACE_ACTIVE");
++    return enabled && enabled[0] == '1' && enabled[1] == '\0';
++}
++
++static inline uint64_t q35_thread(void) {
++    return (uint64_t) (uintptr_t) pthread_self();
++}
++
++static inline void q35_hex(const char * text) {
++    for (const unsigned char * p = (const unsigned char *) text; *p; ++p) {
++        fprintf(stderr, "%02x", *p);
++    }
++}
++
++#include <stdexcept>
++#include <mach-o/dyld.h>
++#include <mach-o/loader.h>
++
++static int q35_repetition = -1;
++static int q35_batches = 0;
++
++static void q35_phase(const char * name, int repetition) {
++    q35_repetition = repetition;
++    q35_batches = 0;
++    if (setenv("Q35_TRACE_ACTIVE", "0", 1)) throw std::runtime_error("Cannot set diagnostic trace gate");
++    fprintf(stderr, "Q35 {\"event\":\"phase\",\"name\":\"%s\",\"repetition\":%d}\n", name, repetition);
++}
++
++static void q35_input(llama_context * ctx, const llama_token * tokens, int count, llama_pos position) {
++    llama_synchronize(ctx);
++    const int vocab = llama_vocab_n_tokens(llama_model_get_vocab(llama_get_model(ctx)));
++    const bool traced = q35_repetition == 0 && q35_batches++ == 0;
++    if (setenv("Q35_TRACE_ACTIVE", traced ? "1" : "0", 1)) throw std::runtime_error("Cannot set diagnostic trace gate");
++    flockfile(stderr);
++    fprintf(stderr, "Q35 {\"event\":\"input\",\"position\":%d,\"vocab\":%d,\"dispatch_traced\":%s,\"tokens\":[", position, vocab, traced ? "true" : "false");
++    for (int i = 0; i < count; ++i) fprintf(stderr, "%s%d", i ? "," : "", tokens[i]);
++    fprintf(stderr, "]}\n");
++    funlockfile(stderr);
++}
++
++static void q35_images(void) {
++    for (uint32_t i = 0; i < _dyld_image_count(); ++i) {
++        const mach_header * header = _dyld_get_image_header(i);
++        const char * path = _dyld_get_image_name(i);
++        if (!header || !path || header->magic != MH_MAGIC_64) continue;
++        const auto * h = (const mach_header_64 *) header;
++        const auto * command = (const load_command *) (h + 1);
++        const unsigned char * uuid = nullptr;
++        for (uint32_t j = 0; j < h->ncmds; ++j) {
++            if (command->cmd == LC_UUID) uuid = ((const uuid_command *) command)->uuid;
++            command = (const load_command *) ((const char *) command + command->cmdsize);
++        }
++        flockfile(stderr);
++        fprintf(stderr, "Q35 {\"event\":\"image\",\"path_hex\":\"");
++        q35_hex(path);
++        fprintf(stderr, "\",\"uuid\":\"");
++        if (uuid) for (int j = 0; j < 16; ++j) fprintf(stderr, "%02x", uuid[j]);
++        fprintf(stderr, "\"}\n");
++        funlockfile(stderr);
++    }
++}
++
++static void q35_state_result(llama_context * ctx, const char * action, size_t expected, size_t actual) {
++    auto mem = llama_get_memory(ctx);
++    fprintf(stderr, "Q35 {\"event\":\"state\",\"action\":\"%s\",\"expected_bytes\":%zu,\"actual_bytes\":%zu,\"position_min\":%d,\"position_max\":%d}\n",
++            action, expected, actual, llama_memory_seq_pos_min(mem, 0), llama_memory_seq_pos_max(mem, 0));
++}
++
++static void q35_logits_file(const char * directory, const char * filename, const std::vector<float> & values) {
++    const std::string path = std::string(directory) + "/" + filename;
++    FILE * file = fopen(path.c_str(), "wbx");
++    if (!file) throw std::runtime_error("Cannot create diagnostic logits file");
++    const size_t written = fwrite(values.data(), sizeof(float), values.size(), file);
++    const int closed = fclose(file);
++    if (written != values.size() || closed) throw std::runtime_error("Cannot retain diagnostic logits");
++    fprintf(stderr, "Q35 {\"event\":\"logits\",\"file\":\"%s\",\"count\":%zu,\"format\":\"native-f32-little-endian\"}\n", filename, values.size());
++}
++
++// Explicit diagnostic mode only; default tracing leaves native decode calls and RNG consumption intact.
++static void q35_probe_state(llama_context * ctx, const std::vector<uint8_t> & saved, int repetition) {
++    const char * directory = std::getenv("Q35_STATE_PROBE_DIR");
++    if (!directory || repetition != 0) return;
++    const std::string saved_directory(directory);
++    auto mem = llama_get_memory(ctx);
++    const llama_pos before_min = llama_memory_seq_pos_min(mem, 0);
++    const llama_pos before_max = llama_memory_seq_pos_max(mem, 0);
++    const int vocab = llama_vocab_n_tokens(llama_model_get_vocab(llama_get_model(ctx)));
++    const llama_token token = 0;
++    auto advance = [&](const char * phase) {
++        q35_phase(phase, repetition);
++        common_batch batch(ctx);
++        batch.add(token, before_max + 1, 0, true);
++        q35_input(ctx, &token, 1, before_max + 1);
++        if (llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get())) throw std::runtime_error("Diagnostic decode failed");
++        llama_synchronize(ctx);
++        const float * logits = llama_get_logits_ith(ctx, -1);
++        if (!logits) throw std::runtime_error("No diagnostic logits");
++        return std::vector<float>(logits, logits + vocab);
++    };
++    auto restore = [&](const char * phase) {
++        q35_phase(phase, repetition);
++        llama_memory_clear(mem, false);
++        const size_t restored = llama_state_seq_set_data(ctx, saved.data(), saved.size(), 0);
++        q35_state_result(ctx, phase, saved.size(), restored);
++        if (restored != saved.size() || llama_memory_seq_pos_min(mem, 0) != before_min ||
++            llama_memory_seq_pos_max(mem, 0) != before_max) throw std::runtime_error("Diagnostic restore differs");
++    };
++    const auto reference = advance("state_reference");
++    q35_logits_file(saved_directory.c_str(), "state-reference.f32", reference);
++    const llama_pos reference_min = llama_memory_seq_pos_min(mem, 0);
++    const llama_pos reference_max = llama_memory_seq_pos_max(mem, 0);
++    restore("state_replay_restore");
++    const auto replay = advance("state_replay");
++    q35_logits_file(saved_directory.c_str(), "state-replay.f32", replay);
++    bool finite = true;
++    float max_abs = 0;
++    for (int i = 0; i < vocab; ++i) {
++        finite = finite && std::isfinite(reference[i]) && std::isfinite(replay[i]);
++        max_abs = std::max(max_abs, std::fabs(reference[i] - replay[i]));
++    }
++    const bool equal = finite && !memcmp(reference.data(), replay.data(), reference.size() * sizeof(float));
++    const llama_pos replay_min = llama_memory_seq_pos_min(mem, 0);
++    const llama_pos replay_max = llama_memory_seq_pos_max(mem, 0);
++    const bool positions = reference_max == before_max + 1 && reference_min == replay_min && reference_max == replay_max;
++    char difference[64];
++    if (finite) snprintf(difference, sizeof(difference), "%.9g", max_abs);
++    else snprintf(difference, sizeof(difference), "null");
++    fprintf(stderr, "Q35 {\"event\":\"state_comparison\",\"logits_bitwise_equal\":%s,\"positions_equal\":%s,\"finite\":%s,\"max_abs\":%s,\"before_min\":%d,\"before_max\":%d,\"reference_min\":%d,\"reference_max\":%d,\"replay_min\":%d,\"replay_max\":%d}\n",
++            equal ? "true" : "false", positions ? "true" : "false", finite ? "true" : "false", difference,
++            before_min, before_max, reference_min, reference_max, replay_min, replay_max);
++    restore("state_final_restore");
++    if (!equal || !positions) throw std::runtime_error("Hybrid state replay differs; retain diagnostic failure");
++}
++
+ 
+ // utils
+ static uint64_t get_time_ns() {
+@@ -2185,6 +2327,7 @@
+         for (int i = 1; i < n_tokens; i++) {
+             tokens[i] = std::rand() % n_vocab;
+         }
++        q35_input(ctx, tokens.data(), n_tokens, llama_memory_seq_pos_max(llama_get_memory(ctx), 0) + 1);
+         common_batch batch = common_batch_get_one(ctx, tokens.data(), n_tokens);
+         int res = llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get());
+         if (res != 0) {
+@@ -2212,6 +2355,7 @@
+ 
+     for (int i = 0; i < n_gen; i++) {
+         batch.clear();
++        q35_input(ctx, &token, 1, pos);
+         batch.add(token, pos++, 0, true);
+         int res = llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get());
+         if (res != 0) {
+@@ -2271,6 +2415,7 @@
+ #endif
+ 
+     // initialize backends
++    q35_phase("load", -1);
+     ggml_backend_load_all();
+ 
+     cmd_params params = parse_cmd_params(argc, argv);
+@@ -2414,6 +2559,7 @@
+         }
+ 
+         llama_attach_threadpool(ctx, threadpool, NULL);
++        q35_images();
+ 
+         // warmup run
+         if (!params.no_warmup) {
+@@ -2422,6 +2568,7 @@
+                     fprintf(stderr, "llama-bench: benchmark %d/%zu: warmup prompt run\n", params_idx, params_count);
+                 }
+                 //test_prompt(ctx, std::min(t.n_batch, std::min(t.n_prompt, 32)), 0, t.n_batch, t.n_threads);
++                q35_phase("warmup_prompt", -1);
+                 bool res = test_prompt(ctx, t.n_prompt, t.n_batch, t.n_threads);
+                 if (!res) {
+                     fprintf(stderr, "%s: error: failed to run prompt warmup\n", __func__);
+@@ -2434,6 +2581,7 @@
+                 if (params.progress) {
+                     fprintf(stderr, "llama-bench: benchmark %d/%zu: warmup generation run\n", params_idx, params_count);
+                 }
++                q35_phase("warmup_generation", -1);
+                 bool res = test_gen(ctx, 1, t.n_threads);
+                 if (!res) {
+                     fprintf(stderr, "%s: error: failed to run gen warmup\n", __func__);
+@@ -2452,7 +2600,9 @@
+ 
+                 if (is_cached) {
+                     // if previously we have computed at this depth, just restore the state
++                    q35_phase("state_restore", i);
+                     const size_t ret = llama_state_seq_set_data(ctx, cstate.buf.data(), cstate.buf.size(), 0);
++                    q35_state_result(ctx, "native_restore", cstate.buf.size(), ret);
+                     if (ret == 0) {
+                         // if the old state is incompatible with the current context - reprocess from scratch
+                         is_cached = false;
+@@ -2464,6 +2614,7 @@
+                         fprintf(stderr, "llama-bench: benchmark %d/%zu: depth run %d/%d\n", params_idx, params_count,
+                                 i + 1, params.reps);
+                     }
++                q35_phase("depth", i);
+                     bool res = test_prompt(ctx, t.n_depth, t.n_batch, t.n_threads);
+                     if (!res) {
+                         fprintf(stderr, "%s: error: failed to run depth\n", __func__);
+@@ -2474,8 +2625,12 @@
+ 
+                     // store the context state for reuse in later runs
+                     cstate.depth = t.n_depth;
++                    q35_phase("state_save", i);
+                     cstate.buf.resize(llama_state_seq_get_size(ctx, 0));
+-                    llama_state_seq_get_data(ctx, cstate.buf.data(), cstate.buf.size(), 0);
++                    const size_t written = llama_state_seq_get_data(ctx, cstate.buf.data(), cstate.buf.size(), 0);
++                    q35_state_result(ctx, "native_save", cstate.buf.size(), written);
++                    if (cstate.buf.empty() || written != cstate.buf.size()) throw std::runtime_error("Incomplete diagnostic state save");
++                    q35_probe_state(ctx, cstate.buf, i);
+                 } else {
+                     if (params.progress) {
+                         fprintf(stderr, "llama-bench: benchmark %d/%zu: depth run %d/%d (cached)\n", params_idx, params_count,
+@@ -2491,6 +2646,7 @@
+                     fprintf(stderr, "llama-bench: benchmark %d/%zu: prompt run %d/%d\n", params_idx, params_count,
+                             i + 1, params.reps);
+                 }
++                q35_phase("prompt", i);
+                 bool res = test_prompt(ctx, t.n_prompt, t.n_batch, t.n_threads);
+                 if (!res) {
+                     fprintf(stderr, "%s: error: failed to run prompt\n", __func__);
+@@ -2504,6 +2660,7 @@
+                     fprintf(stderr, "llama-bench: benchmark %d/%zu: generation run %d/%d\n", params_idx, params_count,
+                             i + 1, params.reps);
+                 }
++                q35_phase("generation", i);
+                 bool res = test_gen(ctx, t.n_gen, t.n_threads);
+                 if (!res) {
+                     fprintf(stderr, "%s: error: failed to run gen\n", __func__);
+@@ -2517,6 +2674,8 @@
+             t.samples_ns.push_back(t_ns);
+         }
+ 
++        q35_phase("done", -1);
++        q35_images();
+         if (p) {
+             p->print_test(t);
+             fflush(p->fout);
+--- a/vendor/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c
++++ b/vendor/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c
+@@ -1,3 +1,49 @@
++#include <inttypes.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++static inline int q35_trace_enabled(void) {
++    const char * enabled = getenv("Q35_TRACE_ACTIVE");
++    return enabled && enabled[0] == '1' && enabled[1] == '\0';
++}
++
++static inline uint64_t q35_thread(void) {
++    return (uint64_t) (uintptr_t) pthread_self();
++}
++
++static inline void q35_hex(const char * text) {
++    for (const unsigned char * p = (const unsigned char *) text; *p; ++p) {
++        fprintf(stderr, "%02x", *p);
++    }
++}
++
++#include "ggml.h"
++#include <string.h>
++
++static void q35_op(const char * event, const struct ggml_tensor * tensor,
++                   size_t m, size_t n, size_t k, size_t start, size_t cols,
++                   int features) {
++    if (strcmp(event, "q8_repack") != 0 && !q35_trace_enabled()) return;
++    const struct ggml_tensor * a = tensor->src[0];
++    const struct ggml_tensor * b = tensor->src[1];
++    flockfile(stderr);
++    fprintf(stderr, "Q35 {\"event\":\"%s\",\"thread\":%" PRIu64 ",\"tensor_hex\":\"", event, q35_thread());
++    q35_hex(tensor->name);
++    fprintf(stderr, "\",\"weight_hex\":\"");
++    q35_hex(a ? a->name : "");
++    fprintf(stderr, "\",\"op\":\"%s\",\"stored_type\":\"%s\",\"activation_type\":\"%s\","
++                    "\"m\":%zu,\"n\":%zu,\"k\":%zu,\"start\":%zu,\"cols\":%zu,\"kernel_required_features\":%d,\"weight_ne\":[",
++            ggml_op_name(tensor->op), a ? ggml_type_name(a->type) : ggml_type_name(tensor->type),
++            b ? ggml_type_name(b->type) : "none", m, n, k, start, cols, features);
++    for (int i = 0; i < 4; ++i) fprintf(stderr, "%s%" PRId64, i ? "," : "", a ? a->ne[i] : tensor->ne[i]);
++    fprintf(stderr, "],\"activation_ne\":[");
++    for (int i = 0; i < 4; ++i) fprintf(stderr, "%s%" PRId64, i ? "," : "", b ? b->ne[i] : 0);
++    fprintf(stderr, "]}\n");
++    funlockfile(stderr);
++}
++
+ #define _CRT_SECURE_NO_DEPRECATE // Disables "unsafe" warnings on Windows
+ #define _USE_MATH_DEFINES // For M_PI on MSVC
+ 
+@@ -1768,6 +1814,10 @@
+     if (ggml_cpu_extra_compute_forward(params, tensor)) {
+         return;
+     }
++
++    if (params->ith == 0 && (tensor->op == GGML_OP_SSM_CONV ||
++        tensor->op == GGML_OP_GATED_DELTA_NET || tensor->op == GGML_OP_GET_ROWS ||
++        tensor->op == GGML_OP_MUL_MAT)) q35_op("cpu_fallback", tensor, 0, 0, 0, 0, 0, 0);
+ 
+     switch (tensor->op) {
+         case GGML_OP_DUP:
+--- a/vendor/llama.cpp/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp
++++ b/vendor/llama.cpp/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp
+@@ -1,3 +1,49 @@
++#include <inttypes.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++static inline int q35_trace_enabled(void) {
++    const char * enabled = getenv("Q35_TRACE_ACTIVE");
++    return enabled && enabled[0] == '1' && enabled[1] == '\0';
++}
++
++static inline uint64_t q35_thread(void) {
++    return (uint64_t) (uintptr_t) pthread_self();
++}
++
++static inline void q35_hex(const char * text) {
++    for (const unsigned char * p = (const unsigned char *) text; *p; ++p) {
++        fprintf(stderr, "%02x", *p);
++    }
++}
++
++#include "ggml.h"
++#include <string.h>
++
++static void q35_op(const char * event, const struct ggml_tensor * tensor,
++                   size_t m, size_t n, size_t k, size_t start, size_t cols,
++                   int features) {
++    if (strcmp(event, "q8_repack") != 0 && !q35_trace_enabled()) return;
++    const struct ggml_tensor * a = tensor->src[0];
++    const struct ggml_tensor * b = tensor->src[1];
++    flockfile(stderr);
++    fprintf(stderr, "Q35 {\"event\":\"%s\",\"thread\":%" PRIu64 ",\"tensor_hex\":\"", event, q35_thread());
++    q35_hex(tensor->name);
++    fprintf(stderr, "\",\"weight_hex\":\"");
++    q35_hex(a ? a->name : "");
++    fprintf(stderr, "\",\"op\":\"%s\",\"stored_type\":\"%s\",\"activation_type\":\"%s\","
++                    "\"m\":%zu,\"n\":%zu,\"k\":%zu,\"start\":%zu,\"cols\":%zu,\"kernel_required_features\":%d,\"weight_ne\":[",
++            ggml_op_name(tensor->op), a ? ggml_type_name(a->type) : ggml_type_name(tensor->type),
++            b ? ggml_type_name(b->type) : "none", m, n, k, start, cols, features);
++    for (int i = 0; i < 4; ++i) fprintf(stderr, "%s%" PRId64, i ? "," : "", a ? a->ne[i] : tensor->ne[i]);
++    fprintf(stderr, "],\"activation_ne\":[");
++    for (int i = 0; i < 4; ++i) fprintf(stderr, "%s%" PRId64, i ? "," : "", b ? b->ne[i] : 0);
++    fprintf(stderr, "]}\n");
++    funlockfile(stderr);
++}
++
+ // SPDX-FileCopyrightText: Copyright 2025-2026 Arm Limited and/or its affiliates <open-source-office@arm.com>
+ // SPDX-License-Identifier: MIT
+ //
+@@ -1402,6 +1448,7 @@
+             const uint8_t * rhs_ptr = slot.rhs_base + rhs_packed_offset;
+             float * dst_ptr         = reinterpret_cast<float *>(dst_batch_base + dst_offset);
+ 
++            q35_op("call_begin", dst, m, n, k, global_start, cols, slot.kernels->required_cpu);
+             slot.kernel->run_kernel_ex(m, cols, k, slot.rhs_bl,
+                                        lhs_ptr,
+                                        rhs_ptr,
+@@ -1410,6 +1457,7 @@
+                                        sizeof(float),
+                                        -FLT_MAX,
+                                        FLT_MAX);
++            if (q35_trace_enabled()) fprintf(stderr, "Q35 {\"event\":\"call_end\",\"thread\":%" PRIu64 "}\n", q35_thread());
+         };
+ 
+         for (int64_t batch_idx = 0; batch_idx < ne12; ++batch_idx) {
+@@ -1599,6 +1647,7 @@
+             }
+         }
+ 
++        if (want_q8 && slot_total > 0) q35_op("q8_repack", tensor, 0, n, k, 0, n, 0);
+         if (want_f32 && slot_total > 0) {
+             bias.resize(n, 0.0f);
+         }
+--- a/vendor/llama.cpp/src/llama-memory-hybrid.cpp
++++ b/vendor/llama.cpp/src/llama-memory-hybrid.cpp
+@@ -1,3 +1,5 @@
++#include <cstdio>
++#include "llama-io.h"
+ #include "llama-memory-hybrid.h"
+ 
+ #include "llama-impl.h"
+@@ -63,7 +65,10 @@
+         filter_recr == nullptr ?
+             [&](int32_t il) { return hparams.is_recr(il); }
+             : filter_recr
+-    )) {}
++    )) {
++    fprintf(stderr, "Q35 {\"event\":\"hybrid_config\",\"type_r\":\"%s\",\"type_s\":\"%s\",\"recurrent_size\":%u,\"rollback_slots\":%u,\"sequences\":%u,\"attention_size\":%u,\"offload\":%s}\n",
++            ggml_type_name(type_r), ggml_type_name(type_s), rs_size, n_rs_seq, n_seq_max, kv_size, offload ? "true" : "false");
++}
+ 
+ llama_memory_context_ptr llama_memory_hybrid::init_batch(llama_batch_allocr & balloc, uint32_t n_ubatch, bool embd_all) {
+     do {
+@@ -189,15 +194,27 @@
+ }
+ 
+ void llama_memory_hybrid::state_write(llama_io_write_i & io, llama_seq_id seq_id, llama_state_seq_flags flags) const {
+-    mem_attn->state_write(io, seq_id, flags);
+-    mem_recr->state_write(io, seq_id, flags);
++    { const size_t q35_before = io.n_bytes();
++        mem_attn->state_write(io, seq_id, flags);
++        fprintf(stderr, "Q35 {\"event\":\"hybrid_state\",\"action\":\"write\",\"component\":\"attn\",\"bytes\":%zu,\"position_min\":%d,\"position_max\":%d}\n",
++                io.n_bytes() - q35_before, mem_attn->seq_pos_min(seq_id), mem_attn->seq_pos_max(seq_id)); }
++    { const size_t q35_before = io.n_bytes();
++        mem_recr->state_write(io, seq_id, flags);
++        fprintf(stderr, "Q35 {\"event\":\"hybrid_state\",\"action\":\"write\",\"component\":\"recr\",\"bytes\":%zu,\"position_min\":%d,\"position_max\":%d}\n",
++                io.n_bytes() - q35_before, mem_recr->seq_pos_min(seq_id), mem_recr->seq_pos_max(seq_id)); }
+ }
+ 
+ void llama_memory_hybrid::state_read(llama_io_read_i & io, llama_seq_id seq_id, llama_state_seq_flags flags) {
+-    mem_attn->state_read(io, seq_id, flags);
++    { const size_t q35_before = io.n_bytes();
++        mem_attn->state_read(io, seq_id, flags);
++        fprintf(stderr, "Q35 {\"event\":\"hybrid_state\",\"action\":\"read\",\"component\":\"attn\",\"bytes\":%zu,\"position_min\":%d,\"position_max\":%d}\n",
++                io.n_bytes() - q35_before, mem_attn->seq_pos_min(seq_id), mem_attn->seq_pos_max(seq_id)); }
+ 
+     try {
++        { const size_t q35_before = io.n_bytes();
+         mem_recr->state_read(io, seq_id, flags);
++        fprintf(stderr, "Q35 {\"event\":\"hybrid_state\",\"action\":\"read\",\"component\":\"recr\",\"bytes\":%zu,\"position_min\":%d,\"position_max\":%d}\n",
++                io.n_bytes() - q35_before, mem_recr->seq_pos_min(seq_id), mem_recr->seq_pos_max(seq_id)); }
+     } catch (...) {
+         // a failed restore leaves the sequence empty in both caches
+         mem_attn->state_clear(seq_id);
+--- a/vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp4x4_qsi8cxp4x4_16x4_neon_dotprod.c
++++ b/vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp4x4_qsi8cxp4x4_16x4_neon_dotprod.c
+@@ -1,3 +1,24 @@
++#include <inttypes.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++static inline int q35_trace_enabled(void) {
++    const char * enabled = getenv("Q35_TRACE_ACTIVE");
++    return enabled && enabled[0] == '1' && enabled[1] == '\0';
++}
++
++static inline uint64_t q35_thread(void) {
++    return (uint64_t) (uintptr_t) pthread_self();
++}
++
++static inline void q35_hex(const char * text) {
++    for (const unsigned char * p = (const unsigned char *) text; *p; ++p) {
++        fprintf(stderr, "%02x", *p);
++    }
++}
++
+ //
+ // SPDX-FileCopyrightText: Copyright 2024-2026 Arm Limited and/or its affiliates <open-source-office@arm.com>
+ //
+@@ -127,6 +148,8 @@
+     size_t dst_stride_col,            //
+     float scalar_min,                 //
+     float scalar_max) {
++    if (q35_trace_enabled()) fprintf(stderr, "Q35 {\"event\":\"kernel\",\"thread\":%" PRIu64 ",\"name\":\"%s\",\"m\":%zu,\"n\":%zu,\"k\":%zu}\n", q35_thread(), __func__, m, n, k);
++
+     KAI_ASSUME(dst_stride_col == sizeof(float));
+ 
+     if (m == 0) {
+--- a/vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp1x4_qsi8cxp4x4_1x4_neon_dotprod.c
++++ b/vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp1x4_qsi8cxp4x4_1x4_neon_dotprod.c
+@@ -1,3 +1,24 @@
++#include <inttypes.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++
++static inline int q35_trace_enabled(void) {
++    const char * enabled = getenv("Q35_TRACE_ACTIVE");
++    return enabled && enabled[0] == '1' && enabled[1] == '\0';
++}
++
++static inline uint64_t q35_thread(void) {
++    return (uint64_t) (uintptr_t) pthread_self();
++}
++
++static inline void q35_hex(const char * text) {
++    for (const unsigned char * p = (const unsigned char *) text; *p; ++p) {
++        fprintf(stderr, "%02x", *p);
++    }
++}
++
+ //
+ // SPDX-FileCopyrightText: Copyright 2024-2026 Arm Limited and/or its affiliates <open-source-office@arm.com>
+ //
+@@ -136,6 +157,8 @@
+     size_t dst_stride_col,            //
+     float scalar_min,                 //
+     float scalar_max) {
++    if (q35_trace_enabled()) fprintf(stderr, "Q35 {\"event\":\"kernel\",\"thread\":%" PRIu64 ",\"name\":\"%s\",\"m\":%zu,\"n\":%zu,\"k\":%zu}\n", q35_thread(), __func__, m, n, k);
++
+     KAI_ASSUME(dst_stride_col == sizeof(float));
+ 
+     if (m == 0) {

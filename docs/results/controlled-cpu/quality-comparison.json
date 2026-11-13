@@ -1,0 +1,4089 @@
+{
+  "schema_version": 1,
+  "kind": "reviewed-backend-quality-comparison",
+  "status": "complete",
+  "quality_preserved": false,
+  "backend_adoption": false,
+  "provenance": {
+    "wrapper_sha256": "2f4959b72dfb9b5a961c87844c47c373ac97a7844926b7ccbf93a249e08f41cb",
+    "exporter_sha256": "789459ca2ad228b2b8f043be359947deaf55137d7b1c6a1860a4a17786e20d36",
+    "guard_sha256": "59dddb4371337662c7b33724b73e9f11f4eba922350878505e904ea0f0048e62",
+    "splits": {
+      "development": {
+        "cpu_report_sha256": "356833de250ac76a8b94c483ee9edef27b94243701497c3d04d4fcc55ee7da89",
+        "cpu_run_sha256": "ac8e9b76c64063b6ee24a8ce1121809a4e2532f5c5e49f089411fecb86e711e0",
+        "cpu_aggregate_sha256": "f2d25faa9640c5e55e6121cc02487dadfb12052c25e063124a9b120f42da6663",
+        "candidate_run_sha256": "ff20c97d6c55aaf01efd43839535146971f67115cc65ef328058f09b8118a27f",
+        "candidate_run_state": "completed",
+        "candidate_failure_sha256": null,
+        "review_sha256": [
+          "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3"
+        ]
+      },
+      "regression": {
+        "cpu_report_sha256": "5b9d810d77fe2ed73c407c1ee1fbdd1e79ea931210c79c5506429e279655b484",
+        "cpu_run_sha256": "c2e8670c964884810ff7c36cf578a0c894a6b1f2ee8d3ef385617b18c9bc4e4d",
+        "cpu_aggregate_sha256": "cd2c364482d4aa65ba847776790b617292d01d3f732e39c394bbc9cc9ed7923b",
+        "candidate_run_sha256": "d828e949f370c85c8ff986979fddc5197f38b554ad9c7dd7ba8f43b7690e0d58",
+        "candidate_run_state": "completed",
+        "candidate_failure_sha256": null,
+        "review_sha256": [
+          "1933e98a3daa1b2503172d9ab66fe4016873c5944225681551ebe360f428082a",
+          "008bce28e9cab783043edaf063fa8b0145a921f2d23909a087cbbdb80ab4a4a0"
+        ]
+      },
+      "validation": {
+        "cpu_report_sha256": "b763e27a3a47180fee504e2fbd0028b01193151f2a4e92af9fdd2b6823d90a72",
+        "cpu_run_sha256": "ef76e1079a2cc2992f5951b025828303778d6cf07f438ecd3f144b64978af982",
+        "cpu_aggregate_sha256": "5dc30f3e67d547865178bfbe52d9a8a79e397e561ead9b243c722cb1cc76760d",
+        "candidate_run_sha256": "98bcf4342ed8d63bd5af4e8deba850ced0e74fc6594c08723fc23f8ee7857788",
+        "candidate_run_state": "completed",
+        "candidate_failure_sha256": null,
+        "review_sha256": [
+          "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c"
+        ]
+      }
+    },
+    "kleidiai_runtime": {
+      "binary_sha256": "478454af8a7ca1644ea584e28c332ac42ae0daed4f3eabda06453f20147f0ee6",
+      "sibling_libraries_sha256": {
+        "libggml-base.0.29.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+        "libggml-cpu.0.29.0.dylib": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2",
+        "libggml.0.29.0.dylib": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b",
+        "libllama-bench-impl.dylib": "3ee4c2d2e036d5c50b742b954d3138fb2bab2bb61e67fc6de275609c0ff25dbe",
+        "libllama-common.0.9.0.dylib": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e",
+        "libllama-completion-impl.dylib": "b1eeb659d3b2b8c2d5d33b4cd63b0eb3834b29314f8cadae4b0d7688a3e36e39",
+        "libllama-server-impl.dylib": "e2d4276ec8ed916e7f13aace1dd540e506efd9142b15a49f7cf0c9569739d5ba",
+        "libllama.0.9.0.dylib": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910",
+        "libmtmd.0.9.0.dylib": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9"
+      },
+      "library_inventory": "Sibling library hashes; not a loaded-library trace."
+    },
+    "candidate_implementation": {
+      "src/arm64_rag/__init__.py": "6687cb36c301b5d4447f4b2841d110bcce0153a209da0f393a1b3331943b2fff",
+      "src/arm64_rag/answers.py": "d3326b84d68d24d659529af20db5a6f5921d0ac54d320157d519555b5238b5f3",
+      "src/arm64_rag/cli.py": "ab75d99f5ba60f34f778ccb558f663b2fe2cd68f6731913bf6b7d64a5c54fad4",
+      "src/arm64_rag/context.py": "51336dec4a9ebd82a90d0c5ac3f9159c3fa005fd2ea1441a31dd78a38026a92c",
+      "src/arm64_rag/corpus.py": "39aeaf644079b8047e475620c840646b1b06f9242866b932a1f59835e3765854",
+      "src/arm64_rag/dense.py": "e0b5b02da5d5d21ee4743a268a41e9f114e407c75a25da935197b7ba7886ec43",
+      "src/arm64_rag/doctor.py": "040e10e766b7d6711d1f0abbd45cd7b4ee20ddc773a2422d57551c592623a69e",
+      "src/arm64_rag/documents.py": "0519bff882f74d97f1135389884b3efe261466edce04681d0b0406eb76ed1899",
+      "src/arm64_rag/embeddings.py": "60648f7e9bf605175aa6f09f375ceab3ebcdb0781682d82e8d7d95d7b6001340",
+      "src/arm64_rag/evaluation.py": "2b154ba2bb357af149dab780bce21ed5c405d80ef388c7ea7c0ae1ead774c4d2",
+      "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
+      "src/arm64_rag/inference.py": "c6cfce7ed76b66f95ef8adeeb499bfaa92992bcf4ac0371c79e48dee30ee1061",
+      "src/arm64_rag/qa_evaluation.py": "f92692c3a3e3cdce5de02fe1231a1f0ed5e66500a2a78a8728e3b02252ab659d",
+      "scripts/check_answers.py": "4c160dea286f499c63cffa4710c1ce970138211401eda4d5d28620613c9d2d3f",
+      "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
+    }
+  },
+  "accounting": {
+    "planned": 40,
+    "known_attempted": 40,
+    "records_retained": 40,
+    "known_unattempted": 0,
+    "attempted_without_record": 0,
+    "failed_before_record": 0,
+    "recorded_execution_failures": 2,
+    "reviewed_structurally_valid": 38,
+    "unobserved_cases": 0,
+    "reviewed": 40,
+    "semantic_reuse": 5,
+    "fact_gains": 3,
+    "fact_losses": 2,
+    "unavailable_fact_units": 4,
+    "cases_without_comparable_inputs": 1,
+    "fact_review_disagreements": 0,
+    "baseline_failed_facts": 17,
+    "candidate_failed_facts": 16
+  },
+  "claim_support": {
+    "cpu": {
+      "claims": 78,
+      "supplied_supported": 78,
+      "attached_supported": 78
+    },
+    "kleidiai": {
+      "claims": 75,
+      "supplied_supported": 74,
+      "attached_supported": 74
+    }
+  },
+  "blockers": [
+    {
+      "id": "dev-010",
+      "reasons": [
+        "supplied_claim_support_failure",
+        "attached_citation_support_failure",
+        "reviewed_claim_failure",
+        "unsupported_claims_failure",
+        "citation_support_failure",
+        "citation_coverage_failure"
+      ]
+    },
+    {
+      "id": "val-009",
+      "reasons": [
+        "previously_passed_fact_lost"
+      ]
+    },
+    {
+      "id": "val-011",
+      "reasons": [
+        "previously_passed_fact_lost"
+      ]
+    },
+    {
+      "id": "fresh-007",
+      "reasons": [
+        "execution_or_structure_failure"
+      ]
+    },
+    {
+      "id": "fresh-008",
+      "reasons": [
+        "execution_or_structure_failure"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "role": "development",
+      "id": "dev-001",
+      "state": "reviewed",
+      "cpu_case_sha256": "6db39cf6cf3e3b81ee9a2be76398b76527b640c369f87f022a8678b5cbb02bf2",
+      "candidate_case_sha256": "29ae045e93416ac74c0e18c1a7580563fc6b3b252c9120cf4b38b73c22be1899",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Enable GGML_CPU_KLEIDIAI=ON.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The target must be AArch64/arm64.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The option enables KleidiAI on x86 or 32-bit Arm.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-002",
+      "state": "reviewed",
+      "cpu_case_sha256": "b57313cf61519a1754114fd960a1e2f8bfdbefad0e4ad036e7aa6e6f64cf6bb6",
+      "candidate_case_sha256": "971e7e5a56e8ef5d547fa9c64d07ba1ee7a48875211ae785f8e7b31be04726c9",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The log establishes allocation through the KleidiAI CPU buffer.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "It does not prove execution of every operation or a specific SME-family operation.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Buffer allocation alone proves complete kernel execution.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-003",
+      "state": "reviewed",
+      "cpu_case_sha256": "7e16b34a51111f91cd140d88016854c38779df3010d108dacfaf98e82aad9950",
+      "candidate_case_sha256": "de83542676718636b232c793c79dfab36aa8ae510141ddd9c9df09ba00e04c1b",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Set GGML_METAL=OFF at build time.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Enabling KleidiAI automatically prevents Metal execution.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-004",
+      "state": "reviewed",
+      "cpu_case_sha256": "2770a16f31b224769eb568e63aedf6d5bb7106587af5948f6185a6f5cafa6631",
+      "candidate_case_sha256": "c56769590aff8a2ebabbf302d89bebd67a19681662c329b16c89493e12633430",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Prompt processing uses -p.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Generation uses -n.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The combined workload uses -pg.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "-p measures generation only.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-005",
+      "state": "reviewed",
+      "cpu_case_sha256": "ed80fd8583e135ef38e68a1b12b2e82f3c2e0af3a495946ede97f66a586d186a",
+      "candidate_case_sha256": "a07594e0a7df8da907d70ea5f355437c9f15f203e0c3f54c7b23c355b2d868e4",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Tokenization time is excluded.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Sampling time is excluded.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The timings include both tokenization and sampling.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-006",
+      "state": "reviewed",
+      "cpu_case_sha256": "cef91d04cfde1f801ee2ac9976f7ef6e1ccd4bf65427e76dea6958396c0898a6",
+      "candidate_case_sha256": "706707999a9818839ea73665887834af3db55eb72ba963961dd61cf15a4617e7",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "-r controls the repetition count.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "JSON can include individual repetition results.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Only the average can be exported.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-007",
+      "state": "reviewed",
+      "cpu_case_sha256": "b0e48e33e957d91fbe2172667f0377a9c148106b0aa8c034089345e929810225",
+      "candidate_case_sha256": "d276e5e000616397d3daf6cfddcd14b1d57ad9ae35fbbbb5603867d5179c4592",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ee6b14fe0ac69afa6347c23275d1c5bbf0e9c3704e7719d1779ea9a7c10bad7d",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "cache_prompt defaults to true.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Different batching can change logits and make results nondeterministic.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Prompt reuse guarantees bit-identical logits.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-008",
+      "state": "reviewed",
+      "cpu_case_sha256": "4c1a1031494d8d26b0bc26896341f1ce81fbed9045010a4c1d2c543048b76bcb",
+      "candidate_case_sha256": "bdaeaf3d41cd125a4b106588a4f47276d21f19aa9c265a770ea0eced2b7e1070",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Loading returns HTTP 503.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Ready returns HTTP 200 with status ok.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "HTTP 503 means the server is ready for generation.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-009",
+      "state": "reviewed",
+      "cpu_case_sha256": "3c5bee12438757f80837f7e31071cf30797be994a72ed89a6a099f55ff282445",
+      "candidate_case_sha256": "0a8caeffb7a285e9e9a0086fe885e15757027a82d4641e420e0623a3da3aedb6",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "POST /apply-template returns a rendered prompt without inference.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "POST /tokenize accepts text and returns token IDs, with optional pieces.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Rendering a chat template performs generation.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-010",
+      "state": "reviewed",
+      "cpu_case_sha256": "84d57f6dc33d1032fbcb7d94d51678b67b4b3c00293a4817045a5886f4b6f136",
+      "candidate_case_sha256": "511eb6f1da590eba8bc23517406f70ec7f710c0f0472b0e0a069ad3523abcde5",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The microkernel API lets the caller control the portion and dispatch across threads.",
+          "cpu": "fail",
+          "kleidiai": "pass",
+          "change": "gain"
+        },
+        {
+          "fact": "KleidiAI lists no scheduling as a feature.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "fail"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "fail"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "fail"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "KleidiAI owns application scheduling.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [
+        "unsupported_claims",
+        "citation_support",
+        "citation_coverage"
+      ],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": [
+        "supplied_claim_support_failure",
+        "attached_citation_support_failure",
+        "reviewed_claim_failure",
+        "unsupported_claims_failure",
+        "citation_support_failure",
+        "citation_coverage_failure"
+      ]
+    },
+    {
+      "role": "development",
+      "id": "dev-011",
+      "state": "reviewed",
+      "cpu_case_sha256": "31bc3e53ca23f93e8e2723cc1194f816f2ba2e65ade63c082e1b5456e7605672",
+      "candidate_case_sha256": "efae20b438bcece27a52e01b793a683685c369d8a63ceea51a0365fe30e13166",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The allocation log does not prove every operation used a KleidiAI kernel.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The benchmark excludes tokenization and sampling, so it is not complete request timing.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Those two observations establish an end-to-end RAG speedup.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-012",
+      "state": "reviewed",
+      "cpu_case_sha256": "edc4ad6f8cae84f1473ea40c9033d4f533a524a5955a498a77ea992da1d067e2",
+      "candidate_case_sha256": "562b095f9e8cfb1a5cba5076ad0db48c0154c8578de5173d8809db718e9a3cd1",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Note A says four CPU threads.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Note B says eight CPU threads.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The records conflict and provide no basis for choosing one as authoritative.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Exactly four or exactly eight threads is established without acknowledging the conflict.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "One note supersedes the other.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-013",
+      "state": "reviewed",
+      "cpu_case_sha256": "880d779510e0bff05baf406fd58a126e75bde06f424033df353c01f5634cec9c",
+      "candidate_case_sha256": "fe796e44683eeadfcb643ac627ec971ae0c17bcfa834b3953a68a8e48261b461",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": true,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "exact_final_output_reuse",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f"
+      },
+      "facts": [
+        {
+          "fact": "The supplied notes do not establish a peak memory measurement.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_support": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_coverage": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "abstention": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Any numerical peak-memory value is supported by these notes.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        },
+        "kleidiai": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "development",
+      "id": "dev-014",
+      "state": "reviewed",
+      "cpu_case_sha256": "7a158c72fdc0d9c5149de4587fd14436825437e2220cc579d3fcaa3d81440377",
+      "candidate_case_sha256": "d3f15682bbb2785fca0785cf9979d61491a8f45aa12d2fbfcbdc26d9515d9932",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "ba1935631deabe6222e3fe74a5320ce22e5902e0654fa6f31a9913b840e6eb0f",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The recorded batch size is 128 tokens.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The answer consists only of BANANA.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The document instruction overrides the question.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-001",
+      "state": "reviewed",
+      "cpu_case_sha256": "9f5c6a2e553d84f688db4579b5c57217aa514096b45c5ab21a4f2c998d900d10",
+      "candidate_case_sha256": "861814048715e10d66aaddd3fa9a6241d2635d0b647074d7e30779bb40123613",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Single-config generators use CMAKE_BUILD_TYPE=Debug when configuring and ignore the --config flag.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "A multi-config generator such as Xcode selects Debug with --config Debug when building.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Passing only --config Debug changes a single-config build to Debug.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-002",
+      "state": "reviewed",
+      "cpu_case_sha256": "74f616d4691878b539c0ff44a1d41046c18b17bdf735e2a3f2cb0e364d646166",
+      "candidate_case_sha256": "653c455d24371e5e30419db812f57eeb997ba094d0ba41dcad0c7faa8cc6e6b5",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Configure with -DBUILD_SHARED_LIBS=OFF.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "BUILD_SHARED_LIBS must be ON to build static libraries.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-003",
+      "state": "reviewed",
+      "cpu_case_sha256": "c6a2af80f963d330c8dc6a8a7738cdcea69f4e85bfcdf242af6d0493d2bae65f",
+      "candidate_case_sha256": "11c90e5a42424d34b6108b2440d1cbb89a27b9908c2675d2253745f38c5e04bf",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "BLAS may improve prompt processing with batch sizes greater than 32.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The guide says BLAS does not affect generation performance.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "BLAS is documented to accelerate token generation.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "BLAS guarantees faster prompt processing for every batch size.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-004",
+      "state": "reviewed",
+      "cpu_case_sha256": "44a6ed9b03ab04ce8c0406c625e78f478d703dff9a28d1c81926e8cc7d9e0b38",
+      "candidate_case_sha256": "dbc018d6bf62f6f46c5c4cee2e3eac64f3a1894a797a166ab0d579fdafbc9d88",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The selector requires a known runtime SVE vector length of QK8_0 bytes, currently 32 bytes.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Apple reports SVE capability separately from userspace non-streaming availability, so this selector treats the length as unknown there.",
+          "cpu": "fail",
+          "kleidiai": "pass",
+          "change": "gain"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Any reported SVE capability is sufficient regardless of vector length.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The selector assumes a 32-byte SVE length on Apple.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-005",
+      "state": "reviewed",
+      "cpu_case_sha256": "6a119a2b24f9e370188a970f5f6e2974760eec8f58be8861993f0a4d694c5def",
+      "candidate_case_sha256": "7457ef5d6d5804baf8f9aed30780f9d904c2e74404b97099671179c43d1de2ac",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Values can be comma-separated or supplied by repeating the option.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Each prompt-processing and text-generation test uses all combinations of specified options.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Only the first supplied parameter value is tested.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The values are paired by position instead of testing all combinations.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-006",
+      "state": "reviewed",
+      "cpu_case_sha256": "84cf8d48e7a962a2b6fefcdda43e88bbd37e75fe9473fb9c18c368ab2d730c2d",
+      "candidate_case_sha256": "f82bfd83007b7b44bea95990e76c374e5af4dece5dcbeaf4ebfa0410c507b2ed",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Use -d 512 to set the context depth and prefill the KV cache with 512 tokens.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The -d option sets only the number of generated tokens.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Context depth leaves the KV cache empty.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-007",
+      "state": "reviewed",
+      "cpu_case_sha256": "8a64a730a4df9c476502fd1d5267630607ed347ce1ba4b6a568575489fb77803",
+      "candidate_case_sha256": "ab60d0937e6176ddb1b8c140e71e19b4f664e3de1aa539f53c09f792797f2cc0",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "--fit-target, or -fitt, specifies the per-device memory margin in MiB.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "--fit-ctx, or -fitc, specifies the minimum context size for --fit-target.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The memory margin is specified in tokens.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "--fit-ctx sets the generation token count.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-008",
+      "state": "reviewed",
+      "cpu_case_sha256": "938b42c40bbac73b8bc5393ddf312e171cd6287b4f5f2286d9174b6d9b7397e6",
+      "candidate_case_sha256": "bd3908bf67a42948f88efe7b8acb1e072b4fe581142760d33a612c1317455ae0",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "The folder name describes the operation and destination/source data types.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Variant filenames add computational parameters, the Arm technology and the architecture feature.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Folder names encode only the operating system.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Variant filenames identify different operators without architecture details.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-009",
+      "state": "reviewed",
+      "cpu_case_sha256": "146d5fcc04a8f701463413045b3f330a0bff326a697204c67bcab970fc832ad7",
+      "candidate_case_sha256": "c338d1de807e5323e36a45d2a686d6895d9bca2c19a812683528771e6891da4f",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Use released source archives, identified under Packages on the official release page or by a hash digest on GitHub.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Dynamically generated source archives can have changed hash digests.",
+          "cpu": "pass",
+          "kleidiai": "fail",
+          "change": "loss"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Dynamically generated archives always retain the same digest.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Any GitHub archive is guaranteed to be immutable.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [
+        "required_facts"
+      ],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": [
+        "previously_passed_fact_lost"
+      ]
+    },
+    {
+      "role": "regression",
+      "id": "val-010",
+      "state": "reviewed",
+      "cpu_case_sha256": "1adf3e52b8f7a7ca1572dd4626e0af40306a56252ea3cbe8000c59fe99fe8516",
+      "candidate_case_sha256": "d5f18d46c8ce52043da361aad572f5f264d33b6cb8146fc6c406d4fc62d32423",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "No; the architecture restriction applies to all micro-kernels, including packing and quantization.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "They depend on Arm instruction set features.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Packing and quantization are portable x86 exceptions.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-011",
+      "state": "reviewed",
+      "cpu_case_sha256": "a06917962eaecf165f4c360492043b9548b2a028d0842b13fc4ecf4fc0042061",
+      "candidate_case_sha256": "422f5865808cdf58ce772e8457409c5d9a0122be2fe41278c87722d7e3f3b3b5",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Compiler support must generate SME ABI-compliant code for SME and SME2 kernels.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The support is not automatically detected and is enabled with KLEIDIAI_INTERNAL_EXTRA_ARCH=+sme.",
+          "cpu": "pass",
+          "kleidiai": "fail",
+          "change": "loss"
+        },
+        {
+          "fact": "Without compiler support, the documented fallback is not valid inside a call chain that already uses ZA.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "No compiler support or build setting is needed when the call chain already uses ZA.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The build detects this support automatically.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [
+        "required_facts"
+      ],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        }
+      },
+      "blockers": [
+        "previously_passed_fact_lost"
+      ]
+    },
+    {
+      "role": "regression",
+      "id": "val-012",
+      "state": "reviewed",
+      "cpu_case_sha256": "ca360f1b1ff30cf2006de2678a6d046948313e944cd76cd3716dbc70cd6137b0",
+      "candidate_case_sha256": "250e3f87f632ffad109855f9e9998b6673c11f62579cf2c2f7084b560cea8946",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "/embeddings supports pooling none and returns unnormalized embeddings for every input token.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "/v1/embeddings requires a pooling type other than none.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "For supported pooled output, the documented normalization is Euclidean, or L2.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "/v1/embeddings accepts pooling none.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Unpooled token embeddings are always L2-normalized.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 4,
+          "supplied_supported": 4,
+          "attached_supported": 4
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-013",
+      "state": "reviewed",
+      "cpu_case_sha256": "1a10f589ffefed9c57ee44acca37cff98d6e8930d1a2da5e9c2b83d48818ba8c",
+      "candidate_case_sha256": "219c9da98416421fadf9193ea4f5ef9e38bdb729a9d5335ac567f28938cf4d70",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Start the server with --metrics.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "In router mode, supply the model query parameter.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Omitting that parameter in router mode produces HTTP 400.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "/metrics is always enabled.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The router silently picks a model when the model parameter is absent.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-014",
+      "state": "reviewed",
+      "cpu_case_sha256": "e316287e1e99014f61767ae3c393553fe5bebea7324092d87432b3f429a3129c",
+      "candidate_case_sha256": "91d6e45da81b89ba209d9599e6b1f3d0ecafc4f8b662f4165c5610285822bc65",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Global properties are read-only by default.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Start the server with --props to permit POST requests that change them.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Global properties can be changed by POST without enabling --props.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-015",
+      "state": "reviewed",
+      "cpu_case_sha256": "72493b2c68b3d53fa90efc77ae56952c3f7baef88348fa93499c2c57b2078472",
+      "candidate_case_sha256": "b2777754e62706a895f407ca3d1fbbff11d61e7ab42d227e52f0a12e5e916c6a",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Launch llama-server without specifying a model to start router mode.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "Sources include the model cache controlled by LLAMA_CACHE, --models-dir and --models-preset.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "A model must be specified to start router mode.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Router mode can use only models already loaded in RAM.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 4,
+          "supplied_supported": 4,
+          "attached_supported": 4
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-016",
+      "state": "reviewed",
+      "cpu_case_sha256": "a3981d6b9ec82be27288b0035b0bccec53f73ffe7daf5e8d72723a925d449d5f",
+      "candidate_case_sha256": "eddb99866178c7f3a5eb4abfcd57c3543e39d2bcf9aea19ce227e2fa48f6fefc",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": true,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "exact_final_output_reuse",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051"
+      },
+      "facts": [
+        {
+          "fact": "Sleep unloads the model and associated memory, including the KV cache, from RAM.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "A new incoming task reloads the model.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "GET /metrics does not trigger reloading or reset the idle timer.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_support": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_coverage": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "abstention": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Sleep retains all model and KV cache memory.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Polling GET /metrics reloads the model or resets the idle timer.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        },
+        "kleidiai": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-017",
+      "state": "reviewed",
+      "cpu_case_sha256": "8218791a44f8c983097206919118c101e22a242ba5c5c4ae3169cded47af37f5",
+      "candidate_case_sha256": "2bc5928ca43cd0bfe2c35cf899f6c77956f32a13742fd2104b4acb7410f68505",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": true,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "exact_final_output_reuse",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051"
+      },
+      "facts": [
+        {
+          "fact": "n_keep counts prompt tokens to retain, excluding the BOS token.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The default 0 keeps no prompt tokens.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "-1 retains all prompt tokens.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_support": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_coverage": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "abstention": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "n_keep includes the BOS token in its count.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "-1 discards all prompt tokens.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        },
+        "kleidiai": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "regression",
+      "id": "val-018",
+      "state": "reviewed",
+      "cpu_case_sha256": "7b36006cd9699c441d7bd3d56bdbb0fd8b816607558cb73026b4dacbbff35ec6",
+      "candidate_case_sha256": "03eba89cf2ca41dfd9f21460518540b47d5c2acd22bd089a7b946a0acf17e9fc",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Stopping strings are not included in the completion.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The client must add them to the prompt for the next iteration if needed.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Stopping strings are always included in the generated text.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The client never needs to add stopping strings to later prompts.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-001",
+      "state": "reviewed",
+      "cpu_case_sha256": "d32a8952c70d39e0c8e95e680ea6c1f7f777f321c02418ea95f38587c17b7983",
+      "candidate_case_sha256": "4f285f452772dd6d02f98480df1160aec95a9bf0994656584ca119b438bb99d0",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": true,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "exact_final_output_reuse",
+        "cpu_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+        "reused_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328"
+      },
+      "facts": [
+        {
+          "fact": "On a Mac, the Accelerate Framework is enabled by default and normal build instructions can be used.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "OpenBLAS must be installed on the Linux machine.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The Linux CMake configuration enables GGML_BLAS=ON and selects GGML_BLAS_VENDOR=OpenBLAS.",
+          "cpu": "fail",
+          "kleidiai": "fail",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "fail"
+        },
+        "unsupported_claims": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_support": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "citation_coverage": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "abstention": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The Accelerate Framework is available on every platform.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Selecting the OpenBLAS vendor alone installs OpenBLAS.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The documented Linux OpenBLAS setup provides GPU acceleration.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        },
+        "kleidiai": {
+          "claims": 0,
+          "supplied_supported": 0,
+          "attached_supported": 0
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-002",
+      "state": "reviewed",
+      "cpu_case_sha256": "82c8bb7645618bc194c22758f7553e29e9b1644b0517c66a9ac0197e5150a2cc",
+      "candidate_case_sha256": "a3067e490d2ad4cdbe4fd2dfb1f7739017f16b824c3fb21724950a98f384f1ae",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "POST /slots/{id_slot}?action=save saves the specified slot prompt cache to a file.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "POST /slots/{id_slot}?action=restore restores the specified slot prompt cache from a file.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The filename is relative to the directory specified by the server --slot-save-path parameter for both operations.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Saving or restoring the slot cache uses a GET request.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The filename refers to a file on the HTTP client machine.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The cache save directory is always the server current working directory.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-003",
+      "state": "reviewed",
+      "cpu_case_sha256": "9940e5f1a878e296c92838d5077c416705b3fc37c49384664479185cf8925ca7",
+      "candidate_case_sha256": "17e1fcbfce6a7d45c636d189dfff517dff25b12c4e832b834f556f8f2aeede0c",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "A positive value n enables compatible SME-family kernels and permits up to n threads for selected quantized SME-family kernels.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "A bundled kernel remains disabled when the CPU lacks its required SME-family capability, regardless of this variable.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "A positive value can enable an SME-family kernel on a CPU lacking its required capability.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The value sets an exact thread count for every operation or every kernel.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-004",
+      "state": "reviewed",
+      "cpu_case_sha256": "8d67f9830913c9d602f238532927f292a3945238a5dd1cc5d7c5e6a0dde15563",
+      "candidate_case_sha256": "09e620901a52b066a9561d4ffaf1981b1b1ec28f85ead21d0fe3f5bfe5259c71",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Production quality should not be expected from code in the experimental directory.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        },
+        {
+          "fact": "The API may change at any time for any file in experimental.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "Experimental code is guaranteed to be production quality.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Experimental APIs are guaranteed to remain stable until the next major release.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-005",
+      "state": "reviewed",
+      "cpu_case_sha256": "bdf0c09ae787e56a65b413b4fc88a1a46fa29cb5b743534eb5bd94364f9edc94",
+      "candidate_case_sha256": "7a09db8e3d0099e168227376635b2423b051b243ee7d85a40e02b8b8a362b623",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "new_source_review",
+        "cpu_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "A slash-delimited nested field is unnested to the response root and given a new name.",
+          "cpu": "fail",
+          "kleidiai": "pass",
+          "change": "gain"
+        },
+        {
+          "fact": "A missing requested field is omitted without an error.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "fail",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "A missing response field causes an error.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "Slash-delimited fields retain their original nesting in the response.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-006",
+      "state": "reviewed",
+      "cpu_case_sha256": "ab640646d1449dcf96a8ce968988ff44cd5cfc59721c11fd7d7bd01501efc049",
+      "candidate_case_sha256": "9ac0980403118a01965bfaf2aa0b230ab85b39638be85855ba42ee80d7e552fc",
+      "structurally_valid": true,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": true
+      },
+      "final_content_identical": true,
+      "validated_answer_identical": true,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "exact_final_output_reuse",
+        "cpu_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+        "reused_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113"
+      },
+      "facts": [
+        {
+          "fact": "The explicitly named --hf-file (or -hff) overrides the quantization in --hf-repo.",
+          "cpu": "pass",
+          "kleidiai": "pass",
+          "change": "unchanged"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_applicable"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The quantization in --hf-repo overrides --hf-file.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        },
+        {
+          "claim": "The server downloads and benchmarks both selections automatically.",
+          "cpu": "pass",
+          "kleidiai": "pass"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        },
+        "kleidiai": {
+          "claims": 1,
+          "supplied_supported": 1,
+          "attached_supported": 1
+        }
+      },
+      "blockers": []
+    },
+    {
+      "role": "validation",
+      "id": "fresh-007",
+      "state": "reviewed",
+      "cpu_case_sha256": "438ab0cb69161aa7b4ca919b34a08afac0a84f278ab7b24e9cbebdb625fafe5e",
+      "candidate_case_sha256": "84758891582450b967b93f97ca807f91bb1230c59b2daf719a7d745eb4b451fa",
+      "structurally_valid": false,
+      "input_evidence": {
+        "state": "matched",
+        "matched_fields": [
+          "question",
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "unavailable_fields": [],
+        "guard_mismatched_fields": [],
+        "generation_comparable": false
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "execution_failure_review",
+        "cpu_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Use the Arm GNU toolchain and make it available on PATH on the x86_64 Linux host.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed",
+          "change": "unavailable"
+        },
+        {
+          "fact": "Pass -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/aarch64-none-linux-gnu.toolchain.cmake to CMake for the documented cross-build.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed",
+          "change": "unavailable"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The build must run on an Arm host because cross-compilation from x86_64 Linux is unsupported.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        {
+          "claim": "The Android NDK toolchain file is the documented toolchain for this Arm Linux cross-build.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 3,
+          "supplied_supported": 3,
+          "attached_supported": 3
+        },
+        "kleidiai": null
+      },
+      "blockers": [
+        "execution_or_structure_failure"
+      ]
+    },
+    {
+      "role": "validation",
+      "id": "fresh-008",
+      "state": "reviewed",
+      "cpu_case_sha256": "bcf1bfc53d296fc119ff6f1e03451fa390a9f06df0933bed1a7990cae9901cfa",
+      "candidate_case_sha256": "7d8eb2ff77651c3c559a8b71b114e54d4f65b5add26914b3f8c697d4ebb4108d",
+      "structurally_valid": false,
+      "input_evidence": {
+        "state": "unavailable_before_packing",
+        "matched_fields": [
+          "question"
+        ],
+        "unavailable_fields": [
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "guard_mismatched_fields": [
+          "retrieval",
+          "packed",
+          "evidence"
+        ],
+        "generation_comparable": false
+      },
+      "final_content_identical": false,
+      "validated_answer_identical": false,
+      "same_output_review_disagreement": false,
+      "semantic_review": {
+        "method": "execution_failure_review",
+        "cpu_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+        "reused_review_sha256": null
+      },
+      "facts": [
+        {
+          "fact": "Select SQL output with -o sql.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed",
+          "change": "unavailable"
+        },
+        {
+          "fact": "Pipe the SQL output into the sqlite3 command-line tool to add the results to a database.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed",
+          "change": "unavailable"
+        }
+      ],
+      "criteria": {
+        "required_facts": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "unsupported_claims": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "citation_support": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "citation_coverage": {
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        "abstention": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        },
+        "conflicts": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        },
+        "document_instructions": {
+          "cpu": "not_applicable",
+          "kleidiai": "not_assessed"
+        }
+      },
+      "forbidden_claims": [
+        {
+          "claim": "The SQL output is not suitable for SQLite.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        },
+        {
+          "claim": "Selecting -o sql automatically creates and writes a SQLite database without a receiving tool.",
+          "cpu": "pass",
+          "kleidiai": "not_assessed"
+        }
+      ],
+      "criterion_regressions": [],
+      "criterion_review_disagreements": [],
+      "claim_support": {
+        "cpu": {
+          "claims": 2,
+          "supplied_supported": 2,
+          "attached_supported": 2
+        },
+        "kleidiai": null
+      },
+      "blockers": [
+        "execution_or_structure_failure"
+      ]
+    }
+  ],
+  "limits": [
+    "All 40 planned cases remain in the denominator. Unobserved or unreviewed cases are pending, never passes.",
+    "Gained facts do not cancel lost facts, unsupported claims, wrong citations or failed executions.",
+    "Exact final-output reuse retains the original agent review; changed outputs receive new source review. No human or external validation is claimed.",
+    "The former fresh CPU questions are now fixed backend regressions over shared sources.",
+    "These guarded quality runs are not timing evidence, and backend labels alone do not prove kernel dispatch.",
+    "Candidate claim counts cover reviewed records only. Pending cases are not treated as having zero claims.",
+    "Failed executions have unavailable semantic verdicts, not factual omissions or support failures. Missing pre-packing inputs are retained without claiming comparable generation."
+  ]
+}

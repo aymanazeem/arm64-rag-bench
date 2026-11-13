@@ -1,0 +1,36 @@
+{
+  "runtime_config": "configs/runtime.json",
+  "model": {
+    "path": "models/qwen35-9b/Qwen3.5-9B-Q8_0.gguf",
+    "size": 9527502048,
+    "sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4"
+  },
+  "expected_model": {
+    "model_type": "qwen35 9B Q8_0",
+    "model_size": 9516533760,
+    "model_n_params": 8953803264
+  },
+  "backends": {
+    "cpu": {
+      "binary": "build/cpu/bin/llama-bench",
+      "cache": "build/cpu/CMakeCache.txt",
+      "build_record": "artifacts/feasibility/cpu/build.json"
+    },
+    "kleidiai": {
+      "binary": "build/kleidiai/bin/llama-bench",
+      "cache": "build/kleidiai/CMakeCache.txt",
+      "build_record": "artifacts/feasibility/kleidiai/build.json"
+    }
+  },
+  "seed": 42,
+  "timeout_seconds": null,
+  "idle_before_session_seconds": 120,
+  "idle_between_pairs_seconds": null,
+  "host_baseline": "artifacts/benchmarks/host-baseline.json",
+  "prerequisites": {
+    "quality_baseline": "artifacts/benchmarks/reviews/quality.json",
+    "dispatch": "artifacts/benchmarks/reviews/dispatch.json",
+    "depth_state": "artifacts/benchmarks/reviews/state.json",
+    "setup_pilot": "artifacts/benchmarks/reviews/setup.json"
+  }
+}

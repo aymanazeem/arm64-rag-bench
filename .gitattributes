@@ -1,1 +1,2 @@
 docs/results/runtime-feasibility/kernels.patch -whitespace
+docs/results/controlled-cpu/diagnostic.patch -whitespace
