@@ -178,3 +178,29 @@ def test_missing_or_reset_counters_cannot_establish_swap_free_interval(change):
     else:
         after["pages"]["value"]["page_size_bytes"] = 4096
     assert host.interval_violations(before, after) == ["swap_counters_unverified"]
+
+
+def test_desktop_policy_records_swap_without_hiding_raw_activity():
+    before, after = snapshot(), snapshot()
+    policy = host.policy_from(before, swap_activity_policy="record_counter_increases")
+    after["pages"]["value"]["Swapins"] += 7
+    assert not host.interval_violations(before, after, policy)
+    assert host.interval_violations(before, after) == ["swap_activity"]
+    assert host.deltas(before, after)["pages"]["value"]["Swapins"] == 7
+    with pytest.raises(ValueError, match="policy"):
+        host.policy_from(before, swap_activity_policy="ignore_everything")
+
+
+@pytest.mark.parametrize("change", ["reset", "missing", "page_size"])
+def test_desktop_policy_still_rejects_unverified_counters(change):
+    before, after = snapshot(), snapshot()
+    policy = host.policy_from(before, swap_activity_policy="record_counter_increases")
+    if change == "reset":
+        after["pages"]["value"]["Swapouts"] = 0
+    elif change == "missing":
+        after["pages"] = host.unavailable("probe_failed")
+    else:
+        after["pages"]["value"]["page_size_bytes"] = 4096
+    assert host.interval_violations(before, after, policy) == [
+        "swap_counters_unverified"
+    ]

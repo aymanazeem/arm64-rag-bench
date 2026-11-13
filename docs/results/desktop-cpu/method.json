@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "study": "desktop",
+  "study_id": "qwen35-desktop-v3",
+  "frozen_at": "2026-11-13T17:15:36.310541+00:00",
+  "question": "Describe fixed-token performance of the two pinned CPU backends on this Mac with Docker temporarily stopped during one declared work period.",
+  "prior_information": "The excluded strict setup, earlier quality and diagnostic observations, all four desktop-v2 setup observations, and nine successful desktop-v2 measured invocations were seen. V2 produced four complete KleidiAI-first pairs, one per workload. Their CPU/KleidiAI mean-duration ratios were 1.604607670455332 (pp512), 1.4780643779681868 (pp2048), 0.7681896574945443 (tg128-d512) and 0.6921666247909088 (tg128-d2048). V2 stopped on memory pressure after the ninth run. The owner confirmed updating Docker during that run and authorized stopping the updated stack for this new study. This is a prospective repeat with known prior outcomes; settings, gates, schedule, formula and analysis are unchanged.",
+  "strict_study": {
+    "status": "blocked",
+    "excluded_setup_ledger_sha256": "abe8c9f3139a4cda66680609377787368f1ccbe4128612a620d9282ccb81cabb",
+    "exclusion_review_sha256": "fe94a85daaa04d009625173dc2cbf079fce49dbe760a43783425937378075358",
+    "retroactive_admission": false
+  },
+  "host_condition": {
+    "machine": "Apple M1 Max, 32 GB",
+    "docker": "temporarily stop the newly recorded updated Docker stack through the authorized graceful shutdown; restore and verify that current stack after completion, failure or interruption, preserving any initially exited containers",
+    "background": "Other user and system activity may continue. No other benchmark, build, model or test jobs during fresh setup or measured sessions.",
+    "scope": "This observed work period with Docker stopped is not representative of ordinary Docker-running use or all desktop use.",
+    "required_before_launch": [
+      "AC power",
+      "frozen power mode and host identity",
+      "normal memory pressure",
+      "matching thermal availability and any reported limits",
+      "available, monotonic page counters"
+    ]
+  },
+  "identity": {
+    "model_sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
+    "llama_cpp_revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+    "timing_builds": {
+      "cpu": "231f09c98de49525db55b362952b7db834c2170215b70288dca233e866568618",
+      "kleidiai": "11fc794c3b4fbfd871c93353d964008cbccd6c99f97ab7b3295f16628d7a05df"
+    }
+  },
+  "setup": {
+    "runs": [
+      "cpu-pp2048",
+      "kleidiai-pp2048",
+      "cpu-tg128-d2048",
+      "kleidiai-tg128-d2048"
+    ],
+    "fresh_observations_required": 4,
+    "timeout_seconds": 1200,
+    "output_limit_bytes": 16777216,
+    "swap_policy": "record_counter_increases",
+    "eligibility": "Complete native contract, resource report and unchanged inputs; no effective host stop. Swap increases alone are recorded and do not exclude.",
+    "failure": "Retain the attempt and stop setup. No retry, replacement or partial calibration.",
+    "measured_deadline_rule": "max(600, ceil(2 * longest eligible process wall seconds / 60) * 60)",
+    "timings_in_final_comparison": false
+  },
+  "measurement": {
+    "sessions": 3,
+    "session_spacing": "Consecutive blocks within one work period; not independent replications.",
+    "rounds_per_session": 2,
+    "workloads": [
+      "pp512",
+      "pp2048",
+      "tg128-d512",
+      "tg128-d2048"
+    ],
+    "planned_processes": 48,
+    "planned_pairs": 24,
+    "pairs_per_workload": 6,
+    "schedule_seed": 42,
+    "assignment": "Balanced adjacent CPU/KleidiAI pairs with shuffled workload order.",
+    "threads": 4,
+    "batch": 512,
+    "microbatch": 512,
+    "kv_type": "f16",
+    "gpu_layers": 0,
+    "flash_attention": false,
+    "upstream_warmup": true,
+    "raw_repetitions": 4,
+    "excluded_sample_indices": [
+      0
+    ],
+    "idle_before_session_seconds": 120,
+    "idle_between_pairs_seconds": 120,
+    "idle_between_sides_seconds": 0,
+    "native_settings": "Unchanged from the reviewed normal fixed-token workloads.",
+    "retries_or_replacements": false
+  },
+  "host_rule": {
+    "swap_activity": "Record every increase; no threshold, filtering or timing adjustment.",
+    "other_departure": "Stop future launches on missing/reset telemetry, AC/mode/pressure/thermal/identity changes. Retain completed valid observations with flags.",
+    "protocol_completion": "False after any effective host stop, even if all planned ratios exist.",
+    "telemetry": "Boundary host readings and setup child resource report only. No new native instrumentation or process counter observer."
+  },
+  "analysis": {
+    "pair_inclusion": "Both processes completed with valid native data and verified inputs, irrespective of recorded host findings. Incomplete or invalid pairs have no ratio.",
+    "process_duration": "Arithmetic mean of the three designated measured durations.",
+    "ratio": "CPU mean duration divided by KleidiAI mean duration.",
+    "report": "All raw repetitions, all pair ratios, order, session median/range, host findings and all 48 planned outcomes.",
+    "sample_size": "A fixed resource budget, not a power calculation.",
+    "limits": [
+      "Completion-conditioned descriptive ratios, with every failure retained.",
+      "No significance test, population confidence interval, tail-latency estimate or universal Arm64 speedup.",
+      "Pairing and random order do not prove isolation or remove systematic bias.",
+      "Synthetic compute excludes retrieval, tokenization, sampling, prefix setup, state restoration and model loading.",
+      "KleidiAI quality and adoption remain rejected.",
+      "This is a prospective local repeat with known earlier outcomes, not a blinded study or external preregistration."
+    ]
+  },
+  "research": {
+    "method_review_sha256": "9b63769af2e791d13b0f0b6e0835fba93ee7af0f99b9a817a35be3a27b0ef85a",
+    "code_review_sha256": "006205c523d036f23c353324af8b63079ba195d293fcf977b64e05f7d5fc8442",
+    "telemetry_review_sha256": "c6e3c9d05aeb9749a9391d6d8fb0528c8ffc73f69fce53ea640205022627346b"
+  },
+  "supersedes": {
+    "method_sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+    "previous_study_id": "qwen35-desktop-v2",
+    "setup_runs": 4,
+    "timed_runs": 9,
+    "completed_pairs": 4,
+    "timing_ledger_sha256": "01b9da63277bd4ef527b601220060f9c1d8c1348c03679c81ed4d3d21b4c8ee9",
+    "timing_report_sha256": "36d0116c74010891a1b0a467450dd91e7c4ea017eb1ef1595b63d0cb54e0ad60",
+    "reason": "The prior study stopped when memory pressure changed. Docker replacements overlapped its ninth run; the owner confirmed the update and authorized a new run after stopping the updated stack. Preserve the prior incomplete study and collect a fresh complete schedule without pooling or replacing prior rows."
+  }
+}

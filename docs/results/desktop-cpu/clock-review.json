@@ -1,0 +1,1007 @@
+{
+  "schema_version": 1,
+  "study_id": "qwen35-desktop-v3",
+  "review_kind": "post_run_clock_and_evidence_review",
+  "reviewer_kind": "agent",
+  "reviewer_limit": "Contributor review with separate source and raw-evidence checks; not external attestation.",
+  "planned_execution_completed": true,
+  "frozen_report_protocol_complete": true,
+  "timing_usable_for_backend_comparison": false,
+  "uninterrupted_compute_timing_valid": false,
+  "quality_preserved": false,
+  "backend_adoption": false,
+  "disposition": "All 48 successful invocations and 24 pairs are retained unchanged. Recorded system sleep affected native timing; mechanical completion does not establish uninterrupted timing validity.",
+  "evidence": {
+    "report": {
+      "sha256": "60f83f93676e921caf1d7b175a5295fccda89747b60b8d5df5397b5d5c5a06da",
+      "size": 229230
+    },
+    "plan": {
+      "sha256": "0669d6910ef56f7c0d42022d09a07ce5d79b371b211ce86262f3fc29b8978a72",
+      "size": 24762
+    },
+    "method": {
+      "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
+      "size": 6858
+    },
+    "session_ledgers": {
+      "1": {
+        "sha256": "005ff78972cb369c090c8edd8ab1e380cbfcf10f0f1836ed764173298bafb9fe",
+        "size": 166115
+      },
+      "2": {
+        "sha256": "61eb3fc3c553f17ab96c06e7d41f13bdd76e8ba4407b34eabeb8dc494e01d96b",
+        "size": 166035
+      },
+      "3": {
+        "sha256": "0d9a88b6ab82efc30cfde082225ce4c5f188882f80b34541895574ae5d9c4371",
+        "size": 166031
+      }
+    },
+    "mechanical_audit": {
+      "sha256": "c5198d9ee0b83b563b256c565eeb15d9ae90b1c33f52eda26074fc0a39996d67",
+      "size": 26993
+    },
+    "raw_power_log": {
+      "sha256": "af83b6b14dcadac95838c4c04c994c9a225cd17bd9ad21a6c7786d6a7b30ef70",
+      "size": 42025
+    },
+    "all_row_clock_observations": {
+      "sha256": "eb16358f615bffed2befddb3a1c7b86c43f31d5efaea1b4cd5c373a220f41153",
+      "size": 19146
+    },
+    "inspected_implementations": {
+      "pinned_native_benchmark": {
+        "sha256": "f6d0bae56c2175bc8bde70fcd47424b146be565da22099a75033110d13ffb612",
+        "size": 103558
+      },
+      "harness": {
+        "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+        "size": 34939
+      },
+      "installed_cpp_clock_alias": {
+        "sha256": "6b1633af4d37bfa1eb150eb2e86eb3410172945d01c36b77391976ab816f4ec9",
+        "size": 945
+      },
+      "installed_mach_time_declarations": {
+        "sha256": "d690e304ea595ca216ed51e20aa9747e0b3bcb07446d996abe0080a231c7065f",
+        "size": 2590
+      }
+    }
+  },
+  "arithmetic_review": {
+    "planned_invocations": 48,
+    "successful_invocations": 48,
+    "retained_pairs": 24,
+    "raw_samples": 192,
+    "excluded_initial_samples": 48,
+    "samples_in_pair_ratios": 144,
+    "pairs_per_workload": 6,
+    "per_workload_direction": "three CPU-first and three KleidiAI-first",
+    "mean_definition": "Arithmetic mean of sample indices 1, 2, 3; sample 0 remains retained and excluded as originally declared.",
+    "result": "Raw sample lists, means, ratios, nested summaries, source mapping, completion accounting and privacy match the frozen evidence."
+  },
+  "clock_findings": {
+    "python_version": "3.12.15",
+    "python_monotonic_implementation": "mach_absolute_time()",
+    "harness": "Process duration and timeout use time.monotonic, which uses the Apple absolute clock and pauses during system sleep.",
+    "native": "Pinned llama-bench uses high_resolution_clock. The installed libc++ header aliases it to steady_clock; LLVM documents the Apple implementation as a sleep-inclusive clock. The linked system library was not disassembled in this review.",
+    "interpretation": "The recorded sleep events and differing clock semantics explain the long native interval and why the harness deadline did not expire. The large sample is not evidence of uninterrupted backend computation.",
+    "deadline": "The frozen 600-second cap used the harness clock; it was not an elapsed-time guarantee including suspend.",
+    "overlapping_rows": [
+      "s1-r1-tg128-d512-cpu",
+      "s1-r1-tg128-d512-kleidiai",
+      "s2-r1-pp512-cpu"
+    ],
+    "preservation": "No sample or pair was removed, replaced, adjusted or rerun. No sleep subtraction or alternate ratio is presented.",
+    "limits": [
+      "Power-event timestamps have second resolution and do not locate exact per-sample suspension intervals.",
+      "UTC-minus-monotonic observations are not CPU time and are not corrections to native samples.",
+      "Boundary host checks did not detect sleep. The report completion flag describes the implemented boundary/integrity rules only.",
+      "Other background activity may also affect results; no causal backend-speed claim follows from this run."
+    ]
+  },
+  "sanitized_power_events": [
+    {
+      "at_utc": "2026-11-13T17:54:12+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Idle Sleep",
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-kleidiai"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T17:54:15+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-kleidiai"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T17:55:00+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Maintenance Sleep",
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-kleidiai"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T18:11:59+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-kleidiai"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T18:12:43+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Maintenance Sleep",
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T18:13:35+00:00",
+      "event": "Wake",
+      "sleep_reason": null,
+      "overlapping_rows": [
+        "s1-r1-tg128-d512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T19:02:03+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Idle Sleep",
+      "overlapping_rows": [
+        "s2-r1-pp512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T19:02:07+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": [
+        "s2-r1-pp512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T19:02:51+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Maintenance Sleep",
+      "overlapping_rows": [
+        "s2-r1-pp512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T19:02:54+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": [
+        "s2-r1-pp512-cpu"
+      ]
+    },
+    {
+      "at_utc": "2026-11-13T19:03:39+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Maintenance Sleep",
+      "overlapping_rows": []
+    },
+    {
+      "at_utc": "2026-11-13T19:03:42+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": []
+    },
+    {
+      "at_utc": "2026-11-13T19:04:27+00:00",
+      "event": "Sleep",
+      "sleep_reason": "Maintenance Sleep",
+      "overlapping_rows": []
+    },
+    {
+      "at_utc": "2026-11-13T19:22:22+00:00",
+      "event": "DarkWake",
+      "sleep_reason": null,
+      "overlapping_rows": []
+    }
+  ],
+  "all_process_clock_observations": [
+    {
+      "id": "s1-r1-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T17:40:40.477202+00:00",
+      "finished_at": "2026-11-13T17:42:31.929128+00:00",
+      "harness_monotonic_seconds": 111.4499767080415,
+      "utc_elapsed_seconds": 111.451926,
+      "utc_minus_harness_seconds": 0.0019492919584962465,
+      "samples_ns": [
+        15176575292,
+        15136313541,
+        15123970375,
+        15129287500
+      ],
+      "all_sample_seconds": 60.566146708,
+      "retained_mean_seconds": 15.129857138666665
+    },
+    {
+      "id": "s1-r1-tg128-d2048-cpu",
+      "started_at": "2026-11-13T17:42:32.136107+00:00",
+      "finished_at": "2026-11-13T17:43:59.397218+00:00",
+      "harness_monotonic_seconds": 87.25977012515068,
+      "utc_elapsed_seconds": 87.261111,
+      "utc_minus_harness_seconds": 0.001340874849319107,
+      "samples_ns": [
+        10457947000,
+        10282942250,
+        10630843542,
+        10580847333
+      ],
+      "all_sample_seconds": 41.952580125,
+      "retained_mean_seconds": 10.498211041666666
+    },
+    {
+      "id": "s1-r1-pp2048-kleidiai",
+      "started_at": "2026-11-13T17:45:59.733655+00:00",
+      "finished_at": "2026-11-13T17:48:23.603398+00:00",
+      "harness_monotonic_seconds": 143.86703424993902,
+      "utc_elapsed_seconds": 143.869743,
+      "utc_minus_harness_seconds": 0.0027087500609752624,
+      "samples_ns": [
+        23583266000,
+        23572614291,
+        23689142292,
+        23598439875
+      ],
+      "all_sample_seconds": 94.443462458,
+      "retained_mean_seconds": 23.620065486
+    },
+    {
+      "id": "s1-r1-pp2048-cpu",
+      "started_at": "2026-11-13T17:48:23.832938+00:00",
+      "finished_at": "2026-11-13T17:51:28.832929+00:00",
+      "harness_monotonic_seconds": 184.997968000127,
+      "utc_elapsed_seconds": 184.999991,
+      "utc_minus_harness_seconds": 0.0020229998729917043,
+      "samples_ns": [
+        34933792958,
+        34685375667,
+        34496302292,
+        35619119750
+      ],
+      "all_sample_seconds": 139.734590667,
+      "retained_mean_seconds": 34.933599236333336
+    },
+    {
+      "id": "s1-r1-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T17:53:29.153855+00:00",
+      "finished_at": "2026-11-13T18:12:04.552726+00:00",
+      "harness_monotonic_seconds": 98.20197904086672,
+      "utc_elapsed_seconds": 1115.398871,
+      "utc_minus_harness_seconds": 1017.1968919591334,
+      "samples_ns": [
+        16030031208,
+        15348386792,
+        15193997083,
+        1032596676125
+      ],
+      "all_sample_seconds": 1079.169091208,
+      "retained_mean_seconds": 354.3796866666667
+    },
+    {
+      "id": "s1-r1-tg128-d512-cpu",
+      "started_at": "2026-11-13T18:12:05.062400+00:00",
+      "finished_at": "2026-11-13T18:14:08.123568+00:00",
+      "harness_monotonic_seconds": 73.25584066682495,
+      "utc_elapsed_seconds": 123.061168,
+      "utc_minus_harness_seconds": 49.80532733317504,
+      "samples_ns": [
+        11271844750,
+        63467361125,
+        14482195709,
+        13246611292
+      ],
+      "all_sample_seconds": 102.468012876,
+      "retained_mean_seconds": 30.398722708666668
+    },
+    {
+      "id": "s1-r1-pp512-kleidiai",
+      "started_at": "2026-11-13T18:16:08.382612+00:00",
+      "finished_at": "2026-11-13T18:17:13.574320+00:00",
+      "harness_monotonic_seconds": 65.1895530410111,
+      "utc_elapsed_seconds": 65.191708,
+      "utc_minus_harness_seconds": 0.0021549589889104936,
+      "samples_ns": [
+        5596045125,
+        5748341750,
+        5727793542,
+        5653059333
+      ],
+      "all_sample_seconds": 22.72523975,
+      "retained_mean_seconds": 5.709731541666667
+    },
+    {
+      "id": "s1-r1-pp512-cpu",
+      "started_at": "2026-11-13T18:17:13.835803+00:00",
+      "finished_at": "2026-11-13T18:18:09.878969+00:00",
+      "harness_monotonic_seconds": 56.030746415955946,
+      "utc_elapsed_seconds": 56.043166,
+      "utc_minus_harness_seconds": 0.012419584044053522,
+      "samples_ns": [
+        8394612250,
+        8413236500,
+        8485170917,
+        8547105333
+      ],
+      "all_sample_seconds": 33.840125,
+      "retained_mean_seconds": 8.481837583333332
+    },
+    {
+      "id": "s1-r2-tg128-d2048-cpu",
+      "started_at": "2026-11-13T18:20:10.208891+00:00",
+      "finished_at": "2026-11-13T18:21:46.915567+00:00",
+      "harness_monotonic_seconds": 96.70185291697271,
+      "utc_elapsed_seconds": 96.706676,
+      "utc_minus_harness_seconds": 0.004823083027289954,
+      "samples_ns": [
+        12186677250,
+        11563072334,
+        11637276625,
+        11121075500
+      ],
+      "all_sample_seconds": 46.508101709,
+      "retained_mean_seconds": 11.440474819666665
+    },
+    {
+      "id": "s1-r2-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T18:21:47.254766+00:00",
+      "finished_at": "2026-11-13T18:23:51.271991+00:00",
+      "harness_monotonic_seconds": 124.01347699994221,
+      "utc_elapsed_seconds": 124.017225,
+      "utc_minus_harness_seconds": 0.003748000057782974,
+      "samples_ns": [
+        18992378542,
+        16426883041,
+        16461630541,
+        15919032375
+      ],
+      "all_sample_seconds": 67.799924499,
+      "retained_mean_seconds": 16.269181985666666
+    },
+    {
+      "id": "s1-r2-tg128-d512-cpu",
+      "started_at": "2026-11-13T18:25:51.654651+00:00",
+      "finished_at": "2026-11-13T18:27:01.681906+00:00",
+      "harness_monotonic_seconds": 70.02335699996911,
+      "utc_elapsed_seconds": 70.027255,
+      "utc_minus_harness_seconds": 0.0038980000308868057,
+      "samples_ns": [
+        11171576666,
+        11146161541,
+        11124165208,
+        11189240625
+      ],
+      "all_sample_seconds": 44.63114404,
+      "retained_mean_seconds": 11.153189124666666
+    },
+    {
+      "id": "s1-r2-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T18:27:01.937714+00:00",
+      "finished_at": "2026-11-13T18:28:40.196264+00:00",
+      "harness_monotonic_seconds": 98.24946579197422,
+      "utc_elapsed_seconds": 98.25855,
+      "utc_minus_harness_seconds": 0.009084208025782914,
+      "samples_ns": [
+        15257333917,
+        18160413750,
+        15431322834,
+        15098117833
+      ],
+      "all_sample_seconds": 63.947188334,
+      "retained_mean_seconds": 16.229951472333333
+    },
+    {
+      "id": "s1-r2-pp512-cpu",
+      "started_at": "2026-11-13T18:30:40.538762+00:00",
+      "finished_at": "2026-11-13T18:31:38.154060+00:00",
+      "harness_monotonic_seconds": 57.61106020817533,
+      "utc_elapsed_seconds": 57.615298,
+      "utc_minus_harness_seconds": 0.004237791824671433,
+      "samples_ns": [
+        8324940208,
+        8372188625,
+        8357791667,
+        8354992834
+      ],
+      "all_sample_seconds": 33.409913334,
+      "retained_mean_seconds": 8.361657708666668
+    },
+    {
+      "id": "s1-r2-pp512-kleidiai",
+      "started_at": "2026-11-13T18:31:38.445070+00:00",
+      "finished_at": "2026-11-13T18:32:32.476876+00:00",
+      "harness_monotonic_seconds": 54.02629391592927,
+      "utc_elapsed_seconds": 54.031806,
+      "utc_minus_harness_seconds": 0.005512084070730339,
+      "samples_ns": [
+        5583094166,
+        5538866791,
+        5602311750,
+        5601426459
+      ],
+      "all_sample_seconds": 22.325699166,
+      "retained_mean_seconds": 5.580868333333333
+    },
+    {
+      "id": "s1-r2-pp2048-cpu",
+      "started_at": "2026-11-13T18:34:32.750770+00:00",
+      "finished_at": "2026-11-13T18:37:44.331756+00:00",
+      "harness_monotonic_seconds": 191.57362012495287,
+      "utc_elapsed_seconds": 191.580986,
+      "utc_minus_harness_seconds": 0.0073658750471281564,
+      "samples_ns": [
+        35146585916,
+        35361064792,
+        35420759000,
+        35578348042
+      ],
+      "all_sample_seconds": 141.50675775,
+      "retained_mean_seconds": 35.45339061133333
+    },
+    {
+      "id": "s1-r2-pp2048-kleidiai",
+      "started_at": "2026-11-13T18:37:44.590666+00:00",
+      "finished_at": "2026-11-13T18:40:15.916475+00:00",
+      "harness_monotonic_seconds": 151.31953716580756,
+      "utc_elapsed_seconds": 151.325809,
+      "utc_minus_harness_seconds": 0.0062718341924323795,
+      "samples_ns": [
+        24072971375,
+        24261119917,
+        24308893834,
+        24171052209
+      ],
+      "all_sample_seconds": 96.814037335,
+      "retained_mean_seconds": 24.247021986666667
+    },
+    {
+      "id": "s2-r1-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T18:43:12.037965+00:00",
+      "finished_at": "2026-11-13T18:45:06.190660+00:00",
+      "harness_monotonic_seconds": 114.15262695797719,
+      "utc_elapsed_seconds": 114.152695,
+      "utc_minus_harness_seconds": 6.804202280363825e-05,
+      "samples_ns": [
+        15768723708,
+        15396348167,
+        15603891417,
+        15498041042
+      ],
+      "all_sample_seconds": 62.267004334,
+      "retained_mean_seconds": 15.499426875333334
+    },
+    {
+      "id": "s2-r1-tg128-d2048-cpu",
+      "started_at": "2026-11-13T18:45:06.433739+00:00",
+      "finished_at": "2026-11-13T18:46:37.896487+00:00",
+      "harness_monotonic_seconds": 91.46197133418173,
+      "utc_elapsed_seconds": 91.462748,
+      "utc_minus_harness_seconds": 0.0007766658182788433,
+      "samples_ns": [
+        11152658166,
+        10887439541,
+        10845493417,
+        11570429416
+      ],
+      "all_sample_seconds": 44.45602054,
+      "retained_mean_seconds": 11.101120791333335
+    },
+    {
+      "id": "s2-r1-pp2048-kleidiai",
+      "started_at": "2026-11-13T18:48:38.265602+00:00",
+      "finished_at": "2026-11-13T18:51:05.299294+00:00",
+      "harness_monotonic_seconds": 147.03075779089704,
+      "utc_elapsed_seconds": 147.033692,
+      "utc_minus_harness_seconds": 0.0029342091029604944,
+      "samples_ns": [
+        23575976416,
+        23685300750,
+        23597692667,
+        23744233708
+      ],
+      "all_sample_seconds": 94.603203541,
+      "retained_mean_seconds": 23.675742375
+    },
+    {
+      "id": "s2-r1-pp2048-cpu",
+      "started_at": "2026-11-13T18:51:05.543542+00:00",
+      "finished_at": "2026-11-13T18:54:10.457552+00:00",
+      "harness_monotonic_seconds": 184.9137970409356,
+      "utc_elapsed_seconds": 184.91401,
+      "utc_minus_harness_seconds": 0.00021295906438467682,
+      "samples_ns": [
+        34801089833,
+        34568946667,
+        34521513500,
+        34553576833
+      ],
+      "all_sample_seconds": 138.445126833,
+      "retained_mean_seconds": 34.54801233333333
+    },
+    {
+      "id": "s2-r1-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T18:56:10.755583+00:00",
+      "finished_at": "2026-11-13T18:57:45.391992+00:00",
+      "harness_monotonic_seconds": 94.63391429092735,
+      "utc_elapsed_seconds": 94.636409,
+      "utc_minus_harness_seconds": 0.0024947090726499255,
+      "samples_ns": [
+        14993907750,
+        14914389375,
+        15280297250,
+        15173101416
+      ],
+      "all_sample_seconds": 60.361695791,
+      "retained_mean_seconds": 15.122596013666666
+    },
+    {
+      "id": "s2-r1-tg128-d512-cpu",
+      "started_at": "2026-11-13T18:57:45.609399+00:00",
+      "finished_at": "2026-11-13T18:58:46.681314+00:00",
+      "harness_monotonic_seconds": 61.06910629221238,
+      "utc_elapsed_seconds": 61.071915,
+      "utc_minus_harness_seconds": 0.0028087077876151056,
+      "samples_ns": [
+        10360141292,
+        10431727792,
+        10090037958,
+        10956573917
+      ],
+      "all_sample_seconds": 41.838480959,
+      "retained_mean_seconds": 10.492779889
+    },
+    {
+      "id": "s2-r1-pp512-kleidiai",
+      "started_at": "2026-11-13T19:00:46.971821+00:00",
+      "finished_at": "2026-11-13T19:01:43.836700+00:00",
+      "harness_monotonic_seconds": 56.8556315000169,
+      "utc_elapsed_seconds": 56.864879,
+      "utc_minus_harness_seconds": 0.009247499983104035,
+      "samples_ns": [
+        5505047875,
+        5487158875,
+        5538787500,
+        5809894125
+      ],
+      "all_sample_seconds": 22.340888375,
+      "retained_mean_seconds": 5.611946833333333
+    },
+    {
+      "id": "s2-r1-pp512-cpu",
+      "started_at": "2026-11-13T19:01:44.019497+00:00",
+      "finished_at": "2026-11-13T19:03:02.675589+00:00",
+      "harness_monotonic_seconds": 77.17170683294535,
+      "utc_elapsed_seconds": 78.656092,
+      "utc_minus_harness_seconds": 1.4843851670546542,
+      "samples_ns": [
+        9644154916,
+        17038857416,
+        16977228959,
+        11320907792
+      ],
+      "all_sample_seconds": 54.981149083,
+      "retained_mean_seconds": 15.112331389
+    },
+    {
+      "id": "s2-r2-pp2048-cpu",
+      "started_at": "2026-11-13T19:22:56.492975+00:00",
+      "finished_at": "2026-11-13T19:26:45.638636+00:00",
+      "harness_monotonic_seconds": 229.13992833299562,
+      "utc_elapsed_seconds": 229.145661,
+      "utc_minus_harness_seconds": 0.005732667004366476,
+      "samples_ns": [
+        38044231792,
+        42511933667,
+        46731829208,
+        49634253542
+      ],
+      "all_sample_seconds": 176.922248209,
+      "retained_mean_seconds": 46.292672139
+    },
+    {
+      "id": "s2-r2-pp2048-kleidiai",
+      "started_at": "2026-11-13T19:26:45.787975+00:00",
+      "finished_at": "2026-11-13T19:30:08.890536+00:00",
+      "harness_monotonic_seconds": 203.09987699985504,
+      "utc_elapsed_seconds": 203.102561,
+      "utc_minus_harness_seconds": 0.002684000144967058,
+      "samples_ns": [
+        34563122042,
+        35069260750,
+        35558726041,
+        35652108500
+      ],
+      "all_sample_seconds": 140.843217333,
+      "retained_mean_seconds": 35.42669843033334
+    },
+    {
+      "id": "s2-r2-tg128-d512-cpu",
+      "started_at": "2026-11-13T19:32:09.127224+00:00",
+      "finished_at": "2026-11-13T19:33:11.848705+00:00",
+      "harness_monotonic_seconds": 62.71845683408901,
+      "utc_elapsed_seconds": 62.721481,
+      "utc_minus_harness_seconds": 0.0030241659109861985,
+      "samples_ns": [
+        9981797333,
+        9986456625,
+        10129536125,
+        10305098333
+      ],
+      "all_sample_seconds": 40.402888416,
+      "retained_mean_seconds": 10.140363694333335
+    },
+    {
+      "id": "s2-r2-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T19:33:12.022940+00:00",
+      "finished_at": "2026-11-13T19:34:53.792252+00:00",
+      "harness_monotonic_seconds": 101.76675670896657,
+      "utc_elapsed_seconds": 101.769312,
+      "utc_minus_harness_seconds": 0.0025552910334312173,
+      "samples_ns": [
+        15589344334,
+        16647512375,
+        17501491458,
+        18723413625
+      ],
+      "all_sample_seconds": 68.461761792,
+      "retained_mean_seconds": 17.624139152666668
+    },
+    {
+      "id": "s2-r2-tg128-d2048-cpu",
+      "started_at": "2026-11-13T19:36:54.046401+00:00",
+      "finished_at": "2026-11-13T19:38:35.818557+00:00",
+      "harness_monotonic_seconds": 101.76751733315177,
+      "utc_elapsed_seconds": 101.772156,
+      "utc_minus_harness_seconds": 0.004638666848222783,
+      "samples_ns": [
+        10904158000,
+        10810105625,
+        11105947792,
+        10752982208
+      ],
+      "all_sample_seconds": 43.573193625,
+      "retained_mean_seconds": 10.889678541666665
+    },
+    {
+      "id": "s2-r2-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T19:38:35.975782+00:00",
+      "finished_at": "2026-11-13T19:41:21.739793+00:00",
+      "harness_monotonic_seconds": 165.76041704183444,
+      "utc_elapsed_seconds": 165.764011,
+      "utc_minus_harness_seconds": 0.0035939581655668462,
+      "samples_ns": [
+        19627739208,
+        21505028292,
+        24699766292,
+        39507201458
+      ],
+      "all_sample_seconds": 105.33973525,
+      "retained_mean_seconds": 28.570665347333332
+    },
+    {
+      "id": "s2-r2-pp512-cpu",
+      "started_at": "2026-11-13T19:43:22.011314+00:00",
+      "finished_at": "2026-11-13T19:44:36.411008+00:00",
+      "harness_monotonic_seconds": 74.39545820909552,
+      "utc_elapsed_seconds": 74.399694,
+      "utc_minus_harness_seconds": 0.004235790904473902,
+      "samples_ns": [
+        12465547209,
+        11800779375,
+        11349148375,
+        11181646125
+      ],
+      "all_sample_seconds": 46.797121084,
+      "retained_mean_seconds": 11.443857958333334
+    },
+    {
+      "id": "s2-r2-pp512-kleidiai",
+      "started_at": "2026-11-13T19:44:36.571590+00:00",
+      "finished_at": "2026-11-13T19:45:38.211145+00:00",
+      "harness_monotonic_seconds": 61.63579404191114,
+      "utc_elapsed_seconds": 61.639555,
+      "utc_minus_harness_seconds": 0.0037609580888613436,
+      "samples_ns": [
+        6980021542,
+        6988831542,
+        7174935500,
+        7579879416
+      ],
+      "all_sample_seconds": 28.723668,
+      "retained_mean_seconds": 7.247882152666667
+    },
+    {
+      "id": "s3-r1-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T19:48:22.576765+00:00",
+      "finished_at": "2026-11-13T19:50:16.770277+00:00",
+      "harness_monotonic_seconds": 114.19288208289072,
+      "utc_elapsed_seconds": 114.193512,
+      "utc_minus_harness_seconds": 0.0006299171092791767,
+      "samples_ns": [
+        15242845875,
+        15310508625,
+        15962315417,
+        17189214041
+      ],
+      "all_sample_seconds": 63.704883958,
+      "retained_mean_seconds": 16.154012694333336
+    },
+    {
+      "id": "s3-r1-tg128-d2048-cpu",
+      "started_at": "2026-11-13T19:50:16.940390+00:00",
+      "finished_at": "2026-11-13T19:52:19.286883+00:00",
+      "harness_monotonic_seconds": 122.34514558385126,
+      "utc_elapsed_seconds": 122.346493,
+      "utc_minus_harness_seconds": 0.00134741614873235,
+      "samples_ns": [
+        11772089000,
+        12346078958,
+        13650751791,
+        18334898792
+      ],
+      "all_sample_seconds": 56.103818541,
+      "retained_mean_seconds": 14.777243180333334
+    },
+    {
+      "id": "s3-r1-pp512-kleidiai",
+      "started_at": "2026-11-13T19:54:19.612325+00:00",
+      "finished_at": "2026-11-13T19:55:27.234748+00:00",
+      "harness_monotonic_seconds": 67.59954233304597,
+      "utc_elapsed_seconds": 67.622423,
+      "utc_minus_harness_seconds": 0.022880666954023354,
+      "samples_ns": [
+        7407634958,
+        6944554334,
+        6818124417,
+        6736824416
+      ],
+      "all_sample_seconds": 27.907138125,
+      "retained_mean_seconds": 6.833167722333333
+    },
+    {
+      "id": "s3-r1-pp512-cpu",
+      "started_at": "2026-11-13T19:55:27.386631+00:00",
+      "finished_at": "2026-11-13T19:56:27.287075+00:00",
+      "harness_monotonic_seconds": 59.89835458411835,
+      "utc_elapsed_seconds": 59.900444,
+      "utc_minus_harness_seconds": 0.002089415881648904,
+      "samples_ns": [
+        10409068583,
+        9885261541,
+        10059121292,
+        10983351000
+      ],
+      "all_sample_seconds": 41.336802416,
+      "retained_mean_seconds": 10.309244611
+    },
+    {
+      "id": "s3-r1-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T19:58:27.520557+00:00",
+      "finished_at": "2026-11-13T20:00:04.376002+00:00",
+      "harness_monotonic_seconds": 96.85248504113406,
+      "utc_elapsed_seconds": 96.855445,
+      "utc_minus_harness_seconds": 0.0029599588659436904,
+      "samples_ns": [
+        14781008583,
+        14695531792,
+        16129674625,
+        17740036542
+      ],
+      "all_sample_seconds": 63.346251542,
+      "retained_mean_seconds": 16.188414319666666
+    },
+    {
+      "id": "s3-r1-tg128-d512-cpu",
+      "started_at": "2026-11-13T20:00:04.523787+00:00",
+      "finished_at": "2026-11-13T20:01:19.757626+00:00",
+      "harness_monotonic_seconds": 75.23173050000332,
+      "utc_elapsed_seconds": 75.233839,
+      "utc_minus_harness_seconds": 0.0021084999966802798,
+      "samples_ns": [
+        11372106417,
+        12069839458,
+        12673912834,
+        13306917042
+      ],
+      "all_sample_seconds": 49.422775751,
+      "retained_mean_seconds": 12.683556444666666
+    },
+    {
+      "id": "s3-r1-pp2048-kleidiai",
+      "started_at": "2026-11-13T20:03:20.015045+00:00",
+      "finished_at": "2026-11-13T20:06:21.318653+00:00",
+      "harness_monotonic_seconds": 181.29894720809534,
+      "utc_elapsed_seconds": 181.303608,
+      "utc_minus_harness_seconds": 0.0046607919046550705,
+      "samples_ns": [
+        28544009708,
+        29224232250,
+        30451844292,
+        34490443625
+      ],
+      "all_sample_seconds": 122.710529875,
+      "retained_mean_seconds": 31.38884005566667
+    },
+    {
+      "id": "s3-r1-pp2048-cpu",
+      "started_at": "2026-11-13T20:06:21.475992+00:00",
+      "finished_at": "2026-11-13T20:13:18.958393+00:00",
+      "harness_monotonic_seconds": 417.47498987498693,
+      "utc_elapsed_seconds": 417.482401,
+      "utc_minus_harness_seconds": 0.007411125013049968,
+      "samples_ns": [
+        108380965417,
+        67977206375,
+        68771678292,
+        71055661500
+      ],
+      "all_sample_seconds": 316.185511584,
+      "retained_mean_seconds": 69.26818205566667
+    },
+    {
+      "id": "s3-r2-pp512-cpu",
+      "started_at": "2026-11-13T20:15:19.192007+00:00",
+      "finished_at": "2026-11-13T20:16:26.951551+00:00",
+      "harness_monotonic_seconds": 67.75593879213557,
+      "utc_elapsed_seconds": 67.759544,
+      "utc_minus_harness_seconds": 0.003605207864438853,
+      "samples_ns": [
+        10431312416,
+        10334087000,
+        10443640708,
+        10519081542
+      ],
+      "all_sample_seconds": 41.728121666,
+      "retained_mean_seconds": 10.43226975
+    },
+    {
+      "id": "s3-r2-pp512-kleidiai",
+      "started_at": "2026-11-13T20:16:27.113729+00:00",
+      "finished_at": "2026-11-13T20:17:29.438461+00:00",
+      "harness_monotonic_seconds": 62.32127874996513,
+      "utc_elapsed_seconds": 62.324732,
+      "utc_minus_harness_seconds": 0.0034532500348660733,
+      "samples_ns": [
+        7202043375,
+        7069710375,
+        7538002083,
+        7333010542
+      ],
+      "all_sample_seconds": 29.142766375,
+      "retained_mean_seconds": 7.313574333333333
+    },
+    {
+      "id": "s3-r2-tg128-d2048-cpu",
+      "started_at": "2026-11-13T20:19:29.691314+00:00",
+      "finished_at": "2026-11-13T20:21:02.755532+00:00",
+      "harness_monotonic_seconds": 93.05924866697751,
+      "utc_elapsed_seconds": 93.064218,
+      "utc_minus_harness_seconds": 0.0049693330224869214,
+      "samples_ns": [
+        10441440125,
+        10457711834,
+        10614943083,
+        10680675125
+      ],
+      "all_sample_seconds": 42.194770167,
+      "retained_mean_seconds": 10.584443347333334
+    },
+    {
+      "id": "s3-r2-tg128-d2048-kleidiai",
+      "started_at": "2026-11-13T20:21:02.923016+00:00",
+      "finished_at": "2026-11-13T20:24:59.433886+00:00",
+      "harness_monotonic_seconds": 236.50669129216112,
+      "utc_elapsed_seconds": 236.51087,
+      "utc_minus_harness_seconds": 0.004178707838889295,
+      "samples_ns": [
+        27841787667,
+        45096929500,
+        50829682833,
+        53219948042
+      ],
+      "all_sample_seconds": 176.988348042,
+      "retained_mean_seconds": 49.715520125
+    },
+    {
+      "id": "s3-r2-tg128-d512-cpu",
+      "started_at": "2026-11-13T20:26:59.701113+00:00",
+      "finished_at": "2026-11-13T20:28:05.704246+00:00",
+      "harness_monotonic_seconds": 65.99910099990666,
+      "utc_elapsed_seconds": 66.003133,
+      "utc_minus_harness_seconds": 0.004032000093346255,
+      "samples_ns": [
+        10433022750,
+        10354959291,
+        10280042708,
+        10278406166
+      ],
+      "all_sample_seconds": 41.346430915,
+      "retained_mean_seconds": 10.304469388333334
+    },
+    {
+      "id": "s3-r2-tg128-d512-kleidiai",
+      "started_at": "2026-11-13T20:28:05.865640+00:00",
+      "finished_at": "2026-11-13T20:29:57.016715+00:00",
+      "harness_monotonic_seconds": 111.14682858297601,
+      "utc_elapsed_seconds": 111.151075,
+      "utc_minus_harness_seconds": 0.0042464170239924215,
+      "samples_ns": [
+        16935556500,
+        17671110125,
+        19768447375,
+        24443346125
+      ],
+      "all_sample_seconds": 78.818460125,
+      "retained_mean_seconds": 20.62763454166667
+    },
+    {
+      "id": "s3-r2-pp2048-cpu",
+      "started_at": "2026-11-13T20:31:57.271048+00:00",
+      "finished_at": "2026-11-13T20:37:47.415213+00:00",
+      "harness_monotonic_seconds": 350.1515406668186,
+      "utc_elapsed_seconds": 350.144165,
+      "utc_minus_harness_seconds": -0.0073756668186319985,
+      "samples_ns": [
+        56687516083,
+        63355463792,
+        77698710708,
+        84275272250
+      ],
+      "all_sample_seconds": 282.016962833,
+      "retained_mean_seconds": 75.10981558333333
+    },
+    {
+      "id": "s3-r2-pp2048-kleidiai",
+      "started_at": "2026-11-13T20:37:47.579387+00:00",
+      "finished_at": "2026-11-13T20:42:06.046373+00:00",
+      "harness_monotonic_seconds": 258.46297362516634,
+      "utc_elapsed_seconds": 258.466986,
+      "utc_minus_harness_seconds": 0.004012374833678223,
+      "samples_ns": [
+        44262404750,
+        43432749167,
+        46717707916,
+        47444854208
+      ],
+      "all_sample_seconds": 181.857716041,
+      "retained_mean_seconds": 45.86510376366667
+    }
+  ],
+  "sources": [
+    {
+      "title": "CPython 3.12.15 monotonic implementation",
+      "url": "https://github.com/python/cpython/blob/v3.12.15/Python/pytime.c",
+      "supports": "The Apple branch of py_get_monotonic_clock uses mach_absolute_time and mach_timebase_info."
+    },
+    {
+      "title": "Apple absolute clock",
+      "url": "https://developer.apple.com/documentation/driverkit/mach_absolute_time",
+      "supports": "The clock does not advance during system sleep."
+    },
+    {
+      "title": "Apple continuous clock",
+      "url": "https://developer.apple.com/documentation/driverkit/mach_continuous_time",
+      "supports": "The clock includes sleep; the documented nanosecond equivalent is CLOCK_MONOTONIC_RAW."
+    },
+    {
+      "title": "LLVM Apple steady clock implementation",
+      "url": "https://github.com/llvm/llvm-project/blob/main/libcxx/src/chrono.cpp",
+      "supports": "The Apple implementation uses CLOCK_MONOTONIC_RAW, including sleep."
+    },
+    {
+      "title": "Pinned llama-bench timer",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/llama-bench.cpp#L40-L43",
+      "supports": "The native sample timer selects high_resolution_clock."
+    }
+  ]
+}

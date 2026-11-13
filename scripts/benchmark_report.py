@@ -184,18 +184,33 @@ def public_host(snapshot):
 
 
 def boundary_violations(plan, rows):
-    violations, pair_start, pair = [], None, None
+    violations, pair_start, previous, pair = [], None, None, None
     for row in rows:
         if "host_before" not in row:
             continue
-        if row["pair"] != pair:
+        new_pair = row["pair"] != pair
+        if new_pair:
             pair, pair_start = row["pair"], row["host_before"]
         for boundary in ("before", "after"):
             snapshot = row.get("host_" + boundary)
             if snapshot is None:
                 continue
             reasons = bench.host.admit(snapshot, plan["host_policy"])
-            reasons += bench.host.interval_violations(pair_start, snapshot)
+            reasons += bench.host.interval_violations(
+                pair_start, snapshot, plan["host_policy"]
+            )
+            if previous is not None:
+                interval_policy = plan["host_policy"]
+                if new_pair and boundary == "before":
+                    interval_policy = {
+                        **interval_policy,
+                        "swap_activity_policy": "record_counter_increases",
+                    }
+                reasons += bench.host.interval_violations(
+                    previous, snapshot, interval_policy
+                )
+            reasons = list(dict.fromkeys(reasons))
+            previous = snapshot
             if reasons:
                 violations.append(
                     {
@@ -254,6 +269,11 @@ def checked_rows(evidence, plan, run, directory):
                 row["argv"] == bench.command(plan, row), "Recorded command differs."
             )
         if state == "finished":
+            require(
+                not run["integrity_verified"]
+                or all(key in row for key in ("host_before", "host_after")),
+                "Verified finished row lacks host boundaries.",
+            )
             require(row.get("outcome") in OUTCOMES, "Unknown finished outcome.")
             clean["outcome"] = row["outcome"]
             require(numeric(row["wall_seconds"]) >= 0, "Negative process duration.")
@@ -447,6 +467,7 @@ def create_report(plan_path, expected_plan_sha256, sessions):
     plan_raw, plan_pin = evidence.raw(plan_path, expected=expected_plan_sha256)
     plan, _ = evidence.document(plan_path)
     bench.check_plan(plan)
+    desktop = plan["kind"] == bench.STUDIES["desktop"]
     for key, path in (
         ("harness_sha256", Path(bench.__file__)),
         ("runtime_helper_sha256", bench.HELPER),
@@ -533,6 +554,9 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         and all(record["evidence"]["summary"] is not None for record in records)
     )
     complete = all_terminal and accounting["included_pairs"] == 24
+    if desktop:
+        complete = complete and all(record["state"] == "finished" for record in records)
+    duration_key = "mean_ns" if desktop else "median_ns"
     workload_summaries = {}
     for name in bench.WORKLOADS:
         values = [
@@ -554,9 +578,9 @@ def create_report(plan_path, expected_plan_sha256, sessions):
                     "cpu_over_kleidiai": distribution(
                         [pair["cpu_over_kleidiai"] for pair in selected]
                     ),
-                    "process_median_ns": {
+                    "process_" + duration_key: {
                         backend: distribution(
-                            [pair["median_ns"][backend] for pair in selected]
+                            [pair[duration_key][backend] for pair in selected]
                         )
                         for backend in bench.BACKENDS
                     },
@@ -569,7 +593,9 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         }
     result = {
         "schema_version": 1,
-        "kind": "controlled-fixed-token-report",
+        "kind": "desktop-fixed-token-report"
+        if desktop
+        else "controlled-fixed-token-report",
         "status": "complete" if complete else "incomplete",
         "accounting_complete": all_terminal,
         "provenance": {
@@ -652,6 +678,27 @@ def create_report(plan_path, expected_plan_sha256, sessions):
             "No hardware-wide, dispatch or answer-quality claim follows from timing.",
         ],
     }
+    if desktop:
+        result["protocol_complete"] = complete
+        result["provenance"]["method"] = public_asset(plan["method"])
+        result["protocol"]["process_duration"] = "arithmetic_mean_of_retained_samples"
+        result["limitations"][2] = (
+            "Ratios divide the CPU mean duration by the KleidiAI mean duration, "
+            "using the three retained samples. Values above one favor KleidiAI "
+            "for this workload and observed desktop work period."
+        )
+        result["limitations"][4] = (
+            "Valid completed pairs remain included with host findings. Swap-counter "
+            "increases are recorded without filtering or timing adjustment. Other "
+            "host departures stop new work and make protocol completion false. "
+            "Boundary readings do not prove stable conditions or normal temperature."
+        )
+        result["limitations"].append(
+            "These completion-conditioned descriptive ratios do not isolate backend "
+            "effects from background activity. Consecutive session blocks are not "
+            "independent replications. No significance test, population confidence "
+            "interval or tail-latency estimate is supported."
+        )
     privacy_check(result)
     evidence.check()
     require(

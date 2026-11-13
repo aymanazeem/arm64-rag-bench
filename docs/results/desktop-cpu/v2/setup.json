@@ -1,0 +1,908 @@
+{
+  "schema_version": 1,
+  "purpose": "setup_only",
+  "study": "desktop",
+  "study_id": "qwen35-desktop-v2",
+  "excluded_from_performance_comparison": true,
+  "planned_observations": 4,
+  "attempted_observations": 4,
+  "completed_observations": 4,
+  "eligible_observations": 4,
+  "planned_order": [
+    "cpu-pp2048",
+    "kleidiai-pp2048",
+    "cpu-tg128-d2048",
+    "kleidiai-tg128-d2048"
+  ],
+  "setup_timeout_seconds": 1200,
+  "output_limit_bytes": 16777216,
+  "deadline": {
+    "seconds": 600,
+    "formula": "max(600, ceil(2 * maxwall / 60) * 60)",
+    "longest_eligible_process_wall_seconds": 197.3845046670176,
+    "scope": "All four fresh desktop setup observations; no partial calibration."
+  },
+  "resource_method": "wait4 for each owned child; Darwin peak resident memory is reported in bytes.",
+  "limits": [
+    "Setup process wall times include loading, warmup and all four native repetitions. They are excluded from the performance comparison.",
+    "This is a deadline calibration heuristic, not a worst-case duration guarantee.",
+    "Page and swap deltas are system-wide observations; they do not identify paging by the benchmark child.",
+    "Resource faults and reported_swaps do not establish active child paging or swap-free execution.",
+    "Boundary readings do not prove constant host conditions. Unavailable thermal limits are not a measured-normal thermal state.",
+    "Docker was temporarily stopped under the frozen method. This record does not certify restoration or ordinary Docker-running performance.",
+    "KleidiAI answer quality and adoption remain rejected."
+  ],
+  "provenance": {
+    "source_ledger": {
+      "sha256": "04d8d212aa0772eb85ea70fb9a3cbcfe600eb27dc42bc3936af0beab91a5e058",
+      "size": 82684
+    },
+    "method": {
+      "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+      "size": 6370
+    },
+    "controller_sha256": {
+      "setup_helper": "ac67fdd0e0600b5f2288d4bbe9d77761c6009e343d6c03f3d0b57de2e1ec1033",
+      "capture_controller": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+      "host_controller": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+      "benchmark_controller": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+      "runtime_helper": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+      "trace_parser": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+      "method": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31"
+    },
+    "runtime": {
+      "cpu": {
+        "build_record_sha256": "231f09c98de49525db55b362952b7db834c2170215b70288dca233e866568618",
+        "file_sha256": {
+          "llama-bench": "511bc5e6a9c5b1edb055f1a7626af4a41f249afdfb4770c3b952aea61e94cadc",
+          "CMakeCache.txt": "5411b6252cf119a55f8dcbe6f380b38d9c8fd9a42c409c750c402aef082ddd49",
+          "compile_commands.json": "7d191387efaa9af5a35ba413fa7891b546aff1990a580b69663df7990e089cfa",
+          "answer-model.json": "f4590d852751b1a3f81eb246fcfa80be1e83d0ceab8a769ac6e415b50f0c315f",
+          "preparation.json": "ddc7343b34cc62de9b305f8f010a0c51286b57a40d2f392deb1a73bed5acac0c",
+          "normal-builds-before.json": "8481a5979a4217cda1efc6f3693f8452477661036736ad8b647a6024851dbb55",
+          "run_q35_diagnostics.py": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "qwen35_trace.py": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "libggml-base.0.29.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+          "libggml-cpu.0.29.0.dylib": "cd854552b420845e59ae7f765495b4f3fdd362606d1838f1d47ec77ea8c6c18a",
+          "libggml.0.29.0.dylib": "fdb0bdd1c89ec25e9dcd69b6c45a873e863cd4e8a3cc47be46bad42a92bfcc99",
+          "libllama-bench-impl.dylib": "0ad368b5fe2b939d8eb0f1cf5be06debbc5467e165fb876d324b86440ae4b0ff",
+          "libllama-common.0.9.0.dylib": "197aa85d4171a09e1a6a2bdf280498e16e2c744d604ad7eb78267906d2133dfa",
+          "libllama-completion-impl.dylib": "7f8b7817a9776e6ff7d7a86f59406e1b2c3a1dbc4750620cbd2da120f86acf63",
+          "libllama-server-impl.dylib": "5b565c77a6015bad62e14ee01d65dac0b27532908a0790e73e59d5b307e48b0a",
+          "libllama.0.9.0.dylib": "00ee99b5934ec761b7f7855717ebf79a86f5fef72df217d6711e00b849f7ebca",
+          "libmtmd.0.9.0.dylib": "c047008a669c8de20ebea2b7e3c95abefb9d1003fd0bbdcc772cad4a234e399f"
+        }
+      },
+      "kleidiai": {
+        "build_record_sha256": "11fc794c3b4fbfd871c93353d964008cbccd6c99f97ab7b3295f16628d7a05df",
+        "file_sha256": {
+          "llama-bench": "b65698050c2ff0d64931d651594d65741e3c2d3cf94993afa157f237ba7c4060",
+          "CMakeCache.txt": "4107b91e56ade8698d5d8143488308cc85ccc2bba6d1e5edde60fd6008bfd508",
+          "compile_commands.json": "28ea4c588bcbc5ad367c5d54dc7844fcbed754898560ef725c9ca33fc45c8494",
+          "answer-model.json": "f4590d852751b1a3f81eb246fcfa80be1e83d0ceab8a769ac6e415b50f0c315f",
+          "preparation.json": "ddc7343b34cc62de9b305f8f010a0c51286b57a40d2f392deb1a73bed5acac0c",
+          "normal-builds-before.json": "8481a5979a4217cda1efc6f3693f8452477661036736ad8b647a6024851dbb55",
+          "run_q35_diagnostics.py": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "qwen35_trace.py": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "libggml-base.0.29.0.dylib": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab",
+          "libggml-cpu.0.29.0.dylib": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2",
+          "libggml.0.29.0.dylib": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b",
+          "libllama-bench-impl.dylib": "3ee4c2d2e036d5c50b742b954d3138fb2bab2bb61e67fc6de275609c0ff25dbe",
+          "libllama-common.0.9.0.dylib": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e",
+          "libllama-completion-impl.dylib": "b1eeb659d3b2b8c2d5d33b4cd63b0eb3834b29314f8cadae4b0d7688a3e36e39",
+          "libllama-server-impl.dylib": "e2d4276ec8ed916e7f13aace1dd540e506efd9142b15a49f7cf0c9569739d5ba",
+          "libllama.0.9.0.dylib": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910",
+          "libmtmd.0.9.0.dylib": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9"
+        }
+      }
+    },
+    "model_sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
+    "source_revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+    "public_host_serializer": {
+      "sha256": "5ef144fbc0415e320ae312717d4e13fe69bb819ddb90724d08d813355567e4d2",
+      "size": 27339
+    },
+    "one_off_exporter_sha256": "c2db0aa4f64fb45c3ddaf906df618f11cb2fd286c2e1babdd635f6fbecc576e8",
+    "scope": "Raw artifacts and helper archives were verified against the pinned ledger. Large runtime/model assets were not rehashed during this export."
+  },
+  "observations": [
+    {
+      "id": "cpu-pp2048",
+      "backend": "cpu",
+      "workload": "pp2048",
+      "state": "completed",
+      "shape": [
+        2048,
+        0,
+        0,
+        4
+      ],
+      "wall_seconds": 197.3845046670176,
+      "resources": {
+        "peak_resident_bytes": 15956213760,
+        "user_seconds": 721.326987,
+        "system_seconds": 18.455377,
+        "minor_faults": 2085605,
+        "major_faults": 11962,
+        "reported_swaps": 0
+      },
+      "eligible_for_deadline_calibration": true,
+      "host_before": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7143025541.12,
+            "free_bytes": 1446909050.88
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 252034161,
+            "Pageouts": 9411364,
+            "Swapins": 16433043,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            10.32470703125,
+            9.30029296875,
+            8.99609375
+          ]
+        }
+      },
+      "host_after": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7143025541.12,
+            "free_bytes": 1446909050.88
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 252152144,
+            "Pageouts": 9412673,
+            "Swapins": 16433350,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            12.537109375,
+            10.0947265625,
+            9.32763671875
+          ]
+        }
+      },
+      "host_findings": [
+        "swap_activity"
+      ],
+      "host_violations": [],
+      "preflight_host_findings": [],
+      "preflight_host_violations": [],
+      "host_deltas": {
+        "swap": {
+          "status": "available",
+          "value": {
+            "used_bytes": 0.0
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "Pageins": 117983,
+            "Pageouts": 1309,
+            "Swapins": 307,
+            "Swapouts": 0
+          }
+        }
+      },
+      "raw_artifacts": {
+        "native_stdout": {
+          "sha256": "7852d0bd731a6460b73a7d8f8d8559bd68775d0d1213427f9002e2900b273987",
+          "size": 1247
+        },
+        "native_stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "archived_benchmark_controller": {
+          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+          "size": 34939
+        },
+        "archived_runtime_helper": {
+          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+          "size": 9785
+        },
+        "archived_capture_controller": {
+          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "size": 22972
+        },
+        "archived_method": {
+          "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+          "size": 6370
+        },
+        "archived_host_controller": {
+          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+          "size": 12278
+        },
+        "archived_setup_helper": {
+          "sha256": "ac67fdd0e0600b5f2288d4bbe9d77761c6009e343d6c03f3d0b57de2e1ec1033",
+          "size": 17521
+        },
+        "archived_trace_parser": {
+          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "size": 31168
+        }
+      }
+    },
+    {
+      "id": "kleidiai-pp2048",
+      "backend": "kleidiai",
+      "workload": "pp2048",
+      "state": "completed",
+      "shape": [
+        2048,
+        0,
+        0,
+        4
+      ],
+      "wall_seconds": 162.18988908291794,
+      "resources": {
+        "peak_resident_bytes": 14846918656,
+        "user_seconds": 508.958562,
+        "system_seconds": 13.081598,
+        "minor_faults": 1580558,
+        "major_faults": 507625,
+        "reported_swaps": 0
+      },
+      "eligible_for_deadline_calibration": true,
+      "host_before": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7143025541.12,
+            "free_bytes": 1446909050.88
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 252156646,
+            "Pageouts": 9412673,
+            "Swapins": 16433366,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            11.30859375,
+            9.96044921875,
+            9.29638671875
+          ]
+        }
+      },
+      "host_after": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7117796802.56,
+            "free_bytes": 1472137789.44
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 252717498,
+            "Pageouts": 9414927,
+            "Swapins": 16434922,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            8.28466796875,
+            8.8310546875,
+            8.9072265625
+          ]
+        }
+      },
+      "host_findings": [
+        "swap_activity"
+      ],
+      "host_violations": [],
+      "preflight_host_findings": [
+        "swap_activity"
+      ],
+      "preflight_host_violations": [],
+      "host_deltas": {
+        "swap": {
+          "status": "available",
+          "value": {
+            "used_bytes": -25228738.559999466
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "Pageins": 560852,
+            "Pageouts": 2254,
+            "Swapins": 1556,
+            "Swapouts": 0
+          }
+        }
+      },
+      "raw_artifacts": {
+        "native_stdout": {
+          "sha256": "bd23ad2b47feba8708504f4f5821e329faed7dbaa717442c73ede746418c2c2f",
+          "size": 1250
+        },
+        "native_stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "archived_benchmark_controller": {
+          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+          "size": 34939
+        },
+        "archived_runtime_helper": {
+          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+          "size": 9785
+        },
+        "archived_capture_controller": {
+          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "size": 22972
+        },
+        "archived_method": {
+          "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+          "size": 6370
+        },
+        "archived_host_controller": {
+          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+          "size": 12278
+        },
+        "archived_setup_helper": {
+          "sha256": "ac67fdd0e0600b5f2288d4bbe9d77761c6009e343d6c03f3d0b57de2e1ec1033",
+          "size": 17521
+        },
+        "archived_trace_parser": {
+          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "size": 31168
+        }
+      },
+      "host_gap": {
+        "previous_run": "cpu-pp2048",
+        "deltas": {
+          "swap": {
+            "status": "available",
+            "value": {
+              "used_bytes": 0.0
+            }
+          },
+          "pages": {
+            "status": "available",
+            "value": {
+              "Pageins": 4502,
+              "Pageouts": 0,
+              "Swapins": 16,
+              "Swapouts": 0
+            }
+          }
+        },
+        "findings": [
+          "swap_activity"
+        ],
+        "violations": []
+      }
+    },
+    {
+      "id": "cpu-tg128-d2048",
+      "backend": "cpu",
+      "workload": "tg128-d2048",
+      "state": "completed",
+      "shape": [
+        0,
+        128,
+        2048,
+        4
+      ],
+      "wall_seconds": 97.2678000421729,
+      "resources": {
+        "peak_resident_bytes": 16520970240,
+        "user_seconds": 320.377553,
+        "system_seconds": 11.950684,
+        "minor_faults": 1482754,
+        "major_faults": 318132,
+        "reported_swaps": 0
+      },
+      "eligible_for_deadline_calibration": true,
+      "host_before": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7117796802.56,
+            "free_bytes": 1472137789.44
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 252727104,
+            "Pageouts": 9414927,
+            "Swapins": 16434926,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            7.4150390625,
+            8.611328125,
+            8.82666015625
+          ]
+        }
+      },
+      "host_after": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7117796802.56,
+            "free_bytes": 1472137789.44
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 253064627,
+            "Pageouts": 9415455,
+            "Swapins": 16434942,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            6.46923828125,
+            7.9345703125,
+            8.5361328125
+          ]
+        }
+      },
+      "host_findings": [
+        "swap_activity"
+      ],
+      "host_violations": [],
+      "preflight_host_findings": [
+        "swap_activity"
+      ],
+      "preflight_host_violations": [],
+      "host_deltas": {
+        "swap": {
+          "status": "available",
+          "value": {
+            "used_bytes": 0.0
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "Pageins": 337523,
+            "Pageouts": 528,
+            "Swapins": 16,
+            "Swapouts": 0
+          }
+        }
+      },
+      "raw_artifacts": {
+        "native_stdout": {
+          "sha256": "4ffa12e8abf990b5069798565b74390912c04e0d6470e9ca6d07798466654a0c",
+          "size": 1252
+        },
+        "native_stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "archived_benchmark_controller": {
+          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+          "size": 34939
+        },
+        "archived_runtime_helper": {
+          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+          "size": 9785
+        },
+        "archived_capture_controller": {
+          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "size": 22972
+        },
+        "archived_method": {
+          "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+          "size": 6370
+        },
+        "archived_host_controller": {
+          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+          "size": 12278
+        },
+        "archived_setup_helper": {
+          "sha256": "ac67fdd0e0600b5f2288d4bbe9d77761c6009e343d6c03f3d0b57de2e1ec1033",
+          "size": 17521
+        },
+        "archived_trace_parser": {
+          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "size": 31168
+        }
+      },
+      "host_gap": {
+        "previous_run": "kleidiai-pp2048",
+        "deltas": {
+          "swap": {
+            "status": "available",
+            "value": {
+              "used_bytes": 0.0
+            }
+          },
+          "pages": {
+            "status": "available",
+            "value": {
+              "Pageins": 9606,
+              "Pageouts": 0,
+              "Swapins": 4,
+              "Swapouts": 0
+            }
+          }
+        },
+        "findings": [
+          "swap_activity"
+        ],
+        "violations": []
+      }
+    },
+    {
+      "id": "kleidiai-tg128-d2048",
+      "backend": "kleidiai",
+      "workload": "tg128-d2048",
+      "state": "completed",
+      "shape": [
+        0,
+        128,
+        2048,
+        4
+      ],
+      "wall_seconds": 116.6174877921585,
+      "resources": {
+        "peak_resident_bytes": 16495427584,
+        "user_seconds": 363.293473,
+        "system_seconds": 9.147458,
+        "minor_faults": 1506260,
+        "major_faults": 195905,
+        "reported_swaps": 0
+      },
+      "eligible_for_deadline_calibration": true,
+      "host_before": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7117796802.56,
+            "free_bytes": 1472137789.44
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 253076834,
+            "Pageouts": 9415455,
+            "Swapins": 16434942,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            6.0322265625,
+            7.7265625,
+            8.443359375
+          ]
+        }
+      },
+      "host_after": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7117796802.56,
+            "free_bytes": 1472137789.44
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 253290114,
+            "Pageouts": 9415880,
+            "Swapins": 16435021,
+            "Swapouts": 19377562
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            6.80078125,
+            7.4267578125,
+            8.2216796875
+          ]
+        }
+      },
+      "host_findings": [
+        "swap_activity"
+      ],
+      "host_violations": [],
+      "preflight_host_findings": [],
+      "preflight_host_violations": [],
+      "host_deltas": {
+        "swap": {
+          "status": "available",
+          "value": {
+            "used_bytes": 0.0
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "Pageins": 213280,
+            "Pageouts": 425,
+            "Swapins": 79,
+            "Swapouts": 0
+          }
+        }
+      },
+      "raw_artifacts": {
+        "native_stdout": {
+          "sha256": "2dd95075e9bd20235d59ac713eedd1a41be91aa6777cf519b04fb55b960d1462",
+          "size": 1249
+        },
+        "native_stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "archived_benchmark_controller": {
+          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+          "size": 34939
+        },
+        "archived_runtime_helper": {
+          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+          "size": 9785
+        },
+        "archived_capture_controller": {
+          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "size": 22972
+        },
+        "archived_method": {
+          "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+          "size": 6370
+        },
+        "archived_host_controller": {
+          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+          "size": 12278
+        },
+        "archived_setup_helper": {
+          "sha256": "ac67fdd0e0600b5f2288d4bbe9d77761c6009e343d6c03f3d0b57de2e1ec1033",
+          "size": 17521
+        },
+        "archived_trace_parser": {
+          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "size": 31168
+        }
+      },
+      "host_gap": {
+        "previous_run": "cpu-tg128-d2048",
+        "deltas": {
+          "swap": {
+            "status": "available",
+            "value": {
+              "used_bytes": 0.0
+            }
+          },
+          "pages": {
+            "status": "available",
+            "value": {
+              "Pageins": 12207,
+              "Pageouts": 0,
+              "Swapins": 0,
+              "Swapouts": 0
+            }
+          }
+        },
+        "findings": [],
+        "violations": []
+      }
+    }
+  ]
+}
