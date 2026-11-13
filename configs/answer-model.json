@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "qwen35-9b-q8-0-thinking-v1",
+  "directory": "models/qwen35-9b",
+  "model": {
+    "repository": "unsloth/Qwen3.5-9B-GGUF",
+    "revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+    "filename": "Qwen3.5-9B-Q8_0.gguf",
+    "url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/resolve/3885219b6810b007914f3a7950a8d1b469d598a5/Qwen3.5-9B-Q8_0.gguf",
+    "size": 9527502048,
+    "sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
+    "license": "Apache-2.0",
+    "quantization": "Q8_0"
+  },
+  "files": [
+    {
+      "filename": "LICENSE",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/LICENSE",
+      "size": 11544,
+      "sha256": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a"
+    },
+    {
+      "filename": "UPSTREAM_README.md",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/README.md",
+      "size": 77643,
+      "sha256": "c5f5a8c2dddab69cfbf05279235aa5fddb137939a06539c4c7637aa900fef6d0"
+    },
+    {
+      "filename": "upstream-config.json",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/config.json",
+      "size": 3126,
+      "sha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05"
+    },
+    {
+      "filename": "upstream-chat_template.jinja",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/chat_template.jinja",
+      "size": 7756,
+      "sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715"
+    },
+    {
+      "filename": "upstream-tokenizer_config.json",
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B/resolve/c202236235762e1c871ad0ccb60c8ee5ba337b9a/tokenizer_config.json",
+      "size": 16710,
+      "sha256": "316230d6a809701f4db5ea8f8fc862bc3a6f3229c937c174e674ff3ca0a64ac8"
+    },
+    {
+      "filename": "PUBLISHER_README.md",
+      "url": "https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/resolve/3885219b6810b007914f3a7950a8d1b469d598a5/README.md",
+      "size": 78888,
+      "sha256": "e50f8066e39c38cbc2da5dd94b9a9a2712b64c4921f107a5adb4b3ca5b6bbac0"
+    }
+  ],
+  "purpose": "Local document answers with bounded reasoning; validate with the frozen answer checks.",
+  "provenance": {
+    "quantization_publisher": "unsloth",
+    "base_model": {
+      "repository": "Qwen/Qwen3.5-9B",
+      "reviewed_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "publisher_declared_base_model": [
+        "Qwen/Qwen3.5-9B"
+      ],
+      "conversion_input_revision": "not stated in publisher metadata/card",
+      "conversion_reproduction": "not performed"
+    },
+    "weight_bytes_verified": true,
+    "embedded_template_verified": true,
+    "expected_architecture": "qwen35",
+    "official_template_sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+    "publisher_advertised_template_sha256": "7f0e529032c25183bcd66c7f238da2d377f43be754a94e2725a58c4e16d2ed67"
+  },
+  "limits": "Third-party GGUF; conversion input and recipe are unstated. Bounded thinking is a local preset, not a general quality or kernel-coverage claim.",
+  "chat_template_sha256": "7f0e529032c25183bcd66c7f238da2d377f43be754a94e2725a58c4e16d2ed67"
+}

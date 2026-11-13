@@ -1,6 +1,6 @@
 # Index and search documents
 
-The CLI searches local text and Markdown without running a model. Results contain exact passages, source IDs, revisions and line numbers. It does not generate answers yet.
+The `search` command finds local text and Markdown. Default keyword search runs without a model; optional dense and hybrid search use BGE embeddings. Results contain exact passages, source IDs, revisions and line numbers. Use [ask](answers.md) to generate answers from those passages.
 
 Install the locked environment, then index a folder or selected files:
 
@@ -59,7 +59,7 @@ Reports keep per-case results, missing evidence, failures and aggregate denomina
 
 Operational failures produce a nonzero exit status. Retrieval misses remain in the report and are not command errors. `first_evidence_rank` is the rank at which the first complete evidence unit is available; `all_evidence_rank` is set only when all required units are covered.
 
-This measures retrieval only. It does not measure answer accuracy, citations, abstention or inference speed. Keep this baseline unchanged for the later dense-search comparison; freeze separate evaluation cases before tuning.
+This measures retrieval only. It does not measure answer accuracy, citations, abstention or inference speed. The [embedding comparison](embeddings.md) preserves this baseline and uses separately frozen evaluation cases.
 
 See the [first keyword baseline](results/lexical-baseline/README.md) for measured coverage and known misses.
 

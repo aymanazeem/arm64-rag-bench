@@ -1,8 +1,10 @@
 # Evaluation contract
 
-This is a small development set, not a held-out benchmark or a quality result. Cases are agent-authored and independently checked by another agent against the named sources. They have not been validated by humans.
+These are small development and evaluation sets, not a general quality benchmark. Cases are agent-authored and independently checked by another agent against the named sources. They have not been validated by humans.
 
-`retrieval-validation.json` adds 18 questions with separate families and evidence spans. They share the source documents. Its reviewed bytes were frozen in `configs/retrieval-comparison.json` before comparing retrieval methods; no settings were tuned to its results. See the [comparison guide](../docs/embeddings.md).
+`retrieval-validation.json` adds 18 questions with separate families and evidence spans. They share the source documents. Its reviewed bytes were frozen in `configs/retrieval-comparison.json` before comparing retrieval methods; no retrieval settings were tuned to its results. Later answer failures informed model and prompt development, so these questions now serve as answer regressions. The earlier [retrieval comparison](../docs/embeddings.md) remains a separate experiment.
+
+`answers-protocol.json` defines local answer checks, citation structure, prompt budgets and independent review criteria. The initial answer model is a 9.53 GB third-party Qwen3.5-9B Q8_0 quantization with bounded thinking. [Published results](../docs/results/grounded-answers/README.md) separate supported claims, missing facts and retrieval gaps across all three sets. Model provenance, CPU settings, sampling limits and commands are in the [answer guide](../docs/answers.md).
 
 `development.json` defines questions, evidence and scoring requirements. `data/manifests/corpus.json` pins four upstream documents and three synthetic fixtures. Each case names its complete corpus scope; absence and conflict labels apply only to that scope. Upstream text stays outside Git. The manifest records immutable URLs, byte hashes and license references. Preserve upstream license notices when materializing the corpus.
 
@@ -35,7 +37,15 @@ Passing a citation-ID check does not establish factual support. A model grader c
 
 ## Splits and regression rules
 
-These cases are available for tuning and regression checks. Before tuning retrieval, prompts or models for a comparison, create and freeze a separate evaluation set, corpus, labels and scoring policy. Keep related question families together when splitting. Record author and reviewer provenance.
+The answer runner keeps three roles separate:
+
+| Split | Dataset | Questions | Role |
+| --- | --- | ---: | --- |
+| `development` | `development.json` | 14 | Model selection and prompt development. |
+| `regression` | `retrieval-validation.json` | 18 | Previously used answer questions; development regressions. |
+| `validation` | `answer-validation.json` | 8 | Fresh answer questions, frozen before final runs. |
+
+Fresh questions share the pinned documents; this does not test unseen-document generalization. Keep them unused until the model, prompt and settings are frozen. Freeze labels and review criteria too, keep related question families together when splitting, and record author and reviewer provenance. `scripts/check_answers.py --split all` runs the three sets in order; individual split commands are in the [answer guide](../docs/answers.md).
 
 If a final case later guides a fix, record that use and version or replace it for future claims. Fix incorrect labels transparently and rerun baseline and candidate. Do not edit labels only to make a candidate pass.
 
@@ -43,16 +53,16 @@ After each major feature, run relevant tests and existing regressions. Use a rea
 
 ## Validate the data
 
-The default check needs only Python and reads no downloaded source:
+The development-contract check needs only Python and reads no downloaded source:
 
 ```sh
 python3 -m unittest discover -s tests -p test_eval_contract.py
 ```
 
-When the pinned checkouts exist under `vendor/`, also verify upstream bytes and every source-backed evidence span:
+When the pinned checkouts exist under `vendor/`, also verify the development set's upstream bytes and evidence spans:
 
 ```sh
 ARM64_VERIFY_UPSTREAM=1 python3 -m unittest discover -s tests -p test_eval_contract.py
 ```
 
-The optional check makes no network requests and fails if a required source is missing or changed. These checks validate data integrity, not model answer quality.
+The optional check makes no network requests and fails if a required source is missing or changed. The [full test suite](../docs/runtime.md#install-and-test) also checks the retrieval-validation contract and all answer-dataset pins. Each answer run validates its selected dataset's spans against indexed sources. These checks validate data integrity, not model answer quality.

@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "id": "answers-fresh-validation-v1",
+  "split": "validation",
+  "manifest_path": "data/manifests/corpus.json",
+  "manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
+  "provenance": {
+    "authored_by": "agent",
+    "review": "pending_independent_agent_source_check",
+    "human_validated": false,
+    "date": "2026-11-12",
+    "selection": "Eight new question families from previously unlabelled facts in the four pinned upstream documents; two multipart, two conditions/negative limits, two exact option/API semantics and two practical cases. No retrieval trials or model generation used to select cases.",
+    "freeze": "Draft withheld from the prompt author until the next scope-only prompt is frozen. Independent source review is required before adoption.",
+    "limits": "Documents are shared with earlier development and reused retrieval-validation. Nonoverlapping labelled evidence is not unseen-document validation; source chunks may have appeared previously as retrieved context. All eight cases are answerable; abstention and conflict remain separate regression checks.",
+    "author_role": "Context/protocol developer and prior answer reviewer; not an external or human dataset author.",
+    "prior_dataset_sha256": {
+      "eval/development.json": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
+      "eval/retrieval-validation.json": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc"
+    },
+    "case_mix": {
+      "multipart": 2,
+      "conditions_negative_limits": 2,
+      "exact_option_api_semantics": 2,
+      "practical": 2
+    }
+  },
+  "evidence": {
+    "accelerate-default": {
+      "source_id": "llama-build",
+      "start": 4796,
+      "end": 4935,
+      "lines": [
+        100,
+        102
+      ],
+      "sha256": "f126355d6fa9b712a07c4363814916e63f39be8b081c66bae91ec5d6be53d1e5"
+    },
+    "openblas-linux-setup": {
+      "source_id": "llama-build",
+      "start": 4936,
+      "end": 5158,
+      "lines": [
+        104,
+        111
+      ],
+      "sha256": "72db112c954c999fd2b2ca781d658f9e962697f238dd3bce4d12d2a6585e5b0f"
+    },
+    "slot-cache-save": {
+      "source_id": "llama-server",
+      "start": 85677,
+      "end": 85942,
+      "lines": [
+        1256,
+        1260
+      ],
+      "sha256": "6215a78e646b2f0031ede477dfaa07ebc37a23b5617dd2a2df0803150a23a41e"
+    },
+    "slot-cache-restore": {
+      "source_id": "llama-server",
+      "start": 86134,
+      "end": 86419,
+      "lines": [
+        1276,
+        1280
+      ],
+      "sha256": "6c962eeab6af6945f05953d828a322d9421ee6246d1e4737536322085ea76e07"
+    },
+    "sme-debug-positive-value": {
+      "source_id": "llama-build",
+      "start": 38507,
+      "end": 38853,
+      "lines": [
+        734,
+        738
+      ],
+      "sha256": "0843482e2d6ebe009ad18a4c22c5ce90a6219ba932da618971b8c232d4351e3a"
+    },
+    "sme-debug-capability-limit": {
+      "source_id": "llama-build",
+      "start": 39026,
+      "end": 39175,
+      "lines": [
+        742,
+        742
+      ],
+      "sha256": "26a68f9fb8821ce0b7ed9225cc5e5ba3217c49c92201b0ab1909a896a934480e"
+    },
+    "experimental-code-limits": {
+      "source_id": "kleidiai-readme",
+      "start": 11857,
+      "end": 12063,
+      "lines": [
+        207,
+        209
+      ],
+      "sha256": "d3b110225bdb13beb24821f8a86139f328b3a498e2d6ddeb606c2db0885e6e37"
+    },
+    "response-field-selection": {
+      "source_id": "llama-server",
+      "start": 61329,
+      "end": 61778,
+      "lines": [
+        616,
+        616
+      ],
+      "sha256": "85acc150f8c15f76436f189c380f0ad6504d6022f77592c4ca8e7623a5e2c254"
+    },
+    "benchmark-explicit-model-file": {
+      "source_id": "llama-bench",
+      "start": 2318,
+      "end": 2503,
+      "lines": [
+        47,
+        48
+      ],
+      "sha256": "260b799a542b28503c5feff38784fec44e931b155b33995cb60b06de78420499"
+    },
+    "kleidiai-linux-cross-build": {
+      "source_id": "kleidiai-readme",
+      "start": 6821,
+      "end": 7340,
+      "lines": [
+        136,
+        143
+      ],
+      "sha256": "b982b2db15554dc7a3558f99fb32396d5a8f81a0902965068a5ee58882b140f1"
+    },
+    "benchmark-sql-import": {
+      "source_id": "llama-bench",
+      "start": 19250,
+      "end": 19449,
+      "lines": [
+        335,
+        341
+      ],
+      "sha256": "f84dbb6fd966a2b6a7df70772c76547efefc6be26cd8022e02570c33762b1b81"
+    }
+  },
+  "cases": [
+    {
+      "id": "fresh-001",
+      "family": "blas-platform-setup",
+      "origin": "source_derived",
+      "tags": [
+        "multipart",
+        "multi_evidence",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "What BLAS setup does the guide describe for a Mac, and how do I select OpenBLAS on Linux?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "accelerate-default",
+        "openblas-linux-setup"
+      ],
+      "required_facts": [
+        "On a Mac, the Accelerate Framework is enabled by default and normal build instructions can be used.",
+        "OpenBLAS must be installed on the Linux machine.",
+        "The Linux CMake configuration enables GGML_BLAS=ON and selects GGML_BLAS_VENDOR=OpenBLAS."
+      ],
+      "unacceptable_claims": [
+        "The Accelerate Framework is available on every platform.",
+        "Selecting the OpenBLAS vendor alone installs OpenBLAS.",
+        "The documented Linux OpenBLAS setup provides GPU acceleration."
+      ]
+    },
+    {
+      "id": "fresh-002",
+      "family": "slot-cache-file-roundtrip",
+      "origin": "source_derived",
+      "tags": [
+        "multipart",
+        "multi_evidence",
+        "api_semantics"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Which HTTP requests save and restore a slot's prompt cache, and which directory is used for their filename?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "slot-cache-save",
+        "slot-cache-restore"
+      ],
+      "required_facts": [
+        "POST /slots/{id_slot}?action=save saves the specified slot prompt cache to a file.",
+        "POST /slots/{id_slot}?action=restore restores the specified slot prompt cache from a file.",
+        "The filename is relative to the directory specified by the server --slot-save-path parameter for both operations."
+      ],
+      "unacceptable_claims": [
+        "Saving or restoring the slot cache uses a GET request.",
+        "The filename refers to a file on the HTTP client machine.",
+        "The cache save directory is always the server current working directory."
+      ]
+    },
+    {
+      "id": "fresh-003",
+      "family": "sme-debug-override-bounds",
+      "origin": "source_derived",
+      "tags": [
+        "conditions_negative_limits",
+        "configuration",
+        "platform_limit"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "During debugging, what does a positive GGML_KLEIDIAI_SME value control, and can it force a kernel onto a CPU missing the needed capability?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "sme-debug-positive-value",
+        "sme-debug-capability-limit"
+      ],
+      "required_facts": [
+        "A positive value n enables compatible SME-family kernels and permits up to n threads for selected quantized SME-family kernels.",
+        "A bundled kernel remains disabled when the CPU lacks its required SME-family capability, regardless of this variable."
+      ],
+      "unacceptable_claims": [
+        "A positive value can enable an SME-family kernel on a CPU lacking its required capability.",
+        "The value sets an exact thread count for every operation or every kernel."
+      ]
+    },
+    {
+      "id": "fresh-004",
+      "family": "experimental-code-stability",
+      "origin": "source_derived",
+      "tags": [
+        "conditions_negative_limits",
+        "paraphrase"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "Can code in KleidiAI's experimental directory be treated as production quality with a stable API?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "experimental-code-limits"
+      ],
+      "required_facts": [
+        "Production quality should not be expected from code in the experimental directory.",
+        "The API may change at any time for any file in experimental."
+      ],
+      "unacceptable_claims": [
+        "Experimental code is guaranteed to be production quality.",
+        "Experimental APIs are guaranteed to remain stable until the next major release."
+      ]
+    },
+    {
+      "id": "fresh-005",
+      "family": "completion-response-field-selection",
+      "origin": "source_derived",
+      "tags": [
+        "exact_option_api_semantics",
+        "api_semantics"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How does /completion response_fields handle a nested path containing '/', and does a missing requested field fail the completion?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "response-field-selection"
+      ],
+      "required_facts": [
+        "A slash-delimited nested field is unnested to the response root and given a new name.",
+        "A missing requested field is omitted without an error."
+      ],
+      "unacceptable_claims": [
+        "A missing response field causes an error.",
+        "Slash-delimited fields retain their original nesting in the response."
+      ]
+    },
+    {
+      "id": "fresh-006",
+      "family": "benchmark-model-file-precedence",
+      "origin": "source_derived",
+      "tags": [
+        "exact_option_api_semantics",
+        "literal_flag"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "In llama-bench, if --hf-repo specifies a quantization and --hf-file names a file, which selection takes precedence?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "benchmark-explicit-model-file"
+      ],
+      "required_facts": [
+        "The explicitly named --hf-file (or -hff) overrides the quantization in --hf-repo."
+      ],
+      "unacceptable_claims": [
+        "The quantization in --hf-repo overrides --hf-file.",
+        "The server downloads and benchmarks both selections automatically."
+      ]
+    },
+    {
+      "id": "fresh-007",
+      "family": "kleidiai-linux-cross-compilation",
+      "origin": "source_derived",
+      "tags": [
+        "practical",
+        "configuration"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How should an x86_64 Linux host set up CMake to cross-compile KleidiAI for an Arm Linux target such as a Raspberry Pi?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "kleidiai-linux-cross-build"
+      ],
+      "required_facts": [
+        "Use the Arm GNU toolchain and make it available on PATH on the x86_64 Linux host.",
+        "Pass -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/aarch64-none-linux-gnu.toolchain.cmake to CMake for the documented cross-build."
+      ],
+      "unacceptable_claims": [
+        "The build must run on an Arm host because cross-compilation from x86_64 Linux is unsupported.",
+        "The Android NDK toolchain file is the documented toolchain for this Arm Linux cross-build."
+      ]
+    },
+    {
+      "id": "fresh-008",
+      "family": "benchmark-sqlite-import",
+      "origin": "source_derived",
+      "tags": [
+        "practical",
+        "literal_flag"
+      ],
+      "corpus_id": "technical-docs",
+      "question": "How can llama-bench results be sent straight into a SQLite database using the documented output format?",
+      "answerability": "answerable",
+      "evidence_ids": [
+        "benchmark-sql-import"
+      ],
+      "required_facts": [
+        "Select SQL output with -o sql.",
+        "Pipe the SQL output into the sqlite3 command-line tool to add the results to a database."
+      ],
+      "unacceptable_claims": [
+        "The SQL output is not suitable for SQLite.",
+        "Selecting -o sql automatically creates and writes a SQLite database without a receiving tool."
+      ]
+    }
+  ]
+}

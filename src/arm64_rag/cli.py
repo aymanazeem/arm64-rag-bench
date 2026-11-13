@@ -1,6 +1,7 @@
 import argparse
 import json
 import sqlite3
+import uuid
 from pathlib import Path
 
 from arm64_rag.corpus import load_manifest, load_paths
@@ -37,21 +38,39 @@ def main() -> None:
         "--manifest", type=Path, default=Path("data/manifests/corpus.json")
     )
     evaluate.add_argument("--token-budget", type=int, help="Budget in BGE text tokens.")
+    ask = commands.add_parser(
+        "ask", help="Answer a question with local source citations."
+    )
+    ask.add_argument("question")
+    ask.add_argument("--source", action="append", help="Limit answers to a source ID.")
+    ask.add_argument(
+        "--server-binary", type=Path, default=Path("build/cpu/bin/llama-server")
+    )
+    ask.add_argument(
+        "--answer-model-config", type=Path, default=Path("configs/answer-model.json")
+    )
+    ask.add_argument(
+        "--protocol", type=Path, default=Path("eval/answers-protocol.json")
+    )
+    ask.add_argument(
+        "--trace", type=Path, help="Save the full local answer record here."
+    )
+    ask.add_argument("--json", action="store_true", help="Print the answer as JSON.")
     embedding = commands.add_parser(
         "embed", help="Add embeddings to the document index."
     )
-    for command in (search, evaluate):
+    for command in (search, evaluate, ask):
         command.add_argument(
             "--method", choices=("lexical", "dense", "hybrid"), default="lexical"
         )
-    for command in (embedding, search, evaluate):
+    for command in (embedding, search, evaluate, ask):
         command.add_argument(
             "--model-dir", type=Path, default=Path("models/bge-small-en-v1.5")
         )
         command.add_argument(
             "--embedding-config", type=Path, default=Path("configs/embeddings.json")
         )
-    for command in (indexing, embedding, search, evaluate):
+    for command in (indexing, embedding, search, evaluate, ask):
         command.add_argument(
             "--db", type=Path, default=Path("data/private/index.sqlite")
         )
@@ -61,7 +80,7 @@ def main() -> None:
     try:
         encoder = None
         if args.command == "embed" or (
-            args.command in {"search", "evaluate"}
+            args.command in {"search", "evaluate", "ask"}
             and (
                 args.method != "lexical"
                 or getattr(args, "token_budget", None) is not None
@@ -102,6 +121,104 @@ def main() -> None:
                     limit=args.limit,
                     source_ids=args.source,
                 )
+        elif args.command == "ask":
+            from arm64_rag.answers import answer_question, render_answer
+            from arm64_rag.inference import LocalServer
+
+            trace = args.trace or Path("artifacts/answers") / f"{uuid.uuid4().hex}.json"
+            if trace.exists() or trace.with_suffix(".server.log").exists():
+                raise ValueError("Use a new trace path to preserve earlier answers.")
+            runtime, interruption = None, None
+            try:
+                try:
+                    protocol = json.loads(args.protocol.read_bytes())
+                    model_config = json.loads(args.answer_model_config.read_bytes())
+                    settings = protocol["settings"]
+                    model = (
+                        Path(model_config["directory"])
+                        / model_config["model"]["filename"]
+                    )
+                    model_hash = model_config["model"]["sha256"]
+                    if (
+                        not isinstance(settings, dict)
+                        or not isinstance(protocol["model_output_schema"], dict)
+                        or not isinstance(model_hash, str)
+                        or not model_hash
+                        or any(
+                            type(settings.get(key)) is not int or settings[key] < 1
+                            for key in (
+                                "context_size",
+                                "max_output_tokens",
+                                "max_passages",
+                            )
+                        )
+                    ):
+                        raise ValueError
+                except (KeyError, TypeError, ValueError) as error:
+                    raise ValueError(
+                        "Invalid answer protocol or model configuration."
+                    ) from error
+                with LocalServer(
+                    args.server_binary,
+                    model,
+                    context_size=protocol["settings"]["context_size"],
+                    request_timeout=300,
+                    reasoning_budget_tokens=protocol["settings"].get(
+                        "reasoning_budget_tokens"
+                    ),
+                    log_path=trace.with_suffix(".server.log"),
+                ) as server:
+                    runtime = server.info()
+                    if runtime["model_sha256"] != model_hash:
+                        raise ValueError(
+                            "Answer model differs from its configured hash."
+                        )
+                    result = answer_question(
+                        args.db,
+                        args.question,
+                        server,
+                        protocol,
+                        method=args.method,
+                        encoder=encoder,
+                        source_ids=args.source,
+                    )
+            except (
+                OSError,
+                ValueError,
+                RuntimeError,
+                sqlite3.Error,
+                KeyboardInterrupt,
+            ) as error:
+                if isinstance(error, KeyboardInterrupt):
+                    interruption = error
+                result = {
+                    "schema_version": 1,
+                    "question": args.question,
+                    "runtime": runtime,
+                    "answer": None,
+                    "failure": "Interrupted by user."
+                    if interruption is not None
+                    else str(error),
+                    "raw_completion": getattr(error, "response", None),
+                }
+            trace.parent.mkdir(parents=True, exist_ok=True)
+            with trace.open("x") as output:
+                output.write(json.dumps(result, ensure_ascii=True, indent=2) + "\n")
+            if interruption is not None:
+                raise interruption
+            if args.json:
+                print(
+                    json.dumps(
+                        {"answer": result["answer"], "failure": result["failure"]},
+                        ensure_ascii=True,
+                        indent=2,
+                    )
+                )
+            else:
+                print(render_answer(result))
+            if result["failure"]:
+                parser.exit(1, f"Details saved to {trace}.\n")
+            return
         else:
             result = evaluate_retrieval(
                 args.db,

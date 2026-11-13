@@ -28,6 +28,16 @@ def verify(path, asset):
         raise ValueError(f"Checksum or size mismatch: {path.name}")
 
 
+def publish_verified(partial, destination, asset):
+    try:
+        destination.hardlink_to(partial)
+    except FileExistsError:
+        verify(destination, asset)
+    finally:
+        partial.unlink(missing_ok=True)
+    return destination
+
+
 def download(asset, destination):
     if destination.exists():
         verify(destination, asset)
@@ -43,8 +53,7 @@ def download(asset, destination):
         except BaseException:
             partial.unlink(missing_ok=True)
             raise
-    partial.replace(destination)
-    return destination
+    return publish_verified(partial, destination, asset)
 
 
 def capture(*args):
