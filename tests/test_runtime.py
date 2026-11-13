@@ -72,6 +72,31 @@ def test_valid_download_is_published_after_verification(runtime, monkeypatch, tm
     assert not partial.exists()
 
 
+@pytest.mark.parametrize("matching", [True, False])
+def test_concurrent_download_destination_is_verified_and_preserved(
+    runtime, monkeypatch, tmp_path, matching
+):
+    model = tmp_path / "model.gguf"
+    raw = b"verified model"
+    competing = raw if matching else b"Preserve this file"
+    created = {}
+
+    def response(*args, **kwargs):
+        model.write_bytes(competing)
+        created["inode"] = model.stat().st_ino
+        return io.BytesIO(raw)
+
+    monkeypatch.setattr(runtime.urllib.request, "urlopen", response)
+    if matching:
+        assert runtime.download(asset_for(raw), model) == model
+    else:
+        with pytest.raises(ValueError, match="Checksum or size"):
+            runtime.download(asset_for(raw), model)
+    assert model.read_bytes() == competing
+    assert model.stat().st_ino == created["inode"]
+    assert not model.with_suffix(".gguf.part").exists()
+
+
 def source_archive(runtime, name="kleidiai/CMakeLists.txt", symlink=False):
     archive = runtime.ROOT / ".local/downloads/kleidiai.tar.gz"
     archive.parent.mkdir(parents=True)

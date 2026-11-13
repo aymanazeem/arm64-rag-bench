@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "kind": "evidence-corrections",
+  "scope": "Original model outputs, reviews and initial exports remain unchanged. The validation artifact uses an explicitly corrected review copy for empty-claim criteria; the historical source-line typo is clarified here.",
+  "corrections": [
+    {
+      "id": "v5-dev010-scheduling-line",
+      "artifact": "pilots.json",
+      "artifact_sha256": "57f31b9154e127d71464e908d76dcfe88fba729165fdc05f0884a3aaff72fb4a",
+      "pilot_id": "development-v5",
+      "case_id": "dev-010",
+      "affected_export_json_pointer": "/pilots/4/cases/9/review/required_facts/1/reason",
+      "original_review_sha256": "97fa04985a26e3a4f9bb8781479805a47e1bee88f0543f897b9c33ed56e9becd",
+      "affected_original_review_json_pointer": "/cases/2/required_facts/1/reason",
+      "original_text": "The answer omits the explicit No scheduling feature. The feature list at canonical README line44 is not present in any packed passage.",
+      "corrected_text": "The answer omits the explicit No scheduling feature. The feature list at canonical README line46 is not present in any packed passage.",
+      "explanation": "No scheduling is at canonical README line 46. Line 44 says No memory management. The scheduling fact is still absent from that answer and its supplied passages.",
+      "source": {
+        "source_id": "kleidiai-readme",
+        "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+        "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+        "web_url": "https://github.com/ARM-software/kleidiai/blob/c80157210987eedaab2509638ef5e15950c53a8c/README.md#L46",
+        "canonical_sha256": "0b44267ff7a8b14f2f99142dfb5512637f9c69850eaeca25a772f38f23b6600b",
+        "line": 46,
+        "text": "- No scheduling"
+      },
+      "scores_changed": false,
+      "originals_modified": false
+    },
+    {
+      "id": "v12-fresh001-empty-claim-criteria",
+      "artifact": "validation.json",
+      "artifact_sha256": "b763e27a3a47180fee504e2fbd0028b01193151f2a4e92af9fdd2b6823d90a72",
+      "original_artifact_sha256": "79aa8e8f21a1a104e034abc93e0cd0d77edbfa3589883d5d8352555cd39e749b",
+      "corrected_in_this_artifact": true,
+      "case_id": "fresh-001",
+      "original_review_sha256": "7096d73cd074b7ccc007cc2a2e1c6b2bfd06293070dc0f18c0b4916d347cb347",
+      "corrected_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+      "addendum_sha256": "a816a3d089bae1daa0fab602b7e718afc4f153de5d5c7bc4cb9209a7225dc4cc",
+      "case_file_sha256": "d32a8952c70d39e0c8e95e680ea6c1f7f777f321c02418ea95f38587c17b7983",
+      "explanation": "The review helper aggregated an empty claim list as three passes. Consistent with earlier zero-claim refusals, these claim/citation criteria are not applicable.",
+      "changes": [
+        {
+          "criterion": "unsupported_claims",
+          "original_review_json_pointer": "/cases/0/criteria/unsupported_claims",
+          "export_json_pointer": "/cases/0/review/criteria/unsupported_claims",
+          "original_verdict": "pass",
+          "corrected_verdict": "not_applicable",
+          "corrected_reason": "No factual claims were emitted. Refusal appropriateness and required-fact coverage are assessed separately.",
+          "summary_json_pointer": "/summary/criteria/unsupported_claims",
+          "original_summary_counts": {
+            "pass": 8,
+            "fail": 0,
+            "not_applicable": 0,
+            "not_assessed": 0
+          },
+          "corrected_summary_counts": {
+            "pass": 7,
+            "fail": 0,
+            "not_applicable": 1,
+            "not_assessed": 0
+          }
+        },
+        {
+          "criterion": "citation_support",
+          "original_review_json_pointer": "/cases/0/criteria/citation_support",
+          "export_json_pointer": "/cases/0/review/criteria/citation_support",
+          "original_verdict": "pass",
+          "corrected_verdict": "not_applicable",
+          "corrected_reason": "No factual claims were emitted. Refusal appropriateness and required-fact coverage are assessed separately.",
+          "summary_json_pointer": "/summary/criteria/citation_support",
+          "original_summary_counts": {
+            "pass": 8,
+            "fail": 0,
+            "not_applicable": 0,
+            "not_assessed": 0
+          },
+          "corrected_summary_counts": {
+            "pass": 7,
+            "fail": 0,
+            "not_applicable": 1,
+            "not_assessed": 0
+          }
+        },
+        {
+          "criterion": "citation_coverage",
+          "original_review_json_pointer": "/cases/0/criteria/citation_coverage",
+          "export_json_pointer": "/cases/0/review/criteria/citation_coverage",
+          "original_verdict": "pass",
+          "corrected_verdict": "not_applicable",
+          "corrected_reason": "No factual claims were emitted. Refusal appropriateness and required-fact coverage are assessed separately.",
+          "summary_json_pointer": "/summary/criteria/citation_coverage",
+          "original_summary_counts": {
+            "pass": 8,
+            "fail": 0,
+            "not_applicable": 0,
+            "not_assessed": 0
+          },
+          "corrected_summary_counts": {
+            "pass": 7,
+            "fail": 0,
+            "not_applicable": 1,
+            "not_assessed": 0
+          }
+        }
+      ],
+      "unchanged_results": {
+        "emitted_claims_supported": 15,
+        "emitted_claims_total": 15,
+        "required_facts_passed": 13,
+        "required_facts_total": 17,
+        "full_case_passes": 6,
+        "cases": 8,
+        "faithful_refusal_cases": [
+          "fresh-001"
+        ]
+      },
+      "headline_scores_changed": false,
+      "originals_modified": false
+    }
+  ]
+}

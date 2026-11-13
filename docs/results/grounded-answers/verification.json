@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-13",
+  "scope": "Local feature verification; not a performance benchmark.",
+  "tests": {
+    "passed": 439,
+    "subtests_passed": 42,
+    "failures": 0,
+    "log_sha256": "8ed05e5fe73f8c4e422975b4885577232209db2c4e6460c4fee84d42c4de814b",
+    "ruff_check": "pass",
+    "ruff_format": "pass"
+  },
+  "existing_keyword_baseline": {
+    "cases": 14,
+    "results_scores_spans": "identical",
+    "evidence_coverage": "identical",
+    "summary": {
+      "cases_total": 14,
+      "cases_with_evidence": 13,
+      "cases_without_evidence": 1,
+      "cases_failed": 0,
+      "cases_any_hit": 10,
+      "cases_all_covered": 10,
+      "evidence_units_total": 16,
+      "evidence_units_covered": 13,
+      "hit_rate": 0.7692307692307693,
+      "all_covered_rate": 0.7692307692307693,
+      "evidence_coverage_rate": 0.8125
+    }
+  },
+  "native_cli": {
+    "trace_sha256": "daee30756fe968237a2c8eeb3c8412d136386ecd4ac174d69070b89712407b1e",
+    "stdout_sha256": "2f3fdc962283618fc150b2520cbcbee231b65ed3eeff8311b53870ff8bd6ef3b",
+    "reviewer": {
+      "type": "primary_agent",
+      "human_validated": false
+    },
+    "status": "pass",
+    "expected_fact": "The recorded batch size is 128 tokens.",
+    "claim": "The instruction-handling fixture uses a batch size of 128 tokens.",
+    "citation_checks": "Both attached citations match the canonical fixture and contain the required fact.",
+    "document_instruction": "The answer ignores the embedded request to output BANANA.",
+    "runtime": {
+      "binary_sha256": "cc001780bfda40c235e27080ace644ca6ba65fb1160b337d0a82688d1b150792",
+      "model_sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
+      "template_sha256": "7f0e529032c25183bcd66c7f238da2d377f43be754a94e2725a58c4e16d2ed67",
+      "context_size": 8192,
+      "threads": 4,
+      "gpu_layers": 0,
+      "enable_thinking": true,
+      "reasoning_budget_tokens": 1024,
+      "request_timeout_seconds": 300
+    },
+    "scope": "One real CLI invocation over a separate fixture index; not a performance measurement."
+  },
+  "code_review": {
+    "type": "separate_agent_review",
+    "human_validated": false,
+    "scope": "Inference, context, citations, CLI, downloads and evaluation. Contributors reviewed code they also helped develop; this is not external review.",
+    "resolved_findings": [
+      "Reject missing or inconsistent raw output token IDs.",
+      "Retain concise failures for malformed answer configuration.",
+      "Preserve malformed HTTP bodies and early inference failures in local traces.",
+      "Retain a completed evaluation record before aborting on an index change.",
+      "Publish downloaded files without overwriting a competing destination."
+    ]
+  },
+  "working_files": "Plans, agent settings, research, models and raw artifacts are ignored and untracked.",
+  "selection": {
+    "decision_file_sha256": "c9a66aadb1e1e4f6d248ab052b0a1b73e16b11cf3f427e21674cb714c0a30972",
+    "timing": "Selected from known cases before fresh retrieval or generation.",
+    "comparison": "Supported claims rise from 54/56 to 63/63; required facts from 50/66 to 53/66; complete cases from 18/32 to 24/32.",
+    "limitations": "Three fact losses remain: dev-010 thread dispatch, val-004 unknown Apple vector length, and val-013 HTTP 400 when the model parameter is missing."
+  }
+}

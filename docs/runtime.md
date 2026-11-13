@@ -1,6 +1,6 @@
 # Runtime checks
 
-This setup builds a controlled CPU pair on Apple Silicon. The application and full RAG benchmark are not implemented yet.
+This setup builds a controlled CPU pair on Apple Silicon. The [document-answering CLI](answers.md) uses the standard CPU server. Controlled performance comparisons remain separate work.
 
 ## Install and test
 
@@ -47,7 +47,7 @@ build/cpu/bin/llama-completion \
   --no-display-prompt --simple-io --no-warmup
 ```
 
-The expected answer is `Paris`; the program may also print its end marker. This is a smoke check, not an answer-quality benchmark. The separate [evaluation contract](../eval/README.md) defines source-grounded cases for later application tests.
+The expected answer is `Paris`; the program may also print its end marker. This is a smoke check, not an answer-quality benchmark. The separate [evaluation contract](../eval/README.md) defines source-grounded application tests.
 
 ## Prove kernel execution without debugger access
 
