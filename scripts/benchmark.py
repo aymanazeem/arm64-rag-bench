@@ -2,6 +2,7 @@
 
 import argparse
 import contextlib
+import copy
 import datetime
 import fcntl
 import hashlib
@@ -13,7 +14,6 @@ import random
 import statistics
 import subprocess
 import tempfile
-import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +25,10 @@ HOST_HELPER = Path(__file__).with_name("benchmark_host.py")
 spec = importlib.util.spec_from_file_location("benchmark_host", HOST_HELPER)
 host = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(host)
+TIMING_HELPER = Path(__file__).with_name("benchmark_timing.py")
+spec = importlib.util.spec_from_file_location("benchmark_timing", TIMING_HELPER)
+timing = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(timing)
 
 REVISION = "8ca5a8008b57aa39f2601546c0d07912045080a5"
 BACKENDS = ("cpu", "kleidiai")
@@ -210,6 +214,13 @@ def schedule(seed):
 
 
 def all_assets(plan):
+    for path, key in (
+        (Path(__file__), "harness_sha256"),
+        (HELPER, "runtime_helper_sha256"),
+        (HOST_HELPER, "host_helper_sha256"),
+        (TIMING_HELPER, "timing_helper_sha256"),
+    ):
+        yield {"path": str(path), "size": path.stat().st_size, "sha256": plan[key]}
     yield plan["model"]
     yield plan["runtime_config"]
     yield plan["host_baseline"]
@@ -255,6 +266,12 @@ def verify_runtime(plan):
             "Prerequisite evidence is unapproved or belongs to different inputs.",
         )
         if purpose == "setup_pilot":
+            require(
+                approval.get("timing_helper_sha256") == plan["timing_helper_sha256"]
+                and json.dumps(approval.get("timing_policy"), sort_keys=True)
+                == json.dumps(plan["timing_policy"], sort_keys=True),
+                "Setup approval lacks the frozen timing guard.",
+            )
             if desktop:
                 require(
                     approval.get("study") == "desktop"
@@ -390,6 +407,12 @@ def check_plan(plan):
         plan["host_helper_sha256"] == runtime.digest(HOST_HELPER),
         "Host helper changed after freeze.",
     )
+    require(
+        plan["timing_helper_sha256"] == runtime.digest(TIMING_HELPER)
+        and json.dumps(plan["timing_policy"], sort_keys=True)
+        == json.dumps(timing.POLICY, sort_keys=True),
+        "Timing guard changed after freeze.",
+    )
     host.check_policy(plan["host_policy"])
     require(
         set(plan["prerequisites"])
@@ -445,6 +468,8 @@ def freeze(spec_path, destination):
         "harness_sha256": runtime.digest(Path(__file__)),
         "runtime_helper_sha256": runtime.digest(HELPER),
         "host_helper_sha256": runtime.digest(HOST_HELPER),
+        "timing_helper_sha256": runtime.digest(TIMING_HELPER),
+        "timing_policy": copy.deepcopy(timing.POLICY),
         "host_baseline": asset(spec["host_baseline"]),
         "host_policy": host.policy_from(
             read_json(Path(spec["host_baseline"])),
@@ -593,26 +618,56 @@ def timestamp():
     return datetime.datetime.now(datetime.UTC).isoformat()
 
 
-def stop_child(process):
-    if process is not None and process.poll() is None:
-        try:
-            process.terminate()
-        except ProcessLookupError:
-            process.wait(timeout=CLEANUP_SECONDS)
-            return
-        try:
-            process.wait(timeout=CLEANUP_SECONDS)
-        except subprocess.TimeoutExpired:
-            process.kill()
-            process.wait(timeout=CLEANUP_SECONDS)
+def stop_child(process, guard=None):
+    return timing.stop_process(
+        process,
+        clock_ns=guard.continuous_ns if guard else None,
+        seconds=CLEANUP_SECONDS,
+    )
 
 
-def execute(plan, row, output, persist, *, popen=subprocess.Popen):
+def row_timing(start, end, reason=None, *, timeout_seconds=None):
+    elapsed = (
+        end["continuous_after_ns"] - start["continuous_before_ns"]
+        if end is not None
+        else None
+    )
+    deadline_exceeded = (
+        elapsed is not None
+        and timeout_seconds is not None
+        and elapsed >= int(timeout_seconds * 1e9)
+    )
+    return {
+        "valid": reason is None and end is not None and not deadline_exceeded,
+        "reason": reason,
+        "start": start,
+        "end": end,
+        "deadline_exceeded": deadline_exceeded,
+        "continuous_seconds": elapsed / 1e9 if elapsed is not None else None,
+        "awake_seconds": (
+            (end["awake_ns"] - start["awake_ns"]) / 1e9 if end is not None else None
+        ),
+    }
+
+
+def native_duration_matches(observed, measurement, policy):
+    if measurement["end"] is None:
+        return False
+    elapsed = (
+        measurement["end"]["continuous_after_ns"]
+        - measurement["start"]["continuous_before_ns"]
+    )
+    return sum(observed["samples_ns"]) <= elapsed + policy["native_sample_allowance_ns"]
+
+
+def execute(plan, row, output, persist, *, guard, popen=subprocess.Popen):
+    start = guard.check(row["id"] + ":start")
     directory = output / row["id"]
     directory.mkdir()
     row.update(state="attempted", started_at=timestamp(), argv=command(plan, row))
+    row["timing"] = row_timing(start, None)
     persist()
-    process, started, interrupted = None, time.monotonic(), None
+    process, interrupted, guard_error = None, None, None
     row["outcome"] = None
     try:
         with (
@@ -628,9 +683,26 @@ def execute(plan, row, output, persist, *, popen=subprocess.Popen):
             )
             row["pid"] = process.pid
             persist()
-            code = process.wait(timeout=plan["timeout_seconds"])
+            try:
+                code, end = guard.wait(
+                    process, start, plan["timeout_seconds"], row["id"] + ":end"
+                )
+                row["timing"] = row_timing(
+                    start, end, timeout_seconds=plan["timeout_seconds"]
+                )
+            except timing.GuardError as error:
+                guard_error = error
+                row["timing"] = row_timing(
+                    start,
+                    error.sample,
+                    error.reason,
+                    timeout_seconds=plan["timeout_seconds"],
+                )
+                code = process.poll()
         row["returncode"] = code
-        if code:
+        if code is None:
+            row.update(outcome="timing_error", failure=guard_error.reason)
+        elif code:
             row.update(
                 outcome="exit_error", failure=f"Child exited with status {code}."
             )
@@ -650,8 +722,30 @@ def execute(plan, row, output, persist, *, popen=subprocess.Popen):
                 row.update(
                     outcome="invalid_output", failure=f"{type(error).__name__}: {error}"
                 )
-    except subprocess.TimeoutExpired:
-        row.update(outcome="timeout", failure="The child exceeded its deadline.")
+        if (
+            guard_error is None
+            and "observed" in row
+            and not native_duration_matches(
+                row["observed"], row["timing"], plan["timing_policy"]
+            )
+        ):
+            try:
+                guard.fail("native_duration_inconsistent", row["timing"]["end"], start)
+            except timing.GuardError as error:
+                guard_error = error
+                row["timing"].update(valid=False, reason=error.reason)
+        if guard_error is not None:
+            if (
+                row["timing"]["deadline_exceeded"]
+                or guard_error.reason == "deadline_exceeded"
+            ):
+                row.update(outcome="timeout", failure=guard_error.reason)
+            elif guard_error.sample is None or guard_error.reason in {
+                "clock_unavailable",
+                "clock_went_backwards",
+                "clock_sampling_uncertain",
+            }:
+                row.update(outcome="timing_error", failure=guard_error.reason)
     except KeyboardInterrupt as error:
         row.update(outcome="interrupted", failure="The session was interrupted.")
         interrupted = error
@@ -662,13 +756,23 @@ def execute(plan, row, output, persist, *, popen=subprocess.Popen):
         )
     finally:
         try:
-            stop_child(process)
-        except (OSError, subprocess.TimeoutExpired) as error:
-            row.update(
-                outcome="cleanup_error", failure=f"{type(error).__name__}: {error}"
+            row["cleanup_clock"] = stop_child(process, guard)
+            guard.record_cleanup("native", row["cleanup_clock"])
+        except (timing.CleanupError, OSError) as error:
+            reason = (
+                str(error)
+                if isinstance(error, timing.CleanupError)
+                else "cleanup_failed"
             )
-            interrupted = error
-        row.update(finished_at=timestamp(), wall_seconds=time.monotonic() - started)
+            row["cleanup_error"] = reason
+            guard.record_cleanup("native", None, error)
+            if interrupted is None and guard_error is None:
+                interrupted = error
+            if row["outcome"] in {None, "success"}:
+                row.update(outcome="cleanup_error", failure=reason)
+        row.update(
+            finished_at=timestamp(), wall_seconds=row["timing"]["continuous_seconds"]
+        )
         if process is not None:
             row["returncode"] = process.returncode
         try:
@@ -680,14 +784,24 @@ def execute(plan, row, output, persist, *, popen=subprocess.Popen):
                         os.fsync(stream.fileno())
                     row["artifacts"][name] = asset(path)
         except OSError as error:
-            row.update(
-                outcome="record_error", failure=f"{type(error).__name__}: {error}"
-            )
-            interrupted = error
+            row["record_error"] = f"{type(error).__name__}: {error}"
+            if row["outcome"] in {None, "success"}:
+                row.update(outcome="record_error", failure=row["record_error"])
+            if interrupted is None and guard_error is None:
+                interrupted = error
         row["state"] = "finished"
-        persist()
+        try:
+            persist()
+        except OSError as error:
+            row["record_error"] = f"{type(error).__name__}: {error}"
+            if row["outcome"] in {None, "success"}:
+                row.update(outcome="record_error", failure=row["record_error"])
+            if interrupted is None and guard_error is None:
+                interrupted = error
     if interrupted is not None:
         raise interrupted
+    if guard_error is not None:
+        raise guard_error
 
 
 def summarize(plan, run):
@@ -760,6 +874,8 @@ def summarize(plan, run):
             "pair": pair_id,
             "workload": group[0]["workload"],
             "included": bool(complete),
+            "timing_valid": bool(run.get("timing_valid"))
+            and all(row.get("timing", {}).get("valid") is True for row in group),
         }
         if desktop:
             findings = [
@@ -833,9 +949,16 @@ def summarize(plan, run):
                 "launch_error",
                 "cleanup_error",
                 "record_error",
+                "timing_error",
             )
         },
         "host_violations": run.get("host_violations", []),
+        "timing_valid": run.get("timing_valid", False),
+        "timing_failures": [
+            {"row": row["id"], "reason": row["timing"]["reason"]}
+            for row in rows
+            if row.get("timing", {}).get("reason") is not None
+        ],
         "quality_comparison": plan["quality_comparison"],
         "pairs": pairs,
         "warmup": "Sample index 0 retained but excluded; upstream warmup also enabled.",
@@ -847,6 +970,91 @@ def summarize(plan, run):
     }
 
 
+def previous_session(plan, plan_sha256, session, path, expected_sha256, output):
+    if session == 1:
+        require(
+            path is None and expected_sha256 is None,
+            "First session cannot use a prior checkpoint.",
+        )
+        return None, None
+    require(
+        path is not None and expected_sha256 is not None,
+        "Previous session and checksum are required.",
+    )
+    path = Path(path)
+    require(
+        path.stat().st_size <= MAX_JSON_BYTES,
+        "Previous session exceeds its size limit.",
+    )
+    raw = path.read_bytes()
+    require(
+        hashlib.sha256(raw).hexdigest() == expected_sha256,
+        "Previous session checksum differs.",
+    )
+    previous = json.loads(
+        raw,
+        object_pairs_hook=unique_object,
+        parse_constant=reject_constant,
+        parse_float=finite_float,
+    )
+    require(
+        previous["plan_sha256"] == plan_sha256
+        and type(previous["session"]) is int
+        and previous["session"] == session - 1
+        and previous["state"] == "finished"
+        and previous["integrity_verified"] is True
+        and previous["timing_valid"] is True
+        and timing.validate_evidence(
+            previous["timing_guard"],
+            plan["timing_policy"],
+            timing.host_identity_hash(plan["host_policy"]["identity"]),
+        ),
+        "Previous session is not cleared for continuation.",
+    )
+    for row in previous["rows"]:
+        require(
+            set(row.get("artifacts", {})) == {"stdout.json", "stderr.log"},
+            "Previous raw evidence is incomplete.",
+        )
+        for name, item in row["artifacts"].items():
+            require(
+                Path(item["path"]).resolve()
+                == path.parent.resolve() / row["id"] / name,
+                "Previous raw evidence path differs.",
+            )
+    summary = summarize(plan, previous)
+    require(
+        summary["successful"] == summary["planned"]
+        and all(pair["included"] and pair["timing_valid"] for pair in summary["pairs"]),
+        "Previous session is incomplete.",
+    )
+    checkpoints = previous["timing_guard"]["checkpoints"]
+    for row in previous["rows"]:
+        measured = row["timing"]
+        require(
+            measured
+            == row_timing(
+                measured["start"],
+                measured["end"],
+                timeout_seconds=plan["timeout_seconds"],
+            )
+            and measured["valid"]
+            and not measured["deadline_exceeded"]
+            and native_duration_matches(
+                row["observed"], measured, plan["timing_policy"]
+            )
+            and all(
+                {"label": row["id"] + ":" + boundary, "sample": measured[boundary]}
+                in checkpoints
+                for boundary in ("start", "end")
+            ),
+            "Previous native timing evidence differs.",
+        )
+    archive = output / "previous-run.json"
+    save_bytes(archive, raw, create=True)
+    return previous["timing_guard"]["exit_checkpoint"], asset(archive)
+
+
 def run_session(
     plan_path,
     expected_sha256,
@@ -855,7 +1063,9 @@ def run_session(
     *,
     lock_path=None,
     popen=subprocess.Popen,
-    sleep=time.sleep,
+    previous_run=None,
+    previous_run_sha256=None,
+    guard_factory=None,
     collect_host=None,
 ):
     require(plan_path.stat().st_size <= MAX_JSON_BYTES, "Plan exceeds its size limit.")
@@ -872,6 +1082,7 @@ def run_session(
     )
     check_plan(plan)
     collect_host = collect_host or host.collect
+    guard_factory = guard_factory or timing.TimingGuard
     require(type(session) is int and 1 <= session <= 3, "Choose session 1, 2 or 3.")
     lock_path = lock_path or ROOT / "artifacts/benchmarks/benchmark.lock"
     with exclusive_lock(lock_path):
@@ -885,6 +1096,9 @@ def run_session(
             "integrity_verified": False,
             "failure": None,
             "host_violations": [],
+            "timing_valid": False,
+            "timing_guard": None,
+            "previous_session": None,
             "rows": [
                 {**row, "state": "planned"}
                 for row in plan["schedule"]
@@ -895,11 +1109,39 @@ def run_session(
         def persist():
             save_json(output / "run.json", run)
 
+        guard = None
+        snapshot = None
+        previous_asset = None
+        previous_source = None
         persist()
         try:
+            for source in (Path(__file__), HELPER, HOST_HELPER, TIMING_HELPER):
+                save_bytes(output / source.name, source.read_bytes(), create=True)
+            checkpoint, previous_asset = previous_session(
+                plan,
+                expected_sha256,
+                session,
+                previous_run,
+                previous_run_sha256,
+                output,
+            )
+            run["previous_session"] = previous_asset
+            previous_source = asset(previous_run) if previous_asset else None
+            if previous_source is not None:
+                require(
+                    previous_source["sha256"] == previous_run_sha256,
+                    "Previous session changed before admission.",
+                )
+            guard = guard_factory(
+                plan["timing_policy"],
+                timing.host_identity_hash(plan["host_policy"]["identity"]),
+                previous_checkpoint=checkpoint,
+            )
+            run["timing_guard"] = guard.evidence
+            guard.start()
             verify_runtime(plan)
             snapshot = fingerprint(plan)
-            sleep(plan["idle_before_session_seconds"])
+            guard.idle(plan["idle_before_session_seconds"], "rest:initial")
             run["state"] = "running"
             persist()
             last_pair = None
@@ -911,11 +1153,17 @@ def run_session(
             }
             for row in run["rows"]:
                 if last_pair is not None and row["pair"] != last_pair:
-                    sleep(plan["idle_between_pairs_seconds"])
+                    guard.idle(
+                        plan["idle_between_pairs_seconds"], row["pair"] + ":rest"
+                    )
                 require(
                     fingerprint(plan) == snapshot,
                     "Pinned runtime changed during the session.",
                 )
+                if previous_asset is not None:
+                    verify_asset(previous_asset)
+                    verify_asset(previous_source)
+                guard.check(row["id"] + ":before_host")
                 row["host_before"] = collect_host()
                 new_pair = row["pair"] != last_pair
                 if new_pair:
@@ -941,43 +1189,70 @@ def run_session(
                             "reasons": violations,
                         }
                     )
-                    persist()
-                    break
                 persist()
+                guard.check(row["id"] + ":after_host")
+                if violations:
+                    break
                 try:
-                    execute(plan, row, output, persist, popen=popen)
+                    execute(plan, row, output, persist, guard=guard, popen=popen)
                 finally:
-                    row["host_after"] = collect_host()
-                    row["host_deltas"] = host.deltas(
-                        row["host_before"], row["host_after"]
-                    )
-                    violations = host.admit(row["host_after"], plan["host_policy"])
-                    violations += host.interval_violations(
-                        pair_start, row["host_after"], plan["host_policy"]
-                    )
-                    violations += host.interval_violations(
-                        row["host_before"], row["host_after"], plan["host_policy"]
-                    )
-                    violations = list(dict.fromkeys(violations))
-                    previous = row["host_after"]
-                    if violations:
-                        run["host_violations"].append(
-                            {
-                                "pair": row["pair"],
-                                "row": row["id"],
-                                "boundary": "after",
-                                "reasons": violations,
-                            }
-                        )
-                    persist()
+                    if row["state"] != "planned":
+                        try:
+                            row["host_after"] = collect_host()
+                            row["host_deltas"] = host.deltas(
+                                row["host_before"], row["host_after"]
+                            )
+                            violations = host.admit(
+                                row["host_after"], plan["host_policy"]
+                            )
+                            violations += host.interval_violations(
+                                pair_start, row["host_after"], plan["host_policy"]
+                            )
+                            violations += host.interval_violations(
+                                row["host_before"],
+                                row["host_after"],
+                                plan["host_policy"],
+                            )
+                            violations = list(dict.fromkeys(violations))
+                            previous = row["host_after"]
+                            if violations:
+                                run["host_violations"].append(
+                                    {
+                                        "pair": row["pair"],
+                                        "row": row["id"],
+                                        "boundary": "after",
+                                        "reasons": violations,
+                                    }
+                                )
+                            persist()
+                        except (OSError, ValueError) as error:
+                            if guard.evidence["first_failure"] is None:
+                                raise
+                            row["host_record_error"] = (
+                                f"{type(error).__name__}: {error}"
+                            )
+                guard.check(row["id"] + ":after_record")
                 if violations:
                     break
                 last_pair = row["pair"]
+            guard.check("session:verification")
             verify_runtime(plan)
             run.update(
                 state="host_blocked" if run["host_violations"] else "finished",
                 integrity_verified=True,
             )
+        except timing.GuardError as error:
+            run.update(state="timing_blocked", failure=error.reason)
+            try:
+                verify_runtime(plan)
+                if snapshot is not None:
+                    require(
+                        fingerprint(plan) == snapshot,
+                        "Pinned runtime changed during the session.",
+                    )
+                run["integrity_verified"] = True
+            except (OSError, ValueError, TypeError, KeyError) as integrity_error:
+                run["integrity_failure"] = str(integrity_error)
         except BaseException as error:
             run.update(
                 state="interrupted"
@@ -987,6 +1262,36 @@ def run_session(
             )
             raise
         finally:
+            if guard is not None:
+                guard.close()
+                run["timing_valid"] = timing.validate_evidence(
+                    guard.evidence,
+                    plan["timing_policy"],
+                    timing.host_identity_hash(plan["host_policy"]["identity"]),
+                )
+                if not run["timing_valid"] and run["state"] in {
+                    "finished",
+                    "host_blocked",
+                }:
+                    run.update(
+                        state="timing_blocked",
+                        failure=(guard.evidence["first_failure"] or {}).get(
+                            "reason", "guard_cleanup_failed"
+                        ),
+                    )
+            try:
+                if snapshot is not None:
+                    require(
+                        fingerprint(plan) == snapshot,
+                        "Pinned runtime changed during the session.",
+                    )
+                if previous_asset is not None:
+                    verify_asset(previous_asset)
+                    verify_asset(previous_source)
+            except (OSError, ValueError) as error:
+                run.update(integrity_verified=False, integrity_failure=str(error))
+                if run["state"] in {"finished", "host_blocked"}:
+                    run.update(state="failed", failure=run["integrity_failure"])
             persist()
             save_json(output / "summary.json", summarize(plan, run), create=True)
         return run
@@ -1003,11 +1308,20 @@ def main():
     run.add_argument("--plan-sha256", required=True)
     run.add_argument("--session", type=int, choices=(1, 2, 3), required=True)
     run.add_argument("--output", type=Path, required=True)
+    run.add_argument("--previous-run", type=Path)
+    run.add_argument("--previous-run-sha256")
     args = parser.parse_args()
     if args.action == "freeze":
         print(freeze(args.spec, args.output))
     else:
-        result = run_session(args.plan, args.plan_sha256, args.session, args.output)
+        result = run_session(
+            args.plan,
+            args.plan_sha256,
+            args.session,
+            args.output,
+            previous_run=args.previous_run,
+            previous_run_sha256=args.previous_run_sha256,
+        )
         if result["state"] != "finished" or any(
             row.get("outcome") != "success" for row in result["rows"]
         ):
