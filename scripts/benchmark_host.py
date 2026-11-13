@@ -194,7 +194,7 @@ def collect(*, run=subprocess.run, getloadavg=os.getloadavg):
     }
 
 
-def policy_from(snapshot):
+def policy_from(snapshot, *, swap_activity_policy="exclude_any_counter_increase"):
     policy = {
         "schema_version": 1,
         "identity": snapshot["identity"],
@@ -208,7 +208,7 @@ def policy_from(snapshot):
         },
         "probe_timeout_seconds": PROBE_SECONDS,
         "observation_boundary": "before_and_after_each_invocation",
-        "swap_activity_policy": "exclude_any_counter_increase",
+        "swap_activity_policy": swap_activity_policy,
         "load_policy": "observe_only",
         "limit": (
             "Boundary observations do not prove constant conditions between checks. "
@@ -236,7 +236,8 @@ def check_policy(policy):
         and policy["memory_pressure_code"] == 1
         and policy["probe_timeout_seconds"] == PROBE_SECONDS
         and policy["observation_boundary"] == "before_and_after_each_invocation"
-        and policy["swap_activity_policy"] == "exclude_any_counter_increase"
+        and policy["swap_activity_policy"]
+        in {"exclude_any_counter_increase", "record_counter_increases"}
         and policy["load_policy"] == "observe_only"
         and policy["thermal"]["status"] in {"available", "unavailable"}
     ):
@@ -315,11 +316,14 @@ def deltas(before, after):
     return result
 
 
-def interval_violations(before, after):
+def interval_violations(before, after, policy=None):
     pages = deltas(before, after)["pages"]
     if pages["status"] != "available":
         return ["swap_counters_unverified"]
-    if any(pages["value"][key] > 0 for key in ("Swapins", "Swapouts")):
+    if any(pages["value"][key] > 0 for key in ("Swapins", "Swapouts")) and not (
+        policy is not None
+        and policy["swap_activity_policy"] == "record_counter_increases"
+    ):
         return ["swap_activity"]
     return []
 

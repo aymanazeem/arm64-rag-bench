@@ -48,6 +48,20 @@ def finish(frozen, sessions, number, mutate):
 
 @pytest.fixture
 def sessions(frozen):
+    return make_sessions(frozen)
+
+
+@pytest.fixture
+def desktop(frozen):
+    return fixtures.desktop_plan(frozen)
+
+
+@pytest.fixture
+def desktop_sessions(desktop):
+    return make_sessions(desktop)
+
+
+def make_sessions(frozen):
     path, digest, root = frozen
     plan = bench.read_json(path)
     result = []
@@ -125,6 +139,136 @@ def sessions(frozen):
             }
         )
     return result
+
+
+def add_desktop_swap(run, directory):
+    for index, row in enumerate(run["rows"]):
+        row["host_before"]["pages"]["value"]["Swapins"] += index
+        row["host_after"]["pages"]["value"]["Swapins"] += index + 1
+        row["host_deltas"] = bench.host.deltas(row["host_before"], row["host_after"])
+
+
+def test_desktop_report_keeps_swap_and_uses_means(desktop, desktop_sessions):
+    for number in range(1, 4):
+        finish(desktop, desktop_sessions, number, add_desktop_swap)
+    value = export(desktop, desktop_sessions)
+    assert value["kind"] == "desktop-fixed-token-report"
+    assert value["status"] == "complete" and value["protocol_complete"]
+    assert value["accounting"]["included_pairs"] == 24
+    plan = bench.read_json(desktop[0])
+    assert value["provenance"]["method"] == report.public_asset(plan["method"])
+    for session in value["sessions"]:
+        assert session["host_violations"] == []
+        for pair in session["pairs"]:
+            assert pair["host_findings"] == ["swap_activity"]
+            assert pair["host_protocol_passed"]
+            assert pair["mean_ns"] == {"cpu": 8e9, "kleidiai": 4e9}
+    for workload in value["workloads"].values():
+        assert workload["cpu_over_kleidiai"]["count"] == 6
+        assert workload["sessions"][0]["process_mean_ns"]["cpu"]["median"] == 8e9
+        assert "process_median_ns" not in workload["sessions"][0]
+    report.privacy_check(value)
+
+
+def test_desktop_final_host_stop_keeps_pair_but_not_completion(
+    desktop, desktop_sessions
+):
+    def violate(run, directory):
+        run["state"] = "host_blocked"
+        row = run["rows"][-1]
+        row["host_after"]["memory_pressure"]["value"] = {"code": 2, "label": "warning"}
+        row["host_deltas"] = bench.host.deltas(row["host_before"], row["host_after"])
+        run["host_violations"] = report.boundary_violations(
+            bench.read_json(desktop[0]), run["rows"]
+        )
+
+    finish(desktop, desktop_sessions, 3, violate)
+    value = export(desktop, desktop_sessions)
+    assert value["accounting_complete"]
+    assert value["accounting"]["included_pairs"] == 24
+    assert value["status"] == "incomplete" and not value["protocol_complete"]
+    pair = value["sessions"][-1]["pairs"][-1]
+    assert pair["included"] and not pair["host_protocol_passed"]
+    assert pair["host_findings"]
+
+
+def test_desktop_summary_cannot_hide_swap(desktop, desktop_sessions):
+    finish(desktop, desktop_sessions, 1, add_desktop_swap)
+    path = desktop_sessions[0]["directory"] / "summary.json"
+    summary = bench.read_json(path)
+    summary["pairs"][0]["host_findings"] = []
+    save(path, summary)
+    with pytest.raises(ValueError, match="summary differs"):
+        export(desktop, desktop_sessions)
+
+
+def test_desktop_method_change_rejected(desktop, desktop_sessions):
+    plan = bench.read_json(desktop[0])
+    Path(plan["method"]["path"]).write_text("changed")
+    with pytest.raises(ValueError):
+        export(desktop, desktop_sessions)
+
+
+def test_desktop_counter_reset_between_sides_stops_remaining_work(
+    desktop, desktop_sessions
+):
+    def reset(run, directory):
+        truncate(run, directory, 1)
+        run.update(state="host_blocked", integrity_verified=True, failure=None)
+        first, second = run["rows"][:2]
+        first["host_after"]["pages"]["value"]["Swapins"] += 10
+        first["host_deltas"] = bench.host.deltas(
+            first["host_before"], first["host_after"]
+        )
+        second["host_before"] = fixtures.stable_host()
+        second["host_before"]["pages"]["value"]["Swapins"] += 5
+        run["host_violations"] = report.boundary_violations(
+            bench.read_json(desktop[0]), run["rows"]
+        )
+
+    run = finish(desktop, desktop_sessions, 1, reset)
+    assert run["host_violations"][0]["boundary"] == "before"
+    assert run["host_violations"][0]["reasons"] == ["swap_counters_unverified"]
+    value = export(desktop, desktop_sessions[:1])
+    assert not value["protocol_complete"]
+    assert value["accounting"]["known_attempted"] == 1
+    assert value["accounting"]["known_unattempted"] == 15
+    assert value["accounting"]["included_pairs"] == 0
+
+
+def test_desktop_counter_reset_during_idle_stops_next_pair(desktop, desktop_sessions):
+    def reset(run, directory):
+        truncate(run, directory, 2)
+        run.update(state="host_blocked", integrity_verified=True, failure=None)
+        for index, row in enumerate(run["rows"][:2]):
+            row["host_before"]["pages"]["value"]["Swapins"] += index * 10
+            row["host_after"]["pages"]["value"]["Swapins"] += (index + 1) * 10
+            row["host_deltas"] = bench.host.deltas(
+                row["host_before"], row["host_after"]
+            )
+        run["rows"][2]["host_before"] = fixtures.stable_host()
+        run["host_violations"] = report.boundary_violations(
+            bench.read_json(desktop[0]), run["rows"]
+        )
+
+    run = finish(desktop, desktop_sessions, 1, reset)
+    assert run["host_violations"][0]["row"] == run["rows"][2]["id"]
+    assert run["host_violations"][0]["reasons"] == ["swap_counters_unverified"]
+    value = export(desktop, desktop_sessions[:1])
+    assert value["accounting"]["included_pairs"] == 1
+    assert not value["protocol_complete"]
+
+
+@pytest.mark.parametrize("boundary", ["host_before", "host_after"])
+def test_desktop_missing_boundary_cannot_claim_completion(
+    desktop, desktop_sessions, boundary
+):
+    def remove(run, directory):
+        del run["rows"][0][boundary]
+
+    finish(desktop, desktop_sessions, 1, remove)
+    with pytest.raises(ValueError, match="lacks host boundaries"):
+        export(desktop, desktop_sessions)
 
 
 def export(frozen, sessions):

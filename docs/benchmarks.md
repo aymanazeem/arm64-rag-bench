@@ -1,4 +1,4 @@
-# Controlled CPU benchmarks
+# CPU benchmarks
 
 Compare standard CPU inference with KleidiAI on the same machine, model and
 settings. Build both runtimes using the [runtime guide](runtime.md). The answer
@@ -39,6 +39,43 @@ and `timing_builds` mapping `cpu` and `kleidiai` to their build-record hashes.
 The quality record also contains the two Boolean quality/adoption fields.
 Include the supporting evidence and review hashes with each record.
 
+## Choose the study
+
+The default `controlled` study excludes a pair if host swap counters increase.
+Use it when the machine can meet that condition. Its results use each process's
+median duration.
+
+The separate `desktop` study describes performance during a declared work period
+on a working Mac. It records swap activity and keeps every complete, valid pair.
+Its results use each process's arithmetic mean duration. Other host failures stop
+new work; completed pairs remain visible with flags. Even a final host failure
+makes the protocol incomplete.
+
+To choose desktop mode, add `"study": "desktop"` and `"method": "PATH"` to the
+specification. The method file must freeze the host conditions, schedule, setup
+rules, exclusions and analysis before fresh setup runs. Keep earlier excluded
+observations separate. Do not convert a controlled plan or reuse its setup
+approval.
+
+A desktop setup approval uses `status: "approved_for_desktop_measurement"`,
+`study: "desktop"` and the method's `method_sha256`, alongside the existing setup
+identity fields. It also binds `timeout_seconds`, `idle_before_session_seconds`
+and `idle_between_pairs_seconds` to the reviewed values. The other three
+prerequisites retain their existing approval format. The runner hashes the method
+file and rejects a mismatched approval or host policy.
+
+Desktop results describe completed observations; pairing does not remove
+background interference. Publish all planned outcomes, host findings and session
+order. Consecutive blocks are not independent replications. These small samples
+do not support significance tests, population confidence intervals or tail latency.
+
+The [recorded desktop study](results/desktop-cpu/README.md) exposed a sleep gap:
+the native timer counted system sleep while Python's deadline clock paused.
+Its complete schedule is preserved, but it is not an uninterrupted speed
+comparison. This runner's boundary checks do not detect sleep. Before a new
+study, add scoped sleep prevention, a deadline that counts sleep, and an
+interruption check. A completed report alone does not establish timing validity.
+
 ## Workloads and controls
 
 | Workload | Prompt tokens | Generated tokens | Saved prefix tokens |
@@ -50,7 +87,7 @@ Include the supporting evidence and review hashes with each record.
 
 Each process uses four CPU threads, batches of 512, F16 caches, no GPU layers
 and no flash attention. Threads use the normal macOS scheduler without core
-affinity. The native timer measures model computation;
+affinity. The native timer measures elapsed time around model computation;
 startup, prefix creation and snapshot restoration are outside it. Context
 allocation follows each synthetic workload. The application uses an
 8,192-token context. These synthetic-token tests exclude retrieval, template
@@ -62,11 +99,13 @@ session. Freeze a balanced, shuffled order before starting. Each process runs
 upstream warmup and four repetitions. Keep every raw sample; exclude sample
 index 0 by the frozen rule.
 
-Require AC power, the same power mode, normal observed memory pressure and no
-swap activity across a pair. Existing stable swap allocation is allowed.
+Both studies require AC power, the same power mode and normal observed memory
+pressure. Controlled mode also requires no swap activity across a pair;
+desktop mode records it. Existing stable swap allocation is allowed.
 Unavailable thermal information stays unavailable. Boundary checks do not
 prove stable conditions throughout a run. Keep other builds and model jobs
-stopped during measurements.
+stopped during setup and measurements. Stop later sessions after a host failure;
+do not restart the study to replace missing pairs.
 
 ## Freeze, run and report
 
@@ -138,8 +177,9 @@ The report verifies raw files and retains all scheduled work. Missing session
 evidence remains unknown. Public fields exclude local paths and raw errors.
 Keep the referenced local evidence available for verification.
 
-Each included pair contributes one ratio: CPU median duration divided by
-KleidiAI median duration. A ratio above 1 favors KleidiAI. Report six planned
+Each included pair contributes one ratio: CPU duration divided by KleidiAI
+duration, using process medians in controlled mode or means in desktop mode.
+A ratio above 1 favors KleidiAI. Report six planned
 pairs per workload and each session's median and range. Repetitions inside a
 process are nested observations, not 18 independent experiments. These small
 local samples do not establish tail latency or performance on other machines.

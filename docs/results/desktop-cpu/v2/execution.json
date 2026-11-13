@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "kind": "desktop-study-execution-disposition",
+  "study_id": "qwen35-desktop-v2",
+  "study_complete": false,
+  "report": {
+    "sha256": "36d0116c74010891a1b0a467450dd91e7c4ea017eb1ef1595b63d0cb54e0ad60",
+    "size": 75625
+  },
+  "method": {
+    "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31",
+    "size": 6370
+  },
+  "execution": {
+    "planned_sessions": 3,
+    "started_sessions": [
+      1
+    ],
+    "not_started_sessions": [
+      2,
+      3
+    ],
+    "not_started_basis": "The controller reports sessions 2 and 3 were not started; their managed directories and ledgers are absent. The frozen ledger-only exporter correctly leaves those 32 invocations unobserved.",
+    "retries_or_replacements": false,
+    "planned_invocations": 48,
+    "successful_invocations": 9,
+    "session1_unattempted_invocations": 7,
+    "later_session_invocations_not_started_per_controller": 32,
+    "completed_pairs": 4,
+    "planned_pairs": 24,
+    "completed_pairs_per_workload": 1,
+    "completed_pair_order": "KleidiAI first in all four pairs. The planned reverse-order pairs were not completed.",
+    "raw_native_samples_retained": 36,
+    "warmup_samples_retained_but_excluded": 9,
+    "samples_used_in_complete_pair_ratios": 24,
+    "unpaired_successful_invocations": 1
+  },
+  "recorded_stop": {
+    "row": "s1-r2-tg128-d2048-cpu",
+    "boundary": "after",
+    "reason": "memory_pressure_changed",
+    "pressure_code": 2,
+    "pressure_label": "warning",
+    "last_invocation_before_utc": "2026-11-13T17:00:41.657500+00:00",
+    "last_invocation_after_utc": "2026-11-13T17:04:49.980830+00:00",
+    "later_launches_stopped": true
+  },
+  "docker_condition_departure": {
+    "declared_condition": "Docker temporarily stopped throughout setup and measurement.",
+    "finding": "Post-run container records show nine newly created containers and their starts during the last, unpaired CPU invocation. The declared Docker-stopped condition was breached.",
+    "last_complete_pair_after_utc": "2026-11-13T16:58:41.496307+00:00",
+    "recorded_container_creation_range_utc": [
+      "2026-11-13T17:01:23.755919294Z",
+      "2026-11-13T17:01:39.709409968Z"
+    ],
+    "recorded_container_start_range_utc": [
+      "2026-11-13T17:01:44.492859303Z",
+      "2026-11-13T17:03:07.208256258Z"
+    ],
+    "recorded_restoration_start_utc": "2026-11-13T17:06:00.960571+00:00",
+    "evidence": {
+      "action.json": {
+        "sha256": "4cf1b3539240b006f83863571d2316bac53671bbbb0f75eb19fb44128199b894",
+        "size": 5879
+      },
+      "changed-inventory.json": {
+        "sha256": "1d3a04cfec8321f856c8744af389a981bcd3f841f2ffd6f2a2dc3c29684cfc6d",
+        "size": 4280
+      },
+      "current-stack-verification.json": {
+        "sha256": "b862fae5998b4a2dfcbf4dcaa90a279371e588e95e6f21876ad7311fd06c4d23",
+        "size": 16488
+      }
+    },
+    "limits": [
+      "Container creation/start times are not a direct observation of Docker VM startup.",
+      "These timestamps do not identify who restarted Docker or establish that Docker caused the pressure increase or a timing change.",
+      "The first recorded new-container creation is after the last complete pair; there was no continuous Docker observation proving the earlier interval stayed stopped.",
+      "The report host_protocol_passed field covers implemented boundary telemetry, not continuous Docker state.",
+      "Docker restoration is reviewed separately; this note does not certify restoration of the exact original state."
+    ]
+  },
+  "interpretation": [
+    "Keep the four mechanically valid ratios as observed evidence; do not replace or selectively discard pairs.",
+    "The study stopped after one pair per workload and did not complete its planned order balance. No stable, general or isolated backend-speed claim follows.",
+    "The frozen report remains incomplete. Its 32 unobserved rows and this controller execution note express different evidence scopes; the report is unchanged.",
+    "KleidiAI quality preservation and application adoption remain false."
+  ]
+}

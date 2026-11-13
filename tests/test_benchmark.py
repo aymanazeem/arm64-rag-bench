@@ -249,6 +249,33 @@ def refreeze(frozen, mutate):
     return path, bench.runtime.digest(path), root
 
 
+def desktop_plan(frozen):
+    root = frozen[2]
+    method = root / "desktop-method.json"
+    write(method, {"study": "desktop", "aggregation": "mean"})
+    spec = bench.read_json(root / "spec.json")
+    spec.update(study="desktop", method=str(method))
+    approval_path = Path(spec["prerequisites"]["setup_pilot"])
+    approval = bench.read_json(approval_path)
+    approval.update(
+        status="approved_for_desktop_measurement",
+        study="desktop",
+        method_sha256=bench.runtime.digest(method),
+        **{
+            key: spec[key]
+            for key in (
+                "timeout_seconds",
+                "idle_before_session_seconds",
+                "idle_between_pairs_seconds",
+            )
+        },
+    )
+    write(approval_path, approval)
+    spec_path, plan_path = root / "desktop-spec.json", root / "desktop-plan.json"
+    write(spec_path, spec)
+    return plan_path, bench.freeze(spec_path, plan_path), root
+
+
 def test_schedule_balances_each_session_and_matches_workload_order():
     rows = bench.schedule(42)
     assert len(rows) == 48 and len({row["id"] for row in rows}) == 48
@@ -864,3 +891,290 @@ def test_nonfinite_json_constants_are_rejected_even_in_extra_fields(tmp_path, co
     path.write_text('{"extra":' + constant + "}")
     with pytest.raises(ValueError, match="Non-finite"):
         bench.read_json(path)
+
+
+@pytest.mark.parametrize("boundary", [2, 3, 4])
+def test_desktop_swap_keeps_all_pairs_and_observations(frozen, boundary):
+    frozen = desktop_plan(frozen)
+    observations = 0
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        if observations >= boundary:
+            value["pages"]["value"]["Swapins"] += 7
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "finished" and not result["host_violations"]
+    assert summary["successful"] == summary["attempted"] == 16
+    assert len(summary["pairs"]) == 8
+    assert all(pair["included"] for pair in summary["pairs"])
+    first = summary["pairs"][0]
+    assert first["host_protocol_passed"]
+    assert first["host_findings"] == ["swap_activity"]
+    assert first["host_deltas"]["pages"]["value"]["Swapins"] == 7
+    assert all(
+        "mean_ns" in pair and "median_ns" not in pair for pair in summary["pairs"]
+    )
+
+
+@pytest.mark.parametrize(
+    "boundary,change", [(4, "ac"), (32, "pressure"), (4, "missing")]
+)
+def test_desktop_completed_host_deviation_pair_is_retained(frozen, boundary, change):
+    frozen = desktop_plan(frozen)
+    observations = 0
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        if observations == boundary:
+            if change == "ac":
+                value["power_source"] = bench.host.available("Battery Power")
+            elif change == "pressure":
+                value["memory_pressure"] = bench.host.available(
+                    {"code": 2, "label": "warning"}
+                )
+            else:
+                value["pages"] = bench.host.unavailable("probe_failed")
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "host_blocked" and result["integrity_verified"]
+    assert summary["successful"] == summary["attempted"] == boundary // 2
+    included = [pair for pair in summary["pairs"] if pair["included"]]
+    assert len(included) == boundary // 4
+    assert not included[-1]["host_protocol_passed"]
+    assert included[-1]["host_findings"]
+    assert len(summary["pairs"]) == 8 and summary["planned"] == 16
+
+
+def test_desktop_counter_reset_stops_before_the_second_side(frozen):
+    frozen = desktop_plan(frozen)
+    observations = 0
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        if observations == 3:
+            value["pages"]["value"]["Swapins"] = 0
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "host_blocked" and summary["successful"] == 1
+    assert result["host_violations"][0]["reasons"] == ["swap_counters_unverified"]
+    assert not any(pair["included"] for pair in summary["pairs"])
+    assert all(pair["host_findings"] == [] for pair in summary["pairs"][1:])
+
+
+@pytest.mark.parametrize("desktop", [False, True])
+@pytest.mark.parametrize("boundary", [3, 4])
+def test_counter_decrease_above_pair_start_still_stops(frozen, desktop, boundary):
+    if desktop:
+        frozen = desktop_plan(frozen)
+    observations = 0
+    counter = "Swapins" if desktop else "Pageins"
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        increment = 0 if observations == 1 else 20 if observations == 2 else 30
+        if observations == boundary:
+            increment = 10
+        value["pages"]["value"][counter] += increment
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "host_blocked"
+    assert summary["attempted"] == (1 if boundary == 3 else 2)
+    assert result["host_violations"][-1]["reasons"] == ["swap_counters_unverified"]
+    pair = summary["pairs"][0]
+    assert pair["included"] is (desktop and boundary == 4)
+    if desktop:
+        assert not pair["host_protocol_passed"]
+        assert "swap_counters_unverified" in pair["host_findings"]
+
+
+@pytest.mark.parametrize("desktop", [False, True])
+@pytest.mark.parametrize("change", ["reset", "missing", "page_size"])
+def test_idle_gap_counter_integrity_failure_stops_next_pair(frozen, desktop, change):
+    if desktop:
+        frozen = desktop_plan(frozen)
+    observations = 0
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        value["pages"]["value"]["Pageins"] += 10 * observations
+        if observations == 5:
+            if change == "reset":
+                value["pages"]["value"]["Pageins"] = 120
+            elif change == "missing":
+                value["pages"] = bench.host.unavailable("probe_failed")
+            else:
+                value["pages"]["value"]["page_size_bytes"] = 4096
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "host_blocked" and summary["successful"] == 2
+    violation = result["host_violations"][0]
+    assert violation["row"] == result["rows"][2]["id"]
+    assert violation["boundary"] == "before"
+    assert "swap_counters_unverified" in violation["reasons"]
+    assert sum(pair["included"] for pair in summary["pairs"]) == 1
+    if desktop:
+        assert "swap_counters_unverified" in summary["pairs"][1]["host_findings"]
+        assert not summary["pairs"][1]["host_protocol_passed"]
+
+
+@pytest.mark.parametrize("desktop", [False, True])
+def test_positive_swap_during_idle_stays_outside_pair_admission(frozen, desktop):
+    if desktop:
+        frozen = desktop_plan(frozen)
+    observations = 0
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        value = stable_host()
+        if observations >= 5:
+            value["pages"]["value"]["Swapins"] += 7
+        return value
+
+    result = run(frozen, collect_host=observe)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "finished" and summary["successful"] == 16
+    assert all(pair["included"] for pair in summary["pairs"])
+    assert result["rows"][2]["host_before"]["pages"]["value"]["Swapins"] == 12
+    assert result["rows"][1]["host_after"]["pages"]["value"]["Swapins"] == 5
+
+
+@pytest.mark.parametrize(
+    "change", ["unknown", "method_on_controlled", "missing_method", "kind"]
+)
+def test_study_spec_cannot_silently_change_the_default(frozen, change):
+    root = frozen[2]
+    spec = bench.read_json(root / "spec.json")
+    if change == "unknown":
+        spec["study"] = "ignore_host"
+    elif change == "method_on_controlled":
+        spec["method"] = str(root / "host.json")
+    elif change == "missing_method":
+        spec["study"] = "desktop"
+    else:
+        spec["kind"] = bench.STUDIES["desktop"]
+    write(root / "invalid-spec.json", spec)
+    with pytest.raises(ValueError):
+        bench.freeze(root / "invalid-spec.json", root / "invalid-plan.json")
+    assert not (root / "invalid-plan.json").exists()
+    assert bench.read_json(frozen[0])["kind"] == bench.STUDIES["controlled"]
+
+
+@pytest.mark.parametrize("change", ["policy", "method", "study"])
+@pytest.mark.parametrize("desktop", [False, True])
+def test_frozen_study_contradictions_reject_before_launch(frozen, change, desktop):
+    if desktop:
+        frozen = desktop_plan(frozen)
+
+    def mutate(plan):
+        if change == "policy":
+            plan["host_policy"]["swap_activity_policy"] = (
+                "exclude_any_counter_increase"
+                if desktop
+                else "record_counter_increases"
+            )
+        elif change == "method":
+            if desktop:
+                del plan["method"]
+            else:
+                plan["method"] = plan["host_baseline"]
+        else:
+            plan["study"] = "controlled" if desktop else "desktop"
+
+    frozen = refreeze(frozen, mutate)
+    with pytest.raises(ValueError, match="Study"):
+        run(frozen, popen=lambda *a, **k: pytest.fail("A child must not launch."))
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "status",
+        "study",
+        "method_sha256",
+        "timeout_seconds",
+        "idle_before_session_seconds",
+        "idle_between_pairs_seconds",
+    ],
+)
+def test_desktop_setup_approval_binds_method_and_timing(frozen, field):
+    frozen = desktop_plan(frozen)
+    root = frozen[2]
+    path = root / "setup_pilot.json"
+    approval = bench.read_json(path)
+    if field == "status":
+        approval[field] = "approved_for_measurement"
+    elif field == "study":
+        approval[field] = "controlled"
+    elif field == "method_sha256":
+        approval[field] = "0" * 64
+    else:
+        approval[field] += 1
+    write(path, approval)
+    with pytest.raises(ValueError, match="approval|Prerequisite"):
+        bench.freeze(root / "desktop-spec.json", root / "invalid-plan.json")
+
+
+@pytest.mark.parametrize("change", ["status", "study"])
+def test_controlled_setup_rejects_desktop_only_approval(frozen, change):
+    root = frozen[2]
+    path = root / "setup_pilot.json"
+    value = bench.read_json(path)
+    value[change] = (
+        "approved_for_desktop_measurement" if change == "status" else "desktop"
+    )
+    write(path, value)
+    with pytest.raises(ValueError, match="approval|Prerequisite"):
+        bench.freeze(root / "spec.json", root / "invalid-plan.json")
+
+
+def test_desktop_method_bytes_remain_pinned(frozen):
+    frozen = desktop_plan(frozen)
+    method = frozen[2] / "desktop-method.json"
+    method.write_text("changed method")
+    with pytest.raises(ValueError):
+        run(frozen, popen=lambda *a, **k: pytest.fail("A child must not launch."))
+
+
+def test_desktop_mean_retains_a_slow_sample_and_differs_from_median(frozen):
+    frozen = desktop_plan(frozen)
+    result = run(frozen)
+    plan = bench.read_json(frozen[0])
+    for row in result["rows"][:2]:
+        path = Path(row["artifacts"]["stdout.json"]["path"])
+        native = bench.read_json(path)
+        samples = [1000, 10, 10, 100] if row["backend"] == "cpu" else [1000, 10, 20, 30]
+        value = native[0]
+        value["samples_ns"] = samples
+        value["avg_ns"] = sum(samples) // 4
+        tokens = value["n_prompt"] + value["n_gen"]
+        value["samples_ts"] = [float(format(1e9 * tokens / n, ".6g")) for n in samples]
+        write(path, native)
+        row["artifacts"]["stdout.json"] = bench.asset(path)
+        row["observed"] = bench.validate_samples(native, plan, row)
+    pair = bench.summarize(plan, result)["pairs"][0]
+    assert pair["mean_ns"] == {"cpu": 40, "kleidiai": 20}
+    assert pair["cpu_over_kleidiai"] == 2
+    assert pair["retained_samples_ns"]["cpu"] == [10, 10, 100]
+    assert "median_ns" not in pair

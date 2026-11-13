@@ -1,0 +1,2606 @@
+{
+  "schema_version": 1,
+  "kind": "desktop-fixed-token-report",
+  "status": "incomplete",
+  "accounting_complete": false,
+  "provenance": {
+    "plan": {
+      "sha256": "7a0b57714d26f595bda770befec9526b668987edcb950945536f0cea90044bbc",
+      "size": 24762
+    },
+    "reporter_sha256": "5ef144fbc0415e320ae312717d4e13fe69bb819ddb90724d08d813355567e4d2",
+    "harness_sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+    "runtime_helper_sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+    "host_helper_sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+    "model": {
+      "size": 9527502048,
+      "sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4"
+    },
+    "runtime_config": {
+      "size": 1642,
+      "sha256": "717a3433784dee698daf9f70df55f5b5cfe2d3ae12eac2448735ce5b557bba30"
+    },
+    "host_baseline": {
+      "size": 2815,
+      "sha256": "0feb7b99f9a7e22f9fa5403890d698f7575c339c87d0b7437053dde17add0575"
+    },
+    "prerequisites": {
+      "quality_baseline": {
+        "size": 2029,
+        "sha256": "35ba6c4d46c784e85a54cc2b24950730b8ae7052f69f78b2d37edc54b4ecaff8"
+      },
+      "dispatch": {
+        "size": 3261,
+        "sha256": "fa0461a64275f57257383fae3fe100e5db1ab5b486b08462809dcd19082949b6"
+      },
+      "depth_state": {
+        "size": 3841,
+        "sha256": "9ead3a5a0e02a996955e762944847da238a9ee050c474943d2330e5ab521f22a"
+      },
+      "setup_pilot": {
+        "size": 1437,
+        "sha256": "5afedaa1ea59159c58d4afbda88da91f4a6643df319b119c3e3ed65aae45e794"
+      }
+    },
+    "backends": {
+      "cpu": {
+        "binary": {
+          "size": 33464,
+          "sha256": "511bc5e6a9c5b1edb055f1a7626af4a41f249afdfb4770c3b952aea61e94cadc"
+        },
+        "cache": {
+          "size": 31490,
+          "sha256": "5411b6252cf119a55f8dcbe6f380b38d9c8fd9a42c409c750c402aef082ddd49"
+        },
+        "build_record": {
+          "size": 5128,
+          "sha256": "231f09c98de49525db55b362952b7db834c2170215b70288dca233e866568618"
+        },
+        "libraries": {
+          "libggml-base.0.29.0.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libllama.0.dylib": {
+            "size": 3899392,
+            "sha256": "00ee99b5934ec761b7f7855717ebf79a86f5fef72df217d6711e00b849f7ebca"
+          },
+          "libmtmd.0.dylib": {
+            "size": 1715440,
+            "sha256": "c047008a669c8de20ebea2b7e3c95abefb9d1003fd0bbdcc772cad4a234e399f"
+          },
+          "libggml.dylib": {
+            "size": 59952,
+            "sha256": "fdb0bdd1c89ec25e9dcd69b6c45a873e863cd4e8a3cc47be46bad42a92bfcc99"
+          },
+          "libggml.0.dylib": {
+            "size": 59952,
+            "sha256": "fdb0bdd1c89ec25e9dcd69b6c45a873e863cd4e8a3cc47be46bad42a92bfcc99"
+          },
+          "libmtmd.dylib": {
+            "size": 1715440,
+            "sha256": "c047008a669c8de20ebea2b7e3c95abefb9d1003fd0bbdcc772cad4a234e399f"
+          },
+          "libllama-server-impl.dylib": {
+            "size": 7277592,
+            "sha256": "5b565c77a6015bad62e14ee01d65dac0b27532908a0790e73e59d5b307e48b0a"
+          },
+          "libggml-base.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libllama-completion-impl.dylib": {
+            "size": 122528,
+            "sha256": "7f8b7817a9776e6ff7d7a86f59406e1b2c3a1dbc4750620cbd2da120f86acf63"
+          },
+          "libllama-bench-impl.dylib": {
+            "size": 328600,
+            "sha256": "0ad368b5fe2b939d8eb0f1cf5be06debbc5467e165fb876d324b86440ae4b0ff"
+          },
+          "libllama-common.0.dylib": {
+            "size": 5497976,
+            "sha256": "197aa85d4171a09e1a6a2bdf280498e16e2c744d604ad7eb78267906d2133dfa"
+          },
+          "libllama.dylib": {
+            "size": 3899392,
+            "sha256": "00ee99b5934ec761b7f7855717ebf79a86f5fef72df217d6711e00b849f7ebca"
+          },
+          "libggml-cpu.dylib": {
+            "size": 1008464,
+            "sha256": "cd854552b420845e59ae7f765495b4f3fdd362606d1838f1d47ec77ea8c6c18a"
+          },
+          "libllama.0.9.0.dylib": {
+            "size": 3899392,
+            "sha256": "00ee99b5934ec761b7f7855717ebf79a86f5fef72df217d6711e00b849f7ebca"
+          },
+          "libmtmd.0.9.0.dylib": {
+            "size": 1715440,
+            "sha256": "c047008a669c8de20ebea2b7e3c95abefb9d1003fd0bbdcc772cad4a234e399f"
+          },
+          "libllama-common.0.9.0.dylib": {
+            "size": 5497976,
+            "sha256": "197aa85d4171a09e1a6a2bdf280498e16e2c744d604ad7eb78267906d2133dfa"
+          },
+          "libggml.0.29.0.dylib": {
+            "size": 59952,
+            "sha256": "fdb0bdd1c89ec25e9dcd69b6c45a873e863cd4e8a3cc47be46bad42a92bfcc99"
+          },
+          "libggml-cpu.0.29.0.dylib": {
+            "size": 1008464,
+            "sha256": "cd854552b420845e59ae7f765495b4f3fdd362606d1838f1d47ec77ea8c6c18a"
+          },
+          "libllama-common.dylib": {
+            "size": 5497976,
+            "sha256": "197aa85d4171a09e1a6a2bdf280498e16e2c744d604ad7eb78267906d2133dfa"
+          },
+          "libggml-base.0.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libggml-cpu.0.dylib": {
+            "size": 1008464,
+            "sha256": "cd854552b420845e59ae7f765495b4f3fdd362606d1838f1d47ec77ea8c6c18a"
+          }
+        }
+      },
+      "kleidiai": {
+        "binary": {
+          "size": 33464,
+          "sha256": "b65698050c2ff0d64931d651594d65741e3c2d3cf94993afa157f237ba7c4060"
+        },
+        "cache": {
+          "size": 33172,
+          "sha256": "4107b91e56ade8698d5d8143488308cc85ccc2bba6d1e5edde60fd6008bfd508"
+        },
+        "build_record": {
+          "size": 5477,
+          "sha256": "11fc794c3b4fbfd871c93353d964008cbccd6c99f97ab7b3295f16628d7a05df"
+        },
+        "libraries": {
+          "libggml-base.0.29.0.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libllama.0.dylib": {
+            "size": 3899392,
+            "sha256": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910"
+          },
+          "libmtmd.0.dylib": {
+            "size": 1715440,
+            "sha256": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9"
+          },
+          "libggml.dylib": {
+            "size": 59952,
+            "sha256": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b"
+          },
+          "libggml.0.dylib": {
+            "size": 59952,
+            "sha256": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b"
+          },
+          "libmtmd.dylib": {
+            "size": 1715440,
+            "sha256": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9"
+          },
+          "libllama-server-impl.dylib": {
+            "size": 7277592,
+            "sha256": "e2d4276ec8ed916e7f13aace1dd540e506efd9142b15a49f7cf0c9569739d5ba"
+          },
+          "libggml-base.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libllama-completion-impl.dylib": {
+            "size": 122528,
+            "sha256": "b1eeb659d3b2b8c2d5d33b4cd63b0eb3834b29314f8cadae4b0d7688a3e36e39"
+          },
+          "libllama-bench-impl.dylib": {
+            "size": 328600,
+            "sha256": "3ee4c2d2e036d5c50b742b954d3138fb2bab2bb61e67fc6de275609c0ff25dbe"
+          },
+          "libllama-common.0.dylib": {
+            "size": 5497976,
+            "sha256": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e"
+          },
+          "libllama.dylib": {
+            "size": 3899392,
+            "sha256": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910"
+          },
+          "libggml-cpu.dylib": {
+            "size": 1154176,
+            "sha256": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2"
+          },
+          "libllama.0.9.0.dylib": {
+            "size": 3899392,
+            "sha256": "7f9aaefcdc0944e1e23887fbe3e1c892ea38615eec20487595ba63ebac1cf910"
+          },
+          "libmtmd.0.9.0.dylib": {
+            "size": 1715440,
+            "sha256": "e7474755610e9b7bac85bb436f1657b3647a85c4a565589b4b560cea0a8437c9"
+          },
+          "libllama-common.0.9.0.dylib": {
+            "size": 5497976,
+            "sha256": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e"
+          },
+          "libggml.0.29.0.dylib": {
+            "size": 59952,
+            "sha256": "a8dac9b31f19a1f7d52ce3174a346f81efdd996297be0cc205ca04f3eb602e7b"
+          },
+          "libggml-cpu.0.29.0.dylib": {
+            "size": 1154176,
+            "sha256": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2"
+          },
+          "libllama-common.dylib": {
+            "size": 5497976,
+            "sha256": "9f0dbeca766ddbf6998b0c250ca88520823066e5b4bfcbe2ea5bb48591c46d7e"
+          },
+          "libggml-base.0.dylib": {
+            "size": 773512,
+            "sha256": "b06ea373938aa921ea7ad988e23886f483571dcfde7d1cbc909d5f778bcb2dab"
+          },
+          "libggml-cpu.0.dylib": {
+            "size": 1154176,
+            "sha256": "7c31ef17b2420855acd3262cb8e1127b5a14e8e2629734f630e4f0884c0011c2"
+          }
+        }
+      }
+    },
+    "method": {
+      "size": 6370,
+      "sha256": "49e614dc14f0d0bab4c0bc8e44bbd6c5ce124ba93c791c20debdbebcb00c5a31"
+    }
+  },
+  "quality_comparison": {
+    "quality_preserved": false,
+    "backend_adoption": false
+  },
+  "protocol": {
+    "native_revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+    "seed": 42,
+    "settings": {
+      "n_batch": 512,
+      "n_ubatch": 512,
+      "n_threads": 4,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": 0,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 0,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "lazy_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "repack": true,
+      "fit_target": 0,
+      "fit_min_ctx": 0
+    },
+    "flags": [
+      "--offline",
+      "-r",
+      "4",
+      "-t",
+      "4",
+      "-b",
+      "512",
+      "-ub",
+      "512",
+      "-ctk",
+      "f16",
+      "-ctv",
+      "f16",
+      "-fa",
+      "off",
+      "-ngl",
+      "0",
+      "-lm",
+      "auto",
+      "-lzm",
+      "auto",
+      "--repack",
+      "1",
+      "-o",
+      "json"
+    ],
+    "workloads": {
+      "pp512": {
+        "prompt_tokens": 512,
+        "generated_tokens": 0,
+        "prefilled_tokens": 0
+      },
+      "pp2048": {
+        "prompt_tokens": 2048,
+        "generated_tokens": 0,
+        "prefilled_tokens": 0
+      },
+      "tg128-d512": {
+        "prompt_tokens": 0,
+        "generated_tokens": 128,
+        "prefilled_tokens": 512
+      },
+      "tg128-d2048": {
+        "prompt_tokens": 0,
+        "generated_tokens": 128,
+        "prefilled_tokens": 2048
+      }
+    },
+    "repetitions": 4,
+    "excluded_sample_indices": [
+      0
+    ],
+    "timeout_seconds": 600,
+    "idle_before_session_seconds": 120,
+    "idle_between_pairs_seconds": 120,
+    "process_duration": "arithmetic_mean_of_retained_samples"
+  },
+  "host_policy": {
+    "schema_version": 1,
+    "power_source": "AC Power",
+    "power_mode": {
+      "powermode": 0
+    },
+    "memory_pressure_code": 1,
+    "thermal": {
+      "status": "unavailable"
+    },
+    "probe_timeout_seconds": 3,
+    "observation_boundary": "before_and_after_each_invocation",
+    "swap_activity_policy": "record_counter_increases",
+    "load_policy": "observe_only",
+    "limit": "Boundary observations do not prove constant conditions between checks. Unavailable CPU-limit telemetry is not a normal thermal reading."
+  },
+  "accounting": {
+    "planned_invocations": 48,
+    "observed_sessions": 1,
+    "planned_sessions": 3,
+    "known_attempted": 9,
+    "known_unattempted": 7,
+    "unresolved_attempts": 0,
+    "unobserved_invocations": 32,
+    "finished": 9,
+    "outcomes": {
+      "cleanup_error": 0,
+      "exit_error": 0,
+      "interrupted": 0,
+      "invalid_output": 0,
+      "launch_error": 0,
+      "record_error": 0,
+      "success": 9,
+      "timeout": 0
+    },
+    "planned_pairs": 24,
+    "included_pairs": 4,
+    "excluded_or_unobserved_pairs": 20
+  },
+  "workloads": {
+    "pp512": {
+      "planned_pairs": 6,
+      "cpu_over_kleidiai": {
+        "count": 1,
+        "median": 1.604607670455332,
+        "minimum": 1.604607670455332,
+        "maximum": 1.604607670455332
+      },
+      "sessions": [
+        {
+          "session": 1,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 1,
+            "median": 1.604607670455332,
+            "minimum": 1.604607670455332,
+            "maximum": 1.604607670455332
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 1,
+              "median": 9184976375,
+              "minimum": 9184976375,
+              "maximum": 9184976375
+            },
+            "kleidiai": {
+              "count": 1,
+              "median": 5724125930.666667,
+              "minimum": 5724125930.666667,
+              "maximum": 5724125930.666667
+            }
+          }
+        },
+        {
+          "session": 2,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        },
+        {
+          "session": 3,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        }
+      ]
+    },
+    "pp2048": {
+      "planned_pairs": 6,
+      "cpu_over_kleidiai": {
+        "count": 1,
+        "median": 1.4780643779681868,
+        "minimum": 1.4780643779681868,
+        "maximum": 1.4780643779681868
+      },
+      "sessions": [
+        {
+          "session": 1,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 1,
+            "median": 1.4780643779681868,
+            "minimum": 1.4780643779681868,
+            "maximum": 1.4780643779681868
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 1,
+              "median": 35423081305.666664,
+              "minimum": 35423081305.666664,
+              "maximum": 35423081305.666664
+            },
+            "kleidiai": {
+              "count": 1,
+              "median": 23965858208.666668,
+              "minimum": 23965858208.666668,
+              "maximum": 23965858208.666668
+            }
+          }
+        },
+        {
+          "session": 2,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        },
+        {
+          "session": 3,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        }
+      ]
+    },
+    "tg128-d512": {
+      "planned_pairs": 6,
+      "cpu_over_kleidiai": {
+        "count": 1,
+        "median": 0.7681896574945443,
+        "minimum": 0.7681896574945443,
+        "maximum": 0.7681896574945443
+      },
+      "sessions": [
+        {
+          "session": 1,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 1,
+            "median": 0.7681896574945443,
+            "minimum": 0.7681896574945443,
+            "maximum": 0.7681896574945443
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 1,
+              "median": 11870976166.666666,
+              "minimum": 11870976166.666666,
+              "maximum": 11870976166.666666
+            },
+            "kleidiai": {
+              "count": 1,
+              "median": 15453184055.333334,
+              "minimum": 15453184055.333334,
+              "maximum": 15453184055.333334
+            }
+          }
+        },
+        {
+          "session": 2,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        },
+        {
+          "session": 3,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        }
+      ]
+    },
+    "tg128-d2048": {
+      "planned_pairs": 6,
+      "cpu_over_kleidiai": {
+        "count": 1,
+        "median": 0.6921666247909088,
+        "minimum": 0.6921666247909088,
+        "maximum": 0.6921666247909088
+      },
+      "sessions": [
+        {
+          "session": 1,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 1,
+            "median": 0.6921666247909088,
+            "minimum": 0.6921666247909088,
+            "maximum": 0.6921666247909088
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 1,
+              "median": 11146984055.666666,
+              "minimum": 11146984055.666666,
+              "maximum": 11146984055.666666
+            },
+            "kleidiai": {
+              "count": 1,
+              "median": 16104480708,
+              "minimum": 16104480708,
+              "maximum": 16104480708
+            }
+          }
+        },
+        {
+          "session": 2,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        },
+        {
+          "session": 3,
+          "planned_pairs": 2,
+          "cpu_over_kleidiai": {
+            "count": 0,
+            "median": null,
+            "minimum": null,
+            "maximum": null
+          },
+          "process_mean_ns": {
+            "cpu": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            },
+            "kleidiai": {
+              "count": 0,
+              "median": null,
+              "minimum": null,
+              "maximum": null
+            }
+          }
+        }
+      ]
+    }
+  },
+  "sessions": [
+    {
+      "session": 1,
+      "state": "host_blocked",
+      "integrity_verified": true,
+      "evidence": {
+        "plan": {
+          "sha256": "7a0b57714d26f595bda770befec9526b668987edcb950945536f0cea90044bbc",
+          "size": 24762
+        },
+        "run": {
+          "sha256": "01b9da63277bd4ef527b601220060f9c1d8c1348c03679c81ed4d3d21b4c8ee9",
+          "size": 95118
+        },
+        "summary": {
+          "sha256": "09996f545e19a7dbbd8d81c9a25f5d9e9a7ddf24bdd647eeda536acc389749e0",
+          "size": 5780
+        }
+      },
+      "rows": [
+        {
+          "id": "s1-r1-tg128-d2048-kleidiai",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 130.57772212522104,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "66eaf088fe558f695d40cb65286ef930ce499a45eaba3c01402e159779325f91",
+              "size": 1250
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            16032897042,
+            16845462416,
+            15800318000,
+            15667661708
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 253600810,
+                "Pageouts": 9417712,
+                "Swapins": 16435598,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                18.291015625,
+                11.7939453125,
+                9.70263671875
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 254381984,
+                "Pageouts": 9420170,
+                "Swapins": 16435700,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                14.34814453125,
+                13.0556640625,
+                10.537109375
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-tg128-d2048-cpu",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 100.69151212507859,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "ccb6749e01fc8ea7b4f49a439231b08c09c692e2b76cffe617d7a6b7da5c9fdd",
+              "size": 1250
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            11033527042,
+            11109519209,
+            11187738333,
+            11143694625
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 254384358,
+                "Pageouts": 9420170,
+                "Swapins": 16435700,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                14.34814453125,
+                13.0556640625,
+                10.537109375
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 254883610,
+                "Pageouts": 9421108,
+                "Swapins": 16435735,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                9.71044921875,
+                11.84375,
+                10.34423828125
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-pp2048-kleidiai",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 153.3330322499387,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "7f34c817858e1c725a69e2a084f3a18050eaa5decb4ec3bdc3793b2171aa0406",
+              "size": 1250
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            24270175500,
+            24087086542,
+            23923306292,
+            23887181792
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 254891926,
+                "Pageouts": 9421108,
+                "Swapins": 16435747,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.455078125,
+                10.654296875,
+                10.0673828125
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 255288508,
+                "Pageouts": 9422793,
+                "Swapins": 16435787,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                12.18310546875,
+                11.0107421875,
+                10.263671875
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-pp2048-cpu",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 196.1780281669926,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "f8a01c4f8ca128e09832112894eb60f831d22fd78f4d33e4294e741515983f06",
+              "size": 1250
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            37256052917,
+            35236126084,
+            35570133458,
+            35462984375
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7101019586.56,
+                "free_bytes": 1488915005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 255288515,
+                "Pageouts": 9422793,
+                "Swapins": 16435787,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                12.18310546875,
+                11.0107421875,
+                10.263671875
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7092630978.56,
+                "free_bytes": 1497303613.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 255609274,
+                "Pageouts": 9424818,
+                "Swapins": 16435847,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.02734375,
+                9.904296875,
+                9.97265625
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-tg128-d512-kleidiai",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 104.65016612503678,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "aef07bc141f4cba3329bec81148387402431438fb8839d78903bf7774fb88388",
+              "size": 1249
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            15454330500,
+            15114765250,
+            15317602291,
+            15927184625
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 255678832,
+                "Pageouts": 9424818,
+                "Swapins": 16436273,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                6.60498046875,
+                8.70263671875,
+                9.4853515625
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 256162341,
+                "Pageouts": 9425679,
+                "Swapins": 16436438,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.64794921875,
+                8.72021484375,
+                9.39404296875
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-tg128-d512-cpu",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 73.9682201249525,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "ddaae018c47974c49e66af9c14756141573ab403c9272946343c2f4de8e75789",
+              "size": 1250
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            10515903666,
+            11031164792,
+            11654434958,
+            12927328750
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 256162348,
+                "Pageouts": 9425679,
+                "Swapins": 16436458,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.64794921875,
+                8.72021484375,
+                9.39404296875
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 256527304,
+                "Pageouts": 9426460,
+                "Swapins": 16436551,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.3681640625,
+                8.685546875,
+                9.32568359375
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-pp512-kleidiai",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 65.78564033401199,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "fb6285cf2ae3c7c7564a266a278145b4645a32af593f0506bb6c90d68565abcb",
+              "size": 1244
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            5889620041,
+            5804927625,
+            5565607375,
+            5801842792
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 256561789,
+                "Pageouts": 9426460,
+                "Swapins": 16436610,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                7.69189453125,
+                8.3701171875,
+                9.111328125
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 257061783,
+                "Pageouts": 9427083,
+                "Swapins": 16436758,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                9.30615234375,
+                8.630859375,
+                9.14697265625
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r1-pp512-cpu",
+          "session": 1,
+          "round": 1,
+          "pair": "s1-r1-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 62.547601291909814,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "dae877eb813925d6902b3645d17bc9d60406d1df9c1013af1d95b164c19244ce",
+              "size": 1245
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            8292616583,
+            8268389250,
+            8779599958,
+            10506939917
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 257061852,
+                "Pageouts": 9427083,
+                "Swapins": 16436758,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                9.30615234375,
+                8.630859375,
+                9.14697265625
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 7075853762.56,
+                "free_bytes": 1514080829.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 257335493,
+                "Pageouts": 9427561,
+                "Swapins": 16436790,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                8.7216796875,
+                8.5693359375,
+                9.08251953125
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r2-tg128-d2048-cpu",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "finished",
+          "outcome": "success",
+          "wall_seconds": 248.12316483305767,
+          "returncode": 0,
+          "raw_files": {
+            "stdout.json": {
+              "sha256": "3ebce3e1b16c6744a9ed564c104229ad9754a16c606b7d330a9c61ebd2b6de23",
+              "size": 1253
+            },
+            "stderr.log": {
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "size": 0
+            }
+          },
+          "samples_ns": [
+            114976347125,
+            29613731834,
+            16627745708,
+            15085921833
+          ],
+          "excluded_sample_indices": [
+            0
+          ],
+          "host_before": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 8589934592.0,
+                "used_bytes": 6958413250.56,
+                "free_bytes": 1631521341.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 257422834,
+                "Pageouts": 9427561,
+                "Swapins": 16444742,
+                "Swapouts": 19377562
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 1,
+                "label": "normal"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                10.2314453125,
+                9.22265625,
+                9.26416015625
+              ]
+            }
+          },
+          "host_after": {
+            "power_mode": {
+              "status": "available",
+              "value": {
+                "powermode": 0
+              }
+            },
+            "thermal": {
+              "status": "unavailable",
+              "reason": "cpu_limits_not_reported"
+            },
+            "swap": {
+              "status": "available",
+              "value": {
+                "total_bytes": 13958643712.0,
+                "used_bytes": 12371424706.56,
+                "free_bytes": 1587219005.44
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "page_size_bytes": 16384,
+                "Pageins": 258723484,
+                "Pageouts": 9431026,
+                "Swapins": 16615369,
+                "Swapouts": 19877942
+              }
+            },
+            "power_source": {
+              "status": "available",
+              "value": "AC Power"
+            },
+            "memory_pressure": {
+              "status": "available",
+              "value": {
+                "code": 2,
+                "label": "warning"
+              }
+            },
+            "load_average": {
+              "status": "available",
+              "value": [
+                38.29150390625,
+                23.22021484375,
+                15.13330078125
+              ]
+            }
+          }
+        },
+        {
+          "id": "s1-r2-tg128-d2048-kleidiai",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-tg128-d512-cpu",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-tg128-d512-kleidiai",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-pp512-cpu",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-pp512-kleidiai",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-pp2048-cpu",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "planned",
+          "raw_files": {}
+        },
+        {
+          "id": "s1-r2-pp2048-kleidiai",
+          "session": 1,
+          "round": 2,
+          "pair": "s1-r2-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "planned",
+          "raw_files": {}
+        }
+      ],
+      "pairs": [
+        {
+          "pair": "s1-r1-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": true,
+          "host_findings": [
+            "swap_activity"
+          ],
+          "host_protocol_passed": true,
+          "host_deltas": {
+            "swap": {
+              "status": "available",
+              "value": {
+                "used_bytes": 0.0
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "Pageins": 1282800,
+                "Pageouts": 3396,
+                "Swapins": 137,
+                "Swapouts": 0
+              }
+            }
+          },
+          "retained_samples_ns": {
+            "kleidiai": [
+              16845462416,
+              15800318000,
+              15667661708
+            ],
+            "cpu": [
+              11109519209,
+              11187738333,
+              11143694625
+            ]
+          },
+          "mean_ns": {
+            "kleidiai": 16104480708,
+            "cpu": 11146984055.666666
+          },
+          "cpu_over_kleidiai": 0.6921666247909088
+        },
+        {
+          "pair": "s1-r1-pp2048",
+          "workload": "pp2048",
+          "included": true,
+          "host_findings": [
+            "swap_activity"
+          ],
+          "host_protocol_passed": true,
+          "host_deltas": {
+            "swap": {
+              "status": "available",
+              "value": {
+                "used_bytes": -8388608.0
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "Pageins": 717348,
+                "Pageouts": 3710,
+                "Swapins": 100,
+                "Swapouts": 0
+              }
+            }
+          },
+          "retained_samples_ns": {
+            "kleidiai": [
+              24087086542,
+              23923306292,
+              23887181792
+            ],
+            "cpu": [
+              35236126084,
+              35570133458,
+              35462984375
+            ]
+          },
+          "mean_ns": {
+            "kleidiai": 23965858208.666668,
+            "cpu": 35423081305.666664
+          },
+          "cpu_over_kleidiai": 1.4780643779681868
+        },
+        {
+          "pair": "s1-r1-tg128-d512",
+          "workload": "tg128-d512",
+          "included": true,
+          "host_findings": [
+            "swap_activity"
+          ],
+          "host_protocol_passed": true,
+          "host_deltas": {
+            "swap": {
+              "status": "available",
+              "value": {
+                "used_bytes": 0.0
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "Pageins": 848472,
+                "Pageouts": 1642,
+                "Swapins": 278,
+                "Swapouts": 0
+              }
+            }
+          },
+          "retained_samples_ns": {
+            "kleidiai": [
+              15114765250,
+              15317602291,
+              15927184625
+            ],
+            "cpu": [
+              11031164792,
+              11654434958,
+              12927328750
+            ]
+          },
+          "mean_ns": {
+            "kleidiai": 15453184055.333334,
+            "cpu": 11870976166.666666
+          },
+          "cpu_over_kleidiai": 0.7681896574945443
+        },
+        {
+          "pair": "s1-r1-pp512",
+          "workload": "pp512",
+          "included": true,
+          "host_findings": [
+            "swap_activity"
+          ],
+          "host_protocol_passed": true,
+          "host_deltas": {
+            "swap": {
+              "status": "available",
+              "value": {
+                "used_bytes": 0.0
+              }
+            },
+            "pages": {
+              "status": "available",
+              "value": {
+                "Pageins": 773704,
+                "Pageouts": 1101,
+                "Swapins": 180,
+                "Swapouts": 0
+              }
+            }
+          },
+          "retained_samples_ns": {
+            "kleidiai": [
+              5804927625,
+              5565607375,
+              5801842792
+            ],
+            "cpu": [
+              8268389250,
+              8779599958,
+              10506939917
+            ]
+          },
+          "mean_ns": {
+            "kleidiai": 5724125930.666667,
+            "cpu": 9184976375
+          },
+          "cpu_over_kleidiai": 1.604607670455332
+        },
+        {
+          "pair": "s1-r2-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": false,
+          "host_findings": [
+            "memory_pressure_changed",
+            "swap_activity"
+          ],
+          "host_protocol_passed": false,
+          "exclusion": "Incomplete/failed pair or unverified runtime integrity; no replacement or retry."
+        },
+        {
+          "pair": "s1-r2-tg128-d512",
+          "workload": "tg128-d512",
+          "included": false,
+          "host_findings": [],
+          "host_protocol_passed": false,
+          "exclusion": "Incomplete/failed pair or unverified runtime integrity; no replacement or retry."
+        },
+        {
+          "pair": "s1-r2-pp512",
+          "workload": "pp512",
+          "included": false,
+          "host_findings": [],
+          "host_protocol_passed": false,
+          "exclusion": "Incomplete/failed pair or unverified runtime integrity; no replacement or retry."
+        },
+        {
+          "pair": "s1-r2-pp2048",
+          "workload": "pp2048",
+          "included": false,
+          "host_findings": [],
+          "host_protocol_passed": false,
+          "exclusion": "Incomplete/failed pair or unverified runtime integrity; no replacement or retry."
+        }
+      ],
+      "host_violations": [
+        {
+          "pair": "s1-r2-tg128-d2048",
+          "row": "s1-r2-tg128-d2048-cpu",
+          "boundary": "after",
+          "reasons": [
+            "memory_pressure_changed"
+          ]
+        }
+      ]
+    },
+    {
+      "session": 2,
+      "state": "unobserved",
+      "integrity_verified": false,
+      "evidence": null,
+      "rows": [
+        {
+          "id": "s2-r1-tg128-d2048-kleidiai",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-tg128-d2048-cpu",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-pp2048-kleidiai",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-pp2048-cpu",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-tg128-d512-kleidiai",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-tg128-d512-cpu",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-pp512-kleidiai",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r1-pp512-cpu",
+          "session": 2,
+          "round": 1,
+          "pair": "s2-r1-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-pp2048-cpu",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-pp2048-kleidiai",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-tg128-d512-cpu",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-tg128-d512-kleidiai",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-tg128-d2048-cpu",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-tg128-d2048-kleidiai",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-pp512-cpu",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s2-r2-pp512-kleidiai",
+          "session": 2,
+          "round": 2,
+          "pair": "s2-r2-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "unobserved"
+        }
+      ],
+      "pairs": [
+        {
+          "pair": "s2-r1-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r1-pp2048",
+          "workload": "pp2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r1-tg128-d512",
+          "workload": "tg128-d512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r1-pp512",
+          "workload": "pp512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r2-pp2048",
+          "workload": "pp2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r2-tg128-d512",
+          "workload": "tg128-d512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r2-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s2-r2-pp512",
+          "workload": "pp512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        }
+      ],
+      "host_violations": []
+    },
+    {
+      "session": 3,
+      "state": "unobserved",
+      "integrity_verified": false,
+      "evidence": null,
+      "rows": [
+        {
+          "id": "s3-r1-tg128-d2048-kleidiai",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-tg128-d2048-cpu",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-pp512-kleidiai",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-pp512-cpu",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-tg128-d512-kleidiai",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-tg128-d512-cpu",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-pp2048-kleidiai",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r1-pp2048-cpu",
+          "session": 3,
+          "round": 1,
+          "pair": "s3-r1-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-pp512-cpu",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-pp512",
+          "backend": "cpu",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-pp512-kleidiai",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-pp512",
+          "backend": "kleidiai",
+          "workload": "pp512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-tg128-d2048-cpu",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-tg128-d2048",
+          "backend": "cpu",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-tg128-d2048-kleidiai",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-tg128-d2048",
+          "backend": "kleidiai",
+          "workload": "tg128-d2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-tg128-d512-cpu",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-tg128-d512",
+          "backend": "cpu",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-tg128-d512-kleidiai",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-tg128-d512",
+          "backend": "kleidiai",
+          "workload": "tg128-d512",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-pp2048-cpu",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-pp2048",
+          "backend": "cpu",
+          "workload": "pp2048",
+          "state": "unobserved"
+        },
+        {
+          "id": "s3-r2-pp2048-kleidiai",
+          "session": 3,
+          "round": 2,
+          "pair": "s3-r2-pp2048",
+          "backend": "kleidiai",
+          "workload": "pp2048",
+          "state": "unobserved"
+        }
+      ],
+      "pairs": [
+        {
+          "pair": "s3-r1-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r1-pp512",
+          "workload": "pp512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r1-tg128-d512",
+          "workload": "tg128-d512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r1-pp2048",
+          "workload": "pp2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r2-pp512",
+          "workload": "pp512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r2-tg128-d2048",
+          "workload": "tg128-d2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r2-tg128-d512",
+          "workload": "tg128-d512",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        },
+        {
+          "pair": "s3-r2-pp2048",
+          "workload": "pp2048",
+          "included": false,
+          "exclusion": "Session evidence was not supplied; attempt status is unknown."
+        }
+      ],
+      "host_violations": []
+    }
+  ],
+  "limitations": [
+    "One ratio per adjacent CPU/KleidiAI process pair; six planned pairs per workload nested in three sessions, not eighteen independent samples.",
+    "Each process retains four samples; index 0 is excluded and the upstream warmup remains enabled.",
+    "Ratios divide the CPU mean duration by the KleidiAI mean duration, using the three retained samples. Values above one favor KleidiAI for this workload and observed desktop work period.",
+    "Incomplete evidence retains every planned row and cannot establish a complete comparison. Unobserved session attempts are unknown.",
+    "Valid completed pairs remain included with host findings. Swap-counter increases are recorded without filtering or timing adjustment. Other host departures stop new work and make protocol completion false. Boundary readings do not prove stable conditions or normal temperature.",
+    "Hashes bind supplied local evidence; they are not external attestation. No hardware-wide, dispatch or answer-quality claim follows from timing.",
+    "These completion-conditioned descriptive ratios do not isolate backend effects from background activity. Consecutive session blocks are not independent replications. No significance test, population confidence interval or tail-latency estimate is supported."
+  ],
+  "protocol_complete": false
+}

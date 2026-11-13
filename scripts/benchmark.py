@@ -1,4 +1,4 @@
-"""Run a controlled fixed-token benchmark with durable evidence."""
+"""Run a frozen fixed-token benchmark with durable evidence."""
 
 import argparse
 import contextlib
@@ -28,6 +28,10 @@ spec.loader.exec_module(host)
 
 REVISION = "8ca5a8008b57aa39f2601546c0d07912045080a5"
 BACKENDS = ("cpu", "kleidiai")
+STUDIES = {
+    "controlled": "controlled-fixed-token-benchmark",
+    "desktop": "desktop-fixed-token-benchmark",
+}
 WORKLOADS = {
     "pp512": (512, 0, 0),
     "pp2048": (2048, 0, 0),
@@ -209,6 +213,8 @@ def all_assets(plan):
     yield plan["model"]
     yield plan["runtime_config"]
     yield plan["host_baseline"]
+    if "method" in plan:
+        yield plan["method"]
     yield from plan["prerequisites"].values()
     for build in plan["backends"].values():
         for key in ("binary", "cache", "build_record"):
@@ -217,17 +223,28 @@ def all_assets(plan):
 
 
 def verify_runtime(plan):
+    desktop = plan["kind"] == STUDIES["desktop"]
     for item in all_assets(plan):
         verify_asset(item)
     require(
-        host.policy_from(read_json(Path(plan["host_baseline"]["path"])))
+        host.policy_from(
+            read_json(Path(plan["host_baseline"]["path"])),
+            swap_activity_policy="record_counter_increases"
+            if desktop
+            else "exclude_any_counter_increase",
+        )
         == plan["host_policy"],
         "Host policy differs from the pinned baseline.",
     )
     for purpose, item in plan["prerequisites"].items():
         approval = read_json(Path(item["path"]))
         require(
-            approval.get("status") == "approved_for_measurement"
+            approval.get("status")
+            == (
+                "approved_for_desktop_measurement"
+                if desktop and purpose == "setup_pilot"
+                else "approved_for_measurement"
+            )
             and approval.get("purpose") == purpose
             and approval.get("model_sha256") == plan["model"]["sha256"]
             and approval.get("timing_builds")
@@ -237,6 +254,27 @@ def verify_runtime(plan):
             },
             "Prerequisite evidence is unapproved or belongs to different inputs.",
         )
+        if purpose == "setup_pilot":
+            if desktop:
+                require(
+                    approval.get("study") == "desktop"
+                    and approval.get("method_sha256") == plan["method"]["sha256"]
+                    and all(
+                        type(approval.get(key)) in (int, float)
+                        and approval[key] == plan[key]
+                        for key in (
+                            "timeout_seconds",
+                            "idle_before_session_seconds",
+                            "idle_between_pairs_seconds",
+                        )
+                    ),
+                    "Desktop setup approval differs from the method or timing policy.",
+                )
+            else:
+                require(
+                    approval.get("study", "controlled") == "controlled",
+                    "Controlled setup cannot use a desktop approval.",
+                )
     quality = read_json(Path(plan["prerequisites"]["quality_baseline"]["path"]))
     require(
         all(
@@ -309,8 +347,17 @@ def check_plan(plan):
     require(
         type(plan["schema_version"]) is int
         and plan["schema_version"] == 1
-        and plan["kind"] == "controlled-fixed-token-benchmark",
+        and plan["kind"] in STUDIES.values(),
         "Unknown plan format.",
+    )
+    desktop = plan["kind"] == STUDIES["desktop"]
+    require(
+        plan.get("study", "desktop" if desktop else "controlled")
+        == ("desktop" if desktop else "controlled")
+        and ("method" in plan) == desktop
+        and plan["host_policy"]["swap_activity_policy"]
+        == ("record_counter_increases" if desktop else "exclude_any_counter_increase"),
+        "Study kind, method and host policy differ.",
     )
     require(set(plan["backends"]) == set(BACKENDS), "Both CPU builds are required.")
     require(
@@ -378,10 +425,17 @@ def check_plan(plan):
 
 def freeze(spec_path, destination):
     spec = read_json(spec_path)
+    study = spec.get("study", "controlled")
+    require(type(study) is str and study in STUDIES, "Unknown benchmark study.")
+    require(
+        ("method" in spec) == (study == "desktop")
+        and spec.get("kind", STUDIES[study]) == STUDIES[study],
+        "Study kind and method differ.",
+    )
     quality = read_json(Path(spec["prerequisites"]["quality_baseline"]))
     plan = {
         "schema_version": 1,
-        "kind": "controlled-fixed-token-benchmark",
+        "kind": STUDIES[study],
         "seed": spec["seed"],
         "schedule": schedule(spec["seed"]),
         "settings": SETTINGS,
@@ -392,7 +446,12 @@ def freeze(spec_path, destination):
         "runtime_helper_sha256": runtime.digest(HELPER),
         "host_helper_sha256": runtime.digest(HOST_HELPER),
         "host_baseline": asset(spec["host_baseline"]),
-        "host_policy": host.policy_from(read_json(Path(spec["host_baseline"]))),
+        "host_policy": host.policy_from(
+            read_json(Path(spec["host_baseline"])),
+            swap_activity_policy="record_counter_increases"
+            if study == "desktop"
+            else "exclude_any_counter_increase",
+        ),
         "prerequisites": {
             key: asset(path) for key, path in spec["prerequisites"].items()
         },
@@ -410,6 +469,8 @@ def freeze(spec_path, destination):
         "idle_between_pairs_seconds": spec["idle_between_pairs_seconds"],
         "backends": {},
     }
+    if study == "desktop":
+        plan["method"] = asset(spec["method"])
     for name in BACKENDS:
         build = spec["backends"][name]
         binary = Path(build["binary"]).resolve(strict=True)
@@ -630,6 +691,11 @@ def execute(plan, row, output, persist, *, popen=subprocess.Popen):
 
 
 def summarize(plan, run):
+    desktop = plan["kind"] == STUDIES["desktop"]
+    idle_policy = {
+        **plan["host_policy"],
+        "swap_activity_policy": "record_counter_increases",
+    }
     planned = [row for row in plan["schedule"] if row["session"] == run["session"]]
     require(len(run["rows"]) == len(planned), "Ledger lost schedule rows.")
     for expected, row in zip(planned, run["rows"]):
@@ -652,31 +718,64 @@ def summarize(plan, run):
                 "Recorded samples differ from raw output.",
             )
     pairs = []
+    previous_after = None
     for pair_id in dict.fromkeys(row["pair"] for row in planned):
         group = [row for row in run["rows"] if row["pair"] == pair_id]
+        gap_findings = (
+            host.interval_violations(
+                previous_after, group[0]["host_before"], idle_policy
+            )
+            if previous_after is not None and "host_before" in group[0]
+            else []
+        )
+        previous_after = group[-1].get("host_after")
         complete = run["integrity_verified"] and all(
             row["state"] == "finished" and row.get("outcome") == "success"
             for row in group
         )
-        host_valid = all(
-            boundary in row and not host.admit(row[boundary], plan["host_policy"])
+        observations = [
+            row[boundary]
             for row in group
             for boundary in ("host_before", "host_after")
+            if boundary in row
+        ]
+        intervals = list(zip(observations, observations[1:]))
+        if observations:
+            intervals.append((observations[0], observations[-1]))
+        host_valid = (
+            not gap_findings
+            and len(observations) == 2 * len(group)
+            and all(
+                not host.admit(snapshot, plan["host_policy"])
+                for snapshot in observations
+            )
         )
         host_valid = host_valid and all(
-            not host.interval_violations(row["host_before"], row["host_after"])
-            for row in group
+            not host.interval_violations(before, after, plan["host_policy"])
+            for before, after in intervals
         )
-        host_valid = host_valid and not host.interval_violations(
-            group[0]["host_before"], group[-1]["host_after"]
-        )
-        complete = complete and host_valid
+        complete = complete and (desktop or host_valid)
         pair = {row["backend"]: row for row in group}
         item = {
             "pair": pair_id,
             "workload": group[0]["workload"],
             "included": bool(complete),
         }
+        if desktop:
+            findings = [
+                reason
+                for snapshot in observations
+                for reason in host.admit(snapshot, plan["host_policy"])
+            ]
+            findings += gap_findings + [
+                reason
+                for before, after in intervals
+                for reason in host.interval_violations(before, after)
+            ]
+            item.update(
+                host_findings=sorted(set(findings)),
+                host_protocol_passed=bool(host_valid),
+            )
         if "host_before" in group[0] and "host_after" in group[-1]:
             item["host_deltas"] = host.deltas(
                 group[0]["host_before"], group[-1]["host_after"]
@@ -685,17 +784,25 @@ def summarize(plan, run):
             samples = {
                 name: row["observed"]["samples_ns"][1:] for name, row in pair.items()
             }
-            medians = {
-                name: statistics.median(values) for name, values in samples.items()
+            durations = {
+                name: (
+                    statistics.mean(values) if desktop else statistics.median(values)
+                )
+                for name, values in samples.items()
             }
             item.update(
-                retained_samples_ns=samples,
-                median_ns=medians,
-                cpu_over_kleidiai=medians["cpu"] / medians["kleidiai"],
+                {
+                    "retained_samples_ns": samples,
+                    "mean_ns" if desktop else "median_ns": durations,
+                    "cpu_over_kleidiai": durations["cpu"] / durations["kleidiai"],
+                }
             )
         else:
             item["exclusion"] = (
-                "Incomplete/failed pair, failed host admission "
+                "Incomplete/failed pair or unverified runtime integrity; "
+                "no replacement or retry."
+                if desktop
+                else "Incomplete/failed pair, failed host admission "
                 "or unverified runtime integrity; no replacement or retry."
             )
         pairs.append(item)
@@ -797,6 +904,11 @@ def run_session(
             persist()
             last_pair = None
             pair_start = None
+            previous = None
+            idle_policy = {
+                **plan["host_policy"],
+                "swap_activity_policy": "record_counter_increases",
+            }
             for row in run["rows"]:
                 if last_pair is not None and row["pair"] != last_pair:
                     sleep(plan["idle_between_pairs_seconds"])
@@ -805,10 +917,21 @@ def run_session(
                     "Pinned runtime changed during the session.",
                 )
                 row["host_before"] = collect_host()
-                if row["pair"] != last_pair:
+                new_pair = row["pair"] != last_pair
+                if new_pair:
                     pair_start = row["host_before"]
+                if previous is None:
+                    previous = pair_start
                 violations = host.admit(row["host_before"], plan["host_policy"])
-                violations += host.interval_violations(pair_start, row["host_before"])
+                violations += host.interval_violations(
+                    pair_start, row["host_before"], plan["host_policy"]
+                )
+                violations += host.interval_violations(
+                    previous,
+                    row["host_before"],
+                    idle_policy if new_pair else plan["host_policy"],
+                )
+                violations = list(dict.fromkeys(violations))
                 if violations:
                     run["host_violations"].append(
                         {
@@ -830,8 +953,13 @@ def run_session(
                     )
                     violations = host.admit(row["host_after"], plan["host_policy"])
                     violations += host.interval_violations(
-                        pair_start, row["host_after"]
+                        pair_start, row["host_after"], plan["host_policy"]
                     )
+                    violations += host.interval_violations(
+                        row["host_before"], row["host_after"], plan["host_policy"]
+                    )
+                    violations = list(dict.fromkeys(violations))
+                    previous = row["host_after"]
                     if violations:
                         run["host_violations"].append(
                             {
