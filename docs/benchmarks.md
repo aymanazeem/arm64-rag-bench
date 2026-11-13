@@ -37,6 +37,8 @@ The record keys are `status: "approved_for_measurement"`, `purpose` (one of
 `quality_baseline`, `dispatch`, `depth_state`, `setup_pilot`), `model_sha256`,
 and `timing_builds` mapping `cpu` and `kleidiai` to their build-record hashes.
 The quality record also contains the two Boolean quality/adoption fields.
+Setup approval must also bind `timing_helper_sha256` and `timing_policy` to the
+current helper and its exact policy. An old unguarded setup approval is rejected.
 Include the supporting evidence and review hashes with each record.
 
 ## Choose the study
@@ -72,9 +74,32 @@ do not support significance tests, population confidence intervals or tail laten
 The [recorded desktop study](results/desktop-cpu/README.md) exposed a sleep gap:
 the native timer counted system sleep while Python's deadline clock paused.
 Its complete schedule is preserved, but it is not an uninterrupted speed
-comparison. This runner's boundary checks do not detect sleep. Before a new
-study, add scoped sleep prevention, a deadline that counts sleep, and an
-interruption check. A completed report alone does not establish timing validity.
+comparison. The timing guard described below applies to new studies. It does not
+validate or change those earlier observations.
+
+## Sleep and clock checks
+
+New plans pin the timing helper and its policy. On macOS, the runner uses
+[caffeinate](https://github.com/apple-oss-distributions/PowerManagement/blob/main/caffeinate/caffeinate.c)
+to prevent idle sleep during the session and releases it on exit. It does not
+change persistent power settings or keep the display awake.
+
+Deadlines use a [clock that advances during system sleep](https://github.com/apple-oss-distributions/Libc/blob/main/gen/clock_gettime.3).
+The runner compares it with an awake-time clock during rests and native work. A detected interruption,
+lost assertion or failed clock check stops later launches and remains in the
+evidence. A sleeping computer cannot execute cleanup: an overdue child is handled
+at the first check after wake.
+
+Clock reads use bounded resampling to handle scheduling delays. The frozen
+tolerances limit detection; they do not prove that every short sleep was detected.
+Timing validity is separate from native output, host-boundary checks and answer
+quality. Preserve all observations and failures; never subtract sleep time or
+replace affected runs.
+
+Freeze a new method and collect fresh guarded setup evidence before another
+study. Old plans cannot run under changed source files. To reproduce the old
+desktop record, use its original code at commit
+`3739ddc7efefc8bf1e928e68a0c69c9a825fe6e0` and retain its sleep warning.
 
 ## Workloads and controls
 
@@ -144,7 +169,7 @@ uv run --locked --offline --group build --extra retrieval \
   --output artifacts/benchmarks/plan.json
 ```
 
-Run sessions 1, 2 and 3 sequentially, each in a new output directory:
+Run session 1 in a new output directory:
 
 ```sh
 uv run --locked --offline --group build --extra retrieval \
@@ -152,8 +177,13 @@ uv run --locked --offline --group build --extra retrieval \
   --plan-sha256 PLAN_SHA --session 1 --output artifacts/benchmarks/session-1
 ```
 
+For sessions 2 and 3, also pass `--previous-run` with the previous session's
+`run.json` and `--previous-run-sha256` with its SHA-256 hash. The runner verifies
+that record and checks clock continuity before admitting more work. Use a new
+output directory for each session; a failed predecessor blocks the next one.
+
 The runner preserves failures and unfinished attempts. It stops admitting work
-when host checks fail. It does not retry or replace excluded pairs.
+when host or timing checks fail. It does not retry or replace excluded pairs.
 
 After review, export the supplied sessions using their recorded ledger hashes:
 
@@ -183,3 +213,5 @@ A ratio above 1 favors KleidiAI. Report six planned
 pairs per workload and each session's median and range. Repetitions inside a
 process are nested observations, not 18 independent experiments. These small
 local samples do not establish tail latency or performance on other machines.
+Ratios marked timing-invalid remain visible for audit and must not support
+performance claims.

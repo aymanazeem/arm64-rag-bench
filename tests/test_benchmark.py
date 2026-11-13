@@ -101,6 +101,77 @@ def stable_host():
 @pytest.fixture(autouse=True)
 def synthetic_host(monkeypatch):
     monkeypatch.setattr(bench.host, "collect", stable_host)
+    monkeypatch.setattr(bench.timing, "TimingGuard", SyntheticGuard)
+    monkeypatch.setattr(bench, "CLEANUP_SECONDS", 0.05)
+
+
+REAL_GUARD = bench.timing.TimingGuard
+
+
+class SyntheticClock:
+    CLOCK_MONOTONIC_RAW = 1
+    CLOCK_UPTIME_RAW = 2
+
+    def __init__(self):
+        self.offset = 0
+        self.elapsed = 0
+
+    def clock_gettime_ns(self, clock):
+        return (
+            time.monotonic_ns()
+            + self.elapsed
+            + (self.offset if clock == self.CLOCK_MONOTONIC_RAW else 0)
+        )
+
+    monotonic_ns = staticmethod(time.monotonic_ns)
+
+
+class AssertionChild:
+    pid = 1234567
+    returncode = None
+
+    def poll(self):
+        return self.returncode
+
+    def terminate(self):
+        self.returncode = -15
+
+    def kill(self):
+        self.returncode = -9
+
+
+class SyntheticGuard(REAL_GUARD):
+    def __init__(self, policy, identity, *, previous_checkpoint=None, clock=None):
+        assertion = AssertionChild()
+
+        def query(argv, **kwargs):
+            raw = (
+                b"11111111-1111-1111-1111-111111111111\n"
+                if argv[0] == "/usr/sbin/sysctl"
+                else b"pid 1234567(caffeinate): PreventUserIdleSystemSleep\n"
+            )
+            return subprocess.CompletedProcess(argv, 0, raw, b"")
+
+        super().__init__(
+            policy,
+            identity,
+            previous_checkpoint=previous_checkpoint,
+            clock=clock or SyntheticClock(),
+            platform="darwin",
+            popen=lambda *a, **k: assertion,
+            run=query,
+        )
+
+    def wait(self, process, start_sample, timeout_seconds, label):
+        self.clock.elapsed += 20_000_000_000
+        if isinstance(process, FakeChild):
+            try:
+                code = process.wait(timeout_seconds)
+            except subprocess.TimeoutExpired:
+                self.clock.elapsed += int(timeout_seconds * 1e9)
+                self._fail("deadline_exceeded", self.check(), start_sample)
+            return code, self.check(label)
+        return super().wait(process, start_sample, timeout_seconds, label)
 
 
 def write(path, value):
@@ -203,6 +274,8 @@ def frozen(tmp_path):
                 "status": "approved_for_measurement",
                 "quality_preserved": True,
                 "backend_adoption": False,
+                "timing_helper_sha256": bench.runtime.digest(bench.TIMING_HELPER),
+                "timing_policy": bench.timing.POLICY,
                 "model_sha256": bench.runtime.digest(model),
                 "timing_builds": {
                     backend: bench.runtime.digest(Path(build["build_record"]))
@@ -506,6 +579,8 @@ def test_reviewed_quality_regression_can_be_measured_without_backend_adoption(fr
         "settings",
         "warmup",
         "helper",
+        "timing_helper",
+        "timing_policy",
         "model",
         "binary",
         "library",
@@ -518,7 +593,14 @@ def test_changed_pins_prevent_any_child_launch(frozen, change):
     plan = bench.read_json(path)
     if change == "plan_bytes":
         path.write_bytes(path.read_bytes() + b" ")
-    elif change in {"schedule", "settings", "warmup", "helper"}:
+    elif change in {
+        "schedule",
+        "settings",
+        "warmup",
+        "helper",
+        "timing_helper",
+        "timing_policy",
+    }:
 
         def mutate(value):
             if change == "schedule":
@@ -530,6 +612,10 @@ def test_changed_pins_prevent_any_child_launch(frozen, change):
                 value["settings"]["n_threads"] = 8
             elif change == "warmup":
                 value["excluded_sample_indices"] = []
+            elif change == "timing_helper":
+                value["timing_helper_sha256"] = "0" * 64
+            elif change == "timing_policy":
+                value["timing_policy"]["allowance_ns"] += 1
             else:
                 value["runtime_helper_sha256"] = "0" * 64
 
@@ -642,6 +728,8 @@ class FakeChild:
 
     def terminate(self):
         self.terminated = True
+        if not self.kill_required:
+            self.returncode = -15
 
     def kill(self):
         self.killed = True
@@ -661,13 +749,14 @@ def test_timeout_cleanup_retains_every_attempt_and_excludes_failed_pairs(frozen)
 
     run(frozen, popen=launcher)
     summary = bench.read_json(frozen[2] / "result/summary.json")
-    assert len(children) == 16 and all(
+    assert len(children) == 1 and all(
         child.terminated and child.killed for child in children
     )
-    assert summary["attempted"] == summary["finished"] == summary["failed"] == 16
-    assert summary["outcomes"]["timeout"] == 16
+    assert summary["attempted"] == summary["finished"] == summary["failed"] == 1
+    assert summary["outcomes"]["timeout"] == 1
+    assert bench.read_json(frozen[2] / "result/run.json")["state"] == "timing_blocked"
     assert not any(pair["included"] for pair in summary["pairs"])
-    assert len(list((frozen[2] / "result").glob("*/stdout.json"))) == 16
+    assert len(list((frozen[2] / "result").glob("*/stdout.json"))) == 1
 
 
 def test_keyboard_interrupt_is_retained_and_reraised_without_extra_work(frozen):
@@ -822,13 +911,21 @@ def test_real_fake_process_deadline_kills_only_owned_child(frozen, monkeypatch):
 
     try:
         start = time.monotonic()
-        bench.execute(
-            plan,
-            row,
-            output,
-            lambda: bench.save_json(output / "record.json", row),
-            popen=launcher,
+        guard = SyntheticGuard(
+            plan["timing_policy"],
+            bench.timing.host_identity_hash(plan["host_policy"]["identity"]),
         )
+        guard.start()
+        with pytest.raises(bench.timing.GuardError, match="deadline_exceeded"):
+            bench.execute(
+                plan,
+                row,
+                output,
+                lambda: bench.save_json(output / "record.json", row),
+                guard=guard,
+                popen=launcher,
+            )
+        guard.close()
         assert time.monotonic() - start < 7
         assert row["outcome"] == "timeout" and row["returncode"] == -9
         assert (output / row["id"] / "stdout.json").read_bytes() == b"started\n"
@@ -856,7 +953,13 @@ def test_persistence_failure_after_launch_cleans_up_and_keeps_failure(frozen):
             raise OSError("Synthetic ledger failure after spawn")
         bench.save_json(output / "record.json", row)
 
-    bench.execute(plan, row, output, persist, popen=lambda *a, **k: child)
+    guard = SyntheticGuard(
+        plan["timing_policy"],
+        bench.timing.host_identity_hash(plan["host_policy"]["identity"]),
+    )
+    guard.start()
+    bench.execute(plan, row, output, persist, guard=guard, popen=lambda *a, **k: child)
+    guard.close()
     retained = bench.read_json(output / "record.json")
     assert child.terminated and child.returncode == -15
     assert retained["state"] == "finished" and retained["outcome"] == "record_error"
@@ -1178,3 +1281,375 @@ def test_desktop_mean_retains_a_slow_sample_and_differs_from_median(frozen):
     assert pair["cpu_over_kleidiai"] == 2
     assert pair["retained_samples_ns"]["cpu"] == [10, 10, 100]
     assert "median_ns" not in pair
+
+
+def synthetic_launcher(argv, **kwargs):
+    value = copy.deepcopy(SAMPLE)
+    item = value[0]
+    item.update(
+        model_filename=argv[argv.index("-m") + 1],
+        n_prompt=int(argv[argv.index("-p") + 1]),
+        n_gen=int(argv[argv.index("-n") + 1]),
+        n_depth=int(argv[argv.index("-d") + 1]),
+    )
+    tokens = item["n_prompt"] + item["n_gen"]
+    item["samples_ts"] = [
+        float(format(1e9 * tokens / n, ".6g")) for n in item["samples_ns"]
+    ]
+    kwargs["stdout"].write(json.dumps(value).encode())
+    return FakeChild()
+
+
+@pytest.mark.parametrize("field", ["timing_policy", "timing_helper_sha256"])
+def test_unguarded_setup_approval_cannot_authorize_new_plan(frozen, field):
+    plan, _, root = frozen
+    spec = bench.read_json(root / "spec.json")
+    approval = Path(spec["prerequisites"]["setup_pilot"])
+    value = bench.read_json(approval)
+    value.pop(field)
+    write(approval, value)
+    with pytest.raises(ValueError, match="Setup approval"):
+        bench.freeze(root / "spec.json", root / "new-plan.json")
+
+
+def test_guard_policy_and_source_are_frozen_and_archived(frozen):
+    result = run(frozen, popen=synthetic_launcher)
+    plan = bench.read_json(frozen[0])
+    assert result["timing_valid"] and result["timing_guard"]["assertion"]["released"]
+    for path, key in (
+        (bench.TIMING_HELPER, "timing_helper_sha256"),
+        (Path(bench.__file__), "harness_sha256"),
+    ):
+        assert bench.runtime.digest(frozen[2] / "result" / path.name) == plan[key]
+    assert all(row["wall_seconds"] >= 20 for row in result["rows"])
+    assert all(row["timing"]["valid"] for row in result["rows"])
+
+
+@pytest.mark.parametrize("phase,attempts", [("initial", 0), ("between", 2)])
+def test_sleep_during_rest_stops_new_work_and_retains_denominator(
+    frozen, phase, attempts
+):
+    class RestGuard(SyntheticGuard):
+        def idle(self, seconds, label):
+            sample = super().idle(seconds, label)
+            if (phase == "initial" and label == "rest:initial") or (
+                phase == "between" and label.endswith(":rest")
+            ):
+                self.clock.offset += 10_000_000
+                self.check(label + ":wake")
+            return sample
+
+    result = run(frozen, popen=synthetic_launcher, guard_factory=RestGuard)
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert result["state"] == "timing_blocked" and not result["timing_valid"]
+    assert result["failure"] == "clock_discontinuity"
+    assert summary["planned"] == 16 and summary["attempted"] == attempts
+    assert summary["successful"] == attempts
+    assert sum(pair["included"] for pair in summary["pairs"]) == attempts // 2
+    assert all(not pair["timing_valid"] for pair in summary["pairs"])
+    assert result["timing_guard"]["assertion"]["released"]
+
+
+@pytest.mark.parametrize(
+    "mode",
+    ["deadline", "sleep_late", "sleep_before_deadline", "assertion", "clock_failure"],
+)
+def test_guard_failure_after_exit_zero_keeps_raw_output_and_classifies_time(
+    frozen, mode
+):
+    class ExitGuard(SyntheticGuard):
+        def wait(self, process, start, seconds, label):
+            code, sample = super().wait(process, start, seconds, label)
+            if mode == "deadline":
+                self.clock.elapsed += 40_000_000_000
+                return REAL_GUARD.wait(self, process, start, seconds, label)
+            if mode in {"sleep_late", "sleep_before_deadline"}:
+                self.clock.offset += (
+                    40_000_000_000 if mode == "sleep_late" else 10_000_000
+                )
+            elif mode == "assertion":
+                self.process.returncode = -15
+            else:
+                self.fail("clock_unavailable")
+            self.check(label)
+            return code, sample
+
+    result = run(frozen, popen=synthetic_launcher, guard_factory=ExitGuard)
+    row = result["rows"][0]
+    expected = (
+        "timeout"
+        if mode in {"deadline", "sleep_late"}
+        else "timing_error"
+        if mode == "clock_failure"
+        else "success"
+    )
+    assert row["outcome"] == expected and row["returncode"] == 0
+    assert row["observed"]["samples_ns"] == SAMPLE[0]["samples_ns"]
+    assert Path(row["artifacts"]["stdout.json"]["path"]).is_file()
+    assert result["state"] == "timing_blocked" and not result["timing_valid"]
+    assert all(item["state"] == "planned" for item in result["rows"][1:])
+    assert row["timing"]["deadline_exceeded"] == (expected == "timeout")
+    if mode == "sleep_late":
+        assert result["failure"] == row["timing"]["reason"] == "clock_discontinuity"
+
+
+def test_impossible_native_duration_is_retained_as_timing_failure(frozen):
+    class ShortClockGuard(SyntheticGuard):
+        def wait(self, process, start, seconds, label):
+            process.wait(seconds)
+            return process.returncode, self.check(label)
+
+    result = run(frozen, popen=synthetic_launcher, guard_factory=ShortClockGuard)
+    row = result["rows"][0]
+    assert row["outcome"] == "success" and row["observed"]["samples_ns"]
+    assert row["timing"]["reason"] == "native_duration_inconsistent"
+    assert result["state"] == "timing_blocked" and not result["timing_valid"]
+
+
+def test_cleanup_failure_does_not_leave_successful_attempt(frozen, monkeypatch):
+    def broken_cleanup(process, guard=None):
+        raise bench.timing.CleanupError("reap_failed")
+
+    monkeypatch.setattr(bench, "stop_child", broken_cleanup)
+    with pytest.raises(bench.timing.CleanupError, match="reap_failed"):
+        run(frozen, popen=synthetic_launcher)
+    result = bench.read_json(frozen[2] / "result/run.json")
+    row = result["rows"][0]
+    assert row["outcome"] == "cleanup_error" and row["observed"]["samples_ns"]
+    assert not result["timing_valid"]
+    assert all(item["state"] == "planned" for item in result["rows"][1:])
+
+
+def test_deadline_failure_survives_later_cleanup_error(frozen, monkeypatch):
+    def broken_cleanup(process, guard=None):
+        process.kill()
+        raise bench.timing.CleanupError("reap_failed")
+
+    monkeypatch.setattr(bench, "stop_child", broken_cleanup)
+    result = run(
+        frozen,
+        popen=lambda *a, **k: FakeChild(
+            error=subprocess.TimeoutExpired("synthetic", 1)
+        ),
+    )
+    row = result["rows"][0]
+    assert (
+        result["state"] == "timing_blocked" and result["failure"] == "deadline_exceeded"
+    )
+    assert row["outcome"] == "timeout" and row["cleanup_error"] == "reap_failed"
+    assert result["timing_guard"]["cleanup_errors"]
+
+
+def test_later_sessions_require_pinned_previous_checkpoint(frozen):
+    path, digest, root = frozen
+    with pytest.raises(ValueError, match="Previous session"):
+        bench.run_session(
+            path,
+            digest,
+            2,
+            root / "missing-previous",
+            lock_path=root / "exclusive.lock",
+            popen=synthetic_launcher,
+        )
+    missing = bench.read_json(root / "missing-previous/run.json")
+    assert missing["state"] == "failed" and all(
+        row["state"] == "planned" for row in missing["rows"]
+    )
+    clock = SyntheticClock()
+
+    def factory(*a, **k):
+        return SyntheticGuard(*a, **k, clock=clock)
+
+    first = run(frozen, popen=synthetic_launcher, guard_factory=factory)
+    previous = root / "result/run.json"
+    second = bench.run_session(
+        path,
+        digest,
+        2,
+        root / "second",
+        lock_path=root / "exclusive.lock",
+        popen=synthetic_launcher,
+        guard_factory=factory,
+        previous_run=previous,
+        previous_run_sha256=bench.runtime.digest(previous),
+    )
+    assert second["state"] == "finished" and second["timing_valid"]
+    assert (
+        second["timing_guard"]["previous_checkpoint"]
+        == first["timing_guard"]["exit_checkpoint"]
+    )
+    assert (root / "second/previous-run.json").read_bytes() == previous.read_bytes()
+    assert second["previous_session"]["sha256"] == bench.runtime.digest(previous)
+
+
+@pytest.mark.parametrize(
+    "change", ["sleep", "checksum", "incomplete", "context", "raw"]
+)
+def test_changed_or_discontinuous_previous_session_blocks_continuation(frozen, change):
+    path, digest, root = frozen
+    clock = SyntheticClock()
+
+    def factory(*a, **k):
+        return SyntheticGuard(*a, **k, clock=clock)
+
+    run(frozen, popen=synthetic_launcher, guard_factory=factory)
+    previous = root / "result/run.json"
+    prior = bench.read_json(previous)
+    if change == "incomplete":
+        prior["state"] = "timing_blocked"
+        write(previous, prior)
+    elif change == "context":
+        prior["timing_guard"]["exit_checkpoint"]["context"]["boot_session_sha256"] = (
+            "f" * 64
+        )
+        write(previous, prior)
+    elif change == "sleep":
+        clock.offset += 5_000_000
+    elif change == "raw":
+        Path(prior["rows"][0]["artifacts"]["stdout.json"]["path"]).write_bytes(b"[]")
+    kwargs = dict(
+        lock_path=root / "exclusive.lock",
+        popen=lambda *a, **k: pytest.fail("Native work must not start"),
+        guard_factory=factory,
+        previous_run=previous,
+        previous_run_sha256="a" * 64
+        if change == "checksum"
+        else bench.runtime.digest(previous),
+    )
+    if change == "sleep":
+        result = bench.run_session(path, digest, 2, root / "second", **kwargs)
+        assert (
+            result["state"] == "timing_blocked"
+            and result["failure"] == "clock_discontinuity"
+        )
+    else:
+        with pytest.raises(ValueError):
+            bench.run_session(path, digest, 2, root / "second", **kwargs)
+    result = bench.read_json(root / "second/run.json")
+    assert all(row["state"] == "planned" for row in result["rows"])
+
+
+def test_unsupported_clock_blocks_all_native_launches(frozen):
+    def factory(policy, identity, **kwargs):
+        return REAL_GUARD(policy, identity, platform="linux", **kwargs)
+
+    result = run(
+        frozen,
+        guard_factory=factory,
+        popen=lambda *a, **k: pytest.fail("Must not launch"),
+    )
+    assert (
+        result["state"] == "timing_blocked" and result["failure"] == "unsupported_clock"
+    )
+    assert not result["timing_guard"]["assertion"]["acquired"]
+    assert all(row["state"] == "planned" for row in result["rows"])
+
+
+def test_sleep_interrupts_owned_live_child_without_losing_raw_files(frozen):
+    child = FakeChild()
+
+    class ActiveGuard(SyntheticGuard):
+        def wait(self, process, start, seconds, label):
+            self.clock.offset += 10_000_000
+            self.check(label)
+
+    def launch(argv, **kwargs):
+        kwargs["stdout"].write(b"partial native output")
+        return child
+
+    result = run(frozen, guard_factory=ActiveGuard, popen=launch)
+    row = result["rows"][0]
+    assert result["state"] == "timing_blocked" and row["outcome"] == "timing_error"
+    assert child.terminated and row["returncode"] == -15
+    assert (
+        Path(row["artifacts"]["stdout.json"]["path"]).read_bytes()
+        == b"partial native output"
+    )
+    assert all(item["state"] == "planned" for item in result["rows"][1:])
+
+
+def test_artifact_failure_after_valid_output_is_not_success(frozen, monkeypatch):
+    original = bench.asset
+
+    def fail_record(path):
+        if Path(path).name == "stdout.json":
+            raise OSError("Synthetic evidence write failure")
+        return original(path)
+
+    monkeypatch.setattr(bench, "asset", fail_record)
+    with pytest.raises(OSError, match="evidence write"):
+        run(frozen, popen=synthetic_launcher)
+    result = bench.read_json(frozen[2] / "result/run.json")
+    assert result["rows"][0]["outcome"] == "record_error"
+    assert result["rows"][0]["observed"]["samples_ns"]
+    assert all(row["state"] == "planned" for row in result["rows"][1:])
+
+
+def test_guard_failure_at_native_start_keeps_row_planned(frozen):
+    row_id = bench.read_json(frozen[0])["schedule"][0]["id"]
+    observations = 0
+
+    class StartGuard(SyntheticGuard):
+        def check(self, label=None):
+            if label == row_id + ":start":
+                self.clock.offset += 10_000_000
+            return super().check(label)
+
+    def observe():
+        nonlocal observations
+        observations += 1
+        return stable_host()
+
+    result = run(
+        frozen,
+        guard_factory=StartGuard,
+        collect_host=observe,
+        popen=lambda *a, **k: pytest.fail("No native launch"),
+    )
+    assert result["state"] == "timing_blocked" and observations == 1
+    row = result["rows"][0]
+    assert row["state"] == "planned" and "host_before" in row
+    assert "host_after" not in row and "argv" not in row and "timing" not in row
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert summary["planned"] == 16 and summary["attempted"] == 0
+
+
+def test_sleep_during_host_probe_retains_observed_host_departure(frozen):
+    clock = SyntheticClock()
+
+    def factory(*args, **kwargs):
+        return SyntheticGuard(*args, **kwargs, clock=clock)
+
+    def observe():
+        clock.offset += 10_000_000
+        value = stable_host()
+        value["power_source"] = bench.host.available("Battery Power")
+        value["memory_pressure"] = bench.host.available({"code": 2, "label": "warn"})
+        return value
+
+    result = run(
+        frozen,
+        guard_factory=factory,
+        collect_host=observe,
+        popen=lambda *a, **k: pytest.fail("No native launch"),
+    )
+    assert (
+        result["state"] == "timing_blocked"
+        and result["failure"] == "clock_discontinuity"
+    )
+    assert result["host_violations"] == [
+        {
+            "pair": result["rows"][0]["pair"],
+            "row": result["rows"][0]["id"],
+            "boundary": "before",
+            "reasons": ["power_source_changed", "memory_pressure_changed"],
+        }
+    ]
+    assert all(
+        row["state"] == "planned" and "host_after" not in row for row in result["rows"]
+    )
+    summary = bench.read_json(frozen[2] / "result/summary.json")
+    assert (
+        summary["attempted"] == 0
+        and summary["host_violations"] == result["host_violations"]
+    )

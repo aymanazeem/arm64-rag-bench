@@ -25,9 +25,18 @@ OUTCOMES = {
     "launch_error",
     "cleanup_error",
     "record_error",
+    "timing_error",
 }
-RUN_STATES = {"planned", "running", "finished", "host_blocked", "failed", "interrupted"}
-TERMINAL = {"finished", "host_blocked", "failed", "interrupted"}
+RUN_STATES = {
+    "planned",
+    "running",
+    "finished",
+    "host_blocked",
+    "timing_blocked",
+    "failed",
+    "interrupted",
+}
+TERMINAL = {"finished", "host_blocked", "timing_blocked", "failed", "interrupted"}
 HOST_FIELDS = {
     "power_mode": bench.host.MODE_KEYS,
     "thermal": bench.host.THERMAL_KEYS,
@@ -229,6 +238,225 @@ def boundary_violations(plan, rows):
     return violations
 
 
+def public_timing(record, passed):
+    if record is None:
+        return {"valid": False, "state": "unavailable", "evidence_sha256": None}
+    return {
+        "valid": passed,
+        "evidence_sha256": sha(bench.timing.encoded(record).encode()),
+        **{
+            key: record[key]
+            for key in (
+                "state",
+                "anchor",
+                "checkpoints",
+                "statistics",
+                "first_failure",
+                "cleanup_errors",
+            )
+        },
+        "assertion": {
+            key: record["assertion"][key]
+            for key in (
+                "acquired",
+                "confirmed",
+                "released",
+                "observation_sha256",
+                "cleanup_clock",
+            )
+        },
+        "previous_checkpoint_sha256": sha(
+            bench.timing.encoded(record["previous_checkpoint"]).encode()
+        )
+        if record["previous_checkpoint"] is not None
+        else None,
+        "exit_sample": (record["exit_checkpoint"] or {}).get("sample"),
+    }
+
+
+def session_timing(evidence, plan, run, directory):
+    require(
+        "timing_guard" in run and type(run.get("timing_valid")) is bool,
+        "Missing timing guard evidence.",
+    )
+    guard = run["timing_guard"]
+    launched = any(row["state"] != "planned" for row in run["rows"])
+    if guard is None:
+        require(
+            not launched
+            and not run["timing_valid"]
+            and run["state"] in {"planned", "failed", "interrupted"},
+            "Launched session lacks a timing guard.",
+        )
+        return public_timing(None, False), None
+    identity = bench.timing.host_identity_hash(plan["host_policy"]["identity"])
+    passed = bench.timing.validate_evidence(guard, plan["timing_policy"], identity)
+    require(run["timing_valid"] == passed, "Recorded timing status differs.")
+    require(
+        run["state"] != "finished" or passed, "Finished session lacks valid timing."
+    )
+    require(
+        run["state"] != "timing_blocked"
+        or (not passed and guard["first_failure"] is not None),
+        "Timing-blocked session lacks a guard failure.",
+    )
+    previous = run.get("previous_session")
+    previous_pin = None
+    if run["session"] == 1:
+        require(
+            previous is None and guard["previous_checkpoint"] is None,
+            "First session has a previous checkpoint.",
+        )
+    elif previous is None:
+        require(not launched and not passed, "Later session lacks its previous ledger.")
+    else:
+        path = directory / "previous-run.json"
+        require(
+            Path(previous["path"]) == path and path.resolve() == path,
+            "Previous ledger escaped its archive.",
+        )
+        prior, previous_pin = evidence.document(path, expected=previous["sha256"])
+        require(previous_pin == public_asset(previous), "Previous ledger size differs.")
+        require(
+            type(prior.get("session")) is int
+            and prior["session"] == run["session"] - 1
+            and prior.get("plan_sha256") == run["plan_sha256"]
+            and prior.get("state") == "finished"
+            and prior.get("integrity_verified") is True
+            and prior.get("timing_valid") is True
+            and bench.timing.validate_evidence(
+                prior["timing_guard"], plan["timing_policy"], identity
+            ),
+            "Previous session did not finish with valid timing.",
+        )
+        scheduled = [
+            row for row in plan["schedule"] if row["session"] == prior["session"]
+        ]
+        require(
+            len(prior["rows"]) == len(scheduled)
+            and all(
+                all(
+                    type(row.get(key)) is type(value) and row[key] == value
+                    for key, value in item.items()
+                )
+                and row.get("state") == "finished"
+                and row.get("outcome") == "success"
+                and row.get("timing", {}).get("valid") is True
+                for row, item in zip(prior["rows"], scheduled, strict=True)
+            ),
+            "Previous session contains an unfinished or failed attempt.",
+        )
+        for row in prior["rows"]:
+            checked_row_timing(plan, prior, row)
+            require(
+                bench.native_duration_matches(
+                    row["observed"], row["timing"], plan["timing_policy"]
+                ),
+                "Previous native samples exceed the process duration.",
+            )
+        require(
+            guard["previous_checkpoint"] == prior["timing_guard"]["exit_checkpoint"],
+            "Transferred timing checkpoint differs.",
+        )
+    return public_timing(guard, passed), previous_pin
+
+
+def checked_row_timing(plan, run, row):
+    value = row.get("timing")
+    require(
+        isinstance(value, dict)
+        and set(value)
+        == {
+            "valid",
+            "reason",
+            "start",
+            "end",
+            "deadline_exceeded",
+            "continuous_seconds",
+            "awake_seconds",
+        },
+        "Missing or invalid row timing evidence.",
+    )
+    require(
+        type(value["valid"]) is bool
+        and value["reason"] in (bench.timing.REASONS | {None}),
+        "Invalid row timing status.",
+    )
+    for key in ("continuous_seconds", "awake_seconds"):
+        if value[key] is not None:
+            numeric(value[key])
+    bench.timing.check_sample(value["start"])
+    guard = run["timing_guard"]
+    checkpoints = guard["checkpoints"]
+    starts = [
+        point["sample"]
+        for point in checkpoints
+        if point["label"] == row["id"] + ":start"
+    ]
+    require(starts == [value["start"]], "Row start differs from the guard checkpoint.")
+    end = value["end"]
+    if end is not None:
+        bench.timing.check_sample(end)
+        ends = [
+            point["sample"]
+            for point in checkpoints
+            if point["label"] == row["id"] + ":end"
+        ]
+        failure = guard["first_failure"]
+        require(
+            ends == [end]
+            or (
+                not ends
+                and failure is not None
+                and failure["sample"] == end
+                and failure["reason"] == value["reason"]
+            ),
+            "Row end differs from guard evidence.",
+        )
+    require(
+        type(value["deadline_exceeded"]) is bool
+        and value
+        == bench.row_timing(
+            value["start"],
+            end,
+            value["reason"],
+            timeout_seconds=plan["timeout_seconds"],
+        ),
+        "Recorded clock duration differs.",
+    )
+    if value["valid"]:
+        require(
+            bench.timing.interval_reason(value["start"], end, plan["timing_policy"])
+            is None,
+            "Row timing pass contradicts its clocks.",
+        )
+        require(
+            value["continuous_seconds"] < plan["timeout_seconds"],
+            "Row timing pass exceeds the deadline.",
+        )
+    elif value["reason"] is not None:
+        require(
+            guard["first_failure"] is not None
+            and guard["first_failure"]["reason"] == value["reason"],
+            "Row failure differs from the guard.",
+        )
+    if row["state"] == "finished":
+        require(
+            row.get("wall_seconds") == value["continuous_seconds"],
+            "Process duration differs from its continuous clock.",
+        )
+        require(
+            row["outcome"] != "success" or end is not None,
+            "Successful process lacks a final clock observation.",
+        )
+        if value["deadline_exceeded"]:
+            require(
+                row["outcome"] == "timeout",
+                "Deadline failure was not recorded as a timeout.",
+            )
+    return value
+
+
 def checked_rows(evidence, plan, run, directory):
     expected = [row for row in plan["schedule"] if row["session"] == run["session"]]
     require(
@@ -266,17 +494,35 @@ def checked_rows(evidence, plan, run, directory):
             )
         else:
             require(
+                "host_before" in row, "Launched row lacks its host-before boundary."
+            )
+            require(
                 row["argv"] == bench.command(plan, row), "Recorded command differs."
             )
+            clean["timing"] = checked_row_timing(plan, run, row)
         if state == "finished":
+            failed_host_read = (
+                run["state"] == "timing_blocked"
+                and run["timing_guard"]["state"] == "failed"
+                and isinstance(row.get("host_record_error"), str)
+                and bool(row["host_record_error"].strip())
+            )
             require(
                 not run["integrity_verified"]
-                or all(key in row for key in ("host_before", "host_after")),
+                or "host_after" in row
+                or failed_host_read,
                 "Verified finished row lacks host boundaries.",
             )
+            if failed_host_read:
+                clean["host_record_error_sha256"] = sha(
+                    row["host_record_error"].encode()
+                )
+                if "host_after" not in row:
+                    clean["host_after"] = public_host({})
             require(row.get("outcome") in OUTCOMES, "Unknown finished outcome.")
             clean["outcome"] = row["outcome"]
-            require(numeric(row["wall_seconds"]) >= 0, "Negative process duration.")
+            if row["wall_seconds"] is not None:
+                numeric(row["wall_seconds"])
             clean["wall_seconds"] = row["wall_seconds"]
             require(
                 row.get("returncode") is None or type(row["returncode"]) is int,
@@ -314,7 +560,10 @@ def checked_rows(evidence, plan, run, directory):
             else:
                 continue
             clean["raw_files"][name] = pin
-        if state == "finished" and row["outcome"] == "success":
+        if state == "finished" and (
+            row["outcome"] == "success"
+            or (row["outcome"] in {"timeout", "timing_error"} and "observed" in row)
+        ):
             require(
                 set(artifacts) == {"stdout.json", "stderr.log"}
                 and row["returncode"] == 0,
@@ -325,6 +574,13 @@ def checked_rows(evidence, plan, run, directory):
             require(
                 observed == row["observed"], "Recorded samples differ from raw output."
             )
+            require(
+                not row["timing"]["valid"]
+                or bench.native_duration_matches(
+                    observed, row["timing"], plan["timing_policy"]
+                ),
+                "Native samples exceed the guarded process duration.",
+            )
             clean["samples_ns"] = observed["samples_ns"]
             clean["excluded_sample_indices"] = [0]
         for boundary in ("host_before", "host_after"):
@@ -332,6 +588,28 @@ def checked_rows(evidence, plan, run, directory):
                 clean[boundary] = public_host(row[boundary])
         public.append(clean)
     return public
+
+
+def timing_stop_bound(run):
+    failure = (run.get("timing_guard") or {}).get("first_failure")
+    if failure is None:
+        return
+    phase, rows = failure["phase"], run["rows"]
+    limit = len(rows)
+    if phase == "session:start" or phase.startswith("rest:initial:"):
+        limit = 0
+    for index, row in enumerate(rows):
+        if phase.startswith(row["pair"] + ":rest:"):
+            limit = min(limit, index)
+        if phase in {row["id"] + ":before_host", row["id"] + ":after_host"}:
+            limit = index
+        elif phase.startswith(row["id"] + ":"):
+            # Unlabelled checks during a child retain the row:start phase.
+            limit = index + 1
+    require(
+        all(row["state"] == "planned" for row in rows[limit:]),
+        "Session continued after its timing failure phase.",
+    )
 
 
 def session_record(evidence, plan, plan_raw, plan_sha256, item):
@@ -354,10 +632,19 @@ def session_record(evidence, plan, plan_raw, plan_sha256, item):
         "Invalid session state.",
     )
     require(
-        not run["integrity_verified"] or run["state"] in {"finished", "host_blocked"},
+        not run["integrity_verified"]
+        or run["state"] in {"finished", "host_blocked", "timing_blocked"},
         "Nonterminal session claims verified integrity.",
     )
+    timing_record, previous_pin = session_timing(evidence, plan, run, directory)
     rows = checked_rows(evidence, plan, run, directory)
+    timing_stop_bound(run)
+    for index, row in enumerate(rows):
+        if row.get("timing", {}).get("reason") is not None:
+            require(
+                all(later["state"] == "planned" for later in rows[index + 1 :]),
+                "Session continued after a timing stop.",
+            )
     violations = boundary_violations(plan, run["rows"])
     require(
         run.get("host_violations") == violations, "Recorded host violations differ."
@@ -404,7 +691,14 @@ def session_record(evidence, plan, plan_raw, plan_sha256, item):
         "session": session,
         "state": run["state"],
         "integrity_verified": run["integrity_verified"],
-        "evidence": {"plan": archive, "run": pin, "summary": summary_pin},
+        "timing_valid": timing_record["valid"],
+        "timing_guard": timing_record,
+        "evidence": {
+            "plan": archive,
+            "run": pin,
+            "summary": summary_pin,
+            "previous_session": previous_pin,
+        },
         "rows": rows,
         "pairs": summary["pairs"],
         "host_violations": violations,
@@ -472,6 +766,7 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         ("harness_sha256", Path(bench.__file__)),
         ("runtime_helper_sha256", bench.HELPER),
         ("host_helper_sha256", bench.HOST_HELPER),
+        ("timing_helper_sha256", bench.TIMING_HELPER),
     ):
         evidence.file(path, expected=plan[key])
     reporter_pin = evidence.file(Path(__file__))
@@ -492,6 +787,22 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         )
         for item in sessions
     }
+    for number, record in observed.items():
+        prior = observed.get(number - 1)
+        if prior is not None and record["evidence"]["previous_session"] is not None:
+            require(
+                record["evidence"]["previous_session"] == prior["evidence"]["run"],
+                "Supplied previous ledger differs from its transferred archive.",
+            )
+        if any(
+            previous["state"] != "finished" or not previous["timing_valid"]
+            for index, previous in observed.items()
+            if index < number
+        ):
+            require(
+                all(row["state"] == "planned" for row in record["rows"]),
+                "Study continued after an unsuccessful session.",
+            )
     records = []
     for number in range(1, 4):
         if number in observed:
@@ -503,6 +814,12 @@ def create_report(plan_path, expected_plan_sha256, sessions):
                     "session": number,
                     "state": "unobserved",
                     "integrity_verified": False,
+                    "timing_valid": False,
+                    "timing_guard": {
+                        "valid": False,
+                        "state": "unobserved",
+                        "evidence_sha256": None,
+                    },
                     "evidence": None,
                     "rows": [{**row, "state": "unobserved"} for row in schedule],
                     "pairs": [
@@ -553,7 +870,10 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         and not counts["attempted"]
         and all(record["evidence"]["summary"] is not None for record in records)
     )
-    complete = all_terminal and accounting["included_pairs"] == 24
+    timing_valid = len(observed) == 3 and all(
+        record["timing_valid"] for record in records
+    )
+    complete = all_terminal and accounting["included_pairs"] == 24 and timing_valid
     if desktop:
         complete = complete and all(record["state"] == "finished" for record in records)
     duration_key = "mean_ns" if desktop else "median_ns"
@@ -598,6 +918,8 @@ def create_report(plan_path, expected_plan_sha256, sessions):
         else "controlled-fixed-token-report",
         "status": "complete" if complete else "incomplete",
         "accounting_complete": all_terminal,
+        "protocol_complete": complete,
+        "timing_valid": timing_valid,
         "provenance": {
             "plan": plan_pin,
             "reporter_sha256": reporter_pin["sha256"],
@@ -607,6 +929,7 @@ def create_report(plan_path, expected_plan_sha256, sessions):
                     "harness_sha256",
                     "runtime_helper_sha256",
                     "host_helper_sha256",
+                    "timing_helper_sha256",
                 )
             },
             "model": public_asset(plan["model"]),
@@ -634,6 +957,7 @@ def create_report(plan_path, expected_plan_sha256, sessions):
             "native_revision": bench.REVISION,
             "seed": plan["seed"],
             "settings": plan["settings"],
+            "timing_policy": plan["timing_policy"],
             "flags": plan["flags"],
             "workloads": {
                 name: {
@@ -676,6 +1000,10 @@ def create_report(plan_path, expected_plan_sha256, sessions):
             "allowed, active swap-counter increases exclude a pair.",
             "Hashes bind supplied local evidence; they are not external attestation. "
             "No hardware-wide, dispatch or answer-quality claim follows from timing.",
+            "Mechanically available ratios remain visible after a clock interruption; "
+            "they do not establish valid timing. The owned idle-sleep assertion and "
+            "bounded clock checks reduce risk but cannot guarantee detection of "
+            "every suspension.",
         ],
     }
     if desktop:
