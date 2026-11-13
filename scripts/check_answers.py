@@ -29,6 +29,10 @@ def main():
     parser.add_argument(
         "--db", type=Path, default=ROOT / "data/private/development.sqlite"
     )
+    parser.add_argument("--backend", choices=("cpu", "kleidiai"), default="cpu")
+    parser.add_argument(
+        "--baseline", type=Path, help="Compare with a published CPU run directory."
+    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -36,6 +40,8 @@ def main():
         help="Use a new output directory for each run.",
     )
     args = parser.parse_args()
+    if args.baseline is not None and args.split == "all":
+        parser.error("Choose one split when comparing with a baseline run.")
     if args.output.exists():
         parser.error("Use a new output directory to preserve earlier attempts.")
     args.output.mkdir(parents=True)
@@ -65,6 +71,7 @@ def main():
     (args.output / "system-prompt.txt").write_text(SYSTEM_PROMPT)
     run = {
         "state": "starting",
+        "backend": args.backend,
         "protocol_sha256": hashlib.sha256(protocol_raw).hexdigest(),
         "protocol_hash_format": "Raw file bytes.",
         "system_prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
@@ -86,14 +93,19 @@ def main():
         "failure": None,
     }
     write_json(args.output / "run.json", run)
+    comparison = None
 
     def start_case(case):
         run["state"] = "running"
         run["active_case"] = case["id"]
         run["attempted"].append(case["id"])
         write_json(args.output / "run.json", run)
+        if comparison is not None:
+            comparison.start(case)
 
     def retain_case(record):
+        if comparison is not None:
+            comparison.retain(record)
         write_json(args.output / f"{record['id']}.json", record)
         run["completed"].append(record["id"])
         run["active_case"] = None
@@ -102,8 +114,21 @@ def main():
         print(f"{record['id']}: {status}", flush=True)
 
     try:
+        if args.baseline is not None:
+            from answer_baseline import BaselineComparison
+
+            comparison = BaselineComparison(
+                ROOT, args.baseline, args.split, run, protocol_raw
+            )
+            run["baseline_comparison"] = {
+                **comparison.metadata,
+                "helper_sha256": hashlib.sha256(
+                    (ROOT / "scripts/answer_baseline.py").read_bytes()
+                ).hexdigest(),
+            }
+            write_json(args.output / "run.json", run)
         with LocalServer(
-            ROOT / "build/cpu/bin/llama-server",
+            ROOT / f"build/{args.backend}/bin/llama-server",
             model,
             context_size=protocol["settings"]["context_size"],
             request_timeout=300,
@@ -114,12 +139,13 @@ def main():
             write_json(args.output / "run.json", run)
             if server.info()["model_sha256"] != asset["sha256"]:
                 raise ValueError("The answer model differs from its pin.")
+            evaluator = comparison.bind(server) if comparison is not None else server
             for split in selected:
                 report = evaluate_answers(
                     args.db,
                     datasets[split],
                     ROOT / protocol["manifest"]["path"],
-                    server,
+                    evaluator,
                     protocol,
                     on_case_start=start_case,
                     on_case=retain_case,

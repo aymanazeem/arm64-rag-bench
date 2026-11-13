@@ -38,7 +38,7 @@ def runner(monkeypatch, tmp_path):
 
     class FakeServer:
         def __init__(self, *args, **kwargs):
-            pass
+            state.binary = args[0]
 
         def __enter__(self):
             state.entries += 1
@@ -84,6 +84,42 @@ def test_failed_server_startup_preserves_failure_and_configuration(runner):
         runner.module.SYSTEM_PROMPT
     )
     assert not (runner.output / "development.json").exists()
+
+
+@pytest.mark.parametrize("backend", ["cpu", "kleidiai"])
+def test_backend_selects_owned_binary_and_is_recorded(runner, monkeypatch, backend):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["check_answers.py", "--backend", backend, "--output", str(runner.output)],
+    )
+    runner.state.startup_error = InferenceError("Stop after selection")
+    with pytest.raises(InferenceError, match="Stop after selection"):
+        runner.module.main()
+    assert runner.state.binary == runner.root / f"build/{backend}/bin/llama-server"
+    assert read_json(runner.output / "run.json")["backend"] == backend
+
+
+def test_invalid_baseline_fails_before_server_start_and_retains_ledger(
+    runner, monkeypatch
+):
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "check_answers.py",
+            "--baseline",
+            str(runner.root / "missing-baseline"),
+            "--output",
+            str(runner.output),
+        ],
+    )
+    with pytest.raises(FileNotFoundError):
+        runner.module.main()
+    run = read_json(runner.output / "run.json")
+    assert run["state"] == "failed"
+    assert run["attempted"] == []
+    assert runner.state.entries == 0
 
 
 def test_interruption_retains_completed_and_active_attempts(runner, monkeypatch):

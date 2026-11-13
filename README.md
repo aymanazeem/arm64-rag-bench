@@ -4,7 +4,7 @@ A local document question-answering application and an engineering investigation
 
 The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
 
-**Status:** local indexing, keyword and embedding search, and document answers with citations are available. Answer checks and runtime probes are separate from the controlled performance study, which is still to come. A valid citation location does not guarantee a correct answer.
+**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. Controlled performance results are pending. A valid citation location does not guarantee a correct answer.
 
 - [Development and GitHub setup](docs/setup.md)
 - [Index and search documents](docs/search.md)
@@ -12,6 +12,8 @@ The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is 
 - [Ask questions with source citations](docs/answers.md)
 - [Build and test the runtime](docs/runtime.md)
 - [Runtime evidence and limits](docs/results/runtime-feasibility/README.md)
+- [CPU and KleidiAI quality and runtime checks](docs/results/controlled-cpu/README.md)
+- [Controlled benchmark method](docs/benchmarks.md)
 - [Evaluation cases and scoring](eval/README.md)
 - [Original reference brief](docs/project-brief.md)
 

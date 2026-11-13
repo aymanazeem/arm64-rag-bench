@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "qwen35-diagnostic-source-patch",
+  "timings_valid": false,
+  "llama_cpp": {
+    "repository": "https://github.com/ggml-org/llama.cpp",
+    "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5"
+  },
+  "kleidiai": {
+    "repository": "https://github.com/ARM-software/kleidiai",
+    "revision": "c80157210987eedaab2509638ef5e15950c53a8c"
+  },
+  "patch_sha256": "90cb617ce5931add8b37cf7356460c0863b6c05f38634ebdd62e207b109bbd7f",
+  "files": {
+    "vendor/llama.cpp/tools/llama-bench/llama-bench.cpp": {
+      "original_sha256": "f6d0bae56c2175bc8bde70fcd47424b146be565da22099a75033110d13ffb612",
+      "traced_sha256": "90ea45984bb5dfae1896deb87f334edb81124f9d4530921df2afcec8a54cd677"
+    },
+    "vendor/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.c": {
+      "original_sha256": "e6f33c7ecbe5eeb6cce487b6aad7ce4932800894d3e33269f0157feaaf74e769",
+      "traced_sha256": "701106668ac4e3334f4c1b8ffaf0493acd6b36fce32543456e52f9b17405a77f"
+    },
+    "vendor/llama.cpp/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp": {
+      "original_sha256": "a4fa72b11069dba81d45285d521cccbbb796d8569a864746ab5e35a3bcf75f6f",
+      "traced_sha256": "2a02ed794b91a1c4d9050e33d83c1a35590f634ae1805c170076f3fe5ba1b803"
+    },
+    "vendor/llama.cpp/src/llama-memory-hybrid.cpp": {
+      "original_sha256": "0c69f0f91072192d71f23ff1d920379aa8b90799db4891c55175db81407d0c37",
+      "traced_sha256": "2c0f0fe52ee78d51b6dd54afacb013e08bba7ca79ecc7dd9639a4742288ec303"
+    },
+    "vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp4x4_qsi8cxp4x4_16x4_neon_dotprod.c": {
+      "original_sha256": "6c88fd5097c7e1832ae4dd6ce5a05bf4d57e06b4e2bb8e02f9c47fe1bfb818a6",
+      "traced_sha256": "97b8fee3dbe694225f8d215dca646cdedf00544b1ae4b49fbe6653abb943a29e"
+    },
+    "vendor/kleidiai-v1.32.0/kai/ukernels/matmul/matmul_clamp_f32_qai8dxp_qsi8cxp/kai_matmul_clamp_f32_qai8dxp1x4_qsi8cxp4x4_1x4_neon_dotprod.c": {
+      "original_sha256": "8b2b91d6566f755979e4c000d7b3520d13e24fc721f50f89f7b563089447e0ef",
+      "traced_sha256": "a7d49adc9cb3b61093a1585c6613d5602b860fae0c01dfe21319a1324f6e852c"
+    }
+  },
+  "scope": "Sampled M1 DotProd Q8 kernel and CPU fallback entries; all synthetic input and hybrid-state events.",
+  "dispatch_sampling": "First input batch of each phase in repetition zero. Not a complete operation census.",
+  "state_replay": "Optional same-backend one-token continuation; exact finite logit and position comparison. Not all future continuations.",
+  "execution_limit": "This patch observes diagnostic builds. Normal timing inputs remain a pinned-source expectation; normal loaded libraries need a separate loader observation.",
+  "third_party_licenses": {
+    "llama.cpp": "LICENSE-llama.cpp.txt",
+    "KleidiAI": "../runtime-feasibility/LICENSE-KleidiAI.txt"
+  }
+}
