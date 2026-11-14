@@ -1,10 +1,10 @@
 # Arm64 RAG Benchmark
 
-A local document question-answering application and an engineering investigation into CPU inference on Apple Silicon: standard Arm64, KleidiAI-enabled Arm64, and a separate Metal comparison.
+A local document question-answering application and an engineering investigation into CPU inference on Apple Silicon: standard Arm64 and KleidiAI-enabled Arm64.
 
 The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
 
-**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. A desktop study completed 48 runs, but system sleep affected its timings. Reliable performance results remain pending. A valid citation location does not guarantee a correct answer.
+**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. A guarded desktop study completed 48 valid runs: prompt processing favored KleidiAI, while generation favored CPU. Application latency and memory measurements are next. A valid citation location does not guarantee a correct answer.
 
 - [Development and GitHub setup](docs/setup.md)
 - [Index and search documents](docs/search.md)
@@ -13,16 +13,16 @@ The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is 
 - [Build and test the runtime](docs/runtime.md)
 - [Runtime evidence and limits](docs/results/runtime-feasibility/README.md)
 - [CPU and KleidiAI quality and runtime checks](docs/results/controlled-cpu/README.md)
-- [Desktop timing study and sleep findings](docs/results/desktop-cpu/README.md)
+- [Guarded desktop CPU results](docs/results/desktop-cpu/README.md)
 - [CPU benchmark methods](docs/benchmarks.md)
 - [Evaluation cases and scoring](eval/README.md)
 - [Original reference brief](docs/project-brief.md)
 
-## Planned approach
+## Design
 
-A small Python application handles ingestion, retrieval, citations and evaluation. Pinned llama.cpp binaries handle local inference. CPU comparisons use the same model and settings, with evidence that the intended kernels actually ran. Metal is reported as a separate backend.
+A small Python application handles ingestion, retrieval, citations and evaluation. Pinned llama.cpp binaries handle local inference. CPU comparisons use the same model and settings, with evidence that the intended kernels actually ran. Metal remains an optional, unmeasured extension.
 
-Start with a command-line workflow and a small licensed technical corpus. Add complexity only when measurements or answer quality justify it. Model weights and private documents stay outside version control.
+The application uses a command-line workflow and a small licensed technical corpus. Add complexity only when measurements or answer quality justify it. Model weights and private documents stay outside version control.
 
 ## Working here
 

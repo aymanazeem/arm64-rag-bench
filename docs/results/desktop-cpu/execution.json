@@ -1,368 +1,78 @@
 {
   "schema_version": 1,
-  "kind": "desktop-study-execution-disposition",
-  "study_id": "qwen35-desktop-v3",
-  "study_complete": false,
-  "planned_execution_complete": true,
-  "performance_validation_passed": false,
-  "timing_warning": "System sleep affected recorded timings. All 48 invocations and 24 pair ratios remain in the frozen report; they are not an unqualified native-compute performance comparison.",
-  "report": {
-    "sha256": "60f83f93676e921caf1d7b175a5295fccda89747b60b8d5df5397b5d5c5a06da",
-    "size": 229230
-  },
-  "method": {
-    "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-    "size": 6858
-  },
-  "plan": {
-    "sha256": "0669d6910ef56f7c0d42022d09a07ce5d79b371b211ce86262f3fc29b8978a72",
-    "size": 24762
-  },
-  "frozen_report_protocol_complete": true,
-  "protocol_flag_scope": "The frozen report flag covers the implemented boundary and integrity rules. It does not establish continuous host conditions or exclude system sleep.",
-  "execution": {
-    "planned_sessions": 3,
-    "started_sessions": [
-      1,
-      2,
-      3
-    ],
-    "not_started_sessions": [],
-    "retries_or_replacements": false,
+  "study_id": "qwen35-desktop-v4",
+  "status": "complete",
+  "execution_source_revision": "5c5d59eb52ae6aaeda89297bb7b464ba9e19afc3",
+  "method_sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+  "setup_sha256": "72acde279dfbb96c12f4e13a0f1fcddb5729a93399982398a247f38b41917051",
+  "report_sha256": "f92c58dfe1cc4dc1886283c9dc1919d58c4cd4731263ef76025aae8dd02946f8",
+  "collection": {
+    "sessions": 3,
     "planned_invocations": 48,
     "successful_invocations": 48,
-    "failed_invocations": 0,
-    "unattempted_invocations": 0,
-    "unobserved_invocations": 0,
-    "completed_pairs": 24,
     "planned_pairs": 24,
-    "completed_pairs_per_workload": {
-      "tg128-d2048": 6,
-      "pp2048": 6,
-      "tg128-d512": 6,
-      "pp512": 6
-    },
-    "completed_pair_first_backend_counts": {
-      "tg128-d2048": {
-        "kleidiai": 3,
-        "cpu": 3
-      },
-      "pp2048": {
-        "kleidiai": 3,
-        "cpu": 3
-      },
-      "tg128-d512": {
-        "kleidiai": 3,
-        "cpu": 3
-      },
-      "pp512": {
-        "kleidiai": 3,
-        "cpu": 3
-      }
-    },
-    "order_limit": "Within every session, round 1 used KleidiAI first and round 2 used CPU first. Overall order is balanced but linked to round.",
-    "raw_native_samples_retained": 192,
-    "sample_index_0_retained_but_excluded": 48,
-    "samples_used_in_complete_pair_ratios": 144,
-    "separate_upstream_warmup_enabled": true,
-    "unpaired_successful_invocations": 0
+    "included_pairs": 24,
+    "raw_samples": 192,
+    "excluded_initial_samples": 48,
+    "retained_samples": 144,
+    "timing_valid": true,
+    "integrity_verified": true,
+    "guards_closed": 3,
+    "session_assertions_released": 3,
+    "rows_retried_or_replaced": 0
   },
-  "sessions": [
+  "session_records": [
     {
       "session": 1,
-      "state": "finished",
-      "integrity_verified": true,
-      "successful_invocations": 16,
-      "completed_pairs": 8,
-      "started_at_utc": "2026-11-13T17:40:40.477202+00:00",
-      "finished_at_utc": "2026-11-13T18:40:15.916475+00:00",
-      "run": {
-        "sha256": "005ff78972cb369c090c8edd8ab1e380cbfcf10f0f1836ed764173298bafb9fe",
-        "size": 166115
-      },
-      "host_stop_findings": []
+      "sha256": "e4dbfcac094dcf2489749f8044114fbf602f0a9c25a15cd2eed62ae4b1719b36"
     },
     {
       "session": 2,
-      "state": "finished",
-      "integrity_verified": true,
-      "successful_invocations": 16,
-      "completed_pairs": 8,
-      "started_at_utc": "2026-11-13T18:43:12.037965+00:00",
-      "finished_at_utc": "2026-11-13T19:45:38.211145+00:00",
-      "run": {
-        "sha256": "61eb3fc3c553f17ab96c06e7d41f13bdd76e8ba4407b34eabeb8dc494e01d96b",
-        "size": 166035
-      },
-      "host_stop_findings": []
+      "sha256": "a9499d408595403eaf4e4e85a8d7ca5e93bd103528b02f25d830e90cc168238e"
     },
     {
       "session": 3,
-      "state": "finished",
-      "integrity_verified": true,
-      "successful_invocations": 16,
-      "completed_pairs": 8,
-      "started_at_utc": "2026-11-13T19:48:22.576765+00:00",
-      "finished_at_utc": "2026-11-13T20:42:06.046373+00:00",
-      "run": {
-        "sha256": "0d9a88b6ab82efc30cfde082225ce4c5f188882f80b34541895574ae5d9c4371",
-        "size": 166031
-      },
-      "host_stop_findings": []
+      "sha256": "2c34b30207f97531f0a1cbe5f8ae9d29aa1aa759408cab1c43ac4dd7742feb64"
     }
   ],
-  "recorded_host_stops": [],
-  "between_session_host_gaps": [
-    {
-      "from_session": 1,
-      "to_session": 2,
-      "previous_boundary_utc": "2026-11-13T18:40:16.043874+00:00",
-      "next_boundary_utc": "2026-11-13T18:43:12.034715+00:00",
-      "deltas": {
-        "swap": {
-          "status": "available",
-          "value": {
-            "used_bytes": -16777216.0
-          }
-        },
-        "pages": {
-          "status": "available",
-          "value": {
-            "Pageins": 77459,
-            "Pageouts": 0,
-            "Swapins": 653,
-            "Swapouts": 0
-          }
-        }
-      },
-      "strict_findings": [
-        "swap_activity"
-      ],
-      "effective_boundary_findings": []
-    },
-    {
-      "from_session": 2,
-      "to_session": 3,
-      "previous_boundary_utc": "2026-11-13T19:45:38.296440+00:00",
-      "next_boundary_utc": "2026-11-13T19:48:22.573943+00:00",
-      "deltas": {
-        "swap": {
-          "status": "available",
-          "value": {
-            "used_bytes": 0.0
-          }
-        },
-        "pages": {
-          "status": "available",
-          "value": {
-            "Pageins": 52240,
-            "Pageouts": 0,
-            "Swapins": 198,
-            "Swapouts": 0
-          }
-        }
-      },
-      "strict_findings": [
-        "swap_activity"
-      ],
-      "effective_boundary_findings": []
-    }
-  ],
-  "gap_scope": "Post-run comparisons of the recorded boundaries. Available counters remained monotonic and no effective boundary departure was found; these observations do not cover the intervening time continuously.",
-  "clock_and_sleep_observations": {
-    "power_events": [
-      {
-        "at_utc": "2026-11-13T17:54:12+00:00",
-        "event": "Sleep",
-        "reason": "Idle Sleep"
-      },
-      {
-        "at_utc": "2026-11-13T17:54:15+00:00",
-        "event": "DarkWake"
-      },
-      {
-        "at_utc": "2026-11-13T17:55:00+00:00",
-        "event": "Sleep",
-        "reason": "Maintenance Sleep"
-      },
-      {
-        "at_utc": "2026-11-13T18:11:59+00:00",
-        "event": "DarkWake"
-      },
-      {
-        "at_utc": "2026-11-13T18:12:43+00:00",
-        "event": "Sleep",
-        "reason": "Maintenance Sleep"
-      },
-      {
-        "at_utc": "2026-11-13T18:13:35+00:00",
-        "event": "Wake"
-      },
-      {
-        "at_utc": "2026-11-13T19:02:03+00:00",
-        "event": "Sleep",
-        "reason": "Idle Sleep"
-      },
-      {
-        "at_utc": "2026-11-13T19:02:07+00:00",
-        "event": "DarkWake"
-      },
-      {
-        "at_utc": "2026-11-13T19:02:51+00:00",
-        "event": "Sleep",
-        "reason": "Maintenance Sleep"
-      },
-      {
-        "at_utc": "2026-11-13T19:02:54+00:00",
-        "event": "DarkWake"
-      }
-    ],
-    "selected_clock_observations": [
-      {
-        "id": "s1-r1-tg128-d512-kleidiai",
-        "started_at": "2026-11-13T17:53:29.153855+00:00",
-        "finished_at": "2026-11-13T18:12:04.552726+00:00",
-        "utc_elapsed_seconds": 1115.398871,
-        "parent_monotonic_seconds": 98.20197904086672,
-        "difference_seconds": 1017.1968919591334,
-        "samples_seconds": [
-          16.030031208,
-          15.348386792,
-          15.193997083,
-          1032.596676125
-        ]
-      },
-      {
-        "id": "s1-r1-tg128-d512-cpu",
-        "started_at": "2026-11-13T18:12:05.062400+00:00",
-        "finished_at": "2026-11-13T18:14:08.123568+00:00",
-        "utc_elapsed_seconds": 123.061168,
-        "parent_monotonic_seconds": 73.25584066682495,
-        "difference_seconds": 49.80532733317504,
-        "samples_seconds": [
-          11.27184475,
-          63.467361125,
-          14.482195709,
-          13.246611292
-        ]
-      },
-      {
-        "id": "s2-r1-pp512-cpu",
-        "started_at": "2026-11-13T19:01:44.019497+00:00",
-        "finished_at": "2026-11-13T19:03:02.675589+00:00",
-        "utc_elapsed_seconds": 78.656092,
-        "parent_monotonic_seconds": 77.17170683294535,
-        "difference_seconds": 1.4843851670546542,
-        "samples_seconds": [
-          9.644154916,
-          17.038857416,
-          16.977228959,
-          11.320907792
-        ]
-      }
-    ],
-    "documented_sleep_overlap_count": 3,
-    "documented_sleep_overlap_rows": [
-      "s1-r1-tg128-d512-kleidiai",
-      "s1-r1-tg128-d512-cpu",
-      "s2-r1-pp512-cpu"
-    ],
-    "selection_scope": "All three listed invocations overlap recorded system sleep, including the row with the smaller clock difference. The exact differences are not attributed solely to sleep. This is an annotation, not a new exclusion threshold; no samples or pairs were removed.",
-    "all_48_clock_observations": {
-      "sha256": "eb16358f615bffed2befddb3a1c7b86c43f31d5efaea1b4cd5c373a220f41153",
-      "size": 19146
-    },
-    "power_log": {
-      "sha256": "af83b6b14dcadac95838c4c04c994c9a225cd17bd9ad21a6c7786d6a7b30ef70",
-      "size": 42025
-    },
-    "limitations": [
-      "Clock differences alone do not assign time to a cause or support subtracting sleep from native samples.",
-      "The report and its ratios are retained unchanged; no corrected speedup is claimed.",
-      "The implemented parent timeout did not establish a 600-second civil-time limit across sleep."
-    ]
+  "review": {
+    "measurement_audit_sha256": "bf97c1e11eafc6e193424e2b90ed70e0fb826c7c151e4adbf5dca187b19acd98",
+    "observed_findings_sha256": "158c1e23cd8dab62c8f40437b33f591827f032da5a58f47a57823c8ac8e37717",
+    "closure_sha256": "9257710b8b4fb59e497383158d736791f95bfa4b1c67aaea910d1738dd469aa9",
+    "scope": "Independent raw-sample arithmetic and record review, with shared pinned host and clock validators. Model/runtime integrity was verified by the collector; the separate audit did not rehash those large assets. Agent review is not external validation."
   },
-  "docker_condition_and_restoration": {
-    "declared_condition": "The updated stack was temporarily stopped and restored after measurement.",
-    "graceful_stops_completed": 11,
-    "desktop_stop_completed_at_utc": "2026-11-13T17:21:33.714641+00:00",
-    "desktop_start_requested_at_utc": "2026-11-13T20:42:46.616210+00:00",
-    "restoration_started_at_utc": "2026-11-13T20:43:00.711639+00:00",
-    "restoration_finished_at_utc": "2026-11-13T20:43:58.874443+00:00",
-    "verification_finished_at_utc": "2026-11-13T20:44:12.658584+00:00",
-    "restoration_status": "verified_selected_metadata_and_health",
-    "current_running_containers": 11,
-    "original_v3_running_ids_and_configuration_match": true,
-    "required_healthy_containers": 5,
-    "unchanged_initially_exited_containers": 1,
-    "complete_inventory_count": 12,
-    "idle_worker_heartbeat_age_seconds": 12.156822,
-    "worker_current_pending_lag_counts": {
-      "current": 0,
-      "pending": 0,
-      "lag": 0
-    },
-    "restoration_required_flags": {
-      "action": false,
-      "ledger": false
-    },
-    "evidence": {
-      "stop_record": {
-        "sha256": "1db5f18e717b4d87365c2194f2fb9fa58f8f43c4dea969aee46a6e67f14e7d9a",
-        "size": 2436
-      },
-      "action": {
-        "sha256": "d07be3dcfbdbb70d14e55bc956fe1d0085256ba2b6cd1cf7fad7508d13f17d90",
-        "size": 5071
-      },
-      "desktop_start": {
-        "sha256": "214f4acea0f562d8457293bf9ab69cfcab6e2fcc1a3b8444050a39bc097da3cb",
-        "size": 346
-      },
-      "restoration_ledger": {
-        "sha256": "b4223ff9d8322cce015adc967b13f8dfd8c9c1ab72a8b3a0ead69a8e735d535e",
-        "size": 51787
-      },
-      "final_verification": {
-        "sha256": "aae1e657f8b6875ddd6c3473c3fa7578e57fa0b6aa4e796816e648fe656c53d2",
-        "size": 35555
-      }
-    },
-    "limits": [
-      "Stop and start events were recorded, but Docker was not observed continuously throughout measurement.",
-      "Restoration refers to the updated stack captured for v3, not the older v2 identities.",
-      "Selected IDs, configuration, mount metadata, health and heartbeat were verified. This does not prove unchanged RAM, data contents, requests or external sessions."
-    ]
+  "handoff": {
+    "count": 2,
+    "review_sha256": "b45fb079ff611506cfafc684acf797bba3c2c32a1ab903f45e0f0500b0fd0635",
+    "owned_assertions_confirmed_and_released": true,
+    "both_overlaps_verified": true,
+    "maximum_seconds": 1200,
+    "auxiliary_poll_seconds": 0.2,
+    "measured_poll_seconds": 0.1,
+    "scope": "A prospective operational clarification during session 1 added bounded, owned assertion overlap across session handoffs. Frozen method, native schedule, rest periods and checks were unchanged. Same-boot checkpoint transfer verified the actual gaps. Release markers were authenticated by the execution owner; observed releases and closure were within the bound. These auxiliary durations are not performance samples."
   },
-  "prior_v2": {
-    "kept_separate": true,
-    "outcomes_known_before_v3": true,
-    "report": {
-      "sha256": "36d0116c74010891a1b0a467450dd91e7c4ea017eb1ef1595b63d0cb54e0ad60",
-      "size": 75625
-    },
-    "pooled_with_v3": false
+  "conditions": {
+    "pairs_with_swap_activity": 24,
+    "pairs_retained": 24,
+    "effective_host_stops": 0,
+    "thermal_telemetry": "unavailable",
+    "background": "Docker was stopped. Other user/system activity and light source/document work continued; no other model, build, test or benchmark job ran during collection.",
+    "order": "Backend order is linked to round: KleidiAI first in round 1, CPU first in round 2. Consecutive sessions are not independent replications."
   },
-  "quality_comparison": {
-    "quality_preserved": false,
-    "backend_adoption": false,
-    "application_backend": "cpu"
+  "restoration": {
+    "status": "verified",
+    "running_services": 11,
+    "healthy_services": 5,
+    "unchanged_exited_services": 1,
+    "original_ids_and_configuration_match": true,
+    "idle_worker_verified": true,
+    "verification_sha256": "80359fa4443925efd80c0d0ecfb55dabe789f755272c817a44d6f9d9e473fd14",
+    "record_audit_sha256": "d7a4690d8ebd2f057164c001a3311a516348a63983cccc7e2e1772672f81d30a",
+    "earlier_verification_sha256": "86c5ab846fd49f6a8d2b986b6ec097d429a8fb5fdea4fd966182e5c599e7430f",
+    "earlier_verification": "The first check found a stale worker heartbeat. A later fresh idle heartbeat appeared without service changes; the same checks then passed. The earlier failed check is retained.",
+    "limits": "Recorded configuration, mount metadata and health only; not identical process memory or data-volume contents."
   },
-  "provenance": {
-    "execution_closed": {
-      "sha256": "8cfb897b7a7111ee543a8149aefda4cf7b49e9a9ba13d2f7665c26f7ac3beb6f",
-      "size": 637
-    },
-    "execution_freeze": {
-      "sha256": "f6303c7dadf7135721b1cc9f0173c00dc2b453c1adda962fc323035e04f9fc9d",
-      "size": 717
-    },
-    "exporter_sha256": "babccd6cbdce0bd48b2405346252f483256041e02f30d86d5fa35af19c5dd51b"
-  },
-  "interpretation": [
-    "Accounting and planned execution completed, but the sleep finding prevents a claim of fully validated timing evidence.",
-    "Preserve all observations and failures; do not silently replace, remove or correct the affected pair.",
-    "The three consecutive sessions are not independent replications. Background activity and boundary-only monitoring prevent a claim of isolated backend effects.",
-    "Raw local evidence is bound by hashes. Contributor agent reviews are not external or human validation."
-  ]
+  "quality_preserved": false,
+  "backend_adoption": false,
+  "reproduction": "Public benchmark collection/reporting used the pinned execution revision. Raw records, local review notes and the private setup controller remain local; their hashes do not supply missing files. The public setup workflow is being completed separately. Earlier v2/v3 studies remain separate and are not pooled."
 }

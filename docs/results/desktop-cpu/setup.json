@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "setup_only",
   "study": "desktop",
-  "study_id": "qwen35-desktop-v3",
+  "study_id": "qwen35-desktop-v4",
   "excluded_from_performance_comparison": true,
   "planned_observations": 4,
   "attempted_observations": 4,
@@ -20,39 +20,70 @@
   ],
   "setup_timeout_seconds": 1200,
   "output_limit_bytes": 16777216,
+  "timing_policy": {
+    "version": 1,
+    "platform": "darwin",
+    "continuous_clock": "CLOCK_MONOTONIC_RAW",
+    "awake_clock": "CLOCK_UPTIME_RAW",
+    "sample_attempts": 3,
+    "sample_budget_ns": 100000000,
+    "max_bracket_ns": 1000000,
+    "allowance_ns": 1000000,
+    "native_sample_allowance_ns": 1000000,
+    "poll_ns": 100000000,
+    "assertion_flags": [
+      "-i",
+      "-w"
+    ],
+    "assertion_start_seconds": 3,
+    "probe_seconds": 0.5,
+    "cleanup_seconds": 5
+  },
+  "timing_helper_sha256": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
   "deadline": {
     "seconds": 600,
-    "formula": "max(600, ceil(2 * maxwall / 60) * 60)",
-    "longest_eligible_process_wall_seconds": 189.62202470796183,
-    "scope": "All four fresh desktop setup observations; no partial calibration."
+    "formula": "max(600, ceil(2 * longest eligible suspend-inclusive process wall seconds / 60) * 60)",
+    "longest_eligible_process_wall_seconds": 190.378253,
+    "scope": "All four fresh guarded setup observations; no partial calibration."
   },
   "resource_method": "wait4 for each owned child; Darwin peak resident memory is reported in bytes.",
   "limits": [
-    "Setup process wall times include loading, warmup and all four native repetitions. They are excluded from the performance comparison.",
-    "This is a deadline calibration heuristic, not a worst-case duration guarantee.",
-    "Page and swap deltas are system-wide observations; they do not identify paging by the benchmark child.",
-    "Resource faults and reported_swaps do not establish active child paging or swap-free execution.",
-    "Boundary readings do not prove constant host conditions. Unavailable thermal limits are not a measured-normal thermal state.",
-    "Docker was temporarily stopped under the frozen method. This record does not certify restoration or ordinary Docker-running performance.",
+    "Setup wall times include loading, warmup and all four native repetitions. They are excluded from the performance comparison.",
+    "The deadline formula is a calibration heuristic, not a worst-case guarantee.",
+    "Guarded continuity covers the four setup observations. The later measured study starts a separate timing phase after review.",
+    "Clock brackets and the declared allowance limit interruption detection. Sleep prevention does not block every suspension.",
+    "Page and swap deltas are system-wide; they do not identify paging by the benchmark child.",
+    "Resource faults and reported swaps do not establish active child paging or swap-free execution.",
+    "Boundary readings do not prove constant conditions. Unavailable thermal limits are not a measured-normal temperature.",
+    "Docker was temporarily stopped. This record does not certify restoration or ordinary Docker-running performance.",
     "KleidiAI answer quality and adoption remain rejected."
   ],
   "provenance": {
     "source_ledger": {
-      "sha256": "455c8761616964e373eef6a59c21fb6d2fdf7d56a116a0f720ea93f4923697f1",
-      "size": 82793
+      "sha256": "115a7ab857006d7ebc7fcf731590d860fb35f7aa92241a98598929cacb2eb7bf",
+      "size": 126572
     },
     "method": {
-      "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-      "size": 6858
+      "sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+      "size": 9516
+    },
+    "observed_review": {
+      "sha256": "108032bef42530f23b21fdc926d6a44e77d7a13a0d53476c74dc75315de84541",
+      "size": 33541
+    },
+    "validation_checks": {
+      "sha256": "11c41abf5075b67c01892e295d37672dd165bdfb0e76acab98b594a53f5e25d0",
+      "size": 47231
     },
     "controller_sha256": {
-      "setup_helper": "19496d7fcf9e4fe74cb4c34f42260e96d98c72d0584a99edfb350796f41b1fec",
+      "setup_helper": "f74c066baa7da02ea368dcd77f899c8ebc256082a75f592ca82508273961a4b8",
       "capture_controller": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
       "host_controller": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
-      "benchmark_controller": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
+      "timing_helper": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+      "benchmark_controller": "34603436817a4a151effca19c4c341f53bcbca365303d85c9a77b46e0a586235",
       "runtime_helper": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
       "trace_parser": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
-      "method": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693"
+      "method": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c"
     },
     "runtime": {
       "cpu": {
@@ -102,12 +133,15 @@
     },
     "model_sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
     "source_revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
-    "public_host_serializer": {
-      "sha256": "5ef144fbc0415e320ae312717d4e13fe69bb819ddb90724d08d813355567e4d2",
-      "size": 27339
+    "public_serializer": {
+      "sha256": "477ad571d306f15a8e49bac47966cf045c345300940076a0a3669fa04916b9de",
+      "size": 39328
     },
-    "one_off_exporter_sha256": "699f818d0f405d3ee37def749562cd1a2adde5de94c5d49b08ab8b76abacaf53",
-    "scope": "Raw artifacts and helper archives were verified against the pinned ledger. Large runtime/model assets were not rehashed during this export."
+    "one_off_exporter": {
+      "sha256": "fed51bcd433f6d78081ae9a4f38e65eecfc0f35ac6d4a0b7495711b3d069fe97",
+      "size": 13896
+    },
+    "scope": "Raw artifacts and helper archives were verified against the pinned ledger and observed review. Large runtime/model assets were not rehashed during export."
   },
   "observations": [
     {
@@ -121,13 +155,159 @@
         0,
         4
       ],
-      "wall_seconds": 189.62202470796183,
+      "wall_seconds": 190.378253,
+      "awake_seconds": 190.378252459,
+      "timing_valid": true,
+      "timing_guard": {
+        "valid": true,
+        "evidence_sha256": "523b2853fa250a892db2c23a23dd1582cb3332c689be78f1c6ea9d622acbb873",
+        "state": "closed",
+        "anchor": {
+          "continuous_before_ns": 3161353401837958,
+          "awake_ns": 1767129467339958,
+          "continuous_after_ns": 3161353401840541
+        },
+        "checkpoints": [
+          {
+            "label": "session:start",
+            "sample": {
+              "continuous_before_ns": 3161353466340958,
+              "awake_ns": 1767129531842375,
+              "continuous_after_ns": 3161353466341250
+            }
+          },
+          {
+            "label": "setup:verify-prior",
+            "sample": {
+              "continuous_before_ns": 3161353466361125,
+              "awake_ns": 1767129531862583,
+              "continuous_after_ns": 3161353466361416
+            }
+          },
+          {
+            "label": "setup:before-host",
+            "sample": {
+              "continuous_before_ns": 3161359006275000,
+              "awake_ns": 1767135071776916,
+              "continuous_after_ns": 3161359006275916
+            }
+          },
+          {
+            "label": "setup:after-host",
+            "sample": {
+              "continuous_before_ns": 3161359141057958,
+              "awake_ns": 1767135206559958,
+              "continuous_after_ns": 3161359141058875
+            }
+          },
+          {
+            "label": "cpu-pp2048:start",
+            "sample": {
+              "continuous_before_ns": 3161359151234833,
+              "awake_ns": 1767135216736541,
+              "continuous_after_ns": 3161359151235416
+            }
+          },
+          {
+            "label": "cpu-pp2048:end",
+            "sample": {
+              "continuous_before_ns": 3161549529487583,
+              "awake_ns": 1767325594989000,
+              "continuous_after_ns": 3161549529487833
+            }
+          },
+          {
+            "label": "setup:before-final-host",
+            "sample": {
+              "continuous_before_ns": 3161549529975041,
+              "awake_ns": 1767325595476583,
+              "continuous_after_ns": 3161549529975416
+            }
+          },
+          {
+            "label": "setup:after-final-host",
+            "sample": {
+              "continuous_before_ns": 3161549632627208,
+              "awake_ns": 1767325698129125,
+              "continuous_after_ns": 3161549632628041
+            }
+          },
+          {
+            "label": "setup:verified",
+            "sample": {
+              "continuous_before_ns": 3161549684454166,
+              "awake_ns": 1767325749955958,
+              "continuous_after_ns": 3161549684454791
+            }
+          },
+          {
+            "label": "session:end",
+            "sample": {
+              "continuous_before_ns": 3161549684488833,
+              "awake_ns": 1767325749990291,
+              "continuous_after_ns": 3161549684489083
+            }
+          },
+          {
+            "label": "session:closed",
+            "sample": {
+              "continuous_before_ns": 3161549790654833,
+              "awake_ns": 1767325856156916,
+              "continuous_after_ns": 3161549790655833
+            }
+          }
+        ],
+        "statistics": {
+          "max_bracket_ns": 10209,
+          "accepted_samples": 3753,
+          "sample_attempts": 3753,
+          "resamples": 0,
+          "max_gap_lower_ns": 0
+        },
+        "first_failure": null,
+        "cleanup_errors": [],
+        "assertion": {
+          "acquired": true,
+          "confirmed": true,
+          "released": true,
+          "observation_sha256": "73cc5475dba31c5569ba765709d9d685548ca1bf6d0d923671379be775042ae0",
+          "cleanup_clock": "continuous"
+        },
+        "previous_checkpoint_sha256": null,
+        "exit_sample": {
+          "continuous_before_ns": 3161549790654833,
+          "awake_ns": 1767325856156916,
+          "continuous_after_ns": 3161549790655833
+        }
+      },
+      "child_timing": {
+        "valid": true,
+        "reason": null,
+        "start": {
+          "continuous_before_ns": 3161359151234833,
+          "awake_ns": 1767135216736541,
+          "continuous_after_ns": 3161359151235416
+        },
+        "end": {
+          "continuous_before_ns": 3161549529487583,
+          "awake_ns": 1767325594989000,
+          "continuous_after_ns": 3161549529487833
+        },
+        "deadline_exceeded": false,
+        "continuous_seconds": 190.378253,
+        "awake_seconds": 190.378252459
+      },
+      "source_record": {
+        "sha256": "a8374f744c689cac6bacaca58427c4484fe9be1dc24bf11b19d20d79c1eed999",
+        "size": 26605
+      },
+      "previous_record_sha256": null,
       "resources": {
-        "peak_resident_bytes": 16167256064,
-        "user_seconds": 711.479498,
-        "system_seconds": 9.576065,
-        "minor_faults": 1628021,
-        "major_faults": 11841,
+        "peak_resident_bytes": 16156672000,
+        "user_seconds": 711.079776,
+        "system_seconds": 11.818097,
+        "minor_faults": 1775244,
+        "major_faults": 11844,
         "reported_swaps": 0
       },
       "eligible_for_deadline_calibration": true,
@@ -145,19 +325,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10618467778.56,
-            "free_bytes": 1192692285.44
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 260862573,
-            "Pageouts": 9437992,
-            "Swapins": 16745661,
-            "Swapouts": 19916853
+            "Pageins": 271937043,
+            "Pageouts": 9526310,
+            "Swapins": 16960366,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -174,9 +354,9 @@
         "load_average": {
           "status": "available",
           "value": [
-            7.7177734375,
-            7.77880859375,
-            9.8671875
+            6.11865234375,
+            7.56005859375,
+            7.373046875
           ]
         }
       },
@@ -194,19 +374,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10601690562.56,
-            "free_bytes": 1209469501.44
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 260913738,
-            "Pageouts": 9438793,
-            "Swapins": 16746919,
-            "Swapouts": 19916853
+            "Pageins": 271987112,
+            "Pageouts": 9527725,
+            "Swapins": 16960390,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -223,9 +403,9 @@
         "load_average": {
           "status": "available",
           "value": [
-            9.0849609375,
-            8.19384765625,
-            9.59765625
+            10.96435546875,
+            9.12353515625,
+            8.06298828125
           ]
         }
       },
@@ -239,22 +419,22 @@
         "swap": {
           "status": "available",
           "value": {
-            "used_bytes": -16777216.0
+            "used_bytes": 0.0
           }
         },
         "pages": {
           "status": "available",
           "value": {
-            "Pageins": 51165,
-            "Pageouts": 801,
-            "Swapins": 1258,
+            "Pageins": 50069,
+            "Pageouts": 1415,
+            "Swapins": 24,
             "Swapouts": 0
           }
         }
       },
       "raw_artifacts": {
         "native_stdout": {
-          "sha256": "7ccd72e42e5701412d9c5e97beb23ace7dd6e67a1c4732c3bcb7beb692bc826a",
+          "sha256": "70e39b4f33d479df9853af7c65229b21957339f9e156183102baf4dd33103462",
           "size": 1250
         },
         "native_stderr": {
@@ -262,8 +442,8 @@
           "size": 0
         },
         "archived_benchmark_controller": {
-          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
-          "size": 34939
+          "sha256": "34603436817a4a151effca19c4c341f53bcbca365303d85c9a77b46e0a586235",
+          "size": 47922
         },
         "archived_runtime_helper": {
           "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
@@ -274,16 +454,20 @@
           "size": 22972
         },
         "archived_method": {
-          "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-          "size": 6858
+          "sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+          "size": 9516
         },
         "archived_host_controller": {
           "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
           "size": 12278
         },
+        "archived_timing_helper": {
+          "sha256": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+          "size": 27807
+        },
         "archived_setup_helper": {
-          "sha256": "19496d7fcf9e4fe74cb4c34f42260e96d98c72d0584a99edfb350796f41b1fec",
-          "size": 17521
+          "sha256": "f74c066baa7da02ea368dcd77f899c8ebc256082a75f592ca82508273961a4b8",
+          "size": 32072
         },
         "archived_trace_parser": {
           "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
@@ -302,13 +486,159 @@
         0,
         4
       ],
-      "wall_seconds": 151.71576529205777,
+      "wall_seconds": 150.760358291,
+      "awake_seconds": 150.760357459,
+      "timing_valid": true,
+      "timing_guard": {
+        "valid": true,
+        "evidence_sha256": "51be7a8fa57d968a4f059314d5b77456d7a3377dc41591f7a26e9619b3ddf928",
+        "state": "closed",
+        "anchor": {
+          "continuous_before_ns": 3161567427824708,
+          "awake_ns": 1767343493326708,
+          "continuous_after_ns": 3161567427827583
+        },
+        "checkpoints": [
+          {
+            "label": "session:start",
+            "sample": {
+              "continuous_before_ns": 3161567493085166,
+              "awake_ns": 1767343558586708,
+              "continuous_after_ns": 3161567493085541
+            }
+          },
+          {
+            "label": "setup:verify-prior",
+            "sample": {
+              "continuous_before_ns": 3161567493101125,
+              "awake_ns": 1767343558602625,
+              "continuous_after_ns": 3161567493101458
+            }
+          },
+          {
+            "label": "setup:before-host",
+            "sample": {
+              "continuous_before_ns": 3161567786650375,
+              "awake_ns": 1767343852152166,
+              "continuous_after_ns": 3161567786651166
+            }
+          },
+          {
+            "label": "setup:after-host",
+            "sample": {
+              "continuous_before_ns": 3161567875176000,
+              "awake_ns": 1767343940677916,
+              "continuous_after_ns": 3161567875176791
+            }
+          },
+          {
+            "label": "kleidiai-pp2048:start",
+            "sample": {
+              "continuous_before_ns": 3161567879383125,
+              "awake_ns": 1767343944885166,
+              "continuous_after_ns": 3161567879384041
+            }
+          },
+          {
+            "label": "kleidiai-pp2048:end",
+            "sample": {
+              "continuous_before_ns": 3161718639741125,
+              "awake_ns": 1767494705242625,
+              "continuous_after_ns": 3161718639741416
+            }
+          },
+          {
+            "label": "setup:before-final-host",
+            "sample": {
+              "continuous_before_ns": 3161718640175125,
+              "awake_ns": 1767494705676708,
+              "continuous_after_ns": 3161718640175541
+            }
+          },
+          {
+            "label": "setup:after-final-host",
+            "sample": {
+              "continuous_before_ns": 3161718742312958,
+              "awake_ns": 1767494807815125,
+              "continuous_after_ns": 3161718742314000
+            }
+          },
+          {
+            "label": "setup:verified",
+            "sample": {
+              "continuous_before_ns": 3161718793887916,
+              "awake_ns": 1767494859389583,
+              "continuous_after_ns": 3161718793888458
+            }
+          },
+          {
+            "label": "session:end",
+            "sample": {
+              "continuous_before_ns": 3161718793914625,
+              "awake_ns": 1767494859416041,
+              "continuous_after_ns": 3161718793914875
+            }
+          },
+          {
+            "label": "session:closed",
+            "sample": {
+              "continuous_before_ns": 3161718903617083,
+              "awake_ns": 1767494969119208,
+              "continuous_after_ns": 3161718903618125
+            }
+          }
+        ],
+        "statistics": {
+          "resamples": 0,
+          "max_bracket_ns": 12709,
+          "max_gap_lower_ns": 0,
+          "accepted_samples": 2975,
+          "sample_attempts": 2975
+        },
+        "first_failure": null,
+        "cleanup_errors": [],
+        "assertion": {
+          "acquired": true,
+          "confirmed": true,
+          "released": true,
+          "observation_sha256": "35df85724d80d64ea1489bf95cc47ed256b2af2db960950f2833100721dc4759",
+          "cleanup_clock": "continuous"
+        },
+        "previous_checkpoint_sha256": "7463158cc9dbea03a0f047b82121a5d1d7287c8fc580b1108bb01aea0879ef31",
+        "exit_sample": {
+          "continuous_before_ns": 3161718903617083,
+          "awake_ns": 1767494969119208,
+          "continuous_after_ns": 3161718903618125
+        }
+      },
+      "child_timing": {
+        "valid": true,
+        "reason": null,
+        "start": {
+          "continuous_before_ns": 3161567879383125,
+          "awake_ns": 1767343944885166,
+          "continuous_after_ns": 3161567879384041
+        },
+        "end": {
+          "continuous_before_ns": 3161718639741125,
+          "awake_ns": 1767494705242625,
+          "continuous_after_ns": 3161718639741416
+        },
+        "deadline_exceeded": false,
+        "continuous_seconds": 150.760358291,
+        "awake_seconds": 150.760357459
+      },
+      "source_record": {
+        "sha256": "737ba8b99a0faefbbefca3b00bd1ea8d6eff00e5b17641770276b3bd045750e3",
+        "size": 27800
+      },
+      "previous_record_sha256": "a8374f744c689cac6bacaca58427c4484fe9be1dc24bf11b19d20d79c1eed999",
       "resources": {
-        "peak_resident_bytes": 17823612928,
-        "user_seconds": 503.998811,
-        "system_seconds": 10.008094,
-        "minor_faults": 1588031,
-        "major_faults": 102244,
+        "peak_resident_bytes": 16513826816,
+        "user_seconds": 502.906403,
+        "system_seconds": 11.052138,
+        "minor_faults": 1712338,
+        "major_faults": 84754,
         "reported_swaps": 0
       },
       "eligible_for_deadline_calibration": true,
@@ -326,19 +656,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10601690562.56,
-            "free_bytes": 1209469501.44
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 260920688,
-            "Pageouts": 9438793,
-            "Swapins": 16747181,
-            "Swapouts": 19916853
+            "Pageins": 271992863,
+            "Pageouts": 9527725,
+            "Swapins": 16960398,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -355,9 +685,9 @@
         "load_average": {
           "status": "available",
           "value": [
-            6.23681640625,
-            7.55810546875,
-            9.2900390625
+            9.94384765625,
+            8.99951171875,
+            8.03759765625
           ]
         }
       },
@@ -375,19 +705,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10551296000.0,
-            "free_bytes": 1259864064.0
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 261082495,
-            "Pageouts": 9439688,
-            "Swapins": 16750640,
-            "Swapouts": 19916853
+            "Pageins": 272140488,
+            "Pageouts": 9529018,
+            "Swapins": 16960524,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -404,9 +734,9 @@
         "load_average": {
           "status": "available",
           "value": [
-            7.36962890625,
-            7.57275390625,
-            9.01171875
+            9.00927734375,
+            9.0029296875,
+            8.1904296875
           ]
         }
       },
@@ -422,31 +752,31 @@
         "swap": {
           "status": "available",
           "value": {
-            "used_bytes": -50394562.559999466
+            "used_bytes": 0.0
           }
         },
         "pages": {
           "status": "available",
           "value": {
-            "Pageins": 161807,
-            "Pageouts": 895,
-            "Swapins": 3459,
+            "Pageins": 147625,
+            "Pageouts": 1293,
+            "Swapins": 126,
             "Swapouts": 0
           }
         }
       },
       "raw_artifacts": {
         "native_stdout": {
-          "sha256": "46c2e51a121d4d73b0101b092904575b8a06bb25117c82d17da740032a7c1626",
-          "size": 1247
+          "sha256": "dc8788e42b6218b3a14525375c80f25b6688e27f7d1d6d6760c555a2ff4ed9ce",
+          "size": 1250
         },
         "native_stderr": {
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "size": 0
         },
         "archived_benchmark_controller": {
-          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
-          "size": 34939
+          "sha256": "34603436817a4a151effca19c4c341f53bcbca365303d85c9a77b46e0a586235",
+          "size": 47922
         },
         "archived_runtime_helper": {
           "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
@@ -457,16 +787,20 @@
           "size": 22972
         },
         "archived_method": {
-          "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-          "size": 6858
+          "sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+          "size": 9516
         },
         "archived_host_controller": {
           "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
           "size": 12278
         },
+        "archived_timing_helper": {
+          "sha256": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+          "size": 27807
+        },
         "archived_setup_helper": {
-          "sha256": "19496d7fcf9e4fe74cb4c34f42260e96d98c72d0584a99edfb350796f41b1fec",
-          "size": 17521
+          "sha256": "f74c066baa7da02ea368dcd77f899c8ebc256082a75f592ca82508273961a4b8",
+          "size": 32072
         },
         "archived_trace_parser": {
           "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
@@ -485,9 +819,9 @@
           "pages": {
             "status": "available",
             "value": {
-              "Pageins": 6950,
+              "Pageins": 5751,
               "Pageouts": 0,
-              "Swapins": 262,
+              "Swapins": 8,
               "Swapouts": 0
             }
           }
@@ -509,13 +843,159 @@
         2048,
         4
       ],
-      "wall_seconds": 92.31967437500134,
+      "wall_seconds": 90.976477041,
+      "awake_seconds": 90.976476417,
+      "timing_valid": true,
+      "timing_guard": {
+        "valid": true,
+        "evidence_sha256": "85fe6fbbfcb0f331fff1e0cc1388d2d92f9f50fbca3f6989198869d7f6348f00",
+        "state": "closed",
+        "anchor": {
+          "continuous_before_ns": 3161734370346375,
+          "awake_ns": 1767510435850625,
+          "continuous_after_ns": 3161734370351041
+        },
+        "checkpoints": [
+          {
+            "label": "session:start",
+            "sample": {
+              "continuous_before_ns": 3161734405414833,
+              "awake_ns": 1767510470916208,
+              "continuous_after_ns": 3161734405415041
+            }
+          },
+          {
+            "label": "setup:verify-prior",
+            "sample": {
+              "continuous_before_ns": 3161734405431625,
+              "awake_ns": 1767510470933041,
+              "continuous_after_ns": 3161734405431875
+            }
+          },
+          {
+            "label": "setup:before-host",
+            "sample": {
+              "continuous_before_ns": 3161734545185916,
+              "awake_ns": 1767510610687708,
+              "continuous_after_ns": 3161734545186750
+            }
+          },
+          {
+            "label": "setup:after-host",
+            "sample": {
+              "continuous_before_ns": 3161734626635833,
+              "awake_ns": 1767510692138000,
+              "continuous_after_ns": 3161734626636875
+            }
+          },
+          {
+            "label": "cpu-tg128-d2048:start",
+            "sample": {
+              "continuous_before_ns": 3161734632850000,
+              "awake_ns": 1767510698351791,
+              "continuous_after_ns": 3161734632850666
+            }
+          },
+          {
+            "label": "cpu-tg128-d2048:end",
+            "sample": {
+              "continuous_before_ns": 3161825609326750,
+              "awake_ns": 1767601674828208,
+              "continuous_after_ns": 3161825609327041
+            }
+          },
+          {
+            "label": "setup:before-final-host",
+            "sample": {
+              "continuous_before_ns": 3161825609617041,
+              "awake_ns": 1767601675118500,
+              "continuous_after_ns": 3161825609617291
+            }
+          },
+          {
+            "label": "setup:after-final-host",
+            "sample": {
+              "continuous_before_ns": 3161825707510916,
+              "awake_ns": 1767601773012916,
+              "continuous_after_ns": 3161825707511833
+            }
+          },
+          {
+            "label": "setup:verified",
+            "sample": {
+              "continuous_before_ns": 3161825753824166,
+              "awake_ns": 1767601819325875,
+              "continuous_after_ns": 3161825753824750
+            }
+          },
+          {
+            "label": "session:end",
+            "sample": {
+              "continuous_before_ns": 3161825753850041,
+              "awake_ns": 1767601819351458,
+              "continuous_after_ns": 3161825753850291
+            }
+          },
+          {
+            "label": "session:closed",
+            "sample": {
+              "continuous_before_ns": 3161825864626125,
+              "awake_ns": 1767601930127666,
+              "continuous_after_ns": 3161825864626583
+            }
+          }
+        ],
+        "statistics": {
+          "resamples": 0,
+          "accepted_samples": 1801,
+          "max_gap_lower_ns": 0,
+          "sample_attempts": 1801,
+          "max_bracket_ns": 4666
+        },
+        "first_failure": null,
+        "cleanup_errors": [],
+        "assertion": {
+          "acquired": true,
+          "confirmed": true,
+          "released": true,
+          "observation_sha256": "284a32bc61f2d31e368a5d948bdf1f346d2334cf4e48f7f093c3269002776c7f",
+          "cleanup_clock": "continuous"
+        },
+        "previous_checkpoint_sha256": "a2c20b27939ee9ece21da8ee89c46ba7ba2426b3d9aa38d05479a86ee65e1cf7",
+        "exit_sample": {
+          "continuous_before_ns": 3161825864626125,
+          "awake_ns": 1767601930127666,
+          "continuous_after_ns": 3161825864626583
+        }
+      },
+      "child_timing": {
+        "valid": true,
+        "reason": null,
+        "start": {
+          "continuous_before_ns": 3161734632850000,
+          "awake_ns": 1767510698351791,
+          "continuous_after_ns": 3161734632850666
+        },
+        "end": {
+          "continuous_before_ns": 3161825609326750,
+          "awake_ns": 1767601674828208,
+          "continuous_after_ns": 3161825609327041
+        },
+        "deadline_exceeded": false,
+        "continuous_seconds": 90.976477041,
+        "awake_seconds": 90.976476417
+      },
+      "source_record": {
+        "sha256": "1edeb4c2fddc7a7f33df83c89ebd86e7be777726b5f39e8515d67b6b53d26ddd",
+        "size": 27630
+      },
+      "previous_record_sha256": "737ba8b99a0faefbbefca3b00bd1ea8d6eff00e5b17641770276b3bd045750e3",
       "resources": {
-        "peak_resident_bytes": 17847336960,
-        "user_seconds": 328.037242,
-        "system_seconds": 4.523446,
-        "minor_faults": 1196437,
-        "major_faults": 56334,
+        "peak_resident_bytes": 16775544832,
+        "user_seconds": 316.030594,
+        "system_seconds": 8.495422,
+        "minor_faults": 1507808,
+        "major_faults": 121829,
         "reported_swaps": 0
       },
       "eligible_for_deadline_calibration": true,
@@ -533,19 +1013,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10542907392.0,
-            "free_bytes": 1268252672.0
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 261094891,
-            "Pageouts": 9439688,
-            "Swapins": 16751152,
-            "Swapouts": 19916853
+            "Pageins": 272145628,
+            "Pageouts": 9529018,
+            "Swapins": 16960524,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -562,9 +1042,9 @@
         "load_average": {
           "status": "available",
           "value": [
-            6.232421875,
-            7.29345703125,
-            8.876953125
+            7.50048828125,
+            8.66064453125,
+            8.08642578125
           ]
         }
       },
@@ -582,19 +1062,19 @@
         "swap": {
           "status": "available",
           "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10534518784.0,
-            "free_bytes": 1276641280.0
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
           }
         },
         "pages": {
           "status": "available",
           "value": {
             "page_size_bytes": 16384,
-            "Pageins": 261169853,
-            "Pageouts": 9440060,
-            "Swapins": 16751594,
-            "Swapouts": 19916853
+            "Pageins": 272295537,
+            "Pageouts": 9529708,
+            "Swapins": 16960544,
+            "Swapouts": 19981315
           }
         },
         "power_source": {
@@ -611,9 +1091,362 @@
         "load_average": {
           "status": "available",
           "value": [
-            10.2314453125,
-            8.27978515625,
-            9.08349609375
+            8.81787109375,
+            8.6650390625,
+            8.1337890625
+          ]
+        }
+      },
+      "host_findings": [
+        "swap_activity"
+      ],
+      "host_violations": [],
+      "preflight_host_findings": [],
+      "preflight_host_violations": [],
+      "host_deltas": {
+        "swap": {
+          "status": "available",
+          "value": {
+            "used_bytes": 0.0
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "Pageins": 149909,
+            "Pageouts": 690,
+            "Swapins": 20,
+            "Swapouts": 0
+          }
+        }
+      },
+      "raw_artifacts": {
+        "native_stdout": {
+          "sha256": "4a030f1e70ce43c0a0e6c293f6d71dfc55d18046f08d87b7b9242c1955e6ec8f",
+          "size": 1252
+        },
+        "native_stderr": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size": 0
+        },
+        "archived_benchmark_controller": {
+          "sha256": "34603436817a4a151effca19c4c341f53bcbca365303d85c9a77b46e0a586235",
+          "size": 47922
+        },
+        "archived_runtime_helper": {
+          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+          "size": 9785
+        },
+        "archived_capture_controller": {
+          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
+          "size": 22972
+        },
+        "archived_method": {
+          "sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+          "size": 9516
+        },
+        "archived_host_controller": {
+          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+          "size": 12278
+        },
+        "archived_timing_helper": {
+          "sha256": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+          "size": 27807
+        },
+        "archived_setup_helper": {
+          "sha256": "f74c066baa7da02ea368dcd77f899c8ebc256082a75f592ca82508273961a4b8",
+          "size": 32072
+        },
+        "archived_trace_parser": {
+          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
+          "size": 31168
+        }
+      },
+      "host_gap": {
+        "previous_run": "kleidiai-pp2048",
+        "deltas": {
+          "swap": {
+            "status": "available",
+            "value": {
+              "used_bytes": 0.0
+            }
+          },
+          "pages": {
+            "status": "available",
+            "value": {
+              "Pageins": 5140,
+              "Pageouts": 0,
+              "Swapins": 0,
+              "Swapouts": 0
+            }
+          }
+        },
+        "findings": [],
+        "violations": []
+      }
+    },
+    {
+      "id": "kleidiai-tg128-d2048",
+      "backend": "kleidiai",
+      "workload": "tg128-d2048",
+      "state": "completed",
+      "shape": [
+        0,
+        128,
+        2048,
+        4
+      ],
+      "wall_seconds": 115.171022916,
+      "awake_seconds": 115.171022417,
+      "timing_valid": true,
+      "timing_guard": {
+        "valid": true,
+        "evidence_sha256": "5dda7e8c00bf185364e3cfa1027ea5eeed66c89cc4870b198ec55a4017330ad7",
+        "state": "closed",
+        "anchor": {
+          "continuous_before_ns": 3161864987827250,
+          "awake_ns": 1767641053329166,
+          "continuous_after_ns": 3161864987829583
+        },
+        "checkpoints": [
+          {
+            "label": "session:start",
+            "sample": {
+              "continuous_before_ns": 3161865025863333,
+              "awake_ns": 1767641091364875,
+              "continuous_after_ns": 3161865025863666
+            }
+          },
+          {
+            "label": "setup:verify-prior",
+            "sample": {
+              "continuous_before_ns": 3161865025881541,
+              "awake_ns": 1767641091383041,
+              "continuous_after_ns": 3161865025881875
+            }
+          },
+          {
+            "label": "setup:before-host",
+            "sample": {
+              "continuous_before_ns": 3161865131012833,
+              "awake_ns": 1767641196514583,
+              "continuous_after_ns": 3161865131013458
+            }
+          },
+          {
+            "label": "setup:after-host",
+            "sample": {
+              "continuous_before_ns": 3161865221379250,
+              "awake_ns": 1767641286881291,
+              "continuous_after_ns": 3161865221380166
+            }
+          },
+          {
+            "label": "kleidiai-tg128-d2048:start",
+            "sample": {
+              "continuous_before_ns": 3161865226014875,
+              "awake_ns": 1767641291516541,
+              "continuous_after_ns": 3161865226015416
+            }
+          },
+          {
+            "label": "kleidiai-tg128-d2048:end",
+            "sample": {
+              "continuous_before_ns": 3161980397037500,
+              "awake_ns": 1767756462538958,
+              "continuous_after_ns": 3161980397037791
+            }
+          },
+          {
+            "label": "setup:before-final-host",
+            "sample": {
+              "continuous_before_ns": 3161980397481458,
+              "awake_ns": 1767756462982875,
+              "continuous_after_ns": 3161980397481708
+            }
+          },
+          {
+            "label": "setup:after-final-host",
+            "sample": {
+              "continuous_before_ns": 3161980501839958,
+              "awake_ns": 1767756567341916,
+              "continuous_after_ns": 3161980501840791
+            }
+          },
+          {
+            "label": "setup:verified",
+            "sample": {
+              "continuous_before_ns": 3161980551865833,
+              "awake_ns": 1767756617367666,
+              "continuous_after_ns": 3161980551866500
+            }
+          },
+          {
+            "label": "session:end",
+            "sample": {
+              "continuous_before_ns": 3161980551891666,
+              "awake_ns": 1767756617393083,
+              "continuous_after_ns": 3161980551891916
+            }
+          },
+          {
+            "label": "session:closed",
+            "sample": {
+              "continuous_before_ns": 3161980662735791,
+              "awake_ns": 1767756728237958,
+              "continuous_after_ns": 3161980662736833
+            }
+          }
+        ],
+        "statistics": {
+          "accepted_samples": 2277,
+          "max_bracket_ns": 9208,
+          "sample_attempts": 2277,
+          "resamples": 0,
+          "max_gap_lower_ns": 0
+        },
+        "first_failure": null,
+        "cleanup_errors": [],
+        "assertion": {
+          "acquired": true,
+          "confirmed": true,
+          "released": true,
+          "observation_sha256": "1d8c2d4879cdaceac5b45eea08cd66ddb9470b68b59714529f4f1c513a5d69b1",
+          "cleanup_clock": "continuous"
+        },
+        "previous_checkpoint_sha256": "11e4671ed57d9d5c9d6ed91b4b8eacea984fa1f275eec008285fdf670ab1603a",
+        "exit_sample": {
+          "continuous_before_ns": 3161980662735791,
+          "awake_ns": 1767756728237958,
+          "continuous_after_ns": 3161980662736833
+        }
+      },
+      "child_timing": {
+        "valid": true,
+        "reason": null,
+        "start": {
+          "continuous_before_ns": 3161865226014875,
+          "awake_ns": 1767641291516541,
+          "continuous_after_ns": 3161865226015416
+        },
+        "end": {
+          "continuous_before_ns": 3161980397037500,
+          "awake_ns": 1767756462538958,
+          "continuous_after_ns": 3161980397037791
+        },
+        "deadline_exceeded": false,
+        "continuous_seconds": 115.171022916,
+        "awake_seconds": 115.171022417
+      },
+      "source_record": {
+        "sha256": "f48c4f88082a2c693567d82477aece683bb34b4929e83b75ba9e898cba81845d",
+        "size": 27824
+      },
+      "previous_record_sha256": "1edeb4c2fddc7a7f33df83c89ebd86e7be777726b5f39e8515d67b6b53d26ddd",
+      "resources": {
+        "peak_resident_bytes": 16610246656,
+        "user_seconds": 362.867588,
+        "system_seconds": 10.732966,
+        "minor_faults": 1647297,
+        "major_faults": 77546,
+        "reported_swaps": 0
+      },
+      "eligible_for_deadline_calibration": true,
+      "host_before": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7419398717.44,
+            "free_bytes": 1170535874.56
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 272310253,
+            "Pageouts": 9529708,
+            "Swapins": 16960552,
+            "Swapouts": 19981315
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            7.30419921875,
+            8.28515625,
+            8.017578125
+          ]
+        }
+      },
+      "host_after": {
+        "power_mode": {
+          "status": "available",
+          "value": {
+            "powermode": 0
+          }
+        },
+        "thermal": {
+          "status": "unavailable",
+          "reason": "cpu_limits_not_reported"
+        },
+        "swap": {
+          "status": "available",
+          "value": {
+            "total_bytes": 8589934592.0,
+            "used_bytes": 7411010109.44,
+            "free_bytes": 1178924482.56
+          }
+        },
+        "pages": {
+          "status": "available",
+          "value": {
+            "page_size_bytes": 16384,
+            "Pageins": 272420171,
+            "Pageouts": 9530636,
+            "Swapins": 16960956,
+            "Swapouts": 19981315
+          }
+        },
+        "power_source": {
+          "status": "available",
+          "value": "AC Power"
+        },
+        "memory_pressure": {
+          "status": "available",
+          "value": {
+            "code": 1,
+            "label": "normal"
+          }
+        },
+        "load_average": {
+          "status": "available",
+          "value": [
+            9.08251953125,
+            8.60595703125,
+            8.17138671875
           ]
         }
       },
@@ -635,25 +1468,25 @@
         "pages": {
           "status": "available",
           "value": {
-            "Pageins": 74962,
-            "Pageouts": 372,
-            "Swapins": 442,
+            "Pageins": 109918,
+            "Pageouts": 928,
+            "Swapins": 404,
             "Swapouts": 0
           }
         }
       },
       "raw_artifacts": {
         "native_stdout": {
-          "sha256": "fc904a63b51608bb49f72a065a22eb9c32b1da4022ad73a06a71aa72b27dd850",
-          "size": 1252
+          "sha256": "f3894bb273fc73f5102fead4872ec729699db9850fe44bc0f4d472a4f5bdf709",
+          "size": 1251
         },
         "native_stderr": {
           "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
           "size": 0
         },
         "archived_benchmark_controller": {
-          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
-          "size": 34939
+          "sha256": "34603436817a4a151effca19c4c341f53bcbca365303d85c9a77b46e0a586235",
+          "size": 47922
         },
         "archived_runtime_helper": {
           "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
@@ -664,223 +1497,20 @@
           "size": 22972
         },
         "archived_method": {
-          "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-          "size": 6858
+          "sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+          "size": 9516
         },
         "archived_host_controller": {
           "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
           "size": 12278
         },
-        "archived_setup_helper": {
-          "sha256": "19496d7fcf9e4fe74cb4c34f42260e96d98c72d0584a99edfb350796f41b1fec",
-          "size": 17521
-        },
-        "archived_trace_parser": {
-          "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
-          "size": 31168
-        }
-      },
-      "host_gap": {
-        "previous_run": "kleidiai-pp2048",
-        "deltas": {
-          "swap": {
-            "status": "available",
-            "value": {
-              "used_bytes": -8388608.0
-            }
-          },
-          "pages": {
-            "status": "available",
-            "value": {
-              "Pageins": 12396,
-              "Pageouts": 0,
-              "Swapins": 512,
-              "Swapouts": 0
-            }
-          }
-        },
-        "findings": [
-          "swap_activity"
-        ],
-        "violations": []
-      }
-    },
-    {
-      "id": "kleidiai-tg128-d2048",
-      "backend": "kleidiai",
-      "workload": "tg128-d2048",
-      "state": "completed",
-      "shape": [
-        0,
-        128,
-        2048,
-        4
-      ],
-      "wall_seconds": 112.95128658297472,
-      "resources": {
-        "peak_resident_bytes": 18075729920,
-        "user_seconds": 366.422863,
-        "system_seconds": 3.528296,
-        "minor_faults": 1198058,
-        "major_faults": 13924,
-        "reported_swaps": 0
-      },
-      "eligible_for_deadline_calibration": true,
-      "host_before": {
-        "power_mode": {
-          "status": "available",
-          "value": {
-            "powermode": 0
-          }
-        },
-        "thermal": {
-          "status": "unavailable",
-          "reason": "cpu_limits_not_reported"
-        },
-        "swap": {
-          "status": "available",
-          "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10534518784.0,
-            "free_bytes": 1276641280.0
-          }
-        },
-        "pages": {
-          "status": "available",
-          "value": {
-            "page_size_bytes": 16384,
-            "Pageins": 261173799,
-            "Pageouts": 9440060,
-            "Swapins": 16751775,
-            "Swapouts": 19916853
-          }
-        },
-        "power_source": {
-          "status": "available",
-          "value": "AC Power"
-        },
-        "memory_pressure": {
-          "status": "available",
-          "value": {
-            "code": 1,
-            "label": "normal"
-          }
-        },
-        "load_average": {
-          "status": "available",
-          "value": [
-            9.48828125,
-            8.21728515625,
-            9.0400390625
-          ]
-        }
-      },
-      "host_after": {
-        "power_mode": {
-          "status": "available",
-          "value": {
-            "powermode": 0
-          }
-        },
-        "thermal": {
-          "status": "unavailable",
-          "reason": "cpu_limits_not_reported"
-        },
-        "swap": {
-          "status": "available",
-          "value": {
-            "total_bytes": 11811160064.0,
-            "used_bytes": 10509352960.0,
-            "free_bytes": 1301807104.0
-          }
-        },
-        "pages": {
-          "status": "available",
-          "value": {
-            "page_size_bytes": 16384,
-            "Pageins": 261202983,
-            "Pageouts": 9440443,
-            "Swapins": 16752449,
-            "Swapouts": 19916853
-          }
-        },
-        "power_source": {
-          "status": "available",
-          "value": "AC Power"
-        },
-        "memory_pressure": {
-          "status": "available",
-          "value": {
-            "code": 1,
-            "label": "normal"
-          }
-        },
-        "load_average": {
-          "status": "available",
-          "value": [
-            9.13427734375,
-            8.41845703125,
-            9.01123046875
-          ]
-        }
-      },
-      "host_findings": [
-        "swap_activity"
-      ],
-      "host_violations": [],
-      "preflight_host_findings": [
-        "swap_activity"
-      ],
-      "preflight_host_violations": [],
-      "host_deltas": {
-        "swap": {
-          "status": "available",
-          "value": {
-            "used_bytes": -25165824.0
-          }
-        },
-        "pages": {
-          "status": "available",
-          "value": {
-            "Pageins": 29184,
-            "Pageouts": 383,
-            "Swapins": 674,
-            "Swapouts": 0
-          }
-        }
-      },
-      "raw_artifacts": {
-        "native_stdout": {
-          "sha256": "57a071853a68aca44fd354627708df4ab630074b0cd6776567f5b402d71fd69d",
-          "size": 1250
-        },
-        "native_stderr": {
-          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          "size": 0
-        },
-        "archived_benchmark_controller": {
-          "sha256": "f7249ba0677a3831a3e677c63de4244c80c0da6bc9b0ce0b1f092748bc7b35fa",
-          "size": 34939
-        },
-        "archived_runtime_helper": {
-          "sha256": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
-          "size": 9785
-        },
-        "archived_capture_controller": {
-          "sha256": "ff9a6033346f6ea720bd18c281c98080e9018ea8a3a1c44fc69f4d7450b5540c",
-          "size": 22972
-        },
-        "archived_method": {
-          "sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-          "size": 6858
-        },
-        "archived_host_controller": {
-          "sha256": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
-          "size": 12278
+        "archived_timing_helper": {
+          "sha256": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+          "size": 27807
         },
         "archived_setup_helper": {
-          "sha256": "19496d7fcf9e4fe74cb4c34f42260e96d98c72d0584a99edfb350796f41b1fec",
-          "size": 17521
+          "sha256": "f74c066baa7da02ea368dcd77f899c8ebc256082a75f592ca82508273961a4b8",
+          "size": 32072
         },
         "archived_trace_parser": {
           "sha256": "b5c145a0cd88a6902d2f0b08eb2e85966de7f087ee440ff635e720b2765df840",
@@ -899,9 +1529,9 @@
           "pages": {
             "status": "available",
             "value": {
-              "Pageins": 3946,
+              "Pageins": 14716,
               "Pageouts": 0,
-              "Swapins": 181,
+              "Swapins": 8,
               "Swapouts": 0
             }
           }

@@ -3,8 +3,9 @@
 The Qwen3.5-9B Q8_0 checks confirm that KleidiAI's intended kernels ran, but
 the backend failed the frozen answer-quality comparison. The application stays
 on CPU. Controlled performance results are pending host and setup checks.
-A separate [desktop study](../desktop-cpu/README.md) completed all 48 runs, but
-system sleep affected its timings. It does not complete the controlled comparison.
+A separate [guarded desktop study](../desktop-cpu/README.md) completed 48 valid
+runs. Prompt processing favored KleidiAI; generation favored CPU. All pairs
+recorded swap activity, so this does not complete the strict controlled comparison.
 
 These observations use the M1 Max with 32 GB memory, four CPU threads and the
 pinned builds in the [benchmark method](../../benchmarks.md).

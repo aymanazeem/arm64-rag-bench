@@ -71,11 +71,13 @@ background interference. Publish all planned outcomes, host findings and session
 order. Consecutive blocks are not independent replications. These small samples
 do not support significance tests, population confidence intervals or tail latency.
 
-The [recorded desktop study](results/desktop-cpu/README.md) exposed a sleep gap:
+The [v3 desktop study](results/desktop-cpu/v3/README.md) exposed a sleep gap:
 the native timer counted system sleep while Python's deadline clock paused.
 Its complete schedule is preserved, but it is not an uninterrupted speed
 comparison. The timing guard described below applies to new studies. It does not
-validate or change those earlier observations.
+validate or change those earlier observations. The later
+[guarded desktop study](results/desktop-cpu/README.md) completed all 48 runs
+under its frozen checks; it remains separate from the strict no-swap study.
 
 ## Sleep and clock checks
 
@@ -97,9 +99,12 @@ quality. Preserve all observations and failures; never subtract sleep time or
 replace affected runs.
 
 Freeze a new method and collect fresh guarded setup evidence before another
-study. Old plans cannot run under changed source files. To reproduce the old
-desktop record, use its original code at commit
+study. Old plans cannot run under changed source files. To inspect the v3 record,
+use its original code at commit
 `3739ddc7efefc8bf1e928e68a0c69c9a825fe6e0` and retain its sleep warning.
+The v4 collector and reporter used
+`5c5d59eb52ae6aaeda89297bb7b464ba9e19afc3`. Historical raw records and private
+setup controllers are not supplied by those Git revisions.
 
 ## Workloads and controls
 
