@@ -4,7 +4,7 @@ A local document question-answering application and an engineering investigation
 
 The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
 
-**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. A guarded desktop study completed 48 valid runs: prompt processing favored KleidiAI, while generation favored CPU. Application latency and memory measurements are next. A valid citation location does not guarantee a correct answer.
+**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. A guarded desktop study completed 48 valid runs: prompt processing favored KleidiAI, while generation favored CPU. The CPU application completed 21 reviewed latency and memory observations on known questions. A valid citation location does not guarantee a correct answer.
 
 - [Development and GitHub setup](docs/setup.md)
 - [Index and search documents](docs/search.md)
@@ -14,6 +14,8 @@ The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is 
 - [Runtime evidence and limits](docs/results/runtime-feasibility/README.md)
 - [CPU and KleidiAI quality and runtime checks](docs/results/controlled-cpu/README.md)
 - [Guarded desktop CPU results](docs/results/desktop-cpu/README.md)
+- [Buffered application results](docs/results/application-performance/README.md)
+- [Project report](docs/report.md)
 - [CPU benchmark methods](docs/benchmarks.md)
 - [Evaluation cases and scoring](eval/README.md)
 - [Original reference brief](docs/project-brief.md)

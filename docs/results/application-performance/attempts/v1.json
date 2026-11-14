@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "kind": "application-compatibility-attempt",
+  "study_id": "qwen35-application-v1",
+  "status": "failed_attempt_preserved",
+  "included_in_measurements": false,
+  "compatibility": {
+    "planned": 2,
+    "attempted": 1,
+    "completed": 0,
+    "failed": 1,
+    "unattempted": 1,
+    "completed_answers": 0,
+    "observations": [
+      {
+        "stage": "cli",
+        "case_id": "val-015",
+        "status": "failed"
+      },
+      {
+        "stage": "fixed",
+        "case_id": "val-015",
+        "status": "unattempted"
+      }
+    ]
+  },
+  "measured": {
+    "planned": 21,
+    "attempted": 0,
+    "unobserved": 21
+  },
+  "failure": {
+    "reason": "clock_discontinuity",
+    "clock_gap_lower_ns": 312636558208,
+    "clock_gap_upper_ns": 312636560458,
+    "clock_allowance_ns": 1000000,
+    "worker_deadline_exceeded": false,
+    "power_log_event": "Maintenance Sleep",
+    "power_log_reported_seconds": 315,
+    "interpretation": "The clock gate stopped work after sleep despite the idle-sleep assertion. The clock-gap bounds and the power log duration are separate observations; neither repairs the failed timing."
+  },
+  "cleanup": {
+    "worker_reaped": true,
+    "worker_and_native_group_cleanup_verified": true,
+    "idle_sleep_assertion_released": true,
+    "cleanup_failures": 0
+  },
+  "integrity": {
+    "source_and_archived_source_pins_verified": 31,
+    "archived_plan_and_launch_claim_verified": true,
+    "artifact_inventory_and_hashes_verified": true,
+    "first_failure_preserved": true,
+    "completed_request_input_identity_available": false
+  },
+  "evidence_sha256": {
+    "plan": "3c516aa7ab48b52cb615bb01a2315298183dbc04deed5461b0ddbdefeda830c5",
+    "execution_freeze": "20c8e07b02ea7bc73cff1865ac8db83975f668d859dea5e94b726eb7d1c80cde",
+    "compatibility_check": "930acac90d7556f736740c23d587d29cc508b77f53bed0a598243bf02d111666",
+    "cli_run": "7295d3f1eec63661a062c78f651511fdf013f4645d09c3aaade5b1c75d189b7c",
+    "power_log": "12c20deedf03b0649ab71c9d5502f9d7c405660f1c998f188b56a659e5f1b0ab",
+    "independent_failure_review": "9211ec8f882aaa5c8b5451a2f9555d322ffbe4ab45ec06a3c472a0b13d7461c9"
+  },
+  "prospective_follow_up": {
+    "study_id": "qwen35-application-v2",
+    "method_sha256": "0854a011ea5e9ce7e598aad429aa042e8958305e93f08bd9ac4af322ed216274",
+    "change": "Add a separately owned, bounded AC-only system-sleep assertion before each stage. Keep the application code, frozen input configuration, schedule and existing host, clock and deadline checks unchanged.",
+    "preservation": "V1 remains failed. V2 requires a new prospective plan and output directory; this record reports no V2 outcome."
+  },
+  "limits": [
+    "No application latency, successful model compatibility or answer-quality result follows from this attempt.",
+    "No completed answer trace establishes rendered prompt or token identity. Source integrity does not establish a completed request.",
+    "Raw traces remain local. Published hashes identify retained evidence but do not provide public reanalysis of those private records."
+  ]
+}

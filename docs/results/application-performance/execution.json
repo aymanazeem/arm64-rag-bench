@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "kind": "application-execution",
+  "study_id": "qwen35-application-v2",
+  "status": "measurements_and_operational_closure_verified",
+  "plan_sha256": "42d93de0802d5ed1c15f7fff6e4ca734b02e9f797db801a5d671c4a26efb8383",
+  "report": {
+    "path": "report.json",
+    "sha256": "9413702d29163ad5ad84123f5b853f406c19d4cbaac289bff71adeb6f98d66b2",
+    "status": "mechanically_complete_unmodified",
+    "metadata": "The report supplies model, runtime, source, input, host and row identities. These companions add operating conditions, semantic review and interpretation without changing its pending review labels."
+  },
+  "declared_conditions": {
+    "desktop": "Local macOS desktop with ordinary desktop processes. No other project test, build or model jobs during observations.",
+    "background_services": "Docker Desktop and its recorded running services were temporarily stopped for collection; restore and verify them afterward.",
+    "power": "AC power and open lid; frozen power mode and host identity. No persistent power-setting changes.",
+    "memory": "Normal pressure required. Swap increases are retained without selecting observations; unavailable thermal limits remain a limitation.",
+    "cache": "Every observation starts a fresh server process. Integrity checks read the model and warm the filesystem cache; this is not a cold-storage, fresh-download or fresh-build measurement.",
+    "failure_policy": "Keep the first failure and all planned rows. No replaced observations or silent retries. An operating-condition change requires a new prospective study."
+  },
+  "prior_attempt": {
+    "path": "attempts/v1.json",
+    "sha256": "bd5986a77187b03bbb053c5df67c36602aed8604369de9415274d30ee78f3319",
+    "status": "failed_attempt_preserved",
+    "summary": "V1 had one failed excluded CLI attempt, one unattempted replay, no answers and no measured attempts. V2 prospectively added temporary AC-only system-sleep protection."
+  },
+  "compatibility": {
+    "path": "compatibility.json",
+    "sha256": "f87ec6a6ea2f8c12aee0dd7bc1c1d5d9d24af394195808b92ffd81c673c66963",
+    "planned": 2,
+    "completed": 2,
+    "excluded_from_measurements": true,
+    "review_sha256": "b49c413fd79ab697a274458566a289913149ade25563bd77b644de1edd1f933d"
+  },
+  "measured_stages": {
+    "cli": {
+      "status": "reviewed_complete",
+      "planned": 12,
+      "completed": 12,
+      "generated_answers": 9,
+      "empty_controls": 3,
+      "clock_guard_valid_and_released": true,
+      "run_sha256": "1078cdc851553632609b2452408ee046f3cd40cabb6c678efaf793c27849c927",
+      "review_sha256": "cddf347d05644a40014a9054dca09665261a99f7e6e10ee6bd2f455a08a4f6f4"
+    },
+    "fixed": {
+      "status": "reviewed_complete",
+      "planned": 9,
+      "completed": 9,
+      "generated_answers": 9,
+      "clock_guard_valid_and_released": true,
+      "run_sha256": "6d236ff6e2f05e5aa216e939d1021493d16650abf570b3d302168ed51dcb0035",
+      "review_sha256": "b393942023ab6651134beafe1dff5797128089e3dfc58304b1725610177393f8"
+    }
+  },
+  "sleep_protection": {
+    "internal": "Each stage has its own guarded 120-second rests, host boundaries and suspend-aware deadlines. No sleep or counter continuity is claimed across stages.",
+    "external": "One separately owned foreground caffeinate -s -t session per phase. Verify the same assertion identity before and after, then interrupt its own terminal and verify release.",
+    "configured_maximum_seconds": {
+      "compatibility": 1800,
+      "cli": 9000,
+      "fixed": 7200
+    },
+    "compatibility": {
+      "endpoint_identity_verified": true,
+      "released": true,
+      "acquired_sha256": "e21d64f0797d98f110fca21732bd38179613b078ec47d1b7162dad02c4e18fab",
+      "post_stage_sha256": "4e4a863a83236da3bb03a7648dff4ad4b1a76d995b4f53c9fa16b54d32b3f73b",
+      "released_sha256": "0e05014d4e9343de9d234cad48333bbd35ebc524698a7aa0af682adb56203793"
+    },
+    "cli": {
+      "endpoint_identity_verified": true,
+      "released": true,
+      "acquired_sha256": "27cccc7794e296d94d3affd980b78cd33287faba380ace2a8bb350e9f0e330e1",
+      "post_stage_sha256": "737539e07b9b086944942398b02f719c936569fcf6e85519edac249b22a86a2e",
+      "released_sha256": "e263c626c26ef62f9ff4a648b469c8e8a5ae0473751a29e1996d65fe723359ee"
+    },
+    "fixed": {
+      "endpoint_identity_verified": true,
+      "released": true,
+      "acquired_sha256": "1080dce3800e887ec655ad6bb412669df44aeaa16b707ff0abebb0b1375cfb77",
+      "post_stage_sha256": "ea5bd7f2926095f11104db3ac72343baf1a23baa2ebf5b2b11d98cac349e6565",
+      "released_sha256": "53a3ba8566661416f72570332c0a6958375ecbbe0a16f52ae3ed48040bf9eeaf"
+    },
+    "limits": "Timeouts are safety caps, not extra worker time or guaranteed stage durations. Endpoint checks do not prove continuous protection or power conditions. Loss or expiry stops dependent work; the clock and host gates remain binding."
+  },
+  "quality_scope": {
+    "path": "quality.json",
+    "sha256": "d984037dbfd98a1ed1f52ec3161588944fd09d9755e954c4bc202429efad0f42",
+    "selected_cases": [
+      "dev-014",
+      "val-015",
+      "val-006"
+    ],
+    "status": "reviewed_complete",
+    "limit": "Known regression cases selected by published input length. Repeated answers do not establish fresh accuracy; compatibility remains separate."
+  },
+  "review_provenance": {
+    "method_sha256": "0854a011ea5e9ce7e598aad429aa042e8958305e93f08bd9ac4af322ed216274",
+    "execution_freeze_sha256": "0d6a0b51f47664d190833702941c47cfc1f91fc9aa70d884937e12df6643ab38",
+    "reviewed_cli_export_sha256": "b22dcfcde0d587bb3154861855d7a1543932b6795cf0aad61eec8fb1f4078484",
+    "final_review_sha256": "b393942023ab6651134beafe1dff5797128089e3dfc58304b1725610177393f8",
+    "basis": "Separate raw-evidence, arithmetic and final-claim review, using shared pure guard and host validators. The reviewer also contributed implementation work; this is not an independent implementation audit.",
+    "limits": "Model/runtime authentication is collector-recorded. Review did not rehash those large assets or establish loaded-library identity. Unretained polling samples cannot be reconstructed. Raw traces remain local; hashes identify evidence but do not supply public reanalysis.",
+    "fixed_closure_sha256": "486b106a90c9afc2fb55796799a79213c21c478d5903c67bdae862c395ed1cce",
+    "reviewer_type": "agent review; not human or external validation",
+    "audit_corrections": "Reviewer checks were corrected for the native token-rate convention and fixed-record metadata. No collector, native observation or report was changed; these were not failed native runs."
+  },
+  "service_restoration": {
+    "status": "verified",
+    "verified": true,
+    "inventory_count": 12,
+    "running": 11,
+    "healthy": 5,
+    "unchanged_exited": 1,
+    "same_identities_configuration_and_mount_metadata": true,
+    "worker_idle": true,
+    "worker_heartbeat_age_seconds": 21.847043,
+    "evidence_sha256": "3350249225e7457f04324bd3466cac3f891dea3443af20ee4de7dcbe7a7ee94e",
+    "owner_closure_sha256": "4fc9056c88ecd330d43f9d914e29ecf8f9a660f8c4c5182f45d4a5cd1a4dd4f9",
+    "scope": "Recorded inventory, selected configuration/mount metadata and health. This does not restore prior RAM, start times or external sessions, or establish unchanged volume contents."
+  },
+  "measured_counts": {
+    "planned": 21,
+    "successful": 21,
+    "failed": 0,
+    "unresolved": 0,
+    "unattempted": 0,
+    "unobserved": 0,
+    "generated_answers": 18,
+    "empty_controls": 3
+  },
+  "host_findings": {
+    "rows_with_swap_increases_retained": {
+      "cli": 7,
+      "fixed": 5,
+      "total": 12
+    },
+    "thermal_limits": "unavailable",
+    "observation_scope": "Host readings are boundary observations, not continuous monitoring."
+  },
+  "interpretation": {
+    "scope": "Descriptive CPU application observations on one Mac, using fresh server processes and uncontrolled file caches.",
+    "limits": [
+      "CLI and fixed stages are separate; their medians do not establish a paired speedup or isolate retrieval cost.",
+      "Buffered first output is not model time to first token. Command intervals include ledger writing, worker creation and the ownership handshake.",
+      "Process RSS values are separate lifetime peaks, not additive memory use.",
+      "Valid clock evidence is bounded by the frozen policy, not proof that every arbitrarily short sleep was detected."
+    ]
+  },
+  "fresh_checkout_verification": {
+    "status": "passed_proposed_tracked_tree_export",
+    "path": "verification.json",
+    "sha256": "affcb8da498a8371101894e1daf877177d859d6e74041d19ecc6d804ff111434",
+    "source_tree": "3f2d7f7b824ab36016ef2fbc6a178467746d8e6a",
+    "scope": "Precommit tracked-source export with a new environment/index and cached assets; separate from measured observations. It is not an exact merged-commit verification."
+  },
+  "release_check": "Exact merged source, installation, indexing and CI are checked separately after PR merge; this precommit record makes no merged-checkout claim."
+}

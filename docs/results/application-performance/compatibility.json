@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "application-compatibility-validation",
+  "study_id": "qwen35-application-v2",
+  "status": "two_excluded_checks_passed",
+  "included_in_measurements": false,
+  "case_id": "val-015",
+  "counts": {
+    "planned": 2,
+    "attempted": 2,
+    "completed": 2,
+    "failed": 0,
+    "unattempted": 0,
+    "completed_answers": 2
+  },
+  "identity": {
+    "question_and_full_packed_inputs_equal": true,
+    "final_completion_bytes_equal": true,
+    "generated_token_ids_equal": true,
+    "validated_answers_equal": true,
+    "packed_input_sha256": "cec7251877ca0d199e454d57842275d30f08dd46b3ce857d6c48a2f195c2874f",
+    "prompt_sha256": "b223019e0f1263e341df7e2a3307a10bcfc3444fb531a9a2d253edae388ee395",
+    "final_content_sha256": "e500ee49867ce60f355d8918dc7f93723f6df53d8377ee41796d8d97ea861c26",
+    "validated_answer_sha256": "68d9d8751e14ebaf098fe2b42d344cfe97faea8ef8954394a16be547e8b0b620",
+    "object_hash_format": "SHA-256 of JSON with sorted keys, ASCII escapes and compact separators.",
+    "text_hash_format": "SHA-256 of UTF-8 text."
+  },
+  "quality": {
+    "supported_claims": 6,
+    "total_claims": 6,
+    "required_facts_passed": 4,
+    "required_fact_opportunities": 4,
+    "complete_answers": 2,
+    "review_basis": "Final claims and frozen facts checked against supplied, cited canonical passages. Both answers are identical; each has three supported claims and both required facts."
+  },
+  "observations": [
+    {
+      "stage": "cli",
+      "status": "completed",
+      "raw_answer_record_sha256": "f8a476abf840fd1bffe20c3b78b6bb69d063346e8ced95bc7fd9c22a954920e5",
+      "run_sha256": "0bea1f943b387a30b6ca246f05d77cb7e0bbb2f69e2b3dc3cf2bb5a87e5f540f"
+    },
+    {
+      "stage": "fixed",
+      "status": "completed",
+      "raw_answer_record_sha256": "b39f10f27217e180ddf90899b69b000aa06f0c12c232ef256337adfe91d8f29d",
+      "run_sha256": "434c45a1b9825573c8cebd4849f13a9f11bab9319c9aa44413501611060408cc"
+    }
+  ],
+  "verification": {
+    "worker_and_native_cleanup_verified": true,
+    "internal_clock_guards_valid": true,
+    "internal_idle_sleep_assertions_released": true,
+    "source_integrity_verified": true,
+    "temporary_system_sleep_assertion": {
+      "same_identity_at_both_endpoints": true,
+      "endpoint_interval_covers_both_internal_guards": true,
+      "configured_maximum_seconds": 1800,
+      "owned_terminal_interrupted_and_release_verified": true
+    }
+  },
+  "source_sha256": {
+    "scripts/benchmark_answers.py": "5d51787213ef7e5e93cfda66e02fe7ded72ee1509beb76c3f01f9e9d1f7df789",
+    "scripts/answer_benchmark_owner.py": "2678a5d25762f13082b264618c91a183aa0ea55cbf5347a8bb75079c0bd73c82",
+    "scripts/benchmark_timing.py": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4",
+    "src/arm64_rag/answers.py": "d3326b84d68d24d659529af20db5a6f5921d0ac54d320157d519555b5238b5f3",
+    "eval/answers-protocol.json": "1202bb8f977b15b5ffa93e74bb01e83dda7c24344122a42acf886c8ab50a131a",
+    "eval/retrieval-validation.json": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc"
+  },
+  "evidence_sha256": {
+    "plan": "42d93de0802d5ed1c15f7fff6e4ca734b02e9f797db801a5d671c4a26efb8383",
+    "compatibility_check": "7efe8ad8e25041d416cf03cdc5be7d7e47ac68e65acccc9b44842956a41cebf6",
+    "operational_method": "0854a011ea5e9ce7e598aad429aa042e8958305e93f08bd9ac4af322ed216274",
+    "execution_freeze": "0d6a0b51f47664d190833702941c47cfc1f91fc9aa70d884937e12df6643ab38",
+    "independent_compatibility_review": "b49c413fd79ab697a274458566a289913149ade25563bd77b644de1edd1f933d",
+    "system_sleep_assertion_acquired": "e21d64f0797d98f110fca21732bd38179613b078ec47d1b7162dad02c4e18fab",
+    "system_sleep_assertion_after_stage": "4e4a863a83236da3bb03a7648dff4ad4b1a76d995b4f53c9fa16b54d32b3f73b",
+    "system_sleep_assertion_released": "0e05014d4e9343de9d234cad48333bbd35ebc524698a7aa0af682adb56203793"
+  },
+  "prior_attempt": {
+    "path": "attempts/v1.json",
+    "sha256": "bd5986a77187b03bbb053c5df67c36602aed8604369de9415274d30ee78f3319",
+    "status": "failed_attempt_preserved"
+  },
+  "limits": [
+    "These two checks are excluded from all measured performance summaries and do not establish a backend speedup.",
+    "This is one known regression case answered twice, not a fresh accuracy evaluation or a general guarantee of identical output.",
+    "Assertion endpoint checks do not prove continuous protection or power conditions; the existing host and clock guards remain binding.",
+    "Model and runtime authentication is collector-recorded; the independent review did not rehash those large assets.",
+    "Raw traces remain local. Hashes identify retained evidence but do not enable public reanalysis without those records."
+  ]
+}
