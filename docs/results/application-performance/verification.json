@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "kind": "prospective-source-workflow-verification",
+  "status": "passed",
+  "source": {
+    "git_tree": "3f2d7f7b824ab36016ef2fbc6a178467746d8e6a",
+    "scope": "Export of the proposed tracked Git tree before the feature commit and merge.",
+    "tracked_files": 153,
+    "frozen_application_sources_matched": 31,
+    "private_working_files_excluded": true,
+    "archive_sha256": "c8f6a557bfffe25374fd63f95eb4bd772b0dcde77c435dd4aa15ea730db8a152"
+  },
+  "environment": {
+    "python": "3.12.15",
+    "new_environment": true,
+    "locked_offline_install": true,
+    "reused_assets": "Cached dependencies, pinned model, normal CPU/KleidiAI builds and their build records. Six manifest documents/licenses copied as real files.",
+    "reused_index": false,
+    "reused_answer_traces": false
+  },
+  "tests": {
+    "passed": 933,
+    "skipped": 23,
+    "skip_reasons": {
+      "existing_mac_owner_smokes": 3,
+      "optional_embedding_assets": 1,
+      "optional_upstream_contracts": 19
+    },
+    "exit_code": 0,
+    "log_sha256": "4b79f85be12c1b1e6cf784ec522702d479fe7fc7a9b4387f0ffc5be19241ad28"
+  },
+  "lint": {
+    "ruff_check": "passed",
+    "ruff_format": "passed",
+    "files": 85
+  },
+  "help_commands": {
+    "passed": 6,
+    "commands": [
+      "arm64-rag --help",
+      "python scripts/benchmark.py --help",
+      "python scripts/benchmark_setup.py --help",
+      "python scripts/answer_baseline.py --help",
+      "python scripts/check_answers.py --help",
+      "python scripts/benchmark_answers.py --help"
+    ]
+  },
+  "fresh_index": {
+    "documents": 7,
+    "chunks": 383,
+    "generation": 1,
+    "fingerprint": "3ccba5bc40fb4704dbf63e70bafaf9e6c5ef30b1027448a6953cb29290748d1f"
+  },
+  "native_answer": {
+    "case_id": "dev-014",
+    "completed": true,
+    "claims": 1,
+    "supported_citations": 2,
+    "required_fact": "128 tokens",
+    "document_instruction_ignored": true,
+    "cleanup_verified": true,
+    "trace_sha256": "f5881e465f16108374a7f4e6cf94bb544a80805bcce63ec3b8668f111acb18a9",
+    "stdout_sha256": "e0a366349f7aa2db4d92bbef7d6405e48ad17b350d9d629e93d323d55f914e30",
+    "review_sha256": "3e55b0f7a3be2a9ba2b8d9774956a0400b6ffdaf8b151e9152c2ae1ea266a7eb",
+    "release_sha256": "8e6feae33f5afe3ebda27b8fe3dd7d7aea5e90befffb508d10431c514d7fcbb7",
+    "included_in_measurements": false
+  },
+  "setup_freeze": {
+    "passed": true,
+    "native_observations": 0,
+    "plan_sha256": "4a3482be9a1caf0b0063f67f2204e634fb74e3450237bf0ddffafae48178d5f1",
+    "calibration_or_approval_established": false
+  },
+  "application_prepare": {
+    "passed": true,
+    "plan_sha256": "2e6146be129c0bcf5d35f4187ebaa8806b0dcee798ab74b444079e930b23078e"
+  },
+  "unstarted_report": {
+    "passed": true,
+    "unobserved_rows": 21,
+    "observed_metrics": false,
+    "sha256": "a1b726b051b11744d4748a3519019624177945eaecfb3f1d5c8dd670d897b968"
+  },
+  "evidence_sha256": {
+    "workflow_checks": "f78d2695e90fca80c325a9f8801d269a2d6361a66c8e8aabb5aa4d18deb9bab3",
+    "export_record": "bd20fb5fdbeda5d708a3ea1c021fb106c443c75c9d0ce43cc90f906bb7b20c11",
+    "environment_record": "3a585ce4f56094bd4539c6f9d8e95f0c3f829dc3a37e63229c41b8cde96f29a6",
+    "help_records": "40efb759b6564bb3bb0f63736edbcb22b2493aa28c95920146fe61db8f006e5c"
+  },
+  "limits": [
+    "This result binds the proposed tree above. Later publication edits need separate review; it does not claim an exact merged-commit check.",
+    "Cached assets do not establish fresh downloads, a clean native build, byte-identical rebuilding or cold-cache behavior.",
+    "The single familiar fixture is a usability check, not new accuracy or performance evidence.",
+    "The suite covers local-baseline and setup-report contracts synthetically. This walkthrough did not repeat native setup calibration, full answer evaluation or measured studies."
+  ],
+  "merged_checkout_check": "A separate release check after PR merge; no merged-commit result is asserted by this precommit record."
+}
