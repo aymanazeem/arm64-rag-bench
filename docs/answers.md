@@ -51,6 +51,37 @@ Each run requires a new output directory. It saves the prompt and protocol, mode
 
 Add `--backend kleidiai` to check the second build. The optional `--baseline PATH` flag expects the original local CPU run whose hashes appear in the published baseline. It requires one split and checks unchanged sources, prompt text, token IDs and settings. Those original raw records stay local. Changed answers still need factual and citation review; verification time is not latency evidence. All 40 questions now serve as fixed backend regressions. The `ask` command continues to use CPU. See the separate [benchmark method](benchmarks.md) for performance checks.
 
+### Compare a fresh CPU baseline
+
+A fresh checkout can freeze its own completed CPU run. This mode checks input
+equality and does not approve its answers or replace the published baseline.
+For example, after collecting `development-01` above:
+
+```sh
+uv run --locked --offline --group build python scripts/answer_baseline.py \
+  --run artifacts/answers/development-01 --split development \
+  --output artifacts/answers/development-baseline.json
+```
+
+Save the printed SHA-256 as `BASELINE_SHA`, then run the candidate:
+
+```sh
+uv run --locked --offline --group build python scripts/check_answers.py \
+  --backend kleidiai --split development \
+  --local-baseline artifacts/answers/development-baseline.json \
+  --local-baseline-sha256 BASELINE_SHA \
+  --output artifacts/answers/kleidiai-development-01
+```
+
+Repeat for `regression` and `validation`, using each split's CPU run and a new
+manifest. Keep the source, prompt, model, retrieval data and settings unchanged.
+The manifest pins raw records and rejects unfinished runs, failed cases and
+changed inputs. It permits the runner-file change needed to add comparison;
+application-code changes require a new baseline. Keep both sets of answers and
+review every claim, citation and missing fact against the source documents.
+Matching inputs or structurally valid answers do not establish equal quality.
+These local manifests and traces stay outside Git.
+
 [answers-protocol.json](../eval/answers-protocol.json) defines three question roles:
 
 | Split | Questions | Use |

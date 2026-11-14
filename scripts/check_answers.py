@@ -30,8 +30,15 @@ def main():
         "--db", type=Path, default=ROOT / "data/private/development.sqlite"
     )
     parser.add_argument("--backend", choices=("cpu", "kleidiai"), default="cpu")
-    parser.add_argument(
+    baselines = parser.add_mutually_exclusive_group()
+    baselines.add_argument(
         "--baseline", type=Path, help="Compare with a published CPU run directory."
+    )
+    baselines.add_argument(
+        "--local-baseline", type=Path, help="Compare with a frozen local CPU manifest."
+    )
+    parser.add_argument(
+        "--local-baseline-sha256", help="Pin the local baseline manifest."
     )
     parser.add_argument(
         "--output",
@@ -40,8 +47,12 @@ def main():
         help="Use a new output directory for each run.",
     )
     args = parser.parse_args()
-    if args.baseline is not None and args.split == "all":
+    if (
+        args.baseline is not None or args.local_baseline is not None
+    ) and args.split == "all":
         parser.error("Choose one split when comparing with a baseline run.")
+    if (args.local_baseline is None) != (args.local_baseline_sha256 is None):
+        parser.error("Use --local-baseline and --local-baseline-sha256 together.")
     if args.output.exists():
         parser.error("Use a new output directory to preserve earlier attempts.")
     args.output.mkdir(parents=True)
@@ -114,11 +125,21 @@ def main():
         print(f"{record['id']}: {status}", flush=True)
 
     try:
-        if args.baseline is not None:
+        if args.baseline is not None or args.local_baseline is not None:
             from answer_baseline import BaselineComparison
 
-            comparison = BaselineComparison(
-                ROOT, args.baseline, args.split, run, protocol_raw
+            comparison = (
+                BaselineComparison.from_local(
+                    args.local_baseline,
+                    args.local_baseline_sha256,
+                    args.split,
+                    run,
+                    protocol_raw,
+                )
+                if args.local_baseline is not None
+                else BaselineComparison(
+                    ROOT, args.baseline, args.split, run, protocol_raw
+                )
             )
             run["baseline_comparison"] = {
                 **comparison.metadata,

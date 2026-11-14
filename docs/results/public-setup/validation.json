@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "kind": "public-setup-validation",
+  "status": "four_setup_observations_verified",
+  "scope": "Public freeze, four native setup observations and candidate export using cached native assets.",
+  "counts": {
+    "planned": 4,
+    "attempted": 4,
+    "completed": 4,
+    "eligible": 4,
+    "failed": 0,
+    "unattempted": 0,
+    "native_repetitions": 16
+  },
+  "candidate": {
+    "status": "pending_review",
+    "timeout_seconds": 600,
+    "deadline_rule": "max(600, ceil(2 * longest eligible continuous seconds / 60) * 60)",
+    "approved": false
+  },
+  "model": {
+    "type": "qwen35 9B Q8_0",
+    "sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4"
+  },
+  "runtime": {
+    "llama_cpp_revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+    "build_record_sha256": {
+      "cpu": "231f09c98de49525db55b362952b7db834c2170215b70288dca233e866568618",
+      "kleidiai": "11fc794c3b4fbfd871c93353d964008cbccd6c99f97ab7b3295f16628d7a05df"
+    }
+  },
+  "source_sha256": {
+    "scripts/benchmark_setup.py": "1d8554f9bf7dfcea834eeaad970ddb630273e7103a10c57b527dd9c471586f47",
+    "scripts/benchmark.py": "7b058834d18d388492ef3663a6835088030452db337a8e453d0201115b0d6355",
+    "scripts/runtime.py": "9b33df0ac707bada9ddadb57951739aff24ea7d9a9fa8c0f3617e547a90118a4",
+    "scripts/benchmark_host.py": "5a5d458024d257e245ee7d79f04e8cda7c9429a4b1aa0725f089dd730ad51a8c",
+    "scripts/benchmark_timing.py": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4"
+  },
+  "evidence_sha256": {
+    "method": "1dbfb5344782d70eb59af031740e76c66634e31b2ecbcbdafbdbc4852e70ae4a",
+    "plan": "36d23cd33f9f08bc00f07675eb151d8c6a999ce65511fb3334cff0ad1c9c7eab",
+    "ledger": "64765be59320ab8878ee5a80c55176f42d0b22d29882fb579f961b026ba95b98",
+    "candidate": "2e5b73835c55bf2bcb43748d9e89f4fadace0027df9e83ffc99042eff143ba74",
+    "closure": "50b7e4655d890ba9ec3f632cb6c119310d2016756204c6c5744667383f97e471",
+    "auxiliary_acquired": "f6963b716cb3c5ded4af21963490da45e24a9cc5d9ca2d92792649255ec921fa",
+    "auxiliary_closed": "9b2fbfec414daa3a477e0222906fe3001a25d5cead714af766c8286ad38fda45",
+    "auxiliary_release": "50b7e4655d890ba9ec3f632cb6c119310d2016756204c6c5744667383f97e471"
+  },
+  "observations": [
+    {
+      "id": "cpu-pp2048",
+      "outcome": "setup_observed",
+      "returncode": 0,
+      "eligible_for_deadline_calibration": true,
+      "guard_valid": true,
+      "native_repetitions": 4,
+      "continuous_seconds": 225.899108041,
+      "host_findings": [
+        "swap_activity"
+      ],
+      "record_sha256": "853b72350a9ea5bfdc2f11c7661a53c791d2a708367bf6ca31d201fa0155b787",
+      "native_output_sha256": "941dd9069486049b2ad4bfadb4722d704ff5747e0b0684128ba2d6d037a165dd"
+    },
+    {
+      "id": "kleidiai-pp2048",
+      "outcome": "setup_observed",
+      "returncode": 0,
+      "eligible_for_deadline_calibration": true,
+      "guard_valid": true,
+      "native_repetitions": 4,
+      "continuous_seconds": 179.231853417,
+      "host_findings": [
+        "swap_activity"
+      ],
+      "record_sha256": "f7e61cda61741f3d189dabbfc9a0333769a3f2a94df6f30901ab0889adde0acf",
+      "native_output_sha256": "cee123b7ae5da519d9de5b7199036881c4f20b965ad7b6d1ceb5f32e3dc49a14"
+    },
+    {
+      "id": "cpu-tg128-d2048",
+      "outcome": "setup_observed",
+      "returncode": 0,
+      "eligible_for_deadline_calibration": true,
+      "guard_valid": true,
+      "native_repetitions": 4,
+      "continuous_seconds": 97.602734958,
+      "host_findings": [
+        "swap_activity"
+      ],
+      "record_sha256": "13d7c9af6cc2953f5a9c47c002410fe3b816db90bf7565cce0d0ed515881537f",
+      "native_output_sha256": "d7407e802315b5cc95719ced5ac98f5be73a45524b1385c4b2a53e201a8ae1a2"
+    },
+    {
+      "id": "kleidiai-tg128-d2048",
+      "outcome": "setup_observed",
+      "returncode": 0,
+      "eligible_for_deadline_calibration": true,
+      "guard_valid": true,
+      "native_repetitions": 4,
+      "continuous_seconds": 122.872708833,
+      "host_findings": [],
+      "record_sha256": "8e0f8264d8ee09d6eabdd12ee707819c04bb7fe97c8923ce5ebe978e7da2768d",
+      "native_output_sha256": "3c729014eb0d3a9a5edd42ee3910b075b8f298906488857ae0a66c8f8528d671"
+    }
+  ],
+  "guard_checks": {
+    "all_closed_and_released": true,
+    "checkpoint_chain_verified": true,
+    "same_boot_context_verified": true,
+    "failures": 0
+  },
+  "additional_idle_sleep_protection": {
+    "closed_and_released": true,
+    "covered_all_four_guards": true,
+    "maximum_seconds": 1800,
+    "release_within_limit": true,
+    "poll_seconds": 0.2,
+    "script_sha256": "c8020de9a1cced524e3aac12cb6036d86d726f164ceb6aa4d75834575f166dd0"
+  },
+  "limits": [
+    "These setup durations only calibrate a candidate deadline. They are excluded from performance comparisons.",
+    "No candidate approval, backend adoption, answer-quality result or new 48-run study is claimed.",
+    "Cached model and build assets were used. This does not validate a fresh download, clean build or cold file cache.",
+    "The collector verified native assets; this independent audit rechecked source/raw-file hashes and recorded runtime fingerprints, with cached model stat continuity rather than a new model hash.",
+    "System swap activity was retained under the frozen desktop policy. Boundary host checks and bounded clock checks do not prove constant conditions or detection of every suspend.",
+    "The extra assertion only prevents idle sleep; release-marker contents were checked independently after closure.",
+    "Local resource records use wait4 child accounting, including eligible descendants; they are not whole-machine memory usage."
+  ]
+}

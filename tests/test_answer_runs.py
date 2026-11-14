@@ -122,6 +122,128 @@ def test_invalid_baseline_fails_before_server_start_and_retains_ledger(
     assert runner.state.entries == 0
 
 
+@pytest.mark.parametrize(
+    "extra",
+    [
+        ["--local-baseline", "manifest.json"],
+        ["--local-baseline-sha256", "0" * 64],
+        [
+            "--baseline",
+            "published",
+            "--local-baseline",
+            "manifest.json",
+            "--local-baseline-sha256",
+            "0" * 64,
+        ],
+        [
+            "--split",
+            "all",
+            "--local-baseline",
+            "manifest.json",
+            "--local-baseline-sha256",
+            "0" * 64,
+        ],
+    ],
+)
+def test_local_baseline_cli_requires_one_explicit_pinned_source(
+    runner, monkeypatch, extra
+):
+    monkeypatch.setattr(
+        sys, "argv", ["check_answers.py", "--output", str(runner.output), *extra]
+    )
+    with pytest.raises(SystemExit) as error:
+        runner.module.main()
+    assert error.value.code == 2
+    assert not runner.output.exists() and runner.state.entries == 0
+
+
+def test_changed_local_manifest_fails_before_start_and_retains_attempt(
+    runner, monkeypatch
+):
+    manifest = runner.root / "manifest.json"
+    manifest.write_text("{}")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "check_answers.py",
+            "--output",
+            str(runner.output),
+            "--local-baseline",
+            str(manifest),
+            "--local-baseline-sha256",
+            "0" * 64,
+        ],
+    )
+    with pytest.raises(ValueError, match="manifest changed"):
+        runner.module.main()
+    run = read_json(runner.output / "run.json")
+    assert run["state"] == "failed" and run["attempted"] == []
+    assert runner.state.entries == 0
+
+
+def test_fresh_cpu_run_can_be_frozen_and_compared_through_cli(runner, monkeypatch):
+    baseline = importlib.import_module("answer_baseline")
+    scripts = runner.root / "scripts"
+    scripts.mkdir()
+    for name in ("check_answers.py", "answer_baseline.py"):
+        (scripts / name).write_text("synthetic implementation identity")
+    protocol_path = runner.root / "eval/answers-protocol.json"
+    protocol = read_json(protocol_path)
+    protocol["model_output_schema"] = {"type": "object"}
+    protocol_path.write_text(json.dumps(protocol))
+    cases = [{**case, "question": "Which setting?"} for case in runner.cases]
+    (runner.root / "eval/development.json").write_text(json.dumps({"cases": cases}))
+
+    def evaluate(db, dataset, manifest, server, protocol, on_case_start, on_case):
+        for case in cases:
+            on_case_start(case)
+            on_case(
+                {
+                    **case,
+                    "failure": None,
+                    "answer": {"status": "answered", "claims": ["known setting"]},
+                    "retrieval": {"results": ["source"]},
+                    "packed": {"token_ids": [1]},
+                    "evidence": [{"included": True}],
+                }
+            )
+        return {"summary": {"cases_failed": 0}}
+
+    monkeypatch.setattr(runner.module, "evaluate_answers", evaluate)
+    runner.module.main()
+    manifest = runner.output.parent / "baseline.json"
+    digest = baseline.freeze_local(runner.output, "development", manifest)
+    candidate = runner.output.parent / "candidate"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "check_answers.py",
+            "--backend",
+            "kleidiai",
+            "--output",
+            str(candidate),
+            "--local-baseline",
+            str(manifest),
+            "--local-baseline-sha256",
+            digest,
+        ],
+    )
+    runner.module.main()
+    run = read_json(candidate / "run.json")
+    assert run["state"] == "completed" and run["backend"] == "kleidiai"
+    assert run["baseline_comparison"]["local_manifest_sha256"] == digest
+    assert run["baseline_comparison"]["semantic_review"] == "not_assessed"
+    assert all(
+        read_json(candidate / f"{case['id']}.json")["baseline_comparison"][
+            "inputs_match"
+        ]
+        for case in cases
+    )
+    assert runner.state.entries == runner.state.exits == 2
+
+
 def test_interruption_retains_completed_and_active_attempts(runner, monkeypatch):
     completed = {
         "id": "dev-001",

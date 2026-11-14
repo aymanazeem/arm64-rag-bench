@@ -139,6 +139,12 @@ do not restart the study to replace missing pairs.
 
 ## Freeze, run and report
 
+For a fresh desktop study, first follow the public [setup and calibration
+procedure](benchmark-setup.md). It freezes the actual model and build files,
+records four guarded observations and prepares a candidate for review. It does
+not approve measurement or backend adoption. Controlled setup still requires
+separate evidence under its stricter swap policy.
+
 Start with [the specification example](../configs/benchmark.example.json).
 Copy it to `artifacts/benchmarks/spec.json`; fill its `null` timeout and idle
 interval from the reviewed setup checks. Keep the chosen values fixed.

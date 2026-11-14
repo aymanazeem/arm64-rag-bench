@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "study": "desktop",
+  "study_id": "replace-with-a-new-study-id",
+  "question": "Describe the two pinned CPU backends on this Mac during one declared work period.",
+  "prior_information": "Record any earlier setup, quality and timing results seen before freezing this method.",
+  "host_condition": {
+    "machine": "Record the target Mac and memory capacity.",
+    "background": "Declare which services remain running. Stop other model, build, test and benchmark jobs.",
+    "required_before_launch": ["AC power", "fixed power mode and host identity", "normal memory pressure", "unchanged thermal availability and reported limits", "available monotonic page counters"],
+    "service_changes": "Record the prior state of any temporarily stopped service; restore and verify it after the study."
+  },
+  "setup": {
+    "runs": ["cpu-pp2048", "kleidiai-pp2048", "cpu-tg128-d2048", "kleidiai-tg128-d2048"],
+    "fresh_observations_required": 4,
+    "timeout_seconds": 1200,
+    "output_limit_bytes": 16777216,
+    "swap_policy": "record_counter_increases",
+    "eligibility": "Valid native output, resources, unchanged inputs, valid timing guard and no effective host stop.",
+    "failure": "Retain the attempt and stop. No retry, replacement or partial calibration.",
+    "measured_deadline_rule": "max(600, ceil(2 * longest eligible continuous seconds / 60) * 60)",
+    "timings_in_final_comparison": false
+  },
+  "measurement": {
+    "sessions": 3,
+    "rounds_per_session": 2,
+    "workloads": ["pp512", "pp2048", "tg128-d512", "tg128-d2048"],
+    "planned_processes": 48,
+    "schedule_seed": 42,
+    "assignment": "Balanced adjacent CPU/KleidiAI pairs with shuffled workload order.",
+    "session_spacing": "Consecutive blocks within one work period, not independent replications.",
+    "raw_repetitions": 4,
+    "excluded_sample_indices": [0],
+    "idle_before_session_seconds": 120,
+    "idle_between_pairs_seconds": 120,
+    "native_settings": "The pinned benchmark.py settings, with upstream warmup enabled.",
+    "retries_or_replacements": false
+  },
+  "host_rule": {
+    "swap_activity": "Record all increases without filtering or timing adjustment.",
+    "other_departure": "Stop new launches on missing/reset counters or changed AC, mode, pressure, thermal or identity readings. Preserve completed observations with flags.",
+    "timing": "Require the pinned benchmark_timing.py policy and its continuous/awake clock checks. Retain timing-invalid observations without performance claims."
+  },
+  "analysis": {
+    "process_duration": "Arithmetic mean of repetitions 1, 2 and 3.",
+    "ratio": "CPU mean duration divided by KleidiAI mean duration for each complete valid pair.",
+    "report": "All 48 planned outcomes, raw repetitions, pair ratios, session median/range and host findings.",
+    "limits": "Descriptive observations on one Mac. No significance, tail-latency or universal speedup claim. Synthetic compute excludes complete Q&A and model loading. Quality and backend adoption require separate review."
+  }
+}
