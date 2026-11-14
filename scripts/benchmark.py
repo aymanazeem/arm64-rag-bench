@@ -303,6 +303,11 @@ def verify_runtime(plan):
         == {key: quality[key] for key in ("quality_preserved", "backend_adoption")},
         "Quality comparison flags differ from the reviewed evidence.",
     )
+    verify_builds(plan)
+
+
+def verify_builds(plan):
+    """Check the normal CPU pair after its file assets have been authenticated."""
     config = read_json(Path(plan["runtime_config"]["path"]))
     require(config["llama_cpp"]["revision"] == REVISION, "Unexpected native revision.")
     for key, value in {

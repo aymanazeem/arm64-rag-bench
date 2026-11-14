@@ -1,7 +1,13 @@
 """Require unchanged inputs when comparing answer backends."""
 
+import argparse
 import hashlib
 import json
+import os
+import re
+from pathlib import Path
+
+ROLES = ("development", "regression", "validation")
 
 
 def digest(raw):
@@ -18,6 +24,35 @@ class BaselineComparison:
         path = root / "docs/results/grounded-answers" / f"{role}.json"
         report_raw = path.read_bytes()
         report = json.loads(report_raw)
+        self._load(directory, role, run, protocol_raw, report, report_raw)
+
+    @classmethod
+    def from_local(cls, path, expected_sha256, role, run, protocol_raw):
+        raw = path.read_bytes()
+        require(digest(raw) == expected_sha256, "Local baseline manifest changed.")
+        manifest = json.loads(raw)
+        require(
+            manifest.get("schema_version") == 1
+            and manifest.get("kind") == "local-answer-input-baseline"
+            and manifest.get("semantic_review") == "not_assessed",
+            "Unknown local baseline manifest.",
+        )
+        directory = (path.parent / manifest["run_directory"]).resolve(strict=True)
+        require(
+            manifest == local_manifest(directory, role, path.parent),
+            "Local baseline inputs changed since freeze.",
+        )
+        comparison = cls.__new__(cls)
+        comparison._load(directory, role, run, protocol_raw, manifest, raw)
+        comparison.metadata.pop("report_sha256")
+        comparison.metadata.update(
+            local_manifest_sha256=expected_sha256,
+            baseline_kind="local_input_equality",
+            semantic_review="not_assessed",
+        )
+        return comparison
+
+    def _load(self, directory, role, run, protocol_raw, report, report_raw):
         baseline_raw = (directory / "run.json").read_bytes()
         baseline = json.loads(baseline_raw)
         require(
@@ -132,3 +167,90 @@ class BaselineComparison:
             record["failure"] = "Inputs differ from the answer baseline."
             if earlier:
                 record["failure"] += f" Earlier failure: {earlier}"
+
+
+def local_manifest(directory, role, parent):
+    require(role in ROLES, "Choose one answer split.")
+    directory = directory.resolve(strict=True)
+    run_raw = (directory / "run.json").read_bytes()
+    run = json.loads(run_raw)
+    planned = run["planned"]
+    require(
+        run.get("backend") == "cpu"
+        and run["state"] == "completed"
+        and run.get("failure") is None
+        and run.get("cases_failed") == 0
+        and run.get("active_case") is None
+        and isinstance(planned, list)
+        and bool(planned)
+        and run["attempted"] == run["completed"] == planned
+        and set(run["datasets"]) == {role},
+        "Freeze a complete, successful CPU run for one split.",
+    )
+    require(
+        all(
+            isinstance(case, str) and re.fullmatch(r"[A-Za-z0-9_-]+", case)
+            for case in planned
+        )
+        and len(set(planned)) == len(planned),
+        "Baseline case IDs are invalid or repeated.",
+    )
+    protocol_raw = (directory / "answers-protocol.json").read_bytes()
+    prompt_raw = (directory / "system-prompt.txt").read_bytes()
+    require(
+        digest(protocol_raw) == run["protocol_sha256"]
+        and digest(prompt_raw) == run["system_prompt_sha256"]
+        and run["runtime"]["model_sha256"] == run["model_sha256"],
+        "Baseline protocol, prompt or model records differ.",
+    )
+    cases = []
+    for case_id in planned:
+        raw = (directory / f"{case_id}.json").read_bytes()
+        case = json.loads(raw)
+        require(
+            case["id"] == case_id
+            and case["failure"] is None
+            and isinstance(case["answer"], dict),
+            "Baseline contains a failed case.",
+        )
+        cases.append({"id": case_id, "case_file_sha256": digest(raw)})
+    return {
+        "schema_version": 1,
+        "kind": "local-answer-input-baseline",
+        "semantic_review": "not_assessed",
+        "role": role,
+        "run_directory": os.path.relpath(directory, parent.resolve()),
+        "run_file_sha256": digest(run_raw),
+        "dataset_sha256": run["datasets"][role]["sha256"],
+        "protocol_file_sha256": digest(protocol_raw),
+        "system_prompt_sha256": run["system_prompt_sha256"],
+        "runtime": run["runtime"],
+        "cases": cases,
+        "scope": (
+            "Input equality only. Review CPU and candidate answers "
+            "against their sources."
+        ),
+    }
+
+
+def freeze_local(directory, role, destination):
+    manifest = local_manifest(directory, role, destination.parent)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("x") as stream:
+        stream.write(
+            json.dumps(manifest, ensure_ascii=True, allow_nan=False, indent=2) + "\n"
+        )
+    return digest(destination.read_bytes())
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Freeze a local CPU answer baseline.")
+    parser.add_argument("--run", type=Path, required=True)
+    parser.add_argument("--split", choices=ROLES, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    print(freeze_local(args.run, args.split, args.output))
+
+
+if __name__ == "__main__":
+    main()

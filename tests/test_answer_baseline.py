@@ -174,3 +174,113 @@ def test_input_mismatch_keeps_failure_and_raw_output(baseline, field):
     assert "Earlier failure" in record["failure"]
     assert record["raw_completion"] == {"content": "retained output"}
     assert record["baseline_comparison"]["mismatched_fields"] == [field]
+
+
+@pytest.fixture
+def local_baseline(baseline):
+    _, current, case, server, directory = baseline
+    module = importlib.import_module("answer_baseline")
+    protocol = json.dumps({"model_output_schema": {"type": "object"}}).encode()
+    prompt = b"synthetic prompt"
+    run = json.loads((directory / "run.json").read_bytes())
+    run.update(
+        backend="cpu",
+        attempted=run["planned"],
+        cases_failed=0,
+        active_case=None,
+        failure=None,
+        protocol_sha256=module.digest(protocol),
+        system_prompt_sha256=module.digest(prompt),
+    )
+    current["system_prompt_sha256"] = run["system_prompt_sha256"]
+    (directory / "run.json").write_text(json.dumps(run))
+    (directory / "answers-protocol.json").write_bytes(protocol)
+    (directory / "system-prompt.txt").write_bytes(prompt)
+    path = directory.parent / "pins/local.json"
+    digest = module.freeze_local(directory, "development", path)
+
+    def load():
+        return module.BaselineComparison.from_local(
+            path, digest, "development", current, protocol
+        )
+
+    return module, load, directory, path, current, case, server
+
+
+def test_fresh_cpu_manifest_enforces_inputs_without_quality_approval(local_baseline):
+    _, load, _, _, _, case, server = local_baseline
+    comparison = load().bind(server)
+    assert comparison.metadata["semantic_review"] == "not_assessed"
+    assert "report_sha256" not in comparison.metadata
+    assert comparison.metadata["local_manifest_sha256"]
+    comparison.start(case)
+    comparison.complete([2, 3], 12, json_schema={"type": "object"}, messages=[])
+    record = copy.deepcopy(case)
+    record["answer"] = {"status": "answered", "claims": ["changed"]}
+    comparison.retain(record)
+    assert record["baseline_comparison"]["inputs_match"]
+    assert not record["baseline_comparison"]["answer_identical"]
+
+
+def test_local_mode_does_not_relax_published_mode(local_baseline, baseline):
+    _, load, *_ = local_baseline
+    assert load().metadata["baseline_kind"] == "local_input_equality"
+    published_load, *_ = baseline
+    with pytest.raises(ValueError, match="published evidence"):
+        published_load()
+
+
+@pytest.mark.parametrize(
+    "file",
+    ["run.json", "one.json", "answers-protocol.json", "system-prompt.txt", "manifest"],
+)
+def test_local_baseline_rejects_changed_pins_or_raw_inputs(local_baseline, file):
+    _, load, directory, manifest, *_ = local_baseline
+    path = manifest if file == "manifest" else directory / file
+    path.write_bytes(path.read_bytes() + b" ")
+    with pytest.raises(ValueError, match="changed|differ"):
+        load()
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("backend", "kleidiai"),
+        ("state", "interrupted"),
+        ("completed", []),
+        ("attempted", []),
+        ("cases_failed", 1),
+        ("failure", "failed"),
+        ("planned", ["../escaped"]),
+        ("planned", ["one", "one"]),
+    ],
+)
+def test_local_freeze_requires_complete_cpu_cases(local_baseline, field, value):
+    module, _, directory, manifest, *_ = local_baseline
+    run = json.loads((directory / "run.json").read_bytes())
+    run[field] = value
+    if field == "planned":
+        run["attempted"] = run["completed"] = value
+    (directory / "run.json").write_text(json.dumps(run))
+    destination = manifest.parent / "rejected.json"
+    with pytest.raises(ValueError):
+        module.freeze_local(directory, "development", destination)
+    assert not destination.exists()
+
+
+def test_local_freeze_is_create_only_and_still_rejects_code_changes(local_baseline):
+    module, load, directory, manifest, current, *_ = local_baseline
+    with pytest.raises(FileExistsError):
+        module.freeze_local(directory, "development", manifest)
+    current["implementation_sha256"]["src/arm64_rag/answers.py"] = "changed"
+    with pytest.raises(ValueError, match="Application code changed"):
+        load()
+
+
+def test_local_baseline_stops_changed_tokens_before_generation(local_baseline):
+    _, load, _, _, _, case, server = local_baseline
+    comparison = load().bind(server)
+    comparison.start(case)
+    with pytest.raises(ValueError, match="Token IDs"):
+        comparison.complete([2, 4], 12, json_schema={"type": "object"}, messages=[])
+    assert not server.calls

@@ -79,4 +79,11 @@ The recorded controller imposed 600-second/64-MiB bounds for smoke and 1,200-sec
 
 The public source manifest lets readers verify and apply the exact instrumentation. The raw native records allow an independent parser to check phase/order, kernel-call pairing, token streams and state sizes. Input digests use token IDs encoded as unsigned 32-bit little-endian bytes. Original local parser/controller hashes bind the retained validation records; hashes alone neither publish those helpers nor let readers rerun their automated checks.
 
+Those raw records must be collected locally with the commands above; the original
+historical logs are not distributed. This is manual instrumentation reproduction,
+not a public automatic validator or a measurement approval. Inspect complete
+token streams, saved/restored state, continuation output and actual kernel entries
+before recording the dispatch and state reviews for a new study. The public
+[setup runner](../../benchmark-setup.md) handles normal-binary calibration only.
+
 Normal loaded libraries require a separate untimed observation of each unmodified binary: use the same clean environment and shared flags, `-p 1 -n 0 -d 0 -r 1`, and add only `DYLD_PRINT_LIBRARIES=1`. Retain and review the actual loader output; the patch does not authenticate normal binaries. Timed runs must have no `DYLD_*` or `Q35_*` controls. Review the observed loader format before treating it as evidence.
