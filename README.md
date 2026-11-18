@@ -2,9 +2,37 @@
 
 A local document question-answering application and an engineering investigation into CPU inference on Apple Silicon: standard Arm64 and KleidiAI-enabled Arm64.
 
-The project starts on an **Apple M1 Max with 32 GB unified memory**. The aim is useful answers with citations and credible measurements of speed, memory and answer quality. A zero or negative speedup is a valid finding.
+**Status:** local indexing, keyword and embedding search, and document answers with citations are available. The CPU application completed 21 reviewed latency and memory observations on known questions. A valid citation location does not guarantee a correct answer.
 
-**Status:** local indexing, keyword and embedding search, and document answers with citations are available. KleidiAI's runtime checks passed, but its answer-quality comparison failed, so the app stays on CPU. A guarded desktop study completed 48 valid runs: prompt processing favored KleidiAI, while generation favored CPU. The CPU application completed 21 reviewed latency and memory observations on known questions. A valid citation location does not guarantee a correct answer.
+## Results
+
+The latest completed CPU/KleidiAI timing study is from **14 November 2026**.
+Both backends used Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB memory and four threads**.
+KleidiAI processed prompts faster but generated tokens slower.
+
+| Workload | KleidiAI computation time compared with CPU |
+| --- | ---: |
+| Process 512 prompt tokens | **33.4% less** |
+| Process 2,048 prompt tokens | **31.7% less** |
+| Generate 128 tokens after a 512-token prefix | **45.0% more** |
+| Generate 128 tokens after a 2,048-token prefix | **45.0% more** |
+
+Each percentage uses the median of six paired CPU/KleidiAI duration ratios.
+**All 48 runs and 24 pairs completed; every pair recorded swap activity.**
+Docker was stopped, other desktop activity continued, and thermal readings were
+unavailable. These are descriptive observations from one Mac.
+[Full results and method](docs/results/desktop-cpu/README.md).
+
+These timings cover native computation, excluding model loading and the full Q&A
+workflow. Separate [application measurements](docs/results/application-performance/README.md)
+use CPU only; no KleidiAI application speedup has been measured.
+
+**CPU remains the application default.** KleidiAI passed runtime checks but did
+not pass the project's specific [no-regression answer-quality gate](docs/results/controlled-cpu/quality.md).
+
+Both readiness checks for the attempted rerun failed before any model timing began.
+
+## Guides
 
 - [Development and GitHub setup](docs/setup.md)
 - [Index and search documents](docs/search.md)
