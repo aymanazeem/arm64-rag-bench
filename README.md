@@ -6,31 +6,31 @@ A local document question-answering application and an engineering investigation
 
 ## Results
 
-The latest completed CPU/KleidiAI timing study is from **14 November 2026**.
-Both backends used Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB memory and four threads**.
-KleidiAI processed prompts faster but generated tokens slower.
+The **18 November 2026** rerun completed **48 runs and 24 paired comparisons in one
+uninterrupted invocation**, with **no observed swap activity** or detected timing
+interruption. Both backends used Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB
+memory and four threads**.
 
 | Workload | KleidiAI computation time compared with CPU |
 | --- | ---: |
-| Process 512 prompt tokens | **33.4% less** |
+| Process 512 prompt tokens | **33.5% less** |
 | Process 2,048 prompt tokens | **31.7% less** |
-| Generate 128 tokens after a 512-token prefix | **45.0% more** |
-| Generate 128 tokens after a 2,048-token prefix | **45.0% more** |
+| Generate 128 tokens after a 512-token prefix | **43.0% more** |
+| Generate 128 tokens after a 2,048-token prefix | **42.1% more** |
 
-Each percentage uses the median of six paired CPU/KleidiAI duration ratios.
-**All 48 runs and 24 pairs completed; every pair recorded swap activity.**
-Docker was stopped, other desktop activity continued, and thermal readings were
-unavailable. These are descriptive observations from one Mac.
-[Full results and method](docs/results/desktop-cpu/README.md).
+Percentages use the median of six paired CPU/KleidiAI mean-duration ratios.
+KleidiAI processed prompts faster but generated tokens slower. The rerun recorded no swap, but absolute median computation times were **1.0–3.3% higher** than
+in the earlier study. All observations are included.
+[Full results, comparison and method](docs/results/desktop-cpu/README.md).
 
-These timings cover native computation, excluding model loading and the full Q&A
-workflow. Separate [application measurements](docs/results/application-performance/README.md)
-use CPU only; no KleidiAI application speedup has been measured.
+macOS, managed security and the controlling editor remained active; thermal
+readings were unavailable. These are descriptive results from one Mac, without
+CPU isolation. Timings exclude model loading and the full Q&A workflow.
+[Application measurements](docs/results/application-performance/README.md) use CPU
+only; no KleidiAI application speedup has been measured.
 
 **CPU remains the application default.** KleidiAI passed runtime checks but did
 not pass the project's specific [no-regression answer-quality gate](docs/results/controlled-cpu/quality.md).
-
-Both readiness checks for the attempted rerun failed before any model timing began.
 
 ## Guides
 

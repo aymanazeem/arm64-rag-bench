@@ -76,8 +76,10 @@ the native timer counted system sleep while Python's deadline clock paused.
 Its complete schedule is preserved, but it is not an uninterrupted speed
 comparison. The timing guard described below applies to new studies. It does not
 validate or change those earlier observations. The later
-[guarded desktop study](results/desktop-cpu/README.md) completed all 48 runs
-under its frozen checks; it remains separate from the strict no-swap study.
+[November 14 study](results/desktop-cpu/v4/README.md) completed all 48 runs
+under its frozen checks. The [November 18 repeat](results/desktop-cpu/README.md)
+completed all 48 runs in one invocation with no observed swap. Both remain
+separate from the earlier strict no-swap study.
 
 ## Sleep and clock checks
 
