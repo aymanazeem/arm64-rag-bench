@@ -1,11 +1,23 @@
-# Public setup workflow validation
+# Setup workflow validation
 
-The [public setup commands](../../benchmark-setup.md) completed four new native observations using cached Qwen3.5-9B Q8_0 assets on an M1 Max. Both CPU backends completed prompt processing and generation setup, with four native repetitions per observation.
+The public setup API completed **four observations** on the M1 Max using cached
+Qwen3.5-9B Q8_0 assets. Both CPU backends completed prompt and generation setup,
+with four native repetitions each. A local supervisor called the unchanged API
+and kept one outer sleep guard active throughout collection.
 
-The [validation record](validation.json) retains source and evidence hashes, all four outcomes and the deadline calculation. All observations passed the frozen native, timing, host and cleanup checks. The linked clock checkpoints and additional idle-sleep assertion were verified after closure. Swap activity was recorded in three observations and retained under the desktop policy.
+All observations passed the native, timing, host and cleanup checks. **No swap
+activity was observed** across readiness and setup. The calibration produced a
+**600-second deadline**, which was separately reviewed and approved for the
+[desktop CPU study](../desktop-cpu/README.md). The exported candidate remains
+unchanged; approval is a separate record.
 
-The candidate deadline is **600 seconds**. Its status remains **`pending_review`**; this record does not approve it for measurement.
+The [validation record](validation.json) contains the counts, source hashes,
+observation hashes and guard checks. [Detailed setup evidence](../desktop-cpu/setup.json)
+retains all native samples and resource observations. These are the same setup
+observations used by the desktop study; they are excluded from its performance
+comparison.
 
-This validates the freeze → setup → candidate-report workflow. It does not test a fresh download, clean build or cold file cache. Setup durations are excluded from performance comparisons. No new 48-run study, answer-quality result or backend adoption is claimed.
-
-Raw machine-specific records remain local. The independent audit rechecked source and raw-record hashes, the recorded runtime fingerprints and cached model stat continuity. It did not rehash the model or rerun native work.
+This validates the setup API and calibration workflow. It does not establish
+fresh downloads, clean builds or cold caches. macOS, managed security and the
+editor remained active; thermal readings were unavailable. Boundary and clock
+checks have finite limits. Raw local records and the supervisor are not distributed.

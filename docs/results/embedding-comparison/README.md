@@ -15,7 +15,7 @@ All six runs completed without execution failures. The development set also has 
 
 Against keyword search, hybrid gains one development case and loses none. On validation it gains `val-008`, `val-016` and `val-017`, but loses `val-006`, about starting a benchmark with an existing KV cache. The [per-case record](retrieval.json) preserves all wins, losses and selected source spans.
 
-The earlier [keyword baseline](../lexical-baseline/README.md) had no text budget and covered 10/13 development questions. Its original results, scores and spans still match exactly. This comparison adds a shared budget; it does not replace that baseline.
+The unbudgeted [keyword baseline](../lexical-baseline/README.md) had no text budget and covered 10/13 development questions. Its original results, scores and spans still match exactly. This comparison adds a shared budget; it does not replace that baseline.
 
 ## Compatibility and verification
 
@@ -23,14 +23,14 @@ The earlier [keyword baseline](../lexical-baseline/README.md) had no text budget
 - All 383 chunk token sequences matched the reference tokenizer. The longest input used 444 tokens, so every chunk fits in one model window.
 - [Index creation](index-build.json) stored 383 vectors atomically. Its observed wall time includes process startup and model loading; it is not a controlled benchmark.
 - [CLI checks](cli-smoke.json) passed for all three methods and validation evaluation.
-- All 216 local tests and 42 subtests passed, including the downloaded-source and model checks. Independent reviews covered storage, model compatibility, labels, evaluation and report publication.
+- The embedding feature checks passed 216 tests and 42 subtests, including the downloaded-source and model checks. Independent reviews covered storage, model compatibility, labels, evaluation and report publication.
 
 See the [reproduction guide](../../embeddings.md). The reports contain asset, source, vector and implementation identities. Full candidate passages remain locally in `artifacts/retrieval/embedding-comparison.json`; the published record includes its hash. The setup, comparison and reference checks make no model downloads after their assets and dependencies are installed.
 
 ## Limits
 
-These are agent-authored questions with source review, not human validation. The validation questions share documents with development. The sample is small and supports no broad reliability or significance claim.
+These are agent-authored questions with source review, not human validation. The validation-labelled set contains known questions and shares documents with development. The sample is small and supports no broad reliability or significance claim.
 
 Coverage requires complete labelled spans after passage selection. The BGE text budget excludes a future generator's instructions and template. Per-case times include search, token counting and scoring; they are not controlled latency measurements.
 
-No generated answers, citation support or abstention were evaluated here. Hybrid retrieval remains an optional candidate for the next Q&A checks. Its validation regression must stay visible when choosing the application's retrieval method.
+No generated answers, citation support or abstention were evaluated here. Hybrid retrieval remains optional because its case regression fails the default's no-regression rule.

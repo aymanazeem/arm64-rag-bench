@@ -1,7 +1,7 @@
 # CPU and KleidiAI checks
 
 The Qwen3.5-9B Q8_0 checks confirm that KleidiAI's intended kernels ran, but
-the backend failed the frozen answer-quality comparison. The application stays
+the backend did not preserve every CPU answer-quality check. The application stays
 on CPU. The [desktop study](../desktop-cpu/README.md) completed 48 valid runs
 in one uninterrupted invocation, with no observed swap activity. Prompt
 processing favored KleidiAI; generation favored CPU.
@@ -11,16 +11,16 @@ pinned builds in the [benchmark method](../../benchmarks.md).
 
 ## Answer quality
 
-CPU passed 30 of 40 complete cases; KleidiAI passed 28. KleidiAI added one
-citation failure, lost two previously supplied details, recovered three others,
-and had one request failure followed by a dependent preparation failure.
-The [quality report](quality.md) retains every case and the limits of this
-comparison. Diagnostic success does not override these quality failures.
+Both backends completed all 40 known questions, with 30 complete answers each.
+CPU had 78/78 supported claims and 66/83 required facts; KleidiAI had 80/81
+supported claims and 67/83 facts. KleidiAI gained three facts, lost two and
+added one citation failure. The [quality report](quality.md) retains each case,
+review provenance and comparison limits. Equal totals do not establish
+unchanged quality, and diagnostic success does not override these failures.
 
 ## Runtime evidence
 
-All 18 final diagnostic probes passed review. One earlier probe remains
-excluded because its controller changed after launch. All eight instrumented
+All 18 included diagnostic probes passed review. All eight instrumented
 CPU/KleidiAI pairs had identical input tokens, positions, phases and repetitions.
 The four planned workloads included these observed inputs:
 
@@ -51,8 +51,8 @@ rely on those source and build bindings; they are not directly traced.
 
 ## Evidence and reproduction
 
-The [compressed diagnostic record](diagnostics.json.gz) preserves all reviewed
-fields, including the excluded attempt. It contains no performance results.
+The [compressed diagnostic record](diagnostics.json.gz) preserves all diagnostic
+observations and exclusions. It contains no performance results.
 Raw traces and token arrays remain local; the public record retains hashes,
 counts and reviewed observations. Internal agent reviews are not external or
 human validation.

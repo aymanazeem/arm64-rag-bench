@@ -77,7 +77,7 @@ The recorded controller imposed 600-second/64-MiB bounds for smoke and 1,200-sec
 
 `stdout.json` is the upstream benchmark array; its timing values are excluded. `stderr.log` includes `Q35 ` JSON lines for actual inputs, sampled kernel entries, selected CPU fallbacks, loaded Mach-O images and hybrid state events. Kernel tracing covers the first batch of each phase in repetition zero, not every operation. The patch instruments two M1 DotProd Q8 entry points; another dispatched kernel needs separate instrumentation. Loaded images describe the diagnostic process only.
 
-The public source manifest lets readers verify and apply the exact instrumentation. The raw native records allow an independent parser to check phase/order, kernel-call pairing, token streams and state sizes. Input digests use token IDs encoded as unsigned 32-bit little-endian bytes. Original local parser/controller hashes bind the retained validation records; hashes alone neither publish those helpers nor let readers rerun their automated checks.
+The public source manifest lets readers verify and apply the exact instrumentation. The raw native records allow an independent parser to check phase/order, kernel-call pairing, token streams and state sizes. Input digests use token IDs encoded as unsigned 32-bit little-endian bytes. Original local parser/controller hashes bind the retained validation records; hashes alone neither publish those helpers nor let readers execute their automated checks.
 
 Those raw records must be collected locally with the commands above; the original
 historical logs are not distributed. This is manual instrumentation reproduction,

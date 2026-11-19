@@ -1,6 +1,5 @@
 {
   "schema_version": 1,
-  "date": "2026-11-13",
   "scope": "Local feature verification; not a performance benchmark.",
   "tests": {
     "passed": 439,

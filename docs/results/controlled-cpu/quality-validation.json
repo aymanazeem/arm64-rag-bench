@@ -6,22 +6,24 @@
   "dataset_id": "answers-fresh-validation-v1",
   "original_dataset_split": "validation",
   "role_provenance": {
-    "current_use": "Frozen backend regression; these questions were already used in CPU evaluation.",
+    "current_use": "Fixed regression questions already used in project evaluation.",
     "protocol_dataset": {
       "role": "validation",
       "use": "Fresh answer questions over shared pinned documents. Frozen before final runs; not held-out documents."
     },
     "recorded_run_role": "validation"
   },
-  "run_context": {},
+  "run_context": {
+    "execution": "CPU and KleidiAI quality checks using the same fixed questions and settings."
+  },
   "scope": "Small shared-source evaluation; independent agent review, not human validation or a general reliability score.",
   "source_manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
   "dataset_sha256": "332e90ad20ae182f0d6c1a2a15cb08a129ac661535070309d68c7b89e0a4221d",
   "protocol_file_sha256": "1202bb8f977b15b5ffa93e74bb01e83dda7c24344122a42acf886c8ab50a131a",
   "protocol_canonical_json_sha256": "b327c86db51d7d394510618f438815910d05e7fa89c1588248692614f5c1b0ef",
   "system_prompt_sha256": "5dd5de85d5050985ddcbf59390578aa3032aa727ef8ae01361879d0d104e5e5d",
-  "run_file_sha256": "98bcf4342ed8d63bd5af4e8deba850ced0e74fc6594c08723fc23f8ee7857788",
-  "aggregate_file_sha256": "ee6ec63fa1c280c47c3254c9c47c316b0b778249c17992bd4044b1ee2ece2401",
+  "run_file_sha256": "0d631437fd3ab8b6ec16f920f55830d5dfa07912343daf0502f16108d25b6966",
+  "aggregate_file_sha256": "d38f6b11f4becffa9af9d08eaa8ce0130092349b1b1898859f267942ae0bf457",
   "implementation": {
     "capture": "Recorded before server startup.",
     "sha256": {
@@ -38,7 +40,7 @@
       "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
       "src/arm64_rag/inference.py": "c6cfce7ed76b66f95ef8adeeb499bfaa92992bcf4ac0371c79e48dee30ee1061",
       "src/arm64_rag/qa_evaluation.py": "f92692c3a3e3cdce5de02fe1231a1f0ed5e66500a2a78a8728e3b02252ab659d",
-      "scripts/check_answers.py": "4c160dea286f499c63cffa4710c1ce970138211401eda4d5d28620613c9d2d3f",
+      "scripts/check_answers.py": "a53591a2fa1b1c0275a114ffbb5fb2362a2ece2ec40b6bafff91d743d5fcec62",
       "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
     }
   },
@@ -169,20 +171,16 @@
   "reviewers": [
     {
       "id": "reviewer-1",
-      "review_file_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+      "review_file_sha256": "2974be8e6485da78efc3e7b215dd41d0aa8a36ffbcf2fe30e46ad62addeb6d85",
       "type": "independent_agent",
       "human_validated": false,
-      "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
-      "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric.",
-      "method": "Follow the unchanged rubric and kleidiai-quality-review-workflow.md. Authenticate candidate/CPU files, compare actual guarded inputs, reuse only exact final content plus validated answer identity, and separately review changed final claims and citations. Do not use reasoning as factual evidence.",
+      "role": "Independent verification of six KleidiAI review transfers and source review of two newly completed answers.",
+      "independence_limit": "Project contributor; prepared source notes from known CPU cases and verified transfers separately from the preparation helper. No human or external validation.",
+      "method": "Reuse authenticated semantic verdicts only when question, retrieval, packed sources, evidence, final text and validated answer match exactly. Review changed outputs against canonical sources. Execution provenance always belongs to this run.",
       "review_scope": {
-        "comparison_note": "Compare each final answer with its own authenticated CPU record. Reuse verdicts only for exact final-content and validated-answer identity; otherwise review sources afresh.",
-        "scope": "All eight fixed validation cases, compared against the corrected CPU V12 validation report. These cases are now backend regressions, not unseen evaluation."
+        "scope": "Known questions over shared sources; no timing or unseen-question claim."
       },
-      "summary_notes": {
-        "denominator_note": "Five full-quality cases out of eight planned. Two failed executions have no final answer and four required fact units remain unassessed. These are not invented semantic failures.",
-        "claim_support_definition": "Only emitted claims are counted; supplied support and attached citation support are separate."
-      }
+      "summary_notes": {}
     }
   ],
   "attempts": {
@@ -224,12 +222,12 @@
   "summary": {
     "execution": {
       "cases_attempted": 8,
-      "cases_failed": 2,
-      "structurally_valid": 6,
+      "cases_failed": 0,
+      "structurally_valid": 8,
       "cases_with_evidence": 8,
-      "complete_evidence_in_prompt": 6,
+      "complete_evidence_in_prompt": 7,
       "statuses": {
-        "answered": 5,
+        "answered": 7,
         "insufficient_evidence": 1,
         "conflicting_evidence": 0
       },
@@ -239,69 +237,69 @@
     },
     "criteria": {
       "required_facts": {
-        "pass": 5,
+        "pass": 7,
         "fail": 1,
         "not_applicable": 0,
-        "not_assessed": 2
+        "not_assessed": 0
       },
       "unsupported_claims": {
-        "pass": 5,
+        "pass": 7,
         "fail": 0,
         "not_applicable": 1,
-        "not_assessed": 2
+        "not_assessed": 0
       },
       "citation_support": {
-        "pass": 5,
+        "pass": 7,
         "fail": 0,
         "not_applicable": 1,
-        "not_assessed": 2
+        "not_assessed": 0
       },
       "citation_coverage": {
-        "pass": 5,
+        "pass": 7,
         "fail": 0,
         "not_applicable": 1,
-        "not_assessed": 2
+        "not_assessed": 0
       },
       "abstention": {
         "pass": 1,
         "fail": 0,
-        "not_applicable": 5,
-        "not_assessed": 2
+        "not_applicable": 7,
+        "not_assessed": 0
       },
       "conflicts": {
         "pass": 0,
         "fail": 0,
-        "not_applicable": 6,
-        "not_assessed": 2
+        "not_applicable": 8,
+        "not_assessed": 0
       },
       "document_instructions": {
         "pass": 0,
         "fail": 0,
-        "not_applicable": 6,
-        "not_assessed": 2
+        "not_applicable": 8,
+        "not_assessed": 0
       }
     },
     "required_fact_items": {
-      "pass": 10,
+      "pass": 14,
       "fail": 3,
       "not_applicable": 0,
-      "not_assessed": 4
+      "not_assessed": 0
     },
-    "quality_passes": 5,
+    "quality_passes": 7,
     "claim_review_verdicts": {
-      "pass": 9,
+      "pass": 15,
       "fail": 0,
       "not_applicable": 0,
       "not_assessed": 0
     },
     "explicit_supplied_claim_verdicts": {
-      "pass": 9,
+      "pass": 15,
       "fail": 0,
       "not_applicable": 0,
       "not_assessed": 0
     },
     "explicit_attached_citation_verdicts": {
-      "pass": 9,
+      "pass": 15,
       "fail": 0,
       "not_applicable": 0,
       "not_assessed": 0
@@ -351,7 +349,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "1ba0901f1d1fa10875b5940bee64c6d2806479c85fc97c41a1b1973c1af1ade8",
+          "sha256": "7322d83a3c215026014d6d19e6d16d7c0bf50d12ee1699aeb477de8b796cd4ca",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -954,14 +952,20 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "The five supplied passages include unrelated Mac/Linux Vulkan instructions; they do not establish the Mac BLAS setup.",
-          "Partial Linux facts are available, but the frozen contract requires insufficient_evidence when the sources do not establish the requested multipart answer."
-        ],
-        "diagnosis": "Faithful whole-question refusal under the frozen all-parts contract. The Mac evidence was retrieved at rank6 and omitted by passage_limit, while the Linux recipe is supplied in S1. This is an answer-completeness failure caused by missing packed evidence, with no emitted unsupported claim.",
-        "abstention_kind": "faithful_missing_evidence"
+        "abstention_kind": "faithful_missing_evidence",
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "4f285f452772dd6d02f98480df1160aec95a9bf0994656584ca119b438bb99d0",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "4f285f452772dd6d02f98480df1160aec95a9bf0994656584ca119b438bb99d0"
+      "case_file_sha256": "8e28e2f881d952cfa5896b1194c8b1b75be2a52766dfca232df49ac07e4fb352"
     },
     {
       "id": "fresh-002",
@@ -1089,7 +1093,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "b0065826b3499a3b760b8f94902615eda8c653df897fa81bca01f1046e4bde87",
+          "sha256": "cc01eb9a091b969c31e290f9e387e902879b8e21207e4f1709ddeb05531807f1",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1685,12 +1689,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The file destination is expressed by the filename-directory sentence; repeating the words to/from a file in claim 1 is unnecessary."
-        ],
-        "diagnosis": "All three frozen facts and both supplied/attached claim checks pass. The shorter answer preserves the CPU quality verdicts."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "a3067e490d2ad4cdbe4fd2dfb1f7739017f16b824c3fb21724950a98f384f1ae",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "a3067e490d2ad4cdbe4fd2dfb1f7739017f16b824c3fb21724950a98f384f1ae"
+      "case_file_sha256": "27e42a71cf7604d65356b7c67e138c39f2bd3f3db0471e92c4779ef7df689b95"
     },
     {
       "id": "fresh-003",
@@ -1782,7 +1793,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "58803f984916e4ad3f4b668517ef1068090045dcd78f73ef59c356b90b3dd669",
+          "sha256": "1c063af3f40f656d402800efa33f289c74cbaa49253169322eadc04321005e9c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -2368,12 +2379,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The n placeholder denotes the positive variable value in the question and cited option; no additional numerical value is required."
-        ],
-        "diagnosis": "Both frozen facts and both supplied/attached claims pass. The up-to-n wording is clearer than the CPU maximum-override paraphrase without changing its verdict."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "17e1fcbfce6a7d45c636d189dfff517dff25b12c4e832b834f556f8f2aeede0c",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "17e1fcbfce6a7d45c636d189dfff517dff25b12c4e832b834f556f8f2aeede0c"
+      "case_file_sha256": "da14d7a424eb3ccfaf83473c3fb8e8804ea54a2881ecbba77bff273abf9d1c3b"
     },
     {
       "id": "fresh-004",
@@ -2465,7 +2483,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "31ff63a1e81d32c8f2d66c4e06576bd30ce3d6f557153bf1ce276d8b694d5aab",
+          "sha256": "08b3b14bcefaaa46e566cede9a280af6635ab4fe2ab751592eddbab9fe6081d8",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3036,12 +3054,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Changed final wording preserves every CPU verdict."
-        ],
-        "diagnosis": "Both frozen facts and both supplied/attached claims pass. The experimental qualification is correctly preserved despite the general stable-API feature list elsewhere in the supplied text."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "09e620901a52b066a9561d4ffaf1981b1b1ec28f85ead21d0fe3f5bfe5259c71",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "09e620901a52b066a9561d4ffaf1981b1b1ec28f85ead21d0fe3f5bfe5259c71"
+      "case_file_sha256": "5abcaca706717684648e536661750a22a4ff4d5c1c4d24d032ea079c689aa14a"
     },
     {
       "id": "fresh-005",
@@ -3133,7 +3158,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "7d04d9282ad4ea36a23e55d106e07011f07db0d5079bf1b51b2002bbfb60aa2e",
+          "sha256": "2ba40a1ae97b1ce9d1e8fa40ebeedb37d935fee169cd0226787f38fd38d7cf73",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3704,12 +3729,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "This case gains one required fact and a full-case pass; it does not cancel separate regressions elsewhere in the backend study."
-        ],
-        "diagnosis": "Both frozen facts and both supplied/attached claims pass. The compound first fact improves from CPU fail to pass because renaming is now explicit."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "7a09db8e3d0099e168227376635b2423b051b243ee7d85a40e02b8b8a362b623",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "7a09db8e3d0099e168227376635b2423b051b243ee7d85a40e02b8b8a362b623"
+      "case_file_sha256": "3e9394b719b85580578c630fc7586ecea45fa5aec6803706c95dca837cdd62dd"
     },
     {
       "id": "fresh-006",
@@ -3777,7 +3809,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "ebf002614b2d683cc6b1f2fab7f83b555772a8677a5cb71c262cdf9ffd0d95ce",
+          "sha256": "6009a15241020a2c33bd981d620ba496f5768d15c47c24eba0fe000942d9becd",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -4348,26 +4380,132 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "A concise, complete answer supported by the directly cited llama-bench option entry."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b5128ed37f34613b77f5e44f3c9af1849c6d499d14133a36f2460cebaf29284c",
+          "source_case_sha256": "9ac0980403118a01965bfaf2aa0b230ab85b39638be85855ba42ee80d7e552fc",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher, prior first-half CPU validation reviewer and pre-generation source reviewer; contributed failure-path fixes and measurement/launcher reviews. Did not author these eight questions.",
+            "independence_limit": "Project contributor, not external or human validation. Previously saw the fixed questions and reviewed their source grounding. Candidate final answers will be graded separately against the unchanged rubric."
+          }
+        }
       },
-      "case_file_sha256": "9ac0980403118a01965bfaf2aa0b230ab85b39638be85855ba42ee80d7e552fc"
+      "case_file_sha256": "a94917baca01e065ee7f74c5dfd5d89d241b72fbf0d011ff7d3fc2689fde6245"
     },
     {
       "id": "fresh-007",
       "question": "How should an x86_64 Linux host set up CMake to cross-compile KleidiAI for an Arm Linux target such as a Raspberry Pi?",
       "expected_answerability": "answerable",
-      "answer_status": null,
-      "failure": "The local inference request failed or timed out.",
-      "attempt_state": "completed_record_with_generation_failure",
-      "generated_claims": [],
+      "answer_status": "answered",
+      "failure": null,
+      "attempt_state": "completed",
+      "generated_claims": [
+        {
+          "claim": 1,
+          "text": "To cross-compile KleidiAI for an Arm Linux target from an x86_64 Linux host, ensure the Arm GNU toolchain is available on the PATH.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "kleidiai-readme",
+              "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+              "start": 6821,
+              "end": 7341,
+              "line_start": 136,
+              "line_end": 144,
+              "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+              "span_sha256": "e722dc1943a138750ee22a95f0d1980692b7154441431dc201b0ef71b7c5e835"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1 explicitly supports an x86_64 Linux host, Arm Linux target and Arm GNU toolchain on PATH.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        },
+        {
+          "claim": 2,
+          "text": "Provide the Arm GNU Toolchain CMakefile found in the `cmake/toolchains` directory to CMake using the `-DCMAKE_TOOLCHAIN_FILE` option.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "kleidiai-readme",
+              "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+              "start": 6821,
+              "end": 7341,
+              "line_start": 136,
+              "line_end": 144,
+              "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+              "span_sha256": "e722dc1943a138750ee22a95f0d1980692b7154441431dc201b0ef71b7c5e835"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1 explicitly names the cmake/toolchains directory and -DCMAKE_TOOLCHAIN_FILE option.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        },
+        {
+          "claim": 3,
+          "text": "Use the specific toolchain file `cmake/toolchains/aarch64-none-linux-gnu.toolchain.cmake` for the target.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "kleidiai-readme",
+              "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+              "start": 6821,
+              "end": 7341,
+              "line_start": 136,
+              "line_end": 144,
+              "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+              "span_sha256": "e722dc1943a138750ee22a95f0d1980692b7154441431dc201b0ef71b7c5e835"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1's Linux configure command uses this exact aarch64-none-linux-gnu.toolchain.cmake path.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        },
+        {
+          "claim": 4,
+          "text": "Execute the build commands `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/aarch64-none-linux-gnu.toolchain.cmake -S . -B build/` followed by `cmake --build ./build`.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "kleidiai-readme",
+              "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+              "start": 6821,
+              "end": 7341,
+              "line_start": 136,
+              "line_end": 144,
+              "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+              "span_sha256": "e722dc1943a138750ee22a95f0d1980692b7154441431dc201b0ef71b7c5e835"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1 gives both commands in this order, with the same Release option, toolchain path and build directories.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        }
+      ],
       "raw_completion_content_hash": {
-        "sha256": null,
-        "format": "No completion returned."
+        "sha256": "e2d4105f29f635cc2721db2d91ac8c1c0b6c43139a23f128dc656e0bced67987",
+        "format": "UTF-8 completion text."
       },
       "final_content_hash": {
-        "sha256": null,
-        "format": "No completion returned."
+        "sha256": "cef95c6d9a2874323555d347d0aa31f848ccac94c524c1f083a8f470bf707ea5",
+        "format": "UTF-8 completion text."
       },
       "prompt": {
         "prompt_sha256": "a6768c4bfbf71b0625c9b5728426ff04df39643cd5cb9682c5df4e4b80fe4380",
@@ -4375,7 +4513,52 @@
         "context_size": 8192,
         "max_output_tokens": 2048
       },
-      "generation": {},
+      "generation": {
+        "stop": true,
+        "stop_type": "eos",
+        "truncated": false,
+        "tokens_evaluated": 1769,
+        "tokens_predicted": 1345,
+        "final_content_hash": {
+          "sha256": "cef95c6d9a2874323555d347d0aa31f848ccac94c524c1f083a8f470bf707ea5",
+          "format": "UTF-8 completion text."
+        },
+        "raw_generated_content_hash": {
+          "sha256": "e2d4105f29f635cc2721db2d91ac8c1c0b6c43139a23f128dc656e0bced67987",
+          "format": "UTF-8 completion text."
+        },
+        "reasoning_content_hash": {
+          "sha256": "2d03fbb91380b91e090e5892909851197bd74640780feaab8cb46f33a5d82f8c",
+          "format": "UTF-8 completion text."
+        },
+        "chat_response_hash": {
+          "sha256": "eb4b6fa08d3cc7d1b53ebdafbeb7de8bc98ce1ce69dc953dd62f9d1df9e9b378",
+          "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
+        },
+        "effective_settings": {
+          "n_predict": 2048,
+          "max_tokens": 2048,
+          "seed": 42,
+          "temperature": 0.6000000238418579,
+          "top_p": 0.949999988079071,
+          "top_k": 20,
+          "min_p": 0.0,
+          "samplers": [
+            "top_k",
+            "top_p",
+            "min_p",
+            "temperature"
+          ],
+          "reasoning_format": "deepseek",
+          "grammar_lazy": false
+        },
+        "usage": {
+          "prompt_tokens": 1769,
+          "completion_tokens": 1345,
+          "total_tokens": 3114
+        },
+        "reasoning_budget_observability": "Requested budget is recorded in runtime; the API does not report a forced-closure flag or a separate reasoning-token count."
+      },
       "retrieved": [
         {
           "source_id": "kleidiai-readme",
@@ -4864,93 +5047,656 @@
       ],
       "review": {
         "reviewer_id": "reviewer-1",
-        "mechanical_validation": "fail",
+        "mechanical_validation": "pass",
         "required_facts": [
           {
             "fact": "Use the Arm GNU toolchain and make it available on PATH on the x86_64 Linux host.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 1 explicitly names the Arm GNU toolchain, PATH and x86_64 Linux host; S1 states each condition."
           },
           {
             "fact": "Pass -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/aarch64-none-linux-gnu.toolchain.cmake to CMake for the documented cross-build.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claims 2-4 give the CMake option and exact aarch64-none-linux-gnu.toolchain.cmake path; S1 contains the same configure command."
           }
         ],
         "unacceptable_claims": [
           {
             "claim": "The build must run on an Arm host because cross-compilation from x86_64 Linux is unsupported.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 1 explicitly supports cross-compilation from x86_64 Linux; the answer does not require an Arm host."
           },
           {
             "claim": "The Android NDK toolchain file is the documented toolchain for this Arm Linux cross-build.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "The answer selects the documented Arm GNU Linux toolchain and makes no Android NDK claim."
           }
         ],
         "criteria": {
           "required_facts": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Both required facts are explicit: Arm GNU/PATH on the host and the exact CMake toolchain-file setting."
           },
           "unsupported_claims": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "All four claims are directly supported by S1's Linux cross-compilation instructions. No Android or unrelated build conditions are added."
           },
           "citation_support": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Every claim cites S1, whose Linux prose and commands support the full attached claim, including host, target, options and paths."
           },
           "citation_coverage": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Each material claim has an S1 citation covering its toolchain or command details."
           },
           "abstention": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "The answer addresses the answerable question with supplied evidence; it does not abstain."
           },
           "conflicts": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "This case has no conflicting source records to reconcile."
           },
           "document_instructions": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "This is not a document-instruction handling case."
           }
         },
-        "failure_kinds": [
-          "inference_request_failure_or_timeout"
-        ],
-        "quality_notes": [
-          "This case remains in the planned and attempted denominator. Execution failure is not a model refusal, factual error or omission judgment."
-        ],
-        "diagnosis": "The inference request failed or timed out without a raw completion or final answer. The retained prompt, token IDs and supplied sources match CPU. No semantic verdict is available."
+        "failure_kinds": [],
+        "semantic_review": {
+          "method": "new_source_review",
+          "source_review_sha256": null,
+          "source_case_sha256": null,
+          "original_reviewer": null
+        }
       },
-      "case_file_sha256": "84758891582450b967b93f97ca807f91bb1230c59b2daf719a7d745eb4b451fa"
+      "case_file_sha256": "e8036ee84bc6b4c0e74916ac8bf3def589d9bfe064ee79da02fd4016e06f67f0"
     },
     {
       "id": "fresh-008",
       "question": "How can llama-bench results be sent straight into a SQLite database using the documented output format?",
       "expected_answerability": "answerable",
-      "answer_status": null,
-      "failure": "Inputs differ from the answer baseline. Earlier failure: The local server is not running.",
-      "attempt_state": "completed_record_with_preflight_failure",
-      "generated_claims": [],
+      "answer_status": "answered",
+      "failure": null,
+      "attempt_state": "completed",
+      "generated_claims": [
+        {
+          "claim": 1,
+          "text": "Run llama-bench with the -o sql option to generate SQL output suitable for importing into a SQLite database.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "llama-bench",
+              "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+              "start": 19250,
+              "end": 20350,
+              "line_start": 335,
+              "line_end": 388,
+              "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+              "span_sha256": "37460e73d2174cf812acedb661c861ae0add228afb648d3bcad833fd95d86be8"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1 states SQLite compatibility and shows the -o sql option; the full first claim is supported.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        },
+        {
+          "claim": 2,
+          "text": "The SQL output can be piped into the sqlite3 command line tool to add the results to a database.",
+          "citations": [
+            {
+              "label": "S1",
+              "resolved": true,
+              "source_id": "llama-bench",
+              "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+              "start": 19250,
+              "end": 20350,
+              "line_start": 335,
+              "line_end": 388,
+              "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+              "span_sha256": "37460e73d2174cf812acedb661c861ae0add228afb648d3bcad833fd95d86be8"
+            }
+          ],
+          "review": {
+            "verdict": "pass",
+            "reason": "S1 explicitly states that SQL output can be piped into sqlite3 to add results to a database.",
+            "supplied_support_verdict": "pass",
+            "citation_support_verdict": "pass"
+          }
+        }
+      ],
       "raw_completion_content_hash": {
-        "sha256": null,
-        "format": "No completion returned."
+        "sha256": "fa703573269e2c24c835edaf36cbd4eb1c426165e3b9be2f50b5ae12736dd601",
+        "format": "UTF-8 completion text."
       },
       "final_content_hash": {
-        "sha256": null,
-        "format": "No completion returned."
+        "sha256": "a2323ef7e1d0da5fb21f4a6a8ff14cda60b7653ec4d435e041b3dc3ee9797143",
+        "format": "UTF-8 completion text."
       },
-      "prompt": {},
-      "generation": {},
-      "retrieved": [],
-      "anchors": [],
-      "supplied": [],
-      "omitted": [],
+      "prompt": {
+        "prompt_sha256": "dc86a0d461dbec195dba7cd0bdb7d7bf2cfe5da26deb977d6953c14a6621c8c0",
+        "prompt_tokens": 1977,
+        "context_size": 8192,
+        "max_output_tokens": 2048
+      },
+      "generation": {
+        "stop": true,
+        "stop_type": "eos",
+        "truncated": false,
+        "tokens_evaluated": 1977,
+        "tokens_predicted": 1165,
+        "final_content_hash": {
+          "sha256": "a2323ef7e1d0da5fb21f4a6a8ff14cda60b7653ec4d435e041b3dc3ee9797143",
+          "format": "UTF-8 completion text."
+        },
+        "raw_generated_content_hash": {
+          "sha256": "fa703573269e2c24c835edaf36cbd4eb1c426165e3b9be2f50b5ae12736dd601",
+          "format": "UTF-8 completion text."
+        },
+        "reasoning_content_hash": {
+          "sha256": "acb42d8beb7dda1d527e83fa48afb786de1615c09e9447266ceba6e4e44114e2",
+          "format": "UTF-8 completion text."
+        },
+        "chat_response_hash": {
+          "sha256": "86d42fe822e9adba35e84cb2918e683cc249c27f6306bf32d1dead37575b22bd",
+          "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
+        },
+        "effective_settings": {
+          "n_predict": 2048,
+          "max_tokens": 2048,
+          "seed": 42,
+          "temperature": 0.6000000238418579,
+          "top_p": 0.949999988079071,
+          "top_k": 20,
+          "min_p": 0.0,
+          "samplers": [
+            "top_k",
+            "top_p",
+            "min_p",
+            "temperature"
+          ],
+          "reasoning_format": "deepseek",
+          "grammar_lazy": false
+        },
+        "usage": {
+          "prompt_tokens": 1977,
+          "completion_tokens": 1165,
+          "total_tokens": 3142
+        },
+        "reasoning_budget_observability": "Requested budget is recorded in runtime; the API does not report a forced-closure flag or a separate reasoning-token count."
+      },
+      "retrieved": [
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 19250,
+          "end": 20350,
+          "line_start": 335,
+          "line_end": 388,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "37460e73d2174cf812acedb661c861ae0add228afb648d3bcad833fd95d86be8",
+          "chunk_id": "05b63a6fdcc2d93406d5c1b56e8d426b2377295a494fa9461b503241c6bd46d3",
+          "rank": 1,
+          "score": -25.75534346699639
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 12432,
+          "end": 12585,
+          "line_start": 192,
+          "line_end": 195,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "1438c9db29a8e281a59273cd31c6aa826cba5ca3e34eb6a89f9e2ad5644e185d",
+          "chunk_id": "835b1b2ec7eee428dcd1e8c3d61b7e9bbda3b7fd11c8547f672841df9bc8e966",
+          "rank": 2,
+          "score": -22.0484971647134
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 4638,
+          "end": 5614,
+          "line_start": 88,
+          "line_end": 97,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "01ffcae24509c23a26a9ba700099e5663c2855429ecc2099249cfb58f3c2cbeb",
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "rank": 3,
+          "score": -12.67824184363376
+        },
+        {
+          "source_id": "llama-build",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 28699,
+          "end": 29571,
+          "line_start": 535,
+          "line_end": 557,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/docs/build.md",
+          "span_sha256": "bc80126cd7d8afabf0c6937b16e683fd582b56cd00f4b4f7fdbecc1b8f081c98",
+          "chunk_id": "69fa3c66c74a309437ecd642468cf38dcd77df425a75dd02bbabf9abb59d2e0f",
+          "rank": 4,
+          "score": -10.275382018395408
+        },
+        {
+          "source_id": "kleidiai-readme",
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "start": 10817,
+          "end": 11476,
+          "line_start": 195,
+          "line_end": 202,
+          "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+          "span_sha256": "7c998a63da16165e7a6a7d6020f58f4af72ac585439a282012994eb67058c954",
+          "chunk_id": "c106f0706d97adcefa4f7bdf9ef249b59904648d573d5f13e0e8638d648c1db8",
+          "rank": 5,
+          "score": -9.558877230301391
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 62219,
+          "end": 63189,
+          "line_start": 622,
+          "line_end": 640,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "078b5a1785414df7cf6e35eebc2ba33163b2ade6bc9840f1580f348766668f5c",
+          "chunk_id": "d6883e0bd209899d42d01b72ec8ad8e45fce5e4a2bcec2c5b06d5ffc3ddb801a",
+          "rank": 6,
+          "score": -9.06284745528177
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 99515,
+          "end": 100523,
+          "line_start": 1603,
+          "line_end": 1615,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "eabc21dfb85de2dfe9607af6b6a5ab34d75023ac4e7f6b5b161cda3cbe452853",
+          "chunk_id": "f16f1f4ad48c30dab968b1993a59aa0154e3350340d8e298f47f7b58d9b02132",
+          "rank": 7,
+          "score": -8.94503661122583
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 655,
+          "end": 1736,
+          "line_start": 20,
+          "line_end": 38,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "917ad3207dc0ede480e04f4022cbc9dff95125dd5db5e436965be69fa6d7551e",
+          "chunk_id": "81fdf313f1fc75c35b5adfe5234469b89ee739f11f3fd066957facc539beb23b",
+          "rank": 8,
+          "score": -8.927480991788501
+        },
+        {
+          "source_id": "kleidiai-readme",
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "start": 960,
+          "end": 2055,
+          "line_start": 19,
+          "line_end": 35,
+          "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+          "span_sha256": "b78a456c375ab05e72ac309878923e0dfd074b815daf358e835a191377ed15d0",
+          "chunk_id": "2aa3ca69c4b3517ef975d784df8400955de77d1427d5afd349f77a99ef63c331",
+          "rank": 9,
+          "score": -7.487518857331763
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 101094,
+          "end": 101995,
+          "line_start": 1624,
+          "line_end": 1634,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "bff490517e9d9226fcbbd29ee216c21ee68e9c1928464b67d39a2375d48a632d",
+          "chunk_id": "b06ddfe631776639df33fe28bbd3b1e98fbb8d51683ac14bcc6fa58c08e900f5",
+          "rank": 10,
+          "score": -7.185495097598713
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 120773,
+          "end": 121588,
+          "line_start": 2061,
+          "line_end": 2083,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "94157d750d2d49bda1498a3244c70849af8d1f6f315ae2617063daced11808c0",
+          "chunk_id": "2a4ca89c80e219d28830e81cf03d014993c64fbb03b688599e3c61c053fb274f",
+          "rank": 11,
+          "score": -7.160057649595726
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 70932,
+          "end": 71663,
+          "line_start": 842,
+          "line_end": 854,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "384e19a47445f897bc19ad052475d7c311532309706fc1b1ca4f0caf216e9f87",
+          "chunk_id": "2d2cbb1d6bcfed9a21e2e0e0fd20a5d2e1d3e5d8240eed2ff828b065a7cf039d",
+          "rank": 12,
+          "score": -6.966337990399783
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 14349,
+          "end": 14394,
+          "line_start": 219,
+          "line_end": 224,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "8a03cea2e74f2793c82150db8798870ab074652e626f48e80cdefee104c25988",
+          "chunk_id": "5fbb5bfb8ac2f4e6216e2662709b29c4aa44e0d1b91fe801ad642acb9a04961e",
+          "rank": 13,
+          "score": -6.893855443710251
+        },
+        {
+          "source_id": "kleidiai-readme",
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "start": 6145,
+          "end": 6380,
+          "line_start": 118,
+          "line_end": 126,
+          "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+          "span_sha256": "088282545e2b151474f07adfb91d8c2a6cc8386d0784a0d3c716a8fe8b7b7f74",
+          "chunk_id": "ef98f0ad3ca2d9cfdfaad429ef3c37b97a8a029e9adeec782aff4476c8575b2b",
+          "rank": 14,
+          "score": -6.8619461996357085
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 16981,
+          "end": 17042,
+          "line_start": 323,
+          "line_end": 329,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "6f4e3a5e60bdded8b1e31070de294ef6687e46a9d45da5b0a0e769efa5cec940",
+          "chunk_id": "02c7261a0f9cd5845c32af89551c83a5d960b498c67fc04add56aeb82b0f9bc3",
+          "rank": 15,
+          "score": -6.820039717569359
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 74260,
+          "end": 74866,
+          "line_start": 883,
+          "line_end": 902,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "8461ee26230ccd8e75676eccb35c91c91a448d0fc61d80a196c948beb5fc7bad",
+          "chunk_id": "b3ccb3d2e82a293c32062c7147ff31c6f7e86cab0e27c4f8ca9c1bd8fcdd1cc9",
+          "rank": 16,
+          "score": -6.768148097486847
+        },
+        {
+          "source_id": "llama-server",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 93661,
+          "end": 94630,
+          "line_start": 1466,
+          "line_end": 1480,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/server/README.md",
+          "span_sha256": "6ba61296aa047a8099c56353fa9af62ad04857733e660e605dde0c69132a907f",
+          "chunk_id": "94ed338a9339a78fa8609af846af4ca467cbc4bfe31a9d94cd8f1a5e7ce7673c",
+          "rank": 17,
+          "score": -6.629810846419463
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 20350,
+          "end": 21203,
+          "line_start": 389,
+          "line_end": 389,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "6b01d13d393e7b3a0351ab87e2b416b723b68ae6c49c3d15519b831a0263aaa4",
+          "chunk_id": "defd2859701aede3047ea5cee72efe6f27275ebea0a015889950a36d225aa137",
+          "rank": 18,
+          "score": -6.612098092457588
+        },
+        {
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 21295,
+          "end": 22148,
+          "line_start": 390,
+          "line_end": 390,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "6b01d13d393e7b3a0351ab87e2b416b723b68ae6c49c3d15519b831a0263aaa4",
+          "chunk_id": "113d9f3a7e613a3fe4e7db46bfd010448c75ade500c979ef31f20e4d7e3d981e",
+          "rank": 19,
+          "score": -6.612098092457588
+        },
+        {
+          "source_id": "llama-build",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 0,
+          "end": 553,
+          "line_start": 1,
+          "line_end": 15,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/docs/build.md",
+          "span_sha256": "028dac3b95bca7cc8d285f21835ee8e89d7fc0dce712700e138e511672445ade",
+          "chunk_id": "e8db7d405042d37baf140de23755b9bbb96f869980c0a8b4bdf79fd124b4dd31",
+          "rank": 20,
+          "score": -6.316185345323588
+        }
+      ],
+      "anchors": [
+        {
+          "label": "S1",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 19250,
+          "end": 20350,
+          "line_start": 335,
+          "line_end": 388,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "37460e73d2174cf812acedb661c861ae0add228afb648d3bcad833fd95d86be8",
+          "chunk_id": "05b63a6fdcc2d93406d5c1b56e8d426b2377295a494fa9461b503241c6bd46d3",
+          "rank": 1,
+          "score": -25.75534346699639
+        },
+        {
+          "label": "S2",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 12432,
+          "end": 12585,
+          "line_start": 192,
+          "line_end": 195,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "1438c9db29a8e281a59273cd31c6aa826cba5ca3e34eb6a89f9e2ad5644e185d",
+          "chunk_id": "835b1b2ec7eee428dcd1e8c3d61b7e9bbda3b7fd11c8547f672841df9bc8e966",
+          "rank": 2,
+          "score": -22.0484971647134
+        },
+        {
+          "label": "S3",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 4638,
+          "end": 5614,
+          "line_start": 88,
+          "line_end": 97,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "01ffcae24509c23a26a9ba700099e5663c2855429ecc2099249cfb58f3c2cbeb",
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "rank": 3,
+          "score": -12.67824184363376
+        },
+        {
+          "label": "S4",
+          "source_id": "llama-build",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 28699,
+          "end": 29571,
+          "line_start": 535,
+          "line_end": 557,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/docs/build.md",
+          "span_sha256": "bc80126cd7d8afabf0c6937b16e683fd582b56cd00f4b4f7fdbecc1b8f081c98",
+          "chunk_id": "69fa3c66c74a309437ecd642468cf38dcd77df425a75dd02bbabf9abb59d2e0f",
+          "rank": 4,
+          "score": -10.275382018395408
+        },
+        {
+          "label": "S5",
+          "source_id": "kleidiai-readme",
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "start": 10817,
+          "end": 11476,
+          "line_start": 195,
+          "line_end": 202,
+          "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+          "span_sha256": "7c998a63da16165e7a6a7d6020f58f4af72ac585439a282012994eb67058c954",
+          "chunk_id": "c106f0706d97adcefa4f7bdf9ef249b59904648d573d5f13e0e8638d648c1db8",
+          "rank": 5,
+          "score": -9.558877230301391
+        }
+      ],
+      "supplied": [
+        {
+          "label": "S1",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 19250,
+          "end": 20350,
+          "line_start": 335,
+          "line_end": 388,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "37460e73d2174cf812acedb661c861ae0add228afb648d3bcad833fd95d86be8",
+          "chunk_id": "05b63a6fdcc2d93406d5c1b56e8d426b2377295a494fa9461b503241c6bd46d3",
+          "rank": 1,
+          "score": -25.75534346699639
+        },
+        {
+          "label": "S2",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 12432,
+          "end": 12585,
+          "line_start": 192,
+          "line_end": 195,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "1438c9db29a8e281a59273cd31c6aa826cba5ca3e34eb6a89f9e2ad5644e185d",
+          "chunk_id": "835b1b2ec7eee428dcd1e8c3d61b7e9bbda3b7fd11c8547f672841df9bc8e966",
+          "rank": 2,
+          "score": -22.0484971647134
+        },
+        {
+          "label": "S3",
+          "source_id": "llama-bench",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 4638,
+          "end": 5614,
+          "line_start": 88,
+          "line_end": 97,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/README.md",
+          "span_sha256": "01ffcae24509c23a26a9ba700099e5663c2855429ecc2099249cfb58f3c2cbeb",
+          "chunk_id": "577415b5ca1ccc48c7341044bd9c1b976323856779175014e056896c02b76e07",
+          "rank": 3,
+          "score": -12.67824184363376
+        },
+        {
+          "label": "S4",
+          "source_id": "llama-build",
+          "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
+          "start": 28699,
+          "end": 29571,
+          "line_start": 535,
+          "line_end": 557,
+          "url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/8ca5a8008b57aa39f2601546c0d07912045080a5/docs/build.md",
+          "span_sha256": "bc80126cd7d8afabf0c6937b16e683fd582b56cd00f4b4f7fdbecc1b8f081c98",
+          "chunk_id": "69fa3c66c74a309437ecd642468cf38dcd77df425a75dd02bbabf9abb59d2e0f",
+          "rank": 4,
+          "score": -10.275382018395408
+        },
+        {
+          "label": "S5",
+          "source_id": "kleidiai-readme",
+          "revision": "c80157210987eedaab2509638ef5e15950c53a8c",
+          "start": 10817,
+          "end": 11476,
+          "line_start": 195,
+          "line_end": 202,
+          "url": "https://raw.githubusercontent.com/ARM-software/kleidiai/c80157210987eedaab2509638ef5e15950c53a8c/README.md",
+          "span_sha256": "7c998a63da16165e7a6a7d6020f58f4af72ac585439a282012994eb67058c954",
+          "chunk_id": "c106f0706d97adcefa4f7bdf9ef249b59904648d573d5f13e0e8638d648c1db8",
+          "rank": 5,
+          "score": -9.558877230301391
+        }
+      ],
+      "omitted": [
+        {
+          "chunk_id": "d6883e0bd209899d42d01b72ec8ad8e45fce5e4a2bcec2c5b06d5ffc3ddb801a",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "f16f1f4ad48c30dab968b1993a59aa0154e3350340d8e298f47f7b58d9b02132",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "81fdf313f1fc75c35b5adfe5234469b89ee739f11f3fd066957facc539beb23b",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "2aa3ca69c4b3517ef975d784df8400955de77d1427d5afd349f77a99ef63c331",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "b06ddfe631776639df33fe28bbd3b1e98fbb8d51683ac14bcc6fa58c08e900f5",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "2a4ca89c80e219d28830e81cf03d014993c64fbb03b688599e3c61c053fb274f",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "2d2cbb1d6bcfed9a21e2e0e0fd20a5d2e1d3e5d8240eed2ff828b065a7cf039d",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "5fbb5bfb8ac2f4e6216e2662709b29c4aa44e0d1b91fe801ad642acb9a04961e",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "ef98f0ad3ca2d9cfdfaad429ef3c37b97a8a029e9adeec782aff4476c8575b2b",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "02c7261a0f9cd5845c32af89551c83a5d960b498c67fc04add56aeb82b0f9bc3",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "b3ccb3d2e82a293c32062c7147ff31c6f7e86cab0e27c4f8ca9c1bd8fcdd1cc9",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "94ed338a9339a78fa8609af846af4ca467cbc4bfe31a9d94cd8f1a5e7ce7673c",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "defd2859701aede3047ea5cee72efe6f27275ebea0a015889950a36d225aa137",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "113d9f3a7e613a3fe4e7db46bfd010448c75ade500c979ef31f20e4d7e3d981e",
+          "reason": "passage_limit"
+        },
+        {
+          "chunk_id": "e8db7d405042d37baf140de23755b9bbb96f869980c0a8b4bdf79fd124b4dd31",
+          "reason": "passage_limit"
+        }
+      ],
       "context_omitted": [],
       "evidence": [
         {
@@ -4964,77 +5710,77 @@
           "sha256": "f84dbb6fd966a2b6a7df70772c76547efefc6be26cd8022e02570c33762b1b81",
           "revision": "8ca5a8008b57aa39f2601546c0d07912045080a5",
           "id": "benchmark-sql-import",
-          "retrieved": false,
-          "included_before_expansion": false,
-          "included": false
+          "retrieved": true,
+          "included_before_expansion": true,
+          "included": true
         }
       ],
       "review": {
         "reviewer_id": "reviewer-1",
-        "mechanical_validation": "fail",
+        "mechanical_validation": "pass",
         "required_facts": [
           {
             "fact": "Select SQL output with -o sql.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 1 explicitly selects -o sql; S1 shows ./llama-bench -o sql."
           },
           {
             "fact": "Pipe the SQL output into the sqlite3 command-line tool to add the results to a database.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 2 explicitly pipes SQL output into the sqlite3 command-line tool to add database results, as S1 states."
           }
         ],
         "unacceptable_claims": [
           {
             "claim": "The SQL output is not suitable for SQLite.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 1 correctly states that SQL output is suitable for SQLite import."
           },
           {
             "claim": "Selecting -o sql automatically creates and writes a SQLite database without a receiving tool.",
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Claim 2 names the receiving sqlite3 tool; the answer does not claim that -o sql writes a database by itself."
           }
         ],
         "criteria": {
           "required_facts": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Both required facts are explicit: -o sql output and a pipe into the sqlite3 receiving tool."
           },
           "unsupported_claims": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Both claims closely follow S1 and add no automatic database-writing or other unsupported behavior."
           },
           "citation_support": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Both claims cite S1, which supports the output option, SQLite compatibility and receiving-tool requirement."
           },
           "citation_coverage": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "pass",
+            "reason": "Both material claims have an S1 citation supporting their full content."
           },
           "abstention": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "The answer addresses the answerable question with supplied evidence; it does not abstain."
           },
           "conflicts": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "This case has no conflicting source records to reconcile."
           },
           "document_instructions": {
-            "verdict": "not_assessed",
-            "reason": "No final answer was available because execution failed; no semantic judgment is made."
+            "verdict": "not_applicable",
+            "reason": "This is not a document-instruction handling case."
           }
         },
-        "failure_kinds": [
-          "server_unavailable_before_prompt"
-        ],
-        "quality_notes": [
-          "This case remains in the planned and attempted denominator. Execution failure is not a model refusal, factual error or omission judgment."
-        ],
-        "diagnosis": "After the previous request failure, the server was not running. This attempted case retains no retrieval, packed prompt or generated answer; the guard correctly records missing-input mismatches. No semantic verdict is available."
+        "failure_kinds": [],
+        "semantic_review": {
+          "method": "new_source_review",
+          "source_review_sha256": null,
+          "source_case_sha256": null,
+          "original_reviewer": null
+        }
       },
-      "case_file_sha256": "7d8eb2ff77651c3c559a8b71b114e54d4f65b5add26914b3f8c697d4ebb4108d"
+      "case_file_sha256": "fcd9786945b0d9ddc233fc06a0266296c38065f5e5e23ec83247d231dc93cf74"
     }
   ]
 }

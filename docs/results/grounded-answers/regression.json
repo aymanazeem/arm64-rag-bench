@@ -6,22 +6,24 @@
   "dataset_id": "arm64-retrieval-validation-v1",
   "original_dataset_split": "validation",
   "role_provenance": {
-    "current_use": "Spent retrieval-validation questions used for regression checks.",
+    "current_use": "Fixed regression questions already used in project evaluation.",
     "protocol_dataset": {
       "role": "development_regression",
       "use": "V6 answer review exposed failures used to guide later prompt changes. These questions now serve as development regressions, not independent validation."
     },
     "recorded_run_role": "regression"
   },
-  "run_context": {},
+  "run_context": {
+    "execution": "CPU and KleidiAI quality checks using the same fixed questions and settings."
+  },
   "scope": "Small shared-source evaluation; independent agent review, not human validation or a general reliability score.",
   "source_manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
   "dataset_sha256": "39c2dce89a1c04fbda8988f3d7a010084a16f7285d219ca08610735565d1cedc",
   "protocol_file_sha256": "1202bb8f977b15b5ffa93e74bb01e83dda7c24344122a42acf886c8ab50a131a",
   "protocol_canonical_json_sha256": "b327c86db51d7d394510618f438815910d05e7fa89c1588248692614f5c1b0ef",
   "system_prompt_sha256": "5dd5de85d5050985ddcbf59390578aa3032aa727ef8ae01361879d0d104e5e5d",
-  "run_file_sha256": "c2e8670c964884810ff7c36cf578a0c894a6b1f2ee8d3ef385617b18c9bc4e4d",
-  "aggregate_file_sha256": "cd2c364482d4aa65ba847776790b617292d01d3f732e39c394bbc9cc9ed7923b",
+  "run_file_sha256": "fc6ec34b81e26077d8fc0ffdf4f54ea78f314971e4e0cafc61212b255d1c4048",
+  "aggregate_file_sha256": "b58d71e5a8bfdb7bd584dd9b2c8bd0aad26de71547c6c4a77249fd5315bc1065",
   "implementation": {
     "capture": "Recorded before server startup.",
     "sha256": {
@@ -38,7 +40,7 @@
       "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
       "src/arm64_rag/inference.py": "c6cfce7ed76b66f95ef8adeeb499bfaa92992bcf4ac0371c79e48dee30ee1061",
       "src/arm64_rag/qa_evaluation.py": "f92692c3a3e3cdce5de02fe1231a1f0ed5e66500a2a78a8728e3b02252ab659d",
-      "scripts/check_answers.py": "cc2321c9418e5a7c4573889b4c0128fd152e4336eed42af228443eb7394ae7ca",
+      "scripts/check_answers.py": "a53591a2fa1b1c0275a114ffbb5fb2362a2ece2ec40b6bafff91d743d5fcec62",
       "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
     }
   },
@@ -169,115 +171,16 @@
   "reviewers": [
     {
       "id": "reviewer-1",
-      "review_file_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+      "review_file_sha256": "7bf16f5984915b3edfa589e6538927ac8ee5fecbf37d7d1a41141935a52ad062",
       "type": "independent_agent",
       "human_validated": false,
-      "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
-      "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review.",
-      "method": "Apply the unchanged required facts, forbidden claims and seven review criteria. Check each final claim against supplied canonical text and its attached citations. Keep fact omissions, retrieval omissions and support failures separate. Reasoning text and structural validity are not factual evidence.",
+      "role": "Independent verification of exact-output review transfers.",
+      "independence_limit": "Project contributor; checked transferred verdicts separately from the preparation helper. No human or external validation.",
+      "method": "Reuse authenticated semantic verdicts only when question, retrieval, packed sources, evidence, final text and validated answer match exactly. Review changed outputs against canonical sources. Execution provenance always belongs to this run.",
       "review_scope": {
-        "comparison_note": "Frozen V12 model/preset, system prompt, schema and source pipeline match the accepted targeted support check. These larger known sets have not been used to change them during this run.",
-        "completion_scope": {
-          "run_state": "completed",
-          "planned": [
-            "val-001",
-            "val-002",
-            "val-003",
-            "val-004",
-            "val-005",
-            "val-006",
-            "val-007",
-            "val-008",
-            "val-009",
-            "val-010",
-            "val-011",
-            "val-012",
-            "val-013",
-            "val-014",
-            "val-015",
-            "val-016",
-            "val-017",
-            "val-018"
-          ],
-          "attempted": [
-            "val-001",
-            "val-002",
-            "val-003",
-            "val-004",
-            "val-005",
-            "val-006",
-            "val-007",
-            "val-008",
-            "val-009",
-            "val-010",
-            "val-011",
-            "val-012",
-            "val-013",
-            "val-014",
-            "val-015",
-            "val-016",
-            "val-017",
-            "val-018"
-          ],
-          "completed": [
-            "val-001",
-            "val-002",
-            "val-003",
-            "val-004",
-            "val-005",
-            "val-006",
-            "val-007",
-            "val-008",
-            "val-009",
-            "val-010",
-            "val-011",
-            "val-012",
-            "val-013",
-            "val-014",
-            "val-015",
-            "val-016",
-            "val-017",
-            "val-018"
-          ],
-          "assigned_cases": [
-            "val-001",
-            "val-002",
-            "val-003",
-            "val-004",
-            "val-005",
-            "val-006",
-            "val-007",
-            "val-008",
-            "val-009"
-          ],
-          "review_complete_for_assigned_cases": true
-        },
-        "scope": "Known questions used for development or regression, over a shared source corpus. No fresh validation or general accuracy claim. Only the assigned first half is reviewed here."
+        "scope": "Known questions over shared sources; no timing or unseen-question claim."
       },
-      "summary_notes": {
-        "claim_support_definition": "Supplied-source support is counted separately from attached-citation support."
-      }
-    },
-    {
-      "id": "reviewer-2",
-      "review_file_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
-      "type": "independent_agent",
-      "human_validated": false,
-      "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
-      "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer.",
-      "method": "Review final answer claims only against cited supplied passages and pinned canonical sources. Do not use model reasoning as answer content or as evidence. Apply every unchanged required fact and unacceptable claim. Mechanical checks establish source binding only. Keep omissions, redundant citations, unsupported claims and execution failures separate.",
-      "review_scope": {
-        "completion_scope": "All nine assigned last-half regression cases reviewed. The full run contains eighteen spent retrieval-validation questions, not fresh answer validation.",
-        "scope": "Last nine spent retrieval-validation questions, now regression cases. These questions have informed development; this is not fresh answer validation."
-      },
-      "summary_notes": {
-        "reason": "All emitted claims are supported. Val013 omits the supplied HTTP 400 behavior. Val016 and val017 correctly abstain because the required evidence is not packed, but still fail the answer requirements.",
-        "quality_gate": "supplied_and_attached_support_pass_with_incomplete_facts",
-        "denominator_note": "Nine assigned completed cases, including two warranted zero-claim abstentions. Zero claims are not counted as claim-support passes.",
-        "comparison_note": "Val013 loses the HTTP 400 detail present in V6. The same two evidence-selection failures remain. The extra supported router-startup statement does not replace the missing fact.",
-        "timing_comparison": "Not made; this is a quality run.",
-        "claim_support_definition": "Supplied-source and attached-citation verdicts are recorded separately."
-      }
+      "summary_notes": {}
     }
   ],
   "attempts": {
@@ -525,7 +428,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "cb025979b8cce1736802f089091c7ec7c540e1a38938f8e053667166b92fb9dd",
+          "sha256": "3c755e98130cba15f72a800fe9f632580262ef1fdd61402d097124f7d6a6246a",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1091,10 +994,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both required build-mode distinctions are complete and supported. The previously omitted ignored-flag behavior is now explicit."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "9f5c6a2e553d84f688db4579b5c57217aa514096b45c5ab21a4f2c998d900d10",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "9f5c6a2e553d84f688db4579b5c57217aa514096b45c5ab21a4f2c998d900d10"
+      "case_file_sha256": "b2e8e78f52e5c07dde802fc3496ac51e1e037b58eded448e3cb61c3c95d67e7a"
     },
     {
       "id": "val-002",
@@ -1162,7 +1074,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "487b0cbc3c414ed48ab7b357987094b3112f72f9b7e68c9c8578d2f4e34658ec",
+          "sha256": "845a73f6355727920e9d07fcaa0a691e00cb2c1ff3037341ead5e5cdb0734fe0",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1728,12 +1640,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Full-span evidence coverage is not needed to support this answer: S5 retains the explicit static-build sentence and command."
-        ],
-        "diagnosis": "The required flag is complete and directly supported by S5. Full labelled-span inclusion is false, but the needed sentence and flag are present."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "74f616d4691878b539c0ff44a1d41046c18b17bdf735e2a3f2cb0e364d646166",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "74f616d4691878b539c0ff44a1d41046c18b17bdf735e2a3f2cb0e364d646166"
+      "case_file_sha256": "11a6843c90ef4fad9f7fde3a4ddd5da47a1d0ef7185e31532ad6a51b1084f490"
     },
     {
       "id": "val-003",
@@ -1825,7 +1744,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "72b9b78f3197a8156c6dbc3a4085331f8d0d220c00d8016287128b2456d1e573",
+          "sha256": "4efda8e6a1ef1d8a0fe769fc714978f34cbd51e424335a81efac0bb0e29f42d4",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -2401,15 +2320,22 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Claim 1 uses the less precise word supports instead of explicitly saying may improve. In this workload-benefit question it identifies the right workload and threshold; it does not assert guaranteed improvement or exclude support for smaller batches."
-        ],
-        "diagnosis": "Both required facts are conveyed in the question context and supported by S1. The prior no-effect omission is fixed.",
         "adjudication": {
           "note_sha256": "7db262d0cd283339d2fe2217dadde87874dc722e3a0d55e8f053d4152e43e52e"
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "c6a2af80f963d330c8dc6a8a7738cdcea69f4e85bfcdf242af6d0493d2bae65f",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
         }
       },
-      "case_file_sha256": "c6a2af80f963d330c8dc6a8a7738cdcea69f4e85bfcdf242af6d0493d2bae65f"
+      "case_file_sha256": "d705036bfae79d3767edaa0412e09971450a9df0695f37caf6e31cb74c150237"
     },
     {
       "id": "val-004",
@@ -2501,7 +2427,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "30af64b3eefb7822fb8b027f44e75acb1ef38bf4b86198d10aff08ae2a324aec",
+          "sha256": "6dfd2cf2ba1b8ad4a5efa1f2ca2168eddb7921e0a33d37b39d30bf49eaf611b3",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3074,15 +3000,22 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "The answer gives the pieces surrounding the missing conclusion, but separate capability reporting does not itself state which vector-length value the selector uses."
-        ],
-        "diagnosis": "Every emitted claim and attached citation is supported, but the Apple-specific unknown-vector-length conclusion is omitted despite full evidence in S1. V6 explicitly stated it; this is a completeness regression, not a false claim.",
         "adjudication": {
           "note_sha256": "ee4af16df729078f456a0ccf8841e4c24814f7839e56cb7ac9312600fde55a17"
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "44a6ed9b03ab04ce8c0406c625e78f478d703dff9a28d1c81926e8cc7d9e0b38",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
         }
       },
-      "case_file_sha256": "44a6ed9b03ab04ce8c0406c625e78f478d703dff9a28d1c81926e8cc7d9e0b38"
+      "case_file_sha256": "92ac4eae4e779de529de97e2677807db97ff1cee96043321578e65553b48b765"
     },
     {
       "id": "val-005",
@@ -3186,7 +3119,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "6281af51ad53ea405a099b16e8d4687651deb19b2ca3491afd302a9add60c080",
+          "sha256": "a0e4308885755c148cbfac44dae316d56213a40b31ffe8a9bdf179b660d0a64c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3757,10 +3690,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both required facts and attached citations pass. The prior unsupported extension to generic every-test or combined-workload scope is absent."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "6a119a2b24f9e370188a970f5f6e2974760eec8f58be8861993f0a4d694c5def",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "6a119a2b24f9e370188a970f5f6e2974760eec8f58be8861993f0a4d694c5def"
+      "case_file_sha256": "40504119fb577accebe0da3dc7f9fe79e1a5b8ccb6fa96dc09ed2de0822bc872"
     },
     {
       "id": "val-006",
@@ -3876,7 +3818,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "7b84864a36d61ef5b645610b137e000104fced8ca4a97fcad6b4828a2a5b09c5",
+          "sha256": "b3d0c1415187f089f9d23a88c104ec9a516b6fe11f41b8659900aaea02462458",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -4447,12 +4389,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The three claims repeat parts of one instruction; this is a concision issue, not a support or completeness failure."
-        ],
-        "diagnosis": "Complete and supported by S1. The answer does not infer prefilled cache from the unrelated pp512 output table."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "84cf8d48e7a962a2b6fefcdda43e88bbd37e75fe9473fb9c18c368ab2d730c2d",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "84cf8d48e7a962a2b6fefcdda43e88bbd37e75fe9473fb9c18c368ab2d730c2d"
+      "case_file_sha256": "905547a6de0279796d2a4a59aaf8dcaec357b1d3b5876493e10b6bbf81b7a951"
     },
     {
       "id": "val-007",
@@ -4544,7 +4493,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "cd789ffdcd9d2eecc0b610c9af133ab65e93837ff358006d6a11b0b21d9cf00f",
+          "sha256": "823211c1a8e1fe3c5918a003d330fa15fc1d270f688132ede9a1c2bb952e797a",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5115,10 +5064,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both required options, their roles and the memory unit are complete and cited to the benchmark table. The prior missing-MiB omission is fixed."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "8a64a730a4df9c476502fd1d5267630607ed347ce1ba4b6a568575489fb77803",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "8a64a730a4df9c476502fd1d5267630607ed347ce1ba4b6a568575489fb77803"
+      "case_file_sha256": "8689d9af5464bff647f6561b052568c8b5d0b51263d3ad1d36a71a443b752532"
     },
     {
       "id": "val-008",
@@ -5210,7 +5168,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "4740654a260f5284e5ec8dbe9c9bbc19bbc0648ff22e45fa459552adf17e4327",
+          "sha256": "09f0fcfbc2944c5691e5187b4ba428d3da82684312f9ee44411e74fb974efe03",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5798,12 +5756,19 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "The canonical folder-name passage at lines 76\u201388 was retrieval rank 6, then omitted for passage_limit. The final five supplied sources contain the variant facts but not the folder-name definition."
-        ],
-        "diagnosis": "The variant part is complete and both claims are supported. The folder-name fact remains missing because its canonical definition was retrieved but not supplied; this is a packing loss plus answer incompleteness, not an unsupported claim."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "938b42c40bbac73b8bc5393ddf312e171cd6287b4f5f2286d9174b6d9b7397e6",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "938b42c40bbac73b8bc5393ddf312e171cd6287b4f5f2286d9174b6d9b7397e6"
+      "case_file_sha256": "8ad4574ae39d7aa6a86a7315adf37ed0d3fad34ec308b2514194ce86e2aca12e"
     },
     {
       "id": "val-009",
@@ -5895,7 +5860,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "7f586a7a25bdda628d368b5beb9c0009c6840fcd4bca5c88eeaad86904940566",
+          "sha256": "6916e5b27e244bc0c8fa5d04a4a31fd34b5aecb3c363aafe9657502bd626119d",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -6471,10 +6436,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both required facts and citations pass. The earlier missing warning about dynamically generated archive hashes is now explicit."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "48fc42907074e26da84627682e85befc305936923b8cc837f8970e9bb0c7a6b0",
+          "source_case_sha256": "146d5fcc04a8f701463413045b3f330a0bff326a697204c67bcab970fc832ad7",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and targeted-pilot reviewer; contributed downloader and failure-path fixes, not the frozen prompt or context expansion.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Scored final claims only. Earlier fresh-question source review is separate; no fresh question was opened or used during this run review."
+          }
+        }
       },
-      "case_file_sha256": "146d5fcc04a8f701463413045b3f330a0bff326a697204c67bcab970fc832ad7"
+      "case_file_sha256": "fd0b3c8f7a078d471adf7150284e401a75b36f016ae6ba10a601d41db2eed8ac"
     },
     {
       "id": "val-010",
@@ -6566,7 +6540,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "b998a505d94794601100c354266a6ccc5cf8b5ee4bdcc84686801fc04cda992b",
+          "sha256": "c564c670d80315185d5b1789d6c248c74a9381406991c7f03eee702a51f83f5e",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -7085,7 +7059,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -7137,10 +7111,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both required facts are explicit and supported by S1. The answer does not invent an x86 exception."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "1adf3e52b8f7a7ca1572dd4626e0af40306a56252ea3cbe8000c59fe99fe8516",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "1adf3e52b8f7a7ca1572dd4626e0af40306a56252ea3cbe8000c59fe99fe8516"
+      "case_file_sha256": "bb1a8ce977475134be3189ca16ce81d6b97de8a49aa7b90ab5f633e8865aef7e"
     },
     {
       "id": "val-011",
@@ -7256,7 +7239,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "c971519ba413c9400b8cb4de7e5138174b8360ee73404ee86bc99a47049a625c",
+          "sha256": "23f15b050e834f7bd8425d13294a95f22bd645ef57c13d99497ae8c7b799f9df",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -7770,7 +7753,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -7832,10 +7815,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "All three frozen compiler, build-setting and ZA call-chain facts are explicit and supported by S1."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "a06917962eaecf165f4c360492043b9548b2a028d0842b13fc4ecf4fc0042061",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "a06917962eaecf165f4c360492043b9548b2a028d0842b13fc4ecf4fc0042061"
+      "case_file_sha256": "c433a91170440ab894535f19a337cb9cc91eec0f210ebef541994b27b94a4d6a"
     },
     {
       "id": "val-012",
@@ -7951,7 +7943,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "63b7a06534486c03a9d08745ccb8c018af19c383ceb61af923512779dbe6c7f7",
+          "sha256": "d98ae0c160a138457183dab47f6554ba84a65968571960d1fba725b39b15555a",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -8480,7 +8472,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -8542,10 +8534,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "The endpoint distinction and normalization conditions are correctly preserved; all three facts pass."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "ca360f1b1ff30cf2006de2678a6d046948313e944cd76cd3716dbc70cd6137b0",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "ca360f1b1ff30cf2006de2678a6d046948313e944cd76cd3716dbc70cd6137b0"
+      "case_file_sha256": "1597a7794badf94ec6e399c047f158b6b30f0ad983b3c2b6423b4f8feb86fbc5"
     },
     {
       "id": "val-013",
@@ -8661,7 +8662,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "01c822a44e0a64bf640beb09091cbe26eaca0a633f1058f46ff1edff7421ddab",
+          "sha256": "f04b8f6abf4b91c09b5a91bb418b379e4a60ee13f7a27a558293261ae94ce7fe",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -9175,7 +9176,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -9239,12 +9240,19 @@
         "failure_kinds": [
           "missing_required_facts"
         ],
-        "quality_notes": [
-          "A completeness regression from V6: V6 explicitly included HTTP 400, with the same S1 evidence. No unsupported statement is introduced."
-        ],
-        "diagnosis": "The answer gives the requested setup and model parameter, but omits the frozen HTTP 400 fact. The extra router-startup statement is accurate and cited; it does not replace the omitted failure behavior."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "1a10f589ffefed9c57ee44acca37cff98d6e8930d1a2da5e9c2b83d48818ba8c",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "1a10f589ffefed9c57ee44acca37cff98d6e8930d1a2da5e9c2b83d48818ba8c"
+      "case_file_sha256": "54e283dc609003184d90e3d4244c10398f2f1d8f5a80a31e1a23a547953fb953"
     },
     {
       "id": "val-014",
@@ -9384,7 +9392,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "61442c5de00cb9fa3fdc8374e7eb9404740735c25f0f2af2a1bf319bee2d5eeb",
+          "sha256": "64b7adf14b2c489dfd241cb27ffd3813c6f975aba2704f50fc06c7c30b4a4abb",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -9898,7 +9906,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -9950,12 +9958,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The three citations repeat the same configuration rule; the redundancy does not make either claim unsupported."
-        ],
-        "diagnosis": "Both frozen property-mutation facts are explicit and supported."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "e316287e1e99014f61767ae3c393553fe5bebea7324092d87432b3f429a3129c",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "e316287e1e99014f61767ae3c393553fe5bebea7324092d87432b3f429a3129c"
+      "case_file_sha256": "b306ceb409861a2770f0a72569fab610268efb245e024c9f5246349be7ba4a31"
     },
     {
       "id": "val-015",
@@ -10083,7 +10098,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "5d838f265d9148b8dcf2023d8eb7147a21a7aba60b5f98e002699e840b07dbd0",
+          "sha256": "9349be9f4c02a0abd2bcb68913efdcd5e435a0425b029ebfc5e3324c355fe37a",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -10617,7 +10632,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -10674,12 +10689,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Claim1 cites overlapping S1 and S3 passages; the source repetition is redundant."
-        ],
-        "diagnosis": "Both frozen routing facts are fully answered and supported. The additional default-cache statement is also supplied."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "72493b2c68b3d53fa90efc77ae56952c3f7baef88348fa93499c2c57b2078472",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "72493b2c68b3d53fa90efc77ae56952c3f7baef88348fa93499c2c57b2078472"
+      "case_file_sha256": "e3448841195c38986b26b8e252f8344b3320e88b9388abc46a715e09de23a3ca"
     },
     {
       "id": "val-016",
@@ -10722,7 +10744,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "f6f2aac68b31b931f9880187fd98f1d30ab27283a6c23fdbb5ace9f31cd76927",
+          "sha256": "23448830b887e2d803e65c2cac352214142849d761ad49144677ba584c0aad24",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -11251,7 +11273,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -11316,18 +11338,20 @@
           "missing_required_facts",
           "missing_packed_evidence"
         ],
-        "quality_notes": [],
-        "diagnosis": "Faithful abstention on insufficient supplied context. The answer exists in the corpus and retrieved candidates, but the passage limit excludes the relevant rank 6 sleep section.",
         "abstention_kind": "faithful_due_to_missing_packed_evidence",
-        "evidence_selection_diagnosis": {
-          "relevant_passage_rank": 6,
-          "candidate_depth": 20,
-          "max_passages": 5,
-          "omission_reason": "passage_limit",
-          "included_in_prompt": false
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "a3981d6b9ec82be27288b0035b0bccec53f73ffe7daf5e8d72723a925d449d5f",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
         }
       },
-      "case_file_sha256": "a3981d6b9ec82be27288b0035b0bccec53f73ffe7daf5e8d72723a925d449d5f"
+      "case_file_sha256": "c8ca6e6dc8e6261c32c57aee27bd974bd3947eba7f824e7b43821dbd03549fec"
     },
     {
       "id": "val-017",
@@ -11370,7 +11394,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "4ff47fd2be8fae42b811fdfdb66aed1f165da190d431509740109234077149cb",
+          "sha256": "10b69440ab1062468326fa8d58ede7e218bd81d50af1d5317ca1130e5b2d5548",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -11889,7 +11913,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -11954,18 +11978,20 @@
           "missing_required_facts",
           "missing_packed_evidence"
         ],
-        "quality_notes": [],
-        "diagnosis": "Faithful abstention on insufficient supplied context. The model does not invent n_keep semantics absent from its five supplied passages; the relevant definition was retrieved at rank 6.",
         "abstention_kind": "faithful_due_to_missing_packed_evidence",
-        "evidence_selection_diagnosis": {
-          "relevant_passage_rank": 6,
-          "candidate_depth": 20,
-          "max_passages": 5,
-          "omission_reason": "passage_limit",
-          "included_in_prompt": false
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "8218791a44f8c983097206919118c101e22a242ba5c5c4ae3169cded47af37f5",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
         }
       },
-      "case_file_sha256": "8218791a44f8c983097206919118c101e22a242ba5c5c4ae3169cded47af37f5"
+      "case_file_sha256": "764e8325438ab52a7722aea22eb61cdae136255490556fedaa3700c71eee5b74"
     },
     {
       "id": "val-018",
@@ -12069,7 +12095,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "546c9268d7dc055647d5dc73a83c20232d062ca61dd936e9726282e33723932d",
+          "sha256": "3387df7ef01c0f415807f8f735f19c059fe1ad8f05cfd2ed1cd5c200aa5ef91d",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -12583,7 +12609,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -12640,10 +12666,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both frozen stopping-string facts are explicit and supported by their attached passages."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "cda1e83af28378f169456c9cf88b6b14649a46dc60508cfd181178686629a051",
+          "source_case_sha256": "7b36006cd9699c441d7bd3d56bdbb0fd8b816607558cb73026b4dacbbff35ec6",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Context-expansion and protocol developer and integration-test reviewer; separately reviewed final outputs and did not author the frozen final prompt.",
+            "independence_limit": "Contributed to the pipeline and rubric; not a fully external or human reviewer."
+          }
+        }
       },
-      "case_file_sha256": "7b36006cd9699c441d7bd3d56bdbb0fd8b816607558cb73026b4dacbbff35ec6"
+      "case_file_sha256": "ea6aa53dc3b0df083006ece1b994a0dd926208bd4a66add290981f2a39aaf37b"
     }
   ]
 }
