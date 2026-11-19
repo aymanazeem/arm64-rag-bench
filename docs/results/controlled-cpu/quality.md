@@ -1,67 +1,66 @@
 # CPU and KleidiAI answer quality
 
-The KleidiAI build failed the frozen CPU quality comparison.
-The application continues to use CPU. All 40 attempted cases are retained in
-the [comparison record](quality-comparison.json).
+Both backends completed all 40 known questions, with 30 complete answers each.
+KleidiAI did not preserve every CPU quality check: it gained three facts, lost
+two and added one claim without full citation support. CPU remains the
+application backend. The [comparison record](quality-comparison.json) retains
+every case.
 
-| Measure | CPU baseline | KleidiAI |
+| Measure | CPU | KleidiAI |
 | --- | ---: | ---: |
-| Outputs with valid format | 40/40 | 38/40 |
-| Claims supported by supplied text and attached citations | 78/78 | 74/75 |
-| Required facts passed | 66/83 | 63/83 |
-| Required facts unassessed after execution failure | 0 | 4 |
-| Cases passing every applicable criterion | 30/40 | 28/40 |
+| Outputs with valid format | 40/40 | 40/40 |
+| Claims supported by supplied text and attached citations | 78/78 | 80/81 |
+| Required facts passed | 66/83 | 67/83 |
+| Required facts unassessed | 0 | 0 |
+| Cases passing every applicable criterion | 30/40 | 30/40 |
 
-KleidiAI has 16 failed fact units and four unassessed units. Failed executions
-remain in the case denominator; their unavailable answers are not graded as
-factual errors. A valid answer format alone does not establish correctness.
+CPU has 17 failed fact units; KleidiAI has 16. These counts include missing
+facts even when an answer correctly declines to fill gaps in its supplied text.
+A valid answer format alone does not establish correctness. Equal complete-case
+counts do not mean that the same answers passed.
 
-The [development](quality-development.json),
+The KleidiAI [development](quality-development.json),
 [regression](quality-regression.json) and
-[former validation](quality-validation.json) records retain each claim,
-citation location, verdict and evidence hash. The
-[accepted CPU baseline](../grounded-answers/README.md) has known omissions.
+[validation](quality-validation.json) records retain each claim, citation
+location, verdict and evidence hash. The [CPU results](../grounded-answers/README.md)
+retain their own omissions.
 
-## What changed
+## Differences between backends
 
-Three facts improved: caller-controlled thread dispatch (`dev-010`), Apple's
-unknown SVE vector length (`val-004`), and field renaming when moving a nested
-response field to the root (`fresh-005`).
+KleidiAI includes three facts missing from CPU: caller-controlled thread dispatch
+(`dev-010`), Apple's unknown SVE vector length (`val-004`), and field renaming
+when moving a nested response field to the root (`fresh-005`).
 
-Two previously passed details were lost: the warning that generated archive
-hashes can change (`val-009`), and the lack of automatic SME ABI support
-detection (`val-011`). The latter still gives the correct build flag. Its
-review records the possible implication of manual configuration while retaining
-the missing detection caveat.
+It omits two details supplied by CPU: the warning that generated archive hashes
+can change (`val-009`), and the lack of automatic SME ABI support detection
+(`val-011`). The latter still gives the correct build flag. Its review records
+the possible implication of manual configuration while retaining the missing
+detection caveat.
 
 `dev-010` also adds a scheduling contrast to a claim about runtime kernel
 selection. Its attached passage supports kernel selection but does not establish
 the full scheduling claim. The review retains a plausible broader reading.
-The recovered facts do not cancel this citation failure or the two omissions.
+The three fact gains do not cancel this citation failure or the two omissions
+under the project's rule that a backend change must preserve answer quality.
+These results do not establish that KleidiAI is generally less accurate.
 
-## Execution failures
+## Collection and review
 
-`fresh-007` retained matching inputs but no completion. Its roughly 301-second
-record and server cancellation are consistent with the 300-second request
-deadline. The adapter then closed its server. `fresh-008` failed before retrieval
-and prompt packing because the server was no longer running.
+Both backends used one attempt per question and completed all 80 cases without
+execution or format failures. Model bytes, prompts, settings, sources and rubric
+stayed fixed. All 40 input pairs matched. Collection guards passed, with no
+observed swap; system and editor activity remained. This was not CPU isolation.
+The [benchmark method](../../benchmarks.md) explains why the two backends can
+still produce different numerical results.
 
-This is one request failure and one dependent preparation failure. The records
-do not establish a backend-specific cause. Missing inputs for the final case
-remain unavailable; they are not declared equal. Neither case was retried, and
-the deadline was unchanged.
+Reviews reuse authenticated source verdicts for 40 CPU and 38 KleidiAI answers
+whose inputs, final text and validated answers match their same-backend review
+records exactly. Two KleidiAI answers received new source review. Reused verdicts
+retain their original meaning; they are not new human reviews or transfers from
+the current CPU answers to KleidiAI.
 
-## Scope
-
-Model bytes, prompts, settings, sources and rubric stayed fixed. The 39 cases
-that reached input checks matched the CPU records. All frozen source and runtime
-hashes remained unchanged during the KleidiAI run. The
-[benchmark method](../../benchmarks.md) explains
-why the two backends can still produce different numerical results.
-
-Five exact final answers reused authenticated CPU verdicts. The other 33 valid
-outputs received new source review. Reviews are by project-contributing agents,
-with material ambiguities separately checked; they are not human or external
-validation. These questions were already used for CPU evaluation, so this is a
-fixed backend regression test, with one attempt per case and no claim of general
-accuracy. Guarded quality-run timings are excluded from performance comparisons.
+Questions and reviews are by project-contributing agents, with material
+ambiguities separately checked. They are not human or external validation.
+All 40 questions are known, so this is a fixed backend regression check with no
+claim of general accuracy or unseen-question performance. Quality collection
+durations are excluded from performance comparisons.

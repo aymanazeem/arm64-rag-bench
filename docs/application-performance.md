@@ -1,6 +1,6 @@
 # Measure application latency
 
-This harness measures the existing buffered CPU answer command and its fixed-context request path. It does not change the prompt, model, retrieval settings or application output. The [initial results](results/application-performance/README.md) retain 21 reviewed observations and the limits of this known-question study. A separate [tracked-source workflow check](results/application-performance/README.md#reproduction) used cached native assets.
+This harness measures the existing buffered CPU answer command and its fixed-context request path. It does not change the prompt, model, retrieval settings or application output. The [results](results/application-performance/README.md) retain 21 reviewed observations and the limits of this known-question study. Separate [working-tree checks](results/application-performance/README.md#reproduction) used cached native assets.
 
 The two stages answer different questions:
 

@@ -5,8 +5,10 @@ and [answer-model download](answers.md). Use a fresh checkout and new ignored
 output paths. The public runner needs no private helper or debugger permission.
 Its setup observations are excluded from final performance results.
 
-The [native workflow check](results/public-setup/README.md) completed all four
-setup observations using cached assets; its candidate remains pending review.
+The [setup validation](results/public-setup/README.md) covers four observations
+through the unchanged public APIs, using cached assets, with no observed swap.
+The candidate remains `pending_review`; a separate recorded approval authorized
+the desktop measurements.
 
 Copy [desktop-method.example.json](../configs/desktop-method.example.json) to
 `artifacts/benchmarks/method.json`. Give the study a new ID, record the target

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "kind": "public-setup-validation",
   "status": "four_setup_observations_verified",
-  "scope": "Public freeze, four native setup observations and candidate export using cached native assets.",
+  "scope": "A local supervisor called the unchanged public setup API for four native observations and exported a calibration candidate using cached assets. This records API execution, not a separate command-line execution.",
   "counts": {
     "planned": 4,
     "attempted": 4,
@@ -15,8 +15,14 @@
   "candidate": {
     "status": "pending_review",
     "timeout_seconds": 600,
-    "deadline_rule": "max(600, ceil(2 * longest eligible continuous seconds / 60) * 60)",
-    "approved": false
+    "deadline_rule": "max(600, ceil(2 * longest eligible continuous seconds / 60) * 60)"
+  },
+  "measurement_approval": {
+    "status": "approved_for_desktop_measurement",
+    "timeout_seconds": 600,
+    "approval_sha256": "f987905b85f94cd22c47fb51e1c1c3c3249cd02649d9373c55a4f65328ec2b36",
+    "review_sha256": "b665e5be5f88b2b26c500c87425795f74dc03d871cfd1f7e0a67ee077c338e98",
+    "scope": "Separate review approved this calibration for the desktop CPU study. It does not approve backend adoption."
   },
   "model": {
     "type": "qwen35 9B Q8_0",
@@ -37,14 +43,12 @@
     "scripts/benchmark_timing.py": "2b0f01a27dc66b6521fc6118c6cd077efcb9457b523d6fb83b11611b495c7fa4"
   },
   "evidence_sha256": {
-    "method": "1dbfb5344782d70eb59af031740e76c66634e31b2ecbcbdafbdbc4852e70ae4a",
-    "plan": "36d23cd33f9f08bc00f07675eb151d8c6a999ce65511fb3334cff0ad1c9c7eab",
-    "ledger": "64765be59320ab8878ee5a80c55176f42d0b22d29882fb579f961b026ba95b98",
-    "candidate": "2e5b73835c55bf2bcb43748d9e89f4fadace0027df9e83ffc99042eff143ba74",
-    "closure": "50b7e4655d890ba9ec3f632cb6c119310d2016756204c6c5744667383f97e471",
-    "auxiliary_acquired": "f6963b716cb3c5ded4af21963490da45e24a9cc5d9ca2d92792649255ec921fa",
-    "auxiliary_closed": "9b2fbfec414daa3a477e0222906fe3001a25d5cead714af766c8286ad38fda45",
-    "auxiliary_release": "50b7e4655d890ba9ec3f632cb6c119310d2016756204c6c5744667383f97e471"
+    "method": "186634ae3819854fa8c74daee3b48784e7106f5c3aecd01aada01d969fb51897",
+    "plan": "afdae832bde7e6a956e7e7a986781736ba22ba096bfd0942a63ecc96e1f1db35",
+    "ledger": "9d1abe71c54be09ae7045b9771917b31d6f9de68c887c273326606e795377e8e",
+    "candidate": "87c2ee2ba55af051e80aa481a008fb791e845cc7ea0bf6a6dc560668e984b3d6",
+    "controller": "1517eebb321e9a433dea1da2d53840f0a4f0331f73d767c265818a52d74955d9",
+    "supervisor_source": "36bcdbd408a025c1436f45cb3339f7b815030bf629f91478eba870e8e5ca8ec2"
   },
   "observations": [
     {
@@ -54,12 +58,11 @@
       "eligible_for_deadline_calibration": true,
       "guard_valid": true,
       "native_repetitions": 4,
-      "continuous_seconds": 225.899108041,
-      "host_findings": [
-        "swap_activity"
-      ],
-      "record_sha256": "853b72350a9ea5bfdc2f11c7661a53c791d2a708367bf6ca31d201fa0155b787",
-      "native_output_sha256": "941dd9069486049b2ad4bfadb4722d704ff5747e0b0684128ba2d6d037a165dd"
+      "continuous_seconds": 186.516451291,
+      "peak_resident_bytes": 16289447936,
+      "host_findings": [],
+      "record_sha256": "06a9d1287971ef3f6f274413eea3d31993c7c452a8b6a7afa0d8c23442791a7a",
+      "native_output_sha256": "490ac1901946c1b85e3774d290d337abde1e33fa1b8b553946c7ce1e95ba8a93"
     },
     {
       "id": "kleidiai-pp2048",
@@ -68,12 +71,11 @@
       "eligible_for_deadline_calibration": true,
       "guard_valid": true,
       "native_repetitions": 4,
-      "continuous_seconds": 179.231853417,
-      "host_findings": [
-        "swap_activity"
-      ],
-      "record_sha256": "f7e61cda61741f3d189dabbfc9a0333769a3f2a94df6f30901ab0889adde0acf",
-      "native_output_sha256": "cee123b7ae5da519d9de5b7199036881c4f20b965ad7b6d1ceb5f32e3dc49a14"
+      "continuous_seconds": 146.119403125,
+      "peak_resident_bytes": 18559631360,
+      "host_findings": [],
+      "record_sha256": "0dfd3b6c3a106e7ebb39f826704fb342a31ab0f1a450f2484a3db30e120a1b12",
+      "native_output_sha256": "6a6916829e77bf0a7e5278910e7c58d70a34f3224c09ae8cba7c430e75d10ece"
     },
     {
       "id": "cpu-tg128-d2048",
@@ -82,12 +84,11 @@
       "eligible_for_deadline_calibration": true,
       "guard_valid": true,
       "native_repetitions": 4,
-      "continuous_seconds": 97.602734958,
-      "host_findings": [
-        "swap_activity"
-      ],
-      "record_sha256": "13d7c9af6cc2953f5a9c47c002410fe3b816db90bf7565cce0d0ed515881537f",
-      "native_output_sha256": "d7407e802315b5cc95719ced5ac98f5be73a45524b1385c4b2a53e201a8ae1a2"
+      "continuous_seconds": 88.059889,
+      "peak_resident_bytes": 17909121024,
+      "host_findings": [],
+      "record_sha256": "22d16ff25620ce5363647982905fe8bc949930791754b834bc7fbdb72faaf8b6",
+      "native_output_sha256": "3d0cd4df90d62b2e9fb1fa6839a72405efc5c6a6be12e8d1da10c23f5da67387"
     },
     {
       "id": "kleidiai-tg128-d2048",
@@ -96,10 +97,11 @@
       "eligible_for_deadline_calibration": true,
       "guard_valid": true,
       "native_repetitions": 4,
-      "continuous_seconds": 122.872708833,
+      "continuous_seconds": 110.646261875,
+      "peak_resident_bytes": 18687459328,
       "host_findings": [],
-      "record_sha256": "8e0f8264d8ee09d6eabdd12ee707819c04bb7fe97c8923ce5ebe978e7da2768d",
-      "native_output_sha256": "3c729014eb0d3a9a5edd42ee3910b075b8f298906488857ae0a66c8f8528d671"
+      "record_sha256": "629811aa932c3963ca8464d791cc10e94984434638934d6d7be014eea6f91231",
+      "native_output_sha256": "d87e8bc29ac4e21235d7527e526c12f7e24cb8a2b2e2a15b1853a51b63d5b44f"
     }
   ],
   "guard_checks": {
@@ -108,21 +110,23 @@
     "same_boot_context_verified": true,
     "failures": 0
   },
-  "additional_idle_sleep_protection": {
+  "outer_protection": {
+    "idle_and_ac_system_sleep_assertions": true,
     "closed_and_released": true,
     "covered_all_four_guards": true,
-    "maximum_seconds": 1800,
-    "release_within_limit": true,
-    "poll_seconds": 0.2,
-    "script_sha256": "c8020de9a1cced524e3aac12cb6036d86d726f164ceb6aa4d75834575f166dd0"
+    "readiness_seconds": 120,
+    "readiness_no_swap": true,
+    "continuous_seconds": 663.529648791,
+    "maximum_seconds": 6120,
+    "same_system_assertion_observed": true
   },
   "limits": [
-    "These setup durations only calibrate a candidate deadline. They are excluded from performance comparisons.",
-    "No candidate approval, backend adoption, answer-quality result or new 48-run study is claimed.",
-    "Cached model and build assets were used. This does not validate a fresh download, clean build or cold file cache.",
-    "The collector verified native assets; this independent audit rechecked source/raw-file hashes and recorded runtime fingerprints, with cached model stat continuity rather than a new model hash.",
-    "System swap activity was retained under the frozen desktop policy. Boundary host checks and bounded clock checks do not prove constant conditions or detection of every suspend.",
-    "The extra assertion only prevents idle sleep; release-marker contents were checked independently after closure.",
-    "Local resource records use wait4 child accounting, including eligible descendants; they are not whole-machine memory usage."
+    "Setup timings calibrate the deadline and are excluded from performance comparisons.",
+    "This is the setup evidence for the desktop CPU study, not an independent replication.",
+    "The exported candidate remains unchanged; approval is a separate reviewed record.",
+    "Cached assets do not establish fresh downloads, clean builds or cold file caches.",
+    "macOS, managed security and the editor remained active. No CPU isolation or fixed-thermal claim; thermal readings were unavailable.",
+    "Boundary host checks and finite clock tolerances cannot prove constant conditions or detect every possible interruption.",
+    "Resource values are child lifetime peaks and are not whole-machine or additive memory use."
   ]
 }

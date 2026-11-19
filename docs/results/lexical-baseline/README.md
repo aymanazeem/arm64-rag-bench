@@ -13,9 +13,9 @@ Measured using the seven pinned documents and 383 chunks. No retrieval settings 
 
 The [per-case record](retrieval.json) includes source locations, scores, missing evidence, configuration, implementation hashes and dataset hashes. It omits passage text. The complete raw report remains locally at `artifacts/retrieval/lexical-baseline.json`; its hash is recorded.
 
-Three questions missed required evidence: the native KleidiAI build option (`dev-001`), benchmark workload options (`dev-004`) and KleidiAI scheduling (`dev-010`). Each required span crosses two chunks. The first five results do not jointly cover those spans. These misses remain recorded for the later retrieval comparison.
+Three questions missed required evidence: the native KleidiAI build option (`dev-001`), benchmark workload options (`dev-004`) and KleidiAI scheduling (`dev-010`). Each required span crosses two chunks. The first five results do not jointly cover those spans. These misses remain visible in the [budgeted comparison](../embedding-comparison/README.md).
 
-An unchanged import preserved the index. Rebuilding from the same sources in reverse order produced identical results, scores, spans and index fingerprint. All 125 local tests passed, including source integrity checks; 42 subtests also passed. Independent review verified coverage against the stored source characters.
+An unchanged import preserved the index. Rebuilding from the same sources in reverse order produced identical results, scores, spans and index fingerprint. The keyword feature checks passed 125 tests and 42 subtests, including source integrity checks. Independent review verified coverage against the stored source characters.
 
 Follow the [index and evaluation commands](../../search.md#run-the-development-evaluation) to reproduce the run. Keep the limit at five. The report's configuration identifies the exact parser, chunker, tokenizer and query policy.
 

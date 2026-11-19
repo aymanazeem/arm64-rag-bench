@@ -1,5 +1,4 @@
 {
-  "created_at": "2026-11-12T20:59:21.806985+00:00",
   "kind": "smoke-check-not-quality-evaluation",
   "model_sha256": "dcd819ff094852c38faba6873d8ff0c9d51eadb2844539e52042ae5d647bbfdb",
   "cases": [

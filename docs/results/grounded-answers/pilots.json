@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "development-pilots",
-  "scope": "Models, prompts, context and settings changed during development; these are not controlled causal or speed comparisons.",
+  "scope": "Edited summaries of development evidence. Models, prompts, context and settings changed; these are not controlled causal or speed comparisons.",
   "pilots": [
     {
       "id": "development-v1",
@@ -43136,7 +43136,7 @@
           "summary_notes": {
             "quality_gate": "incomplete_due_to_execution_failure",
             "denominator_note": "One supported final answer does not erase two failed attempted cases or the unattempted case. Timeouts are execution failures, not refusals or model factual errors.",
-            "causal_limit": "Concurrency is a possible contributor to the timeout, not an established cause. A separate rerun must retain this failed run.",
+            "causal_limit": "Concurrency is a possible contributor to the timeout, not an established cause. The failed run remains recorded.",
             "timing_comparison": "Not made: concurrent CPU quality pilots."
           }
         }
@@ -44910,7 +44910,7 @@
           "independence_limit": "Contributor to model selection and earlier evaluation, not an external reviewer. Authored no model answers. Fresh-question source review occurred separately and did not inform this review or pilot.",
           "method": "Review final claims against actually cited and supplied canonical text, then apply original required facts and seven frozen criteria. Raw reasoning is not answer evidence.",
           "review_scope": {
-            "comparison_note": "V8 and V10 use the same 8B bytes, sources and inference settings. V10 adds the visible schema and one generic system sentence. This rerun uses one owned server after a concurrent run failed. Other machine activity is uncontrolled; no timing or concurrency-only causal conclusion follows.",
+            "comparison_note": "V8 and V10 use the same 8B bytes, sources and inference settings. V10 adds the visible schema and one generic system sentence. This check uses one owned server. A concurrent run failed and remains recorded. Other machine activity is uncontrolled; no timing or concurrency-only causal conclusion follows.",
             "completion_scope": {
               "run_state": "completed",
               "planned": [

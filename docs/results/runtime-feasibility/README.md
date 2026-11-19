@@ -11,7 +11,9 @@ Both CPU builds run the official Qwen 1.5B Q4_0 model. A separate diagnostic bui
 | Prompt-processing kernel | 193 calls with `m=32` | [Dispatch record](dispatch.json), [sample](prefill-sample.txt) |
 | Generation kernel | 1,568 calls with `m=1` | [Dispatch record](dispatch.json), [sample](decode-sample.txt) |
 | Benchmark output | Six valid samples per backend | [Validation](bench-check.json), [CPU samples](cpu-bench.json), [KleidiAI samples](kleidiai-bench.json) |
-| Local tests | 44 passed, including upstream-source validation | See commands in the [runtime guide](../../runtime.md) |
+| Runtime feature checks | 44 tests passed, including upstream-source validation | See commands in the [runtime guide](../../runtime.md) |
+
+The linked build, smoke and benchmark files are edited summaries. Measured values, settings and source hashes are preserved. Benchmark build hashes identify the complete local records.
 
 The [hardware inventory](hardware.json) excludes personal identifiers. Build records include source, compiler, settings and binary/library hashes. Assets are pinned in [runtime.json](../../../configs/runtime.json).
 

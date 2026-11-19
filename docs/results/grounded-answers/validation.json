@@ -6,22 +6,24 @@
   "dataset_id": "answers-fresh-validation-v1",
   "original_dataset_split": "validation",
   "role_provenance": {
-    "current_use": "Fresh answer questions over shared documents; not a new corpus.",
+    "current_use": "Fixed regression questions already used in project evaluation.",
     "protocol_dataset": {
       "role": "validation",
       "use": "Fresh answer questions over shared pinned documents. Frozen before final runs; not held-out documents."
     },
     "recorded_run_role": "validation"
   },
-  "run_context": {},
+  "run_context": {
+    "execution": "CPU and KleidiAI quality checks using the same fixed questions and settings."
+  },
   "scope": "Small shared-source evaluation; independent agent review, not human validation or a general reliability score.",
   "source_manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
   "dataset_sha256": "332e90ad20ae182f0d6c1a2a15cb08a129ac661535070309d68c7b89e0a4221d",
   "protocol_file_sha256": "1202bb8f977b15b5ffa93e74bb01e83dda7c24344122a42acf886c8ab50a131a",
   "protocol_canonical_json_sha256": "b327c86db51d7d394510618f438815910d05e7fa89c1588248692614f5c1b0ef",
   "system_prompt_sha256": "5dd5de85d5050985ddcbf59390578aa3032aa727ef8ae01361879d0d104e5e5d",
-  "run_file_sha256": "ef76e1079a2cc2992f5951b025828303778d6cf07f438ecd3f144b64978af982",
-  "aggregate_file_sha256": "5dc30f3e67d547865178bfbe52d9a8a79e397e561ead9b243c722cb1cc76760d",
+  "run_file_sha256": "1cfaaf7ec272062b3cbcd09e4e81d1581e64724ae27df2868e387c88db9ecf25",
+  "aggregate_file_sha256": "bde535e9a1962a0c613b3d8f11d0b33ad28b2acb3599750a7ae3f8bc81d2e386",
   "implementation": {
     "capture": "Recorded before server startup.",
     "sha256": {
@@ -38,7 +40,7 @@
       "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
       "src/arm64_rag/inference.py": "c6cfce7ed76b66f95ef8adeeb499bfaa92992bcf4ac0371c79e48dee30ee1061",
       "src/arm64_rag/qa_evaluation.py": "f92692c3a3e3cdce5de02fe1231a1f0ed5e66500a2a78a8728e3b02252ab659d",
-      "scripts/check_answers.py": "cc2321c9418e5a7c4573889b4c0128fd152e4336eed42af228443eb7394ae7ca",
+      "scripts/check_answers.py": "a53591a2fa1b1c0275a114ffbb5fb2362a2ece2ec40b6bafff91d743d5fcec62",
       "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
     }
   },
@@ -169,80 +171,16 @@
   "reviewers": [
     {
       "id": "reviewer-1",
-      "review_file_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+      "review_file_sha256": "fa1d8592eb1d3e2fcb3d8b16f6d9d71c21f8d9159eec4f0967989de71ab7e8f8",
       "type": "independent_agent",
       "human_validated": false,
-      "role": "Model researcher and known-case reviewer; contributed downloader and failure-path fixes. Independently source-reviewed these fresh labels before generation, but did not author the questions or the frozen prompt.",
-      "independence_limit": "Project contributor, not an external or human reviewer. Earlier source-label review means the questions were not unseen to this reviewer. The root selected the pipeline before fresh retrieval/generation; this review scores final answers and does not tune the pipeline.",
-      "method": "Apply the unchanged required facts, forbidden claims and seven review criteria. Check each final claim against supplied canonical text and its attached citations. Keep fact omissions, retrieval omissions and support failures separate. Reasoning text and structural validity are not factual evidence.",
+      "role": "Independent verification of exact-output review transfers.",
+      "independence_limit": "Project contributor; checked transferred verdicts separately from the preparation helper. No human or external validation.",
+      "method": "Reuse authenticated semantic verdicts only when question, retrieval, packed sources, evidence, final text and validated answer match exactly. Review changed outputs against canonical sources. Execution provenance always belongs to this run.",
       "review_scope": {
-        "comparison_note": "The selected V12 model/preset, prompt, schema and source pipeline were frozen after known-case review and before this fresh run. No fresh-output-driven tuning or retries.",
-        "completion_scope": {
-          "run_state": "completed",
-          "planned": [
-            "fresh-001",
-            "fresh-002",
-            "fresh-003",
-            "fresh-004",
-            "fresh-005",
-            "fresh-006",
-            "fresh-007",
-            "fresh-008"
-          ],
-          "attempted": [
-            "fresh-001",
-            "fresh-002",
-            "fresh-003",
-            "fresh-004",
-            "fresh-005",
-            "fresh-006",
-            "fresh-007",
-            "fresh-008"
-          ],
-          "completed": [
-            "fresh-001",
-            "fresh-002",
-            "fresh-003",
-            "fresh-004",
-            "fresh-005",
-            "fresh-006",
-            "fresh-007",
-            "fresh-008"
-          ],
-          "assigned_cases": [
-            "fresh-001",
-            "fresh-002",
-            "fresh-003",
-            "fresh-004"
-          ],
-          "review_complete_for_assigned_cases": true
-        },
-        "scope": "First four questions from a fresh eight-question answer-validation set over shared documents. Previously source-reviewed labels, unused for generation or pipeline selection before this frozen run. No general reliability or new-corpus claim."
+        "scope": "Known questions over shared sources; no timing or unseen-question claim."
       },
-      "summary_notes": {
-        "claim_support_definition": "Supplied-source support is counted separately from attached-citation support."
-      }
-    },
-    {
-      "id": "reviewer-2",
-      "review_file_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
-      "type": "independent_agent",
-      "human_validated": false,
-      "role": "Inference-adapter, schema-visibility and evaluation contributor; separately reviews final outputs after candidate selection was frozen.",
-      "independence_limit": "Project contributor and prior prompt/workflow contributor, not a fully external or human reviewer. No fresh questions were read by this reviewer before selection; root authorized access for this review.",
-      "method": "Review final claim text against exact attached supplied passages and pinned canonical sources. Apply every unchanged required fact and unacceptable claim. Separate supplied support, attached citation support, completeness and execution. Do not use model reasoning as answer content or evidence.",
-      "review_scope": {
-        "completion_scope": "All four assigned last-half fresh questions reviewed after the selected preset was frozen. The full eight-question run completed; run and aggregate hashes below identify its final files.",
-        "scope": "Last four fresh answer-validation questions in dataset order. Questions were withheld until candidate selection; pinned documents are shared with development and chunks may have appeared as prior context. All eight fresh questions are answerable; abstention, conflicts and instruction handling remain separate regression checks.",
-        "dataset_note": "The unchanged dataset retains its original pending-review wording; a separate independently completed agent source review verified these same frozen bytes before candidate selection. Questions are fresh for this selected candidate, while documents are shared."
-      },
-      "summary_notes": {
-        "reason": "All eight emitted claims are supported and fully cited. Fresh005 omits the required new-name qualification despite complete supplied evidence; its first fact remains failed.",
-        "quality_gate": "supplied_and_attached_support_pass_with_incomplete_fact",
-        "denominator_note": "Four assigned cases were attempted, completed and reviewed. All four answered; no failed execution or zero-claim abstention is counted as a claim-support pass. Full run totals are eight planned, eight attempted and eight completed.",
-        "timing_comparison": "Not made; this is a quality run.",
-        "claim_support_definition": "Supplied-source and attached-citation verdicts are recorded separately. Multiple attached citations may jointly support a claim; redundant partial citations are noted."
-      }
+      "summary_notes": {}
     }
   ],
   "attempts": {
@@ -411,7 +349,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "c953f8c650d80b554c8f02b2c1c36c3743a862b988cc6298efe3aed2d4e6c71c",
+          "sha256": "2428b9275c4541744471f1b0b93452775de985ce4077937d30b6cd106fea9a2c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1014,20 +952,26 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "The five supplied passages include unrelated Mac/Linux Vulkan instructions; they do not establish the Mac BLAS setup.",
-          "Partial Linux facts are available, but the frozen contract requires insufficient_evidence when the sources do not establish the requested multipart answer."
-        ],
-        "diagnosis": "Faithful whole-question refusal under the frozen all-parts contract. The Mac evidence was retrieved at rank6 and omitted by passage_limit, while the Linux recipe is supplied in S1. This is an answer-completeness failure caused by missing packed evidence, with no emitted unsupported claim.",
         "abstention_kind": "faithful_missing_evidence",
         "adjudication": {
           "note_sha256": "a816a3d089bae1daa0fab602b7e718afc4f153de5d5c7bc4cb9209a7225dc4cc",
           "initial_verdict": "pass",
           "final_verdict": "not_applicable",
           "reason": "Correct empty-claim aggregation for unsupported_claims, citation_support and citation_coverage. No claims were emitted; refusal and required-fact scores are unchanged."
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+          "source_case_sha256": "d32a8952c70d39e0c8e95e680ea6c1f7f777f321c02418ea95f38587c17b7983",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and known-case reviewer; contributed downloader and failure-path fixes. Independently source-reviewed these fresh labels before generation, but did not author the questions or the frozen prompt.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Earlier source-label review means the questions were not unseen to this reviewer. The root selected the pipeline before fresh retrieval/generation; this review scores final answers and does not tune the pipeline."
+          }
         }
       },
-      "case_file_sha256": "d32a8952c70d39e0c8e95e680ea6c1f7f777f321c02418ea95f38587c17b7983"
+      "case_file_sha256": "abc00ef9a3775b74ca8c20fa23e3ee3a3295f940d82452bb53693b6be63eadca"
     },
     {
       "id": "fresh-002",
@@ -1167,7 +1111,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "5263afb99890b2746a71865fe1ae67c72fb1c22f592d836ed078b9a8fe6cf7a9",
+          "sha256": "786b4e81a31eae9a396056907ff231be36c7be46f5da4321454de659541d27e7",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1763,12 +1707,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "S3 is redundant for claim 3; S1 and S2 already support both operations."
-        ],
-        "diagnosis": "All three required facts and final claims are complete, supported and cited. The response counters and concrete filenames are unasked details and are not required."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+          "source_case_sha256": "82c8bb7645618bc194c22758f7553e29e9b1644b0517c66a9ac0197e5150a2cc",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and known-case reviewer; contributed downloader and failure-path fixes. Independently source-reviewed these fresh labels before generation, but did not author the questions or the frozen prompt.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Earlier source-label review means the questions were not unseen to this reviewer. The root selected the pipeline before fresh retrieval/generation; this review scores final answers and does not tune the pipeline."
+          }
+        }
       },
-      "case_file_sha256": "82c8bb7645618bc194c22758f7553e29e9b1644b0517c66a9ac0197e5150a2cc"
+      "case_file_sha256": "4bba0c198b0e25642d7420ebc96a480db92c6707a862ac26ec9539ec11a91166"
     },
     {
       "id": "fresh-003",
@@ -1860,7 +1811,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "6cd9047085a33a6189c771cbd0a73b1668ee2644fbcdb03342d8e9e8f8503e1a",
+          "sha256": "dfd407110bfef288e1359a67b8797f11ceb440bdfb4e7d86883801fe2117eae0",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -2446,16 +2397,22 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Explicit up-to-n wording would make the value-to-limit mapping clearer; maximum-thread-count override conveys the same bound in this question context.",
-          "No unasked Windows-specific diagnostic caveat or automatic-detection setting is required under the pre-generation source-review boundary."
-        ],
-        "diagnosis": "Both required facts and attached citations pass as concise semantic paraphrases. The answer preserves compatibility, the selected-kernel upper bound and the CPU-capability limit.",
         "adjudication": {
           "note_sha256": "275c46615aa0e03c47839e652796a7272b692451c6d69619027b33cbff383652"
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+          "source_case_sha256": "9940e5f1a878e296c92838d5077c416705b3fc37c49384664479185cf8925ca7",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and known-case reviewer; contributed downloader and failure-path fixes. Independently source-reviewed these fresh labels before generation, but did not author the questions or the frozen prompt.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Earlier source-label review means the questions were not unseen to this reviewer. The root selected the pipeline before fresh retrieval/generation; this review scores final answers and does not tune the pipeline."
+          }
         }
       },
-      "case_file_sha256": "9940e5f1a878e296c92838d5077c416705b3fc37c49384664479185cf8925ca7"
+      "case_file_sha256": "45d05abebce782a21df4605d85462f3048dcf541776e433ede95539a447f9ec2"
     },
     {
       "id": "fresh-004",
@@ -2547,7 +2504,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "36cea0b6dcf13c613118e96cf17d36249d57d0aaa7eda61ce563a7da3c04b1e9",
+          "sha256": "0cf1862fa163f4c0a6dd7ec68494bd4b3c30f8ec0b08f752d2f6f52f4ae1c29e",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3118,12 +3075,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The general stable-API feature list in S4 does not override the explicit experimental-directory limitation in S1."
-        ],
-        "diagnosis": "The source-backed negative answer states both requested limitations and cites the experimental-code section."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "a5e7865ecc512284ccd624fcca95ae354f6918c7041bdcd7cb018c3765e39328",
+          "source_case_sha256": "8d67f9830913c9d602f238532927f292a3945238a5dd1cc5d7c5e6a0dde15563",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and known-case reviewer; contributed downloader and failure-path fixes. Independently source-reviewed these fresh labels before generation, but did not author the questions or the frozen prompt.",
+            "independence_limit": "Project contributor, not an external or human reviewer. Earlier source-label review means the questions were not unseen to this reviewer. The root selected the pipeline before fresh retrieval/generation; this review scores final answers and does not tune the pipeline."
+          }
+        }
       },
-      "case_file_sha256": "8d67f9830913c9d602f238532927f292a3945238a5dd1cc5d7c5e6a0dde15563"
+      "case_file_sha256": "2b256520982db35743a14cea54be4badd7ef0e217759de240ecf278c254cc9f1"
     },
     {
       "id": "fresh-005",
@@ -3215,7 +3179,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "da422bdc09bccd1be13748e3a5d5c2cc25d751508f339e7d27c661c1cfab7a25",
+          "sha256": "acc1a64431af2532f26f521186db0f028a60cda45c715cbc6e200ba0b62db857",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3729,7 +3693,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -3788,12 +3752,19 @@
         "failure_kinds": [
           "missing_required_fact"
         ],
-        "quality_notes": [
-          "The complete bound citation includes the new-name detail, but citation text is evidence rather than an emitted answer claim."
-        ],
-        "diagnosis": "A generation omission despite fully supplied evidence: root relocation is correct, but the required renaming qualification is absent. No unsupported claim or citation mismatch."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+          "source_case_sha256": "bdf0c09ae787e56a65b413b4fc88a1a46fa29cb5b743534eb5bd94364f9edc94",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference-adapter, schema-visibility and evaluation contributor; separately reviews final outputs after candidate selection was frozen.",
+            "independence_limit": "Project contributor and prior prompt/workflow contributor, not a fully external or human reviewer. No fresh questions were read by this reviewer before selection; root authorized access for this review."
+          }
+        }
       },
-      "case_file_sha256": "bdf0c09ae787e56a65b413b4fc88a1a46fa29cb5b743534eb5bd94364f9edc94"
+      "case_file_sha256": "e7293dfc98fdfc0fc0d3bf4488345b3a843d963456b6e7b83aa86ca3c5a6d004"
     },
     {
       "id": "fresh-006",
@@ -3861,7 +3832,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "6c025f8d65490242453acb1668b32d4eeaa443b416e613564d9caaa433904b53",
+          "sha256": "f26163d9bf45cf49280c3ca1d4840fb691d4dca9e44582158d0cab3219ef77d0",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -4380,7 +4351,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -4432,10 +4403,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "A concise, complete answer supported by the directly cited llama-bench option entry."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+          "source_case_sha256": "ab640646d1449dcf96a8ce968988ff44cd5cfc59721c11fd7d7bd01501efc049",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference-adapter, schema-visibility and evaluation contributor; separately reviews final outputs after candidate selection was frozen.",
+            "independence_limit": "Project contributor and prior prompt/workflow contributor, not a fully external or human reviewer. No fresh questions were read by this reviewer before selection; root authorized access for this review."
+          }
+        }
       },
-      "case_file_sha256": "ab640646d1449dcf96a8ce968988ff44cd5cfc59721c11fd7d7bd01501efc049"
+      "case_file_sha256": "ab769b116a9ecb031fdc880e32bc1fc301bafd6ac0a5fc6438a1622cb7c09610"
     },
     {
       "id": "fresh-007",
@@ -4551,7 +4531,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "f0d1399ed43c79a99e1f62d32cd070f9fc3e89fc0bdc280f51602aaf0af8ef97",
+          "sha256": "ba9d9116c1d0005bb850044799901968b1e6b64d46d78acfc6598688e1463c0c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5065,7 +5045,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -5122,12 +5102,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The general CMake instruction and concrete command overlap, but both are supported and the command supplies the requested exact setup."
-        ],
-        "diagnosis": "A complete Linux cross-build answer despite nearby native-Arm and Android alternatives in the supplied context."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+          "source_case_sha256": "438ab0cb69161aa7b4ca919b34a08afac0a84f278ab7b24e9cbebdb625fafe5e",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference-adapter, schema-visibility and evaluation contributor; separately reviews final outputs after candidate selection was frozen.",
+            "independence_limit": "Project contributor and prior prompt/workflow contributor, not a fully external or human reviewer. No fresh questions were read by this reviewer before selection; root authorized access for this review."
+          }
+        }
       },
-      "case_file_sha256": "438ab0cb69161aa7b4ca919b34a08afac0a84f278ab7b24e9cbebdb625fafe5e"
+      "case_file_sha256": "7610ec8c0c2c3c1a57d6661d9a274d503625e4159b5fa581ff4dc3e7156cf4a3"
     },
     {
       "id": "fresh-008",
@@ -5231,7 +5218,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "fbe05477825d3d16af338f0a58a0c720fd194cd1eeec9c471372554499200547",
+          "sha256": "f9072e243fa15373914076ef4f14e3171f5ca12a4181d8a30127ed612c4381d1",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5745,7 +5732,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -5802,12 +5789,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "S2 is a redundant general-format citation; S1 independently supports the full first claim."
-        ],
-        "diagnosis": "A complete and supported SQL-to-SQLite workflow; no invented automatic database creation."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "b4982a5aaf1bf0aeacd291f9b50902eb442cca532f80386af613b0c1cf474113",
+          "source_case_sha256": "bcf1bfc53d296fc119ff6f1e03451fa390a9f06df0933bed1a7990cae9901cfa",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference-adapter, schema-visibility and evaluation contributor; separately reviews final outputs after candidate selection was frozen.",
+            "independence_limit": "Project contributor and prior prompt/workflow contributor, not a fully external or human reviewer. No fresh questions were read by this reviewer before selection; root authorized access for this review."
+          }
+        }
       },
-      "case_file_sha256": "bcf1bfc53d296fc119ff6f1e03451fa390a9f06df0933bed1a7990cae9901cfa"
+      "case_file_sha256": "661976df783e188d029ce46c12bb05dbd512ea60e0c3c68f1299c13186f7972b"
     }
   ]
 }

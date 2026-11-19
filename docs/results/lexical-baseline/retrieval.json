@@ -1034,7 +1034,6 @@
   ],
   "dataset_id": "arm64-qa-development-v1",
   "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
-  "date": "2026-11-12",
   "implementation_sha256": {
     "pyproject.toml": "5f992e4882bbddba392761d68906de212dcacb82fa0b49650e2cc3c8ce9cec46",
     "src/arm64_rag/cli.py": "111293e3de82bcc709099184d965da419e30aac1be5338452f23a6da31dd1b3e",
@@ -1076,7 +1075,6 @@
   "method": "fts5-bm25",
   "provenance": {
     "authored_by": "agent",
-    "date": "2026-11-12",
     "human_validated": false,
     "review": "independent_agent_source_checked"
   },

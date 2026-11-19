@@ -48,7 +48,6 @@
       "method": "hybrid"
     }
   ],
-  "date": "2026-11-12",
   "embedding": {
     "chunks": 383,
     "config": {

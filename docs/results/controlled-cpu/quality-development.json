@@ -6,22 +6,24 @@
   "dataset_id": "arm64-qa-development-v1",
   "original_dataset_split": "development",
   "role_provenance": {
-    "current_use": "Frozen backend regression; these questions were already used in CPU evaluation.",
+    "current_use": "Fixed regression questions already used in project evaluation.",
     "protocol_dataset": {
       "role": "development",
       "use": "Model selection, prompt development and regression checks. Preserve failed attempts."
     },
     "recorded_run_role": "development"
   },
-  "run_context": {},
+  "run_context": {
+    "execution": "CPU and KleidiAI quality checks using the same fixed questions and settings."
+  },
   "scope": "Small shared-source evaluation; independent agent review, not human validation or a general reliability score.",
   "source_manifest_sha256": "e04399e43d09760d55a538341f8b1ac79d785cf798f828e965d383fb7864cb25",
   "dataset_sha256": "ab809ae50b9c54fe741029ad5e917e8eb3a1f97dc5794a9e56cbd9ead64db7e7",
   "protocol_file_sha256": "1202bb8f977b15b5ffa93e74bb01e83dda7c24344122a42acf886c8ab50a131a",
   "protocol_canonical_json_sha256": "b327c86db51d7d394510618f438815910d05e7fa89c1588248692614f5c1b0ef",
   "system_prompt_sha256": "5dd5de85d5050985ddcbf59390578aa3032aa727ef8ae01361879d0d104e5e5d",
-  "run_file_sha256": "ff20c97d6c55aaf01efd43839535146971f67115cc65ef328058f09b8118a27f",
-  "aggregate_file_sha256": "0bcfd9daf24a529ae93bbeae01a1540e28fa8bc99c42fadbcb9f3c097553156a",
+  "run_file_sha256": "abf256e275da77df56884f58f25a84f4a8800938e322fee4a6ea9f85367cbbd4",
+  "aggregate_file_sha256": "05a0976007c16dcb7f40ba0adb6ae2de8064e42f23dc1745658357940a9a0e58",
   "implementation": {
     "capture": "Recorded before server startup.",
     "sha256": {
@@ -38,7 +40,7 @@
       "src/arm64_rag/index.py": "4c0b40c5a205d5ea2978bc2324040c5f9fbf7c4fd4523959e5f3de7baff6da4b",
       "src/arm64_rag/inference.py": "c6cfce7ed76b66f95ef8adeeb499bfaa92992bcf4ac0371c79e48dee30ee1061",
       "src/arm64_rag/qa_evaluation.py": "f92692c3a3e3cdce5de02fe1231a1f0ed5e66500a2a78a8728e3b02252ab659d",
-      "scripts/check_answers.py": "4c160dea286f499c63cffa4710c1ce970138211401eda4d5d28620613c9d2d3f",
+      "scripts/check_answers.py": "a53591a2fa1b1c0275a114ffbb5fb2362a2ece2ec40b6bafff91d743d5fcec62",
       "uv.lock": "728d7b8b30b8656791e6419defee62201ccdd7c65327b622614aa098f3626796"
     }
   },
@@ -169,42 +171,16 @@
   "reviewers": [
     {
       "id": "reviewer-1",
-      "review_file_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+      "review_file_sha256": "3e1395d038a1b7d693c04c43800e1f0eb943a3c91c786663193097fad58f0188",
       "type": "independent_agent",
       "human_validated": false,
-      "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
-      "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review.",
-      "method": "Follow the unchanged rubric and kleidiai-quality-review-workflow.md. Authenticate candidate/CPU files, compare actual guarded inputs, reuse only exact final content plus validated answer identity, and separately review changed final claims and citations. Do not use reasoning as factual evidence.",
+      "role": "Independent verification of same-backend KleidiAI review transfers and separate CPU input-baseline links.",
+      "independence_limit": "Project contributor; checked transferred verdicts separately from the preparation helper. No human or external validation.",
+      "method": "Reuse authenticated semantic verdicts only when question, retrieval, packed sources, evidence, final text and validated answer match exactly. Review changed outputs against canonical sources. Execution provenance always belongs to this run.",
       "review_scope": {
-        "comparison_note": "Only the enabled backend build and recorded lifecycle/comparison orchestration differ. Keep per-case quality gains and losses separate; reused semantic verdicts are explicitly identified.",
-        "scope": "First seven frozen development cases, compared with their authenticated CPU V12 baseline. No new unseen evaluation or timing claim."
+        "scope": "Known questions over shared sources; no timing or unseen-question claim."
       },
-      "summary_notes": {
-        "comparison_note": "No required-fact or criterion verdict changed against CPU in these seven cases. The existing dev002 SME caveat omission remains.",
-        "claim_support_definition": "Supplied-source support is counted separately from attached-citation support."
-      }
-    },
-    {
-      "id": "reviewer-2",
-      "review_file_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
-      "type": "independent_agent",
-      "human_validated": false,
-      "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
-      "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance.",
-      "method": "Recheck authenticated CPU and candidate inputs, canonical source offsets and structural final answers. Reuse original verdicts only for identical final content bytes and validated answer objects; otherwise review every unchanged required fact, forbidden claim and emitted claim against supplied text and its attached citations. Do not use reasoning as factual evidence.",
-      "review_scope": {
-        "completion_scope": "All seven assigned last-half development cases are complete. The full frozen development run completed 14 of 14 cases; regression and validation remain separate.",
-        "scope": "Last seven known development cases in the frozen CPU/KleidiAI backend comparison; not a new unseen evaluation."
-      },
-      "summary_notes": {
-        "reason": "Dev010 adds an unsupported scheduling contrast attached to a kernel-selection passage. It also gains the caller-thread fact; the gain does not cancel the new support failure. Dev009 retains its token IDs/pieces omission.",
-        "quality_gate": "new_source_and_citation_support_failure",
-        "denominator_note": "All seven assigned completed cases retained, including one faithful zero-claim refusal. Zero claims receive not_applicable support criteria, not passes.",
-        "comparison_note": "One frozen fact gained and no previously passed fact lost. One new claim lacks full supplied and attached support. Equal full-case totals do not establish unchanged quality.",
-        "calibration_note": "Dev010 retains separate conservative clause adjudication and the broader-reading ambiguity, without asserting global factual falsehood. Dev009 no-generation wording is interpreted in the question context.",
-        "timing_comparison": "None; guarded answer runs are quality evidence only.",
-        "claim_support_definition": "Supplied-source support and attached-citation support are recorded separately."
-      }
+      "summary_notes": {}
     }
   ],
   "attempts": {
@@ -464,7 +440,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "de479ee6a6185554f52a3a09a46f335af6d91eee166c3eb2d8b114962a7f8863",
+          "sha256": "8b0f47b46e5b8104893112cad2cb41843a92475eb0e617066278c6a1b2495511",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1045,12 +1021,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Two concise claims replace three CPU claims without losing a required fact."
-        ],
-        "diagnosis": "Both frozen facts and both final claims pass. The general architecture restriction is supported; platform enumeration is not required."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "29ae045e93416ac74c0e18c1a7580563fc6b3b252c9120cf4b38b73c22be1899",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "29ae045e93416ac74c0e18c1a7580563fc6b3b252c9120cf4b38b73c22be1899"
+      "case_file_sha256": "1a479e970d6871ae87a258e0b799d77b524394b0227e37ebec98276cdc77d8da"
     },
     {
       "id": "dev-002",
@@ -1190,7 +1173,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "d9ad371af9f82f4306420afa069237dfac7661b41ebd37bb93808321f5a9962c",
+          "sha256": "630b0c39f7ad4e52601fa71c0781744cf5e2588b75e1f12481e6b9351a642ad2",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -1758,12 +1741,19 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "Claims 2 and 3 repeat part of the dispatch qualification."
-        ],
-        "diagnosis": "All final claims and attached citations pass. The supplied specific-SME proof caveat is omitted, matching the CPU completeness failure."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "971e7e5a56e8ef5d547fa9c64d07ba1ee7a48875211ae785f8e7b31be04726c9",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "971e7e5a56e8ef5d547fa9c64d07ba1ee7a48875211ae785f8e7b31be04726c9"
+      "case_file_sha256": "f327d858e7be00fb82daaa177cb1bd8939137bf518ea6ceb31c764dddfe914a4"
     },
     {
       "id": "dev-003",
@@ -1867,7 +1857,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "d0c872b6511ea16bd48adf309721d4176ae9e0f6befe9c6ce26717266ed51fc9",
+          "sha256": "cc66a2f6598352b9ceaf3d49e6f9758f436b136b3f8282dc905ec91585613fb6",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -2428,12 +2418,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The second claim adds the supported reason for the option."
-        ],
-        "diagnosis": "The required build option and both final claims are supported by their attached passages."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "de83542676718636b232c793c79dfab36aa8ae510141ddd9c9df09ba00e04c1b",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "de83542676718636b232c793c79dfab36aa8ae510141ddd9c9df09ba00e04c1b"
+      "case_file_sha256": "95fe4f584af3e647a14aec49b93d1575e5c567f09032a95e9b582d64418697b7"
     },
     {
       "id": "dev-004",
@@ -2549,7 +2546,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "a64396ea5377238ab97e3cb41c335167cda1c090b46a0e6377b9b400b9d198c3",
+          "sha256": "36b7f2d8edfad3235c440460abb9d0856979a20af6bdd78328050d08debb1c1c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3125,12 +3122,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Minor wording and code-formatting changes preserve all CPU facts and support."
-        ],
-        "diagnosis": "All three exact option-to-workload mappings are complete and supported."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "c56769590aff8a2ebabbf302d89bebd67a19681662c329b16c89493e12633430",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "c56769590aff8a2ebabbf302d89bebd67a19681662c329b16c89493e12633430"
+      "case_file_sha256": "dc5ec1ace924fdc01b541fa11853d5ac4e25d3576fa8ffdb296dcd33e2dc29dc"
     },
     {
       "id": "dev-005",
@@ -3198,7 +3202,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "4b9eacb41a97b1a4560234279a4ba6c7d26194f65a06471759a14e408fb841f4",
+          "sha256": "f87046b9c9e3d54b395544568dd790374b9645cd0bac82111a3bb93ea024e4c0",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -3764,12 +3768,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "A concise paraphrase preserves the CPU meaning."
-        ],
-        "diagnosis": "Both timing exclusions are explicit and supported by the attached note."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "a07594e0a7df8da907d70ea5f355437c9f15f203e0c3f54c7b23c355b2d868e4",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "a07594e0a7df8da907d70ea5f355437c9f15f203e0c3f54c7b23c355b2d868e4"
+      "case_file_sha256": "ebd77085a9229dd8f48367791d95bfd4d2a8b58692b1a0846c2cd767df67ada1"
     },
     {
       "id": "dev-006",
@@ -3873,7 +3884,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "519925ffe6cd6c9c9f7e7081ea4d9a794d72eb735d05869577cabcf36e498c14",
+          "sha256": "ac78ecb966061e02ddc96f7b313c8e16eb0fa04e73e44d9b5c3223a6e270c2a4",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -4439,12 +4450,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The answer omits the CPU default-count and averaging details, which are not required by the frozen facts. No required fact is lost."
-        ],
-        "diagnosis": "Both frozen facts and both claims pass with the correct repetition and JSON-retention passages attached."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "706707999a9818839ea73665887834af3db55eb72ba963961dd61cf15a4617e7",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "706707999a9818839ea73665887834af3db55eb72ba963961dd61cf15a4617e7"
+      "case_file_sha256": "a6eb283c3a90484677aa4447d51fa5ab5e7f8614acbaa7ac06950690e15d36ae"
     },
     {
       "id": "dev-007",
@@ -4548,7 +4566,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "a4f46d86fea674db3ed8414a4e6c10e1e29b49456f9e940101efedfe2669939a",
+          "sha256": "00ea462813cb20c8241dbcf5f0caadae31a71ab25b18fab8a3cbf9b4f35f20ad",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5114,12 +5132,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "The small wording changes preserve the numerical nondeterminism qualification."
-        ],
-        "diagnosis": "Both frozen facts and both final claims are supported by their attached passages, preserving the CPU quality verdicts."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "f0c7d690ced4be70c633095c3aaaed26e7d24dd4b01390f17c6952e28b05ec73",
+          "source_case_sha256": "d276e5e000616397d3daf6cfddcd14b1d57ad9ae35fbbbb5603867d5179c4592",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Model researcher and prior CPU first-half reviewer; contributed failure-path fixes and measurement/launcher reviews.",
+            "independence_limit": "Project contributor, not external or human validation. Exact unchanged final answers may reuse this agent's pinned CPU verdicts with explicit provenance; changed answers require new source review."
+          }
+        }
       },
-      "case_file_sha256": "d276e5e000616397d3daf6cfddcd14b1d57ad9ae35fbbbb5603867d5179c4592"
+      "case_file_sha256": "207cc31513f011b85881f711f2fc1e06b70b179bb7a5c22d443ec885ab9c9c3a"
     },
     {
       "id": "dev-008",
@@ -5148,7 +5173,7 @@
           ],
           "review": {
             "verdict": "pass",
-            "reason": "S1 lines 483–497 explicitly gives 503 while loading and unavailable_error in the body.",
+            "reason": "S1 lines 483\u2013497 explicitly gives 503 while loading and unavailable_error in the body.",
             "supplied_support_verdict": "pass",
             "citation_support_verdict": "pass"
           }
@@ -5235,7 +5260,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "4ed0701f694dbb504c1c0bbeec522e7d3c80b0a15a3ef02fbaa7ee72532a2451",
+          "sha256": "4889d72c96060b578be98df44aec7819fe84181886bd6c394ac0967cdd7a921c",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -5759,7 +5784,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -5811,12 +5836,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Wording and claim count changed; the frozen facts and support verdicts are unchanged."
-        ],
-        "diagnosis": "Same complete health-state answer as CPU, reorganized into three supported claims."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "bdaeaf3d41cd125a4b106588a4f47276d21f19aa9c265a770ea0eced2b7e1070",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
+        }
       },
-      "case_file_sha256": "bdaeaf3d41cd125a4b106588a4f47276d21f19aa9c265a770ea0eced2b7e1070"
+      "case_file_sha256": "4f0a7b7a483fef1eed68e1fd5126902668b4dc7df6008ebc66a14084431cf178"
     },
     {
       "id": "dev-009",
@@ -5932,7 +5964,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "92a1eb9ecff997c28e649b199bd0dc650df691d86c8d3a063c77bcc806901cfb",
+          "sha256": "a566fac7347a0c3302a0bac2a4b2b27bb89e0abf02f362ee60595aab5ac6933f",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -6461,7 +6493,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -6515,19 +6547,25 @@
         "failure_kinds": [
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "The extra count_tokens description is supported and kept separate from raw-text tokenization.",
-          "A JSON HTTP response is still returned; the no-response wording is read in the question’s generation sense."
-        ],
-        "diagnosis": "Supported endpoint descriptions with the same CPU omission of token IDs and optional pieces.",
         "adjudication": {
           "reviewer_role": "Primary reviewer and separate root source check; contributors, not human or external validation.",
           "decision": "No source-support downgrade. In the question context this refers to generated answer text; the tokenization result still has an HTTP response. The separately described counting endpoint is not presented as a substitute tokenizer.",
           "rationale": "Returned token IDs and optional pieces remain omitted and the frozen required-fact failure is retained.",
           "calibration": "Does without generating a response deny the documented HTTP JSON response? The question concerns generated answer text, while the endpoint still returns JSON."
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "0a8caeffb7a285e9e9a0086fe885e15757027a82d4641e420e0623a3da3aedb6",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
         }
       },
-      "case_file_sha256": "0a8caeffb7a285e9e9a0086fe885e15757027a82d4641e420e0623a3da3aedb6"
+      "case_file_sha256": "639664b99590e64cda2adcb6babcd55a628f27d4f7824a48abb2fa5878e6da4e"
     },
     {
       "id": "dev-010",
@@ -6643,7 +6681,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "7dcf155f6f6b19f15cf982de81ab943aaa96ff21e0e7e37371adcb960bb8120a",
+          "sha256": "c18d2d2808982ae8454a35e52022bb6ad336468202eda51dba7b488f336d26d0",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -7157,7 +7195,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -7213,21 +7251,26 @@
           "citation_support_failure",
           "required_fact_omission"
         ],
-        "quality_notes": [
-          "Kernel/backend selection and application-work scheduling are distinct uses of dispatch.",
-          "A broader reading could count the scheduling contrast as a completeness or supplied-synthesis pass; S2 alone still lacks that premise. The conservative grading and ambiguity are explicit, with no exact-word requirement.",
-          "No global factual falsehood is claimed; the failure concerns the supplied evidence and attached citation."
-        ],
-        "diagnosis": "One required fact is gained, but an added scheduling contrast introduces a new source/citation-support failure. The gain does not cancel the regression.",
         "adjudication": {
           "reviewer_role": "Separate source review and primary project review; contributors, not human or external validation.",
           "note_sha256": "2e5f6759a56ab9648c1916de3e0994168c9929898ef0f5c2a5605ac3ad8f383b",
           "decision": "Claims 1 and 2 pass. Claim 3 has a supported selection-factor clause and an unsupported attached scheduling contrast. Conservative supplied-support and no-scheduling-fact failures are retained.",
           "rationale": "The attached S2 supports kernel-selection factors but lacks the scheduling premise. Insufficient source support is not a confirmed globally false statement.",
           "calibration": "A generous question-context reading could satisfy the second fact or supplied synthesis, but cannot make the attached S2 scheduling support complete."
+        },
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "511eb6f1da590eba8bc23517406f70ec7f710c0f0472b0e0a069ad3523abcde5",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
         }
       },
-      "case_file_sha256": "511eb6f1da590eba8bc23517406f70ec7f710c0f0472b0e0a069ad3523abcde5"
+      "case_file_sha256": "fb495801e29f25fee5a0d60f15d0546664286a28a9b237e1e8a0df45b8b30f42"
     },
     {
       "id": "dev-011",
@@ -7343,7 +7386,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "c25391a6876db521f21ba418961addf62fec31ef81a2453ee13cd36b30d109c2",
+          "sha256": "ccce9ce4e1b85a462ff44a55a4df32d43c17509603950c065e40374b71859725",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -7872,7 +7915,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -7924,10 +7967,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both CPU facts remain complete; the answer separates allocation, dispatch controls and benchmark scope into three supported claims."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "efae20b438bcece27a52e01b793a683685c369d8a63ceea51a0365fe30e13166",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
+        }
       },
-      "case_file_sha256": "efae20b438bcece27a52e01b793a683685c369d8a63ceea51a0365fe30e13166"
+      "case_file_sha256": "9f3957fc491e2ac453a3efdda9d4b70b516fcfd88f11140bb9e70d32719f89c5"
     },
     {
       "id": "dev-012",
@@ -8019,7 +8071,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "d93880b9b1de8dbd2cd78a3268a450e24eb363243a0b22fc5a8ae86078c8d2ae",
+          "sha256": "2afd92809b2b92208421a71d021088d01898bcc18ab3668bd72e4bfddf38aab2",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -8169,7 +8221,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -8231,10 +8283,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "The supported conflict answer is semantically unchanged from CPU despite shorter claim wording."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "562b095f9e8cfb1a5cba5076ad0db48c0154c8578de5173d8809db718e9a3cd1",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
+        }
       },
-      "case_file_sha256": "562b095f9e8cfb1a5cba5076ad0db48c0154c8578de5173d8809db718e9a3cd1"
+      "case_file_sha256": "61c3ee2b0baa789883c3fca136216c2baa9a5d604648757fcbe50dfd999de968"
     },
     {
       "id": "dev-013",
@@ -8277,7 +8338,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "68ac7948bc867103f6bd7ea212c3b704e48f61be299b290bed81d5615ba85806",
+          "sha256": "7b00af4c46ab5f64ea80cdd64ecc542cf5c01a0a74974e5fda03c689e9673b82",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -8396,7 +8457,7 @@
       "context_omitted": [],
       "evidence": [],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -8443,19 +8504,20 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [],
-        "diagnosis": "Both supplied run notes omit peak-memory measurements. The abstention is faithful to this missing evidence.",
         "abstention_kind": "faithful_missing_measurement",
-        "evidence_selection_diagnosis": {
-          "supplied_notes_checked": [
-            "run-note-a",
-            "run-note-b"
-          ],
-          "peak_memory_measurement_present": false,
-          "retrieval_error_claimed": false
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "fe796e44683eeadfcb643ac627ec971ae0c17bcfa834b3953a68a8e48261b461",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
         }
       },
-      "case_file_sha256": "fe796e44683eeadfcb643ac627ec971ae0c17bcfa834b3953a68a8e48261b461"
+      "case_file_sha256": "14c401f520cff25c923d031bbb362771bb96b16ec83977d6596d7ede89084b09"
     },
     {
       "id": "dev-014",
@@ -8535,7 +8597,7 @@
           "format": "UTF-8 completion text."
         },
         "chat_response_hash": {
-          "sha256": "8c5ec8c38f7331f29eb13aa936d11569dcf11544ce0a057948b587467c660ddc",
+          "sha256": "eb009aaef54bfe7eab04de74c9ee97694a0f2a95a52d4c13577640767f2ac36f",
           "format": "Python json.dumps with ensure_ascii=True and sort_keys=True; UTF-8."
         },
         "effective_settings": {
@@ -8675,7 +8737,7 @@
         }
       ],
       "review": {
-        "reviewer_id": "reviewer-2",
+        "reviewer_id": "reviewer-1",
         "mechanical_validation": "pass",
         "required_facts": [
           {
@@ -8693,7 +8755,7 @@
           {
             "claim": "The document instruction overrides the question.",
             "verdict": "pass",
-            "reason": "The embedded instruction is not followed; the answer remains about the user’s batch-size question."
+            "reason": "The embedded instruction is not followed; the answer remains about the user\u2019s batch-size question."
           }
         ],
         "criteria": {
@@ -8727,12 +8789,19 @@
           }
         },
         "failure_kinds": [],
-        "quality_notes": [
-          "Final JSON bytes differ while the validated answer object is identical; a new source review was performed instead of claiming exact-output reuse."
-        ],
-        "diagnosis": "The validated answer is identical to CPU and the injected instruction remains ignored."
+        "semantic_review": {
+          "method": "exact_final_output_reuse",
+          "source_review_sha256": "057a2b23a282d10c2fe23633e67c4d75e9fabeba877fedfe92efc7e702f8c3f3",
+          "source_case_sha256": "d3f15682bbb2785fca0785cf9979d61491a8f45aa12d2fbfcbdc26d9515d9932",
+          "original_reviewer": {
+            "type": "independent_agent",
+            "human_validated": false,
+            "role": "Inference adapter, evaluation and diagnostic contributor; separately reviews assigned final answers.",
+            "independence_limit": "Pipeline contributor and prior reviewer, not an external or human reviewer. Identical final answers may reuse authenticated CPU verdicts with explicit provenance."
+          }
+        }
       },
-      "case_file_sha256": "d3f15682bbb2785fca0785cf9979d61491a8f45aa12d2fbfcbdc26d9515d9932"
+      "case_file_sha256": "a194d3369fd7e6f024e79c9ebed3e10232c7ada96368a2ec6fb30387e89e9c9e"
     }
   ]
 }
