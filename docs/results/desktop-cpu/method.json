@@ -1,28 +1,37 @@
 {
   "schema_version": 1,
   "study": "desktop",
-  "study_id": "qwen35-desktop-v4",
-  "frozen_at": "2026-11-14T06:56:29.841083+00:00",
-  "question": "Describe fixed-token performance of the two pinned CPU backends on this Mac with Docker temporarily stopped during one declared work period.",
-  "prior_information": "The excluded strict setup, earlier quality and diagnostic observations, all four desktop-v2 setup observations, and nine successful desktop-v2 measured invocations were seen. V2 produced four complete KleidiAI-first pairs, one per workload. Their CPU/KleidiAI mean-duration ratios were 1.604607670455332 (pp512), 1.4780643779681868 (pp2048), 0.7681896574945443 (tg128-d512) and 0.6921666247909088 (tg128-d2048). V2 stopped on memory pressure after the ninth run. The owner confirmed updating Docker during that run and authorized stopping the updated stack for this new study. This is a prospective repeat with known prior outcomes; settings, gates, schedule, formula and analysis are unchanged. All four desktop-v3 setup observations and all 48 measured invocations / 24 pair ratios were also seen. V3 completed its old boundary checks, but power logs confirmed sleep during three processes. Its native and parent clocks counted sleep differently. The full unchanged report and clock audit remain public. V4 changes only timing protection and its evidence requirements: owned idle-sleep prevention, suspend-aware deadlines, clock continuity and verified checkpoint transfer. Known prior outcomes do not justify selecting or dropping rows. No prior observations enter V4 estimates.",
-  "strict_study": {
-    "status": "blocked",
-    "excluded_setup_ledger_sha256": "abe8c9f3139a4cda66680609377787368f1ccbe4128612a620d9282ccb81cabb",
-    "exclusion_review_sha256": "fe94a85daaa04d009625173dc2cbf079fce49dbe760a43783425937378075358",
-    "retroactive_admission": false
-  },
+  "study_id": "qwen35-quiet-desktop-v2",
+  "question": "Describe the two pinned CPU backends during one continuous measured invocation after explicitly recorded background-work reduction; compare all four workloads with the published desktop study using the same arithmetic.",
+  "prior_information": "Earlier strict setup was excluded for swap activity. Desktop-v2 stopped early on pressure; desktop-v3 has retained sleep-affected observations. The complete guarded desktop-v4 report and its 24 paired outcomes are known: median CPU/KleidiAI process-mean ratios were 1.5006415939472677 (pp512), 1.465012813111032 (pp2048), 0.689890328342813 (tg128-d512) and 0.6896300057628738 (tg128-d2048), with swap activity in all 24 pairs. The public four-observation setup validation and application studies were also completed. KleidiAI failed the strict no-regression adoption gate in the separate frozen answer-quality comparison: one citation/support regression and two required-detail losses remained despite three fact gains, with two execution failures. Among the same38 cases with completed KleidiAI answers, both CPU and KleidiAI passed every applicable criterion on28 cases. This is not proof of a general quality loss; the strict gate remains failed and timing cannot authorize application adoption. This prospective repeat has known prior results and is not blinded or externally preregistered. No earlier observation enters its estimates. On November 18, quiet-v1 had two readiness failures before any native setup or measurement: 1,368 and 1,615 swap-in pages over separate 120-second checks, first with Docker stopped and then with selected apps paused. All temporary changes were restored. The owner restarted the Mac at 20:55 UTC. This fresh preparation retains both failures; it does not restart or overwrite their records.",
   "host_condition": {
+    "status": "declared_conditions_subject_to_guarded_readiness",
     "machine": "Apple M1 Max, 32 GB",
-    "docker": "temporarily stop the newly recorded updated Docker stack through the authorized graceful shutdown; restore and verify that current stack after completion, failure or interruption, preserving any initially exited containers",
-    "background": "Other user and system activity may continue. No other benchmark, build, model or test jobs during fresh setup or measured sessions.",
-    "scope": "This observed work period with Docker stopped is not representative of ordinary Docker-running use or all desktop use.",
+    "background": "After a user restart, Docker/VM and other model, build or test jobs are absent. No application suspension or service shutdown is planned. macOS, the controlling editor/agent and managed security remain active. Record residual activity before and after each phase. This is a reduced-workload desktop study, with no CPU isolation or zero-background-activity claim.",
+    "restoration": "Record exact prior state for every temporary change, use supported graceful controls, and restore and verify those recorded services/settings after completion, failure or interruption. Do not promise unchanged RAM, cache or application-internal content.",
+    "scope": "Reduced controllable activity during one declared period; never zero operating-system activity, CPU isolation, fixed thermals or representative desktop use.",
     "required_before_launch": [
-      "AC power",
-      "frozen power mode and host identity",
-      "normal memory pressure",
-      "matching thermal availability and any reported limits",
-      "available, monotonic page counters"
-    ]
+      "AC power and open lid",
+      "same frozen power mode and host identity",
+      "normal pressure at both recorded120-second preflight endpoints",
+      "required monotonic counters available",
+      "no identified competing controllable jobs or VM",
+      "documented residual system/security activity reviewed before launch"
+    ],
+    "operational_preflight": {
+      "duration_seconds": 120,
+      "normal_pressure_at_all_readings": true,
+      "swapins_and_swapouts_increase_allowed": false,
+      "counter_reset_or_missing_allowed": false,
+      "cpu_or_load_percent_cutoff": null,
+      "decision": "Require AC, declared identity and mode, normal pressure at both endpoints and no increase/reset/missing swap counters over the guarded120-second interval. Residual managed/system activity is recorded and reviewed explicitly. Passing readiness does not certify zero background activity or prevent later swap.",
+      "limits": "Both recorded endpoints must be normal; this does not prove pressure remained normal at every instant. Cumulative available monotonic swap counters bound activity between them. The prior five-reading host diagnostic is separate and does not replace the controller readiness interval.",
+      "recorded_endpoint_offsets_seconds": [
+        0,
+        120
+      ],
+      "remaining_load_scope": "Windows, editor and managed security can consume CPU even when intentional user tasks are idle. Results must retain that limitation and cannot be described as a perfectly quiet host."
+    }
   },
   "identity": {
     "model_sha256": "809626574d0cb43d4becfa56169980da2bb448f2299270f7be443cb89d0a6ae4",
@@ -45,12 +54,12 @@
     "swap_policy": "record_counter_increases",
     "eligibility": "Complete native contract and resource report, unchanged inputs, successful closed timing evidence and no effective host stop. Swap increases alone are recorded and do not exclude.",
     "failure": "Retain the attempt and stop setup. No retry, replacement or partial calibration.",
-    "measured_deadline_rule": "max(600, ceil(2 * longest eligible suspend-inclusive process wall seconds / 60) * 60)",
+    "measured_deadline_rule": "max(600, ceil(2 * longest eligible continuous seconds / 60) * 60)",
     "timings_in_final_comparison": false
   },
   "measurement": {
     "sessions": 3,
-    "session_spacing": "Consecutive blocks within one work period; not independent replications.",
+    "session_spacing": "Three consecutive logical blocks in one controller invocation; not independent replications. Frozen rests remain, with no manual handoff delay.",
     "rounds_per_session": 2,
     "workloads": [
       "pp512",
@@ -77,14 +86,70 @@
     "idle_before_session_seconds": 120,
     "idle_between_pairs_seconds": 120,
     "idle_between_sides_seconds": 0,
-    "native_settings": "Unchanged from the reviewed normal fixed-token workloads.",
-    "retries_or_replacements": false
+    "native_settings": {
+      "n_batch": 512,
+      "n_ubatch": 512,
+      "n_threads": 4,
+      "cpu_mask": "0x0",
+      "cpu_strict": false,
+      "poll": 50,
+      "type_k": "f16",
+      "type_v": "f16",
+      "n_gpu_layers": 0,
+      "n_cpu_moe": 0,
+      "split_mode": "layer",
+      "main_gpu": 0,
+      "no_kv_offload": false,
+      "flash_attn": 0,
+      "devices": "auto",
+      "tensor_split": "0.00",
+      "tensor_buft_overrides": "none",
+      "load_mode": "auto",
+      "lazy_mode": "auto",
+      "embeddings": false,
+      "no_op_offload": 0,
+      "no_host": false,
+      "repack": true,
+      "fit_target": 0,
+      "fit_min_ctx": 0
+    },
+    "retries_or_replacements": false,
+    "native_flags": [
+      "--offline",
+      "-r",
+      "4",
+      "-t",
+      "4",
+      "-b",
+      "512",
+      "-ub",
+      "512",
+      "-ctk",
+      "f16",
+      "-ctv",
+      "f16",
+      "-fa",
+      "off",
+      "-ngl",
+      "0",
+      "-lm",
+      "auto",
+      "-lzm",
+      "auto",
+      "--repack",
+      "1",
+      "-o",
+      "json"
+    ],
+    "planned_raw_samples": 192,
+    "planned_retained_samples": 144
   },
   "host_rule": {
     "swap_activity": "Record every increase; no threshold, filtering or timing adjustment.",
     "other_departure": "Stop future launches on missing/reset telemetry, AC/mode/pressure/thermal/identity changes. Retain completed valid observations with flags. Stop after failed timing continuity, sleep assertion or cleanup.",
     "protocol_completion": "False after any effective host, timing, integrity or cleanup failure, even if all planned ratios exist.",
-    "telemetry": "Boundary host readings and setup child resource report only. No new native instrumentation or process counter observer."
+    "telemetry": "Unchanged per-row host boundaries and setup resource records, controller readiness endpoints and per-block assertion observations. Separate process inventories before and after each phase describe residual background activity; no continuous or between-block process observer.",
+    "quiet_claim": "Swap increments remain included under the desktop policy. Any observed increase defeats a no-observed-swap claim for that covered interval. Residual or resumed substantial background activity defeats an unqualified quiet-host claim, without deleting its measurements."
   },
   "analysis": {
     "pair_inclusion": "Both processes completed with valid native data, within the suspend-aware deadline and with verified inputs. Preserve mechanical ratios and flags according to the current reporter, but never present a timing-invalid pair as clean performance evidence. Incomplete or invalid native pairs have no ratio.",
@@ -97,28 +162,14 @@
       "No significance test, population confidence interval, tail-latency estimate or universal Arm64 speedup.",
       "Pairing and random order do not prove isolation or remove systematic bias.",
       "Synthetic compute excludes retrieval, tokenization, sampling, prefix setup, state restoration and model loading.",
-      "KleidiAI quality and adoption remain rejected.",
+      "The strict KleidiAI no-regression adoption gate remains failed; this is not proof of general quality loss.",
       "This is a prospective local repeat with known earlier outcomes, not a blinded study or external preregistration.",
-      "No clean performance claim if the timing guard fails. Retain the full planned denominator and all failures without post-hoc exclusions or timing corrections."
+      "No clean performance claim if the timing guard fails. Retain the full planned denominator and all failures without post-hoc exclusions or timing corrections.",
+      "No causal claim that a ratio change from desktop-v4 was caused by stopped services; date, cache, scheduler and unmeasured conditions also differ."
     ]
   },
-  "research": {
-    "method_review_sha256": "9b63769af2e791d13b0f0b6e0835fba93ee7af0f99b9a817a35be3a27b0ef85a",
-    "code_review_sha256": "006205c523d036f23c353324af8b63079ba195d293fcf977b64e05f7d5fc8442",
-    "telemetry_review_sha256": "c6e3c9d05aeb9749a9391d6d8fb0528c8ffc73f69fce53ea640205022627346b"
-  },
-  "supersedes": {
-    "method_sha256": "a9d4fa26aa257e0a7fc2ab2d2f6565af25dfe7d025f15d202c0eeec154cdd693",
-    "previous_study_id": "qwen35-desktop-v3",
-    "setup_runs": 4,
-    "timed_runs": 48,
-    "completed_pairs": 24,
-    "timing_report_sha256": "60f83f93676e921caf1d7b175a5295fccda89747b60b8d5df5397b5d5c5a06da",
-    "clock_review_sha256": "653e5a0dee12bb522e1414492b8329ea6fbf3ccd4885a0ccfa5b1d9151df58db",
-    "reason": "Sleep affected three V3 processes. Preserve V3 unchanged and collect fresh guarded observations; do not pool studies, replace selected rows or subtract sleep."
-  },
   "timing": {
-    "scope": "Guard setup observations, native waits, host probes, verification, rests and measured sessions. Verify continuity between setup observations and between measured sessions. Setup and the measured study are separate phases; no timing estimate spans their review gap.",
+    "scope": "Separate setup and measured phases. One continuous owned outer protection spans each phase; unchanged internal guards cover observations/rests/probes and exact boot/checkpoint transfer. No estimate spans the setup approval gap.",
     "failure": "Preserve the first failure and all raw output. Stop later launches after a guard, host, integrity or cleanup failure. No retry or replacement. A deadline expiry is a failed native attempt even if exit zero is observed after the deadline.",
     "limits": [
       "Idle-sleep prevention does not block every possible suspend or OS interruption.",
@@ -146,5 +197,68 @@
     "assertion_start_seconds": 3,
     "probe_seconds": 0.5,
     "cleanup_seconds": 5
-  }
+  },
+  "controller": {
+    "implementation": "Small ignored supervisor around unchanged public setup, run_session and report contracts; exact helper/source/method/plan pins frozen before execution.",
+    "setup_invocations": 1,
+    "measured_invocations": 1,
+    "measured_blocks_in_invocation": 3,
+    "handoffs": "Automatic sequential handoff without human pauses, exact closed previous-run SHA/checkpoint transfer, same boot and unchanged plan. Existing native/rest timing boundaries stay unchanged.",
+    "exclusive_ownership": "One study owner/public benchmark lock across the invocation; internal calls use the reviewed distinct nested lock to avoid self-deadlock. No parallel native child.",
+    "outer_protection": "Owned idle-sleep guard plus bounded AC system-sleep assertion from before collection until all blocks and cleanup close; internal guards remain. Record acquisition, liveness, same assertion identity and release/reap. No renewal or weakened clock/deadline rule.",
+    "caps": {
+      "status": "reviewed_in_controller_36bcdbd408a025c1436f45cb3339f7b815030bf629f91478eba870e8e5ca8ec2",
+      "setup_formula": "4 * 1200 + 120 + 1200",
+      "setup_seconds": 6120,
+      "measurement_formula": "48 * frozen_timeout_seconds + 120 + 3 * 120 + 21 * 120 + 1800",
+      "measurement_seconds_if_timeout_600": 33600,
+      "setup_overhead_allowance_seconds": 1200,
+      "measurement_overhead_allowance_seconds": 1800,
+      "meaning": "Conservative prospective operational margins for verification, host probes and cleanup, not measured overhead or statistical thresholds. Derive final caps from the adopted deadline before launch. Expiry stops collection; no extension based on outcomes.",
+      "readiness_seconds_per_phase": 120
+    },
+    "stop": "Retain all outcomes and stop future launch on effective host, timing, input-integrity, cleanup or outer-assertion failure. Ordinary invalid native outputs retain the existing runner semantics; no failed block may seed another. Never retry, replace or reset the study to discard an unfavorable observation.",
+    "readiness": "The first120 seconds of each phase occur inside its continuous outer guard, separately from the existing per-block rests. Required host admission passes at both endpoints, counters are available/monotonic and show no new Swapins or Swapouts. A pinned operational review binds the phase and plan SHA and explicitly clears competing jobs and residual background load before native launch. Later swap remains visible and included under desktop policy."
+  },
+  "comparison": {
+    "reference_report_sha256": "f92c58dfe1cc4dc1886283c9dc1919d58c4cd4731263ef76025aae8dd02946f8",
+    "reference_method_sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
+    "reference_study": "qwen35-desktop-v4",
+    "same_primary_arithmetic": true,
+    "process_duration": "arithmetic_mean_of_three_retained_samples",
+    "pair_ratio": "cpu_mean_ns / kleidiai_mean_ns",
+    "workload_summary": "All six paired ratios, median and range; per-block two-pair summaries and order retained.",
+    "no_pooling": true,
+    "interpretation": "Side-by-side descriptions from different periods, not a causal effect of background reduction. Keep old artifacts unchanged and all new failures/flags. Strongest evidence means validity and complete accounting, not largest speedup.",
+    "quality_preserved": false,
+    "backend_adoption": false,
+    "quality_interpretation": "The prior strict no-regression gate remains failed. Matched completed-case totals were28/38 for each backend; count equality does not cancel individual regressions or establish equivalence, and these fixed cases do not establish general quality loss."
+  },
+  "primary_sources": [
+    {
+      "url": "https://www.itl.nist.gov/div898/handbook/pri/section3/pri332.htm",
+      "relevance": "Blocking and randomization address nuisance variation without proving isolation."
+    },
+    {
+      "url": "https://google.github.io/benchmark/reducing_variance.html",
+      "relevance": "Scheduling, frequency and competing activity can affect measurements; mitigation is platform-specific."
+    },
+    {
+      "url": "https://github.com/apple-oss-distributions/adv_cmds/blob/main/ps/ps.1",
+      "relevance": "ps CPU is a decaying recent average, so repeated snapshots are diagnostic rather than a precise interval utilization proof."
+    },
+    {
+      "url": "https://github.com/apple-oss-distributions/top/blob/main/top.1",
+      "relevance": "A separately chosen interval CPU observer must discard its first invalid delta sample; monitoring overhead remains observable."
+    },
+    {
+      "url": "https://github.com/apple-oss-distributions/PowerManagement/blob/main/caffeinate/caffeinate.c",
+      "relevance": "Distinct idle/system-sleep assertions and bounded release; no persistent power-setting change."
+    },
+    {
+      "url": "https://github.com/ggml-org/llama.cpp/blob/8ca5a8008b57aa39f2601546c0d07912045080a5/tools/llama-bench/llama-bench.cpp#L2417-L2518",
+      "relevance": "Unchanged fixed-token native timing/state boundary."
+    }
+  ],
+  "frozen_for": "2026-11-18 fresh-boot prospective collection; no native observation has begun"
 }

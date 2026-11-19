@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "reference_study": "qwen35-desktop-v4",
+  "current_study": "qwen35-quiet-desktop-v2",
+  "reference_report_sha256": "f92c58dfe1cc4dc1886283c9dc1919d58c4cd4731263ef76025aae8dd02946f8",
+  "current_report_sha256": "788d6ec1017596eccbf5239a703a7d22b8c6fd1c638731f8c86d0d31b8dad604",
+  "method": "Separate six-pair summaries for each workload. No pooling or selected subset. Absolute times are medians of six process means per backend, in seconds; ratios are medians of six paired CPU/KleidiAI mean-duration ratios.",
+  "workloads": {
+    "pp512": {
+      "reference_ratio": {
+        "count": 6,
+        "median": 1.5006415939472677,
+        "minimum": 1.4825650246202682,
+        "maximum": 1.5142054228484225
+      },
+      "current_ratio": {
+        "count": 6,
+        "median": 1.5033192113682246,
+        "minimum": 1.4727617985600336,
+        "maximum": 1.511969144488367
+      },
+      "reference_kleidiai_time_change_percent": -33.361836428269775,
+      "current_kleidiai_time_change_percent": -33.48052812483755,
+      "absolute_process_time": {
+        "cpu": {
+          "reference_median_seconds": 8.197900847166666,
+          "current_median_seconds": 8.276517138833334,
+          "change_percent": 0.9589807577855547
+        },
+        "kleidiai": {
+          "reference_median_seconds": 5.458447000166666,
+          "current_median_seconds": 5.545194854,
+          "change_percent": 1.589240562941896
+        }
+      }
+    },
+    "pp2048": {
+      "reference_ratio": {
+        "count": 6,
+        "median": 1.465012813111032,
+        "minimum": 1.4474242143089224,
+        "maximum": 1.4944605774145527
+      },
+      "current_ratio": {
+        "count": 6,
+        "median": 1.4639144700668871,
+        "minimum": 1.4432478204982917,
+        "maximum": 1.467299489284632
+      },
+      "reference_kleidiai_time_change_percent": -31.7412113361352,
+      "current_kleidiai_time_change_percent": -31.689998258278752,
+      "absolute_process_time": {
+        "cpu": {
+          "reference_median_seconds": 34.605836139000004,
+          "current_median_seconds": 34.943432034833336,
+          "change_percent": 0.9755461318065706
+        },
+        "kleidiai": {
+          "reference_median_seconds": 23.632621285,
+          "current_median_seconds": 23.860648604,
+          "change_percent": 0.9648837352830286
+        }
+      }
+    },
+    "tg128-d512": {
+      "reference_ratio": {
+        "count": 6,
+        "median": 0.689890328342813,
+        "minimum": 0.6848540537555391,
+        "maximum": 0.6960096163430223
+      },
+      "current_ratio": {
+        "count": 6,
+        "median": 0.69907071612556,
+        "minimum": 0.6697004922318545,
+        "maximum": 0.7463867413796827
+      },
+      "reference_kleidiai_time_change_percent": 44.95057531855853,
+      "current_kleidiai_time_change_percent": 43.047044731364494,
+      "absolute_process_time": {
+        "cpu": {
+          "reference_median_seconds": 10.1891001735,
+          "current_median_seconds": 10.4852813405,
+          "change_percent": 2.906843214382304
+        },
+        "kleidiai": {
+          "reference_median_seconds": 14.7474506595,
+          "current_median_seconds": 14.970656423666668,
+          "change_percent": 1.513521009971197
+        }
+      }
+    },
+    "tg128-d2048": {
+      "reference_ratio": {
+        "count": 6,
+        "median": 0.6896300057628738,
+        "minimum": 0.6819363691753592,
+        "maximum": 0.6968192832397362
+      },
+      "current_ratio": {
+        "count": 6,
+        "median": 0.7038195913514557,
+        "minimum": 0.7016964618997631,
+        "maximum": 0.7097068440986105
+      },
+      "reference_kleidiai_time_change_percent": 45.00529148145065,
+      "current_kleidiai_time_change_percent": 42.081864768757946,
+      "absolute_process_time": {
+        "cpu": {
+          "reference_median_seconds": 10.440612117833332,
+          "current_median_seconds": 10.784213055333334,
+          "change_percent": 3.291003761293898
+        },
+        "kleidiai": {
+          "reference_median_seconds": 15.156022597333333,
+          "current_median_seconds": 15.302938243,
+          "change_percent": 0.9693548866344104
+        }
+      }
+    }
+  },
+  "limits": [
+    "Different dates and observed background conditions; changes are descriptive, not a causal effect of restarting or removing swap.",
+    "No significance, population confidence or application speedup claim.",
+    "Cleaner observed paging conditions do not imply faster or uniformly less variable computation."
+  ]
+}

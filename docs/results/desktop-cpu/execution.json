@@ -1,13 +1,15 @@
 {
   "schema_version": 1,
-  "study_id": "qwen35-desktop-v4",
+  "study_id": "qwen35-quiet-desktop-v2",
   "status": "complete",
-  "execution_source_revision": "5c5d59eb52ae6aaeda89297bb7b464ba9e19afc3",
-  "method_sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
-  "setup_sha256": "72acde279dfbb96c12f4e13a0f1fcddb5729a93399982398a247f38b41917051",
-  "report_sha256": "f92c58dfe1cc4dc1886283c9dc1919d58c4cd4731263ef76025aae8dd02946f8",
+  "execution_source_revision": "15dc33dc736c5aaa92fa8afd3e8f61d07dd65241",
+  "method_sha256": "186634ae3819854fa8c74daee3b48784e7106f5c3aecd01aada01d969fb51897",
+  "setup_sha256": "16227faa8b048d74a7fb24ba87f8d7c86e12a39bc50acd6f422b7ba19d1b17cd",
+  "report_sha256": "788d6ec1017596eccbf5239a703a7d22b8c6fd1c638731f8c86d0d31b8dad604",
+  "comparison_sha256": "3bf3c5f2a999adb11509e64d6f51b1a49e102c32edd96ca7f2f57dc1eb80e0c6",
   "collection": {
-    "sessions": 3,
+    "controller_invocations": 1,
+    "logical_blocks": 3,
     "planned_invocations": 48,
     "successful_invocations": 48,
     "planned_pairs": 24,
@@ -15,64 +17,72 @@
     "raw_samples": 192,
     "excluded_initial_samples": 48,
     "retained_samples": 144,
-    "timing_valid": true,
-    "integrity_verified": true,
-    "guards_closed": 3,
-    "session_assertions_released": 3,
-    "rows_retried_or_replaced": 0
+    "rows_retried_or_replaced": 0,
+    "outer_continuous_seconds": 7791.41167875,
+    "outer_timing_valid": true,
+    "outer_phase_within_cap": true,
+    "inner_guards_valid": true,
+    "automatic_handoffs": 2,
+    "exact_checkpoint_handoffs_verified": true,
+    "first_block_started_at": "2026-11-18T21:27:24.164957+00:00",
+    "last_block_finished_at": "2026-11-18T23:35:13.560741+00:00"
   },
   "session_records": [
     {
       "session": 1,
-      "sha256": "e4dbfcac094dcf2489749f8044114fbf602f0a9c25a15cd2eed62ae4b1719b36"
+      "sha256": "e75ec9c8d4f8d86ce6fa41eb7703705f85ce3b0334080de825276fdd192c9323"
     },
     {
       "session": 2,
-      "sha256": "a9499d408595403eaf4e4e85a8d7ca5e93bd103528b02f25d830e90cc168238e"
+      "sha256": "152b8a717018b83392e99818915f210c75613c27618103832c230ce8eb107ed6"
     },
     {
       "session": 3,
-      "sha256": "2c34b30207f97531f0a1cbe5f8ae9d29aa1aa759408cab1c43ac4dd7742feb64"
+      "sha256": "7c9e291fbcd82ab963dc84319f686dac8dcc9ff4e93303dcfb3b74396ccb9b7c"
     }
   ],
-  "review": {
-    "measurement_audit_sha256": "bf97c1e11eafc6e193424e2b90ed70e0fb826c7c151e4adbf5dca187b19acd98",
-    "observed_findings_sha256": "158c1e23cd8dab62c8f40437b33f591827f032da5a58f47a57823c8ac8e37717",
-    "closure_sha256": "9257710b8b4fb59e497383158d736791f95bfa4b1c67aaea910d1738dd469aa9",
-    "scope": "Independent raw-sample arithmetic and record review, with shared pinned host and clock validators. Model/runtime integrity was verified by the collector; the separate audit did not rehash those large assets. Agent review is not external validation."
+  "supervisor": {
+    "source_sha256": "36bcdbd408a025c1436f45cb3339f7b815030bf629f91478eba870e8e5ca8ec2",
+    "envelope_sha256": "42d1eef290b64440444800bee284204148a6ae578541c2931be1e775a86891dd",
+    "closed_record_sha256": "bb295a6c346a3839c5bf0627e86b02160c96a836af5f1255e54a2bf1d54bf69c",
+    "scope": "One local supervisor called the unchanged public runner for three automatic blocks under one outer sleep guard and benchmark lock. Private supervisor and raw local records are not distributed."
   },
-  "handoff": {
-    "count": 2,
-    "review_sha256": "b45fb079ff611506cfafc684acf797bba3c2c32a1ab903f45e0f0500b0fd0635",
-    "owned_assertions_confirmed_and_released": true,
-    "both_overlaps_verified": true,
-    "maximum_seconds": 1200,
-    "auxiliary_poll_seconds": 0.2,
-    "measured_poll_seconds": 0.1,
-    "scope": "A prospective operational clarification during session 1 added bounded, owned assertion overlap across session handoffs. Frozen method, native schedule, rest periods and checks were unchanged. Same-boot checkpoint transfer verified the actual gaps. Release markers were authenticated by the execution owner; observed releases and closure were within the bound. These auxiliary durations are not performance samples."
+  "review": {
+    "measurement_audit_sha256": "3eb9725cf7c8b2fcb0eb7f2ffdbe83847ee606de63d553492c14ab36e690055a",
+    "setup_audit_sha256": "b665e5be5f88b2b26c500c87425795f74dc03d871cfd1f7e0a67ee077c338e98",
+    "plan_review_sha256": "6c2d39af115326024d05d58403900cbbc3a13ab4c6fe1ca32fd1c0e52d34841e",
+    "scope": "Separate raw arithmetic/evidence review using pinned pure host/timing validators. Local automated review is not external validation."
   },
   "conditions": {
-    "pairs_with_swap_activity": 24,
-    "pairs_retained": 24,
-    "effective_host_stops": 0,
+    "pairs_with_swap_activity": 0,
+    "host_findings": [],
     "thermal_telemetry": "unavailable",
-    "background": "Docker was stopped. Other user/system activity and light source/document work continued; no other model, build, test or benchmark job ran during collection.",
-    "order": "Backend order is linked to round: KleidiAI first in round 1, CPU first in round 2. Consecutive sessions are not independent replications."
+    "background": "Fresh boot; Docker/VM and other intentional workloads absent. macOS, managed security and controlling editor remained active. Small status-file reads occurred; no other model, build or test work ran during measurement.",
+    "cpu_isolation": false,
+    "readiness_seconds": 120,
+    "readiness_no_swap": true,
+    "order": "Backend order is linked to round. Three consecutive blocks are not independent replications."
   },
-  "restoration": {
+  "cleanup": {
     "status": "verified",
-    "running_services": 11,
-    "healthy_services": 5,
-    "unchanged_exited_services": 1,
-    "original_ids_and_configuration_match": true,
-    "idle_worker_verified": true,
-    "verification_sha256": "80359fa4443925efd80c0d0ecfb55dabe789f755272c817a44d6f9d9e473fd14",
-    "record_audit_sha256": "d7a4690d8ebd2f057164c001a3311a516348a63983cccc7e2e1772672f81d30a",
-    "earlier_verification_sha256": "86c5ab846fd49f6a8d2b986b6ec097d429a8fb5fdea4fd966182e5c599e7430f",
-    "earlier_verification": "The first check found a stale worker heartbeat. A later fresh idle heartbeat appeared without service changes; the same checks then passed. The earlier failed check is retained.",
-    "limits": "Recorded configuration, mount metadata and health only; not identical process memory or data-volume contents."
+    "owned_assertions_released": true,
+    "persistent_power_settings_unchanged": true,
+    "apps_or_services_stopped": 0,
+    "restoration_required": false,
+    "closure_sha256": "f24dd1ddf0210e445b24d5ab42012b0ae99ce1880b6d9ae0c6991f4f32101618"
+  },
+  "prior_attempts": {
+    "failed_readiness_checks": 2,
+    "native_runs_in_those_attempts": 0,
+    "reason": "System swap-in counters rose before native launch. Both attempts and their restoration evidence are retained locally.",
+    "outcome_review_sha256": "266ecf2d8d0ac5d81d1729a98e2aff92220a437900bae6448b608b9d3edd7f77"
   },
   "quality_preserved": false,
   "backend_adoption": false,
-  "reproduction": "Public benchmark collection/reporting used the pinned execution revision. Raw records, local review notes and the private setup controller remain local; their hashes do not supply missing files. The public setup workflow is being completed separately. Earlier v2/v3 studies remain separate and are not pooled."
+  "limits": [
+    "Sleep/clock checks have finite detection tolerances; this is not proof of every possible interruption being absent.",
+    "Host counters are system-wide; no zero-background or fixed-thermal claim.",
+    "No earlier observations were pooled or replaced.",
+    "Timing excludes model loading and full document answers; no KleidiAI application speedup measured."
+  ]
 }
