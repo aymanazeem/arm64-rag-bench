@@ -1,6 +1,6 @@
 # Keyword retrieval baseline
 
-Measured on 2026-11-12 using the seven pinned documents and 383 chunks. No retrieval settings were tuned against these cases.
+Measured using the seven pinned documents and 383 chunks. No retrieval settings were tuned against these cases.
 
 | Check | Result |
 | --- | --- |

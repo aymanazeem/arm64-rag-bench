@@ -1,6 +1,6 @@
 # Grounded answer checks
 
-Checked on 2026-11-13 on an M1 Max with 32 GB memory. The answer command uses keyword retrieval and pinned Qwen3.5-9B Q8_0 on the CPU. These small, source-reviewed checks establish neither general accuracy nor inference speed.
+Checked on an M1 Max with 32 GB memory. The answer command uses keyword retrieval and pinned Qwen3.5-9B Q8_0 on the CPU. These small, source-reviewed checks establish neither general accuracy nor inference speed.
 
 ## Results
 

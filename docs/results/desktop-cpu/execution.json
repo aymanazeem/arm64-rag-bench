@@ -3,10 +3,8 @@
   "study_id": "qwen35-quiet-desktop-v2",
   "status": "complete",
   "execution_source_revision": "15dc33dc736c5aaa92fa8afd3e8f61d07dd65241",
-  "method_sha256": "186634ae3819854fa8c74daee3b48784e7106f5c3aecd01aada01d969fb51897",
   "setup_sha256": "16227faa8b048d74a7fb24ba87f8d7c86e12a39bc50acd6f422b7ba19d1b17cd",
   "report_sha256": "788d6ec1017596eccbf5239a703a7d22b8c6fd1c638731f8c86d0d31b8dad604",
-  "comparison_sha256": "3bf3c5f2a999adb11509e64d6f51b1a49e102c32edd96ca7f2f57dc1eb80e0c6",
   "collection": {
     "controller_invocations": 1,
     "logical_blocks": 3,
@@ -23,9 +21,7 @@
     "outer_phase_within_cap": true,
     "inner_guards_valid": true,
     "automatic_handoffs": 2,
-    "exact_checkpoint_handoffs_verified": true,
-    "first_block_started_at": "2026-11-18T21:27:24.164957+00:00",
-    "last_block_finished_at": "2026-11-18T23:35:13.560741+00:00"
+    "exact_checkpoint_handoffs_verified": true
   },
   "session_records": [
     {
@@ -71,18 +67,14 @@
     "restoration_required": false,
     "closure_sha256": "f24dd1ddf0210e445b24d5ab42012b0ae99ce1880b6d9ae0c6991f4f32101618"
   },
-  "prior_attempts": {
-    "failed_readiness_checks": 2,
-    "native_runs_in_those_attempts": 0,
-    "reason": "System swap-in counters rose before native launch. Both attempts and their restoration evidence are retained locally.",
-    "outcome_review_sha256": "266ecf2d8d0ac5d81d1729a98e2aff92220a437900bae6448b608b9d3edd7f77"
-  },
   "quality_preserved": false,
   "backend_adoption": false,
   "limits": [
     "Sleep/clock checks have finite detection tolerances; this is not proof of every possible interruption being absent.",
     "Host counters are system-wide; no zero-background or fixed-thermal claim.",
-    "No earlier observations were pooled or replaced.",
     "Timing excludes model loading and full document answers; no KleidiAI application speedup measured."
-  ]
+  ],
+  "kind": "execution_summary",
+  "source_method_sha256": "186634ae3819854fa8c74daee3b48784e7106f5c3aecd01aada01d969fb51897",
+  "method_summary_sha256": "323c3389a88fe3eb6ba1a4cf516494eab95433517f039cce6bae81c9b0d771b9"
 }

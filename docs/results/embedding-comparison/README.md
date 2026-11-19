@@ -1,6 +1,6 @@
 # Embedding retrieval comparison
 
-Measured on 2026-11-12 on the M1 Max. Keyword search remains the default. Hybrid search improves aggregate coverage, but loses one validation case that keyword search covers. Dense search alone performs worse on both sets.
+Measured on the M1 Max. Keyword search remains the default. Hybrid search improves aggregate coverage, but loses one validation case that keyword search covers. Dense search alone performs worse on both sets.
 
 Each method uses the same 383 chunks, up to five selected passages and a 1,024-token BGE text budget. Questions and settings were frozen before the comparison. No settings were tuned to these results.
 

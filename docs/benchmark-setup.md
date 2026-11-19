@@ -87,9 +87,8 @@ instrumentation has a separate [manual guide](results/controlled-cpu/diagnostics
 Then collect a fresh host baseline and follow
 [freeze, run and report](benchmarks.md#freeze-run-and-report).
 
-Published summaries and hashes describe historical evidence. Original raw answer
-traces, native logs, local review notes and old private controllers are not
-distributed. A fresh checkout can collect a new study using this public setup
-runner; it cannot recreate missing historical records or rerun the old private
-parsers from hashes alone. Local setup candidates contain evidence identifiers,
-not a general public-report sanitization guarantee; review files before publishing.
+Published summaries describe the recorded evidence. Raw answer traces, native
+logs, local review notes and private controllers are not distributed. A fresh
+checkout can collect a study using this public setup runner; hashes alone cannot
+reconstruct missing records or private parsers. Review setup candidates before
+publishing; their evidence identifiers do not guarantee that private data is absent.
