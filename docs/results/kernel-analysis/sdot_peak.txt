@@ -1,0 +1,6 @@
+threads 1 rep 0: clock 2.54 GHz, SDOT 4.95 per cycle per core (200.9 GMAC/s per core)
+threads 1 rep 1: clock 3.15 GHz, SDOT 4.04 per cycle per core (203.8 GMAC/s per core)
+threads 2 rep 0: clock 3.13 GHz, SDOT 3.97 per cycle per core (198.7 GMAC/s per core)
+threads 2 rep 1: clock 3.12 GHz, SDOT 4.05 per cycle per core (202.1 GMAC/s per core)
+threads 4 rep 0: clock 3.07 GHz, SDOT 4.00 per cycle per core (196.1 GMAC/s per core)
+threads 4 rep 1: clock 3.06 GHz, SDOT 3.99 per cycle per core (195.6 GMAC/s per core)

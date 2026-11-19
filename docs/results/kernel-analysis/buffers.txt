@@ -1,0 +1,14 @@
+# llama-bench -v load lines (env -i PATH=/usr/bin:/bin LANG=C LC_ALL=C; -m Qwen3.5-9B-Q8_0.gguf -p 16 -n 0 -r 1 -t 4 --offline -b 512 -ub 512 -ctk f16 -ctv f16 -fa off -ngl 0 --repack 1 -v)
+## cpu
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 177 others) cannot be used with preferred buffer type CPU_REPACK, using CPU instead
+load_tensors:   CPU_Mapped model buffer size =  1030.64 MiB
+load_tensors:   CPU_REPACK model buffer size =  8041.00 MiB
+## kleidiai
+kleidiai: primary q4 kernel feature DOTPROD
+kleidiai: primary q8 kernel feature DOTPROD
+kleidiai: no compatible q4_k kernels found for CPU features mask 33
+kleidiai: no compatible f32 kernels found for CPU features mask 33
+kleidiai: SME disabled
+done_getting_tensors: tensor 'token_embd.weight' (q8_0) (and 177 others) cannot be used with preferred buffer type CPU_KLEIDIAI, using CPU instead
+load_tensors:   CPU_Mapped model buffer size =  1030.64 MiB
+load_tensors: CPU_KLEIDIAI model buffer size =  8041.00 MiB

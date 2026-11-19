@@ -1,0 +1,26 @@
+threads=4 m=512
+kai 16x4
+  k= 4096 n=12288 x64    33.75 ms each   763.6 GMAC/s
+  k=12288 n= 4096 x32    33.65 ms each   765.9 GMAC/s
+  k= 4096 n= 8192 x32    22.42 ms each   766.4 GMAC/s
+  k= 4096 n= 4096 x56    11.20 ms each   766.9 GMAC/s
+  k= 4096 n= 1024 x16     2.82 ms each   761.2 GMAC/s
+  weight matmuls per 512-token pass: 4.626 s, 765.0 GMAC/s
+ggml 4x4
+  k= 4096 n=12288 x64    54.58 ms each   472.1 GMAC/s
+  k=12288 n= 4096 x32    54.87 ms each   469.7 GMAC/s
+  k= 4096 n= 8192 x32    36.33 ms each   472.9 GMAC/s
+  k= 4096 n= 4096 x56    18.05 ms each   476.0 GMAC/s
+  k= 4096 n= 1024 x16     4.66 ms each   461.0 GMAC/s
+  weight matmuls per 512-token pass: 7.497 s, 472.1 GMAC/s
+ggml 4x4, no per-block scaling
+  k= 4096 n=12288 x64    43.03 ms each   598.8 GMAC/s
+  k=12288 n= 4096 x32    42.66 ms each   604.1 GMAC/s
+  k= 4096 n= 8192 x32    28.10 ms each   611.4 GMAC/s
+  k= 4096 n= 4096 x56    14.24 ms each   603.2 GMAC/s
+  k= 4096 n= 1024 x16     3.58 ms each   599.7 GMAC/s
+  weight matmuls per 512-token pass: 5.873 s, 602.6 GMAC/s
+in-cache, 1 thread (m=64, n=256, k=1024, 200 reps)
+  kai 16x4                          194.9 GMAC/s
+  ggml 4x4                          123.0 GMAC/s
+  ggml 4x4, no per-block scaling    158.3 GMAC/s

@@ -1,0 +1,2 @@
+before: 'AC Power'; load averages { 7.00 10.25 10.46 }
+after: 'AC Power'; load averages { 6.60 10.00 10.36 }

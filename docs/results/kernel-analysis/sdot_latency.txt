@@ -1,0 +1,3 @@
+rep 0: add 0.3942 ns (2.54 GHz) | dependent sdot 0.9507 ns = 2.41 cycles | independent sdot 0.1224 ns = 3.22 per cycle
+rep 1: add 0.3160 ns (3.16 GHz) | dependent sdot 0.9542 ns = 3.02 cycles | independent sdot 0.1205 ns = 2.62 per cycle
+rep 2: add 0.3158 ns (3.17 GHz) | dependent sdot 0.9501 ns = 3.01 cycles | independent sdot 0.1229 ns = 2.57 per cycle

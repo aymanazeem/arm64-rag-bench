@@ -24,6 +24,15 @@ prompt tokens per second and generated about 12; KleidiAI processed about 86–9
 and generated about 8.4–8.6. All observations are retained.
 [Full results and method](docs/results/desktop-cpu/README.md).
 
+**Why:** on this M1 Max, KleidiAI's kernels add up each weight row in one
+unbroken running total per token; the CPU kernels restart theirs every 32
+weights. In kernel tests, with 16 prompt tokens' totals running at once,
+KleidiAI kept the multiply units about 98% busy, against 60% for CPU, whose
+restarts cost extra instructions. With one token, KleidiAI's kernel has a single
+total, so each multiply instruction waits about 3 cycles for the previous one;
+at four threads it processed 73 billion weights per second, against 101 billion
+for CPU. [Kernel timings](docs/results/kernel-analysis/README.md).
+
 ### Answer quality
 
 Both backends answered all **40 fixed questions** without execution or format
@@ -67,6 +76,7 @@ scores do not establish general accuracy or human validation.
 - [CPU and KleidiAI quality and runtime checks](docs/results/controlled-cpu/README.md)
 - [Guarded desktop CPU results](docs/results/desktop-cpu/README.md)
 - [Buffered application results](docs/results/application-performance/README.md)
+- [Prompt and generation kernel timings](docs/results/kernel-analysis/README.md)
 - [Project report](docs/report.md)
 - [CPU benchmark methods](docs/benchmarks.md)
 - [Evaluation cases and scoring](eval/README.md)
