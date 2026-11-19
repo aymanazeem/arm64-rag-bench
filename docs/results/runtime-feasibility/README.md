@@ -1,6 +1,6 @@
 # Runtime feasibility: M1 Max
 
-Date: 2026-11-12. Hardware: Apple M1 Max, 32 GB memory, macOS 26.7.1.
+Hardware: Apple M1 Max, 32 GB memory, macOS 26.7.1.
 
 Both CPU builds run the official Qwen 1.5B Q4_0 model. A separate diagnostic build confirmed the two expected Q4_0 DotProd kernel paths. This establishes a useful local test platform; it does not establish a speedup or RAG answer quality.
 

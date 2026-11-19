@@ -1,6 +1,6 @@
 # CPU and KleidiAI answer quality
 
-The KleidiAI build failed the frozen CPU quality comparison on 2026-11-13.
+The KleidiAI build failed the frozen CPU quality comparison.
 The application continues to use CPU. All 40 attempted cases are retained in
 the [comparison record](quality-comparison.json).
 

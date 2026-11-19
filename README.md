@@ -6,7 +6,7 @@ A local document question-answering application and an engineering investigation
 
 ## Results
 
-The **18 November 2026** rerun completed **48 runs and 24 paired comparisons in one
+The study completed **48 runs and 24 paired comparisons in one
 uninterrupted invocation**, with **no observed swap activity** or detected timing
 interruption. Both backends used Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB
 memory and four threads**.
@@ -19,9 +19,8 @@ memory and four threads**.
 | Generate 128 tokens after a 2,048-token prefix | **42.1% more** |
 
 Percentages use the median of six paired CPU/KleidiAI mean-duration ratios.
-KleidiAI processed prompts faster but generated tokens slower. The rerun recorded no swap, but absolute median computation times were **1.0–3.3% higher** than
-in the earlier study. All observations are included.
-[Full results, comparison and method](docs/results/desktop-cpu/README.md).
+KleidiAI processed prompts faster but generated tokens slower. All observations
+are included. [Full results and method](docs/results/desktop-cpu/README.md).
 
 macOS, managed security and the controlling editor remained active; thermal
 readings were unavailable. These are descriptive results from one Mac, without

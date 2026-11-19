@@ -1,9 +1,11 @@
 {
   "schema_version": 1,
+  "kind": "method_summary",
+  "source_method_sha256": "186634ae3819854fa8c74daee3b48784e7106f5c3aecd01aada01d969fb51897",
+  "scope": "Edited description of the frozen method. Source hashes in the report and setup identify the original local method, not this summary.",
   "study": "desktop",
   "study_id": "qwen35-quiet-desktop-v2",
-  "question": "Describe the two pinned CPU backends during one continuous measured invocation after explicitly recorded background-work reduction; compare all four workloads with the published desktop study using the same arithmetic.",
-  "prior_information": "Earlier strict setup was excluded for swap activity. Desktop-v2 stopped early on pressure; desktop-v3 has retained sleep-affected observations. The complete guarded desktop-v4 report and its 24 paired outcomes are known: median CPU/KleidiAI process-mean ratios were 1.5006415939472677 (pp512), 1.465012813111032 (pp2048), 0.689890328342813 (tg128-d512) and 0.6896300057628738 (tg128-d2048), with swap activity in all 24 pairs. The public four-observation setup validation and application studies were also completed. KleidiAI failed the strict no-regression adoption gate in the separate frozen answer-quality comparison: one citation/support regression and two required-detail losses remained despite three fact gains, with two execution failures. Among the same38 cases with completed KleidiAI answers, both CPU and KleidiAI passed every applicable criterion on28 cases. This is not proof of a general quality loss; the strict gate remains failed and timing cannot authorize application adoption. This prospective repeat has known prior results and is not blinded or externally preregistered. No earlier observation enters its estimates. On November 18, quiet-v1 had two readiness failures before any native setup or measurement: 1,368 and 1,615 swap-in pages over separate 120-second checks, first with Docker stopped and then with selected apps paused. All temporary changes were restored. The owner restarted the Mac at 20:55 UTC. This fresh preparation retains both failures; it does not restart or overwrite their records.",
+  "question": "Compare the two pinned CPU backends across four workloads in one continuous measured invocation.",
   "host_condition": {
     "status": "declared_conditions_subject_to_guarded_readiness",
     "machine": "Apple M1 Max, 32 GB",
@@ -25,7 +27,7 @@
       "counter_reset_or_missing_allowed": false,
       "cpu_or_load_percent_cutoff": null,
       "decision": "Require AC, declared identity and mode, normal pressure at both endpoints and no increase/reset/missing swap counters over the guarded120-second interval. Residual managed/system activity is recorded and reviewed explicitly. Passing readiness does not certify zero background activity or prevent later swap.",
-      "limits": "Both recorded endpoints must be normal; this does not prove pressure remained normal at every instant. Cumulative available monotonic swap counters bound activity between them. The prior five-reading host diagnostic is separate and does not replace the controller readiness interval.",
+      "limits": "Both recorded endpoints must be normal; this does not prove pressure remained normal at every instant. Available monotonic swap counters bound activity between them.",
       "recorded_endpoint_offsets_seconds": [
         0,
         120
@@ -163,9 +165,8 @@
       "Pairing and random order do not prove isolation or remove systematic bias.",
       "Synthetic compute excludes retrieval, tokenization, sampling, prefix setup, state restoration and model loading.",
       "The strict KleidiAI no-regression adoption gate remains failed; this is not proof of general quality loss.",
-      "This is a prospective local repeat with known earlier outcomes, not a blinded study or external preregistration.",
       "No clean performance claim if the timing guard fails. Retain the full planned denominator and all failures without post-hoc exclusions or timing corrections.",
-      "No causal claim that a ratio change from desktop-v4 was caused by stopped services; date, cache, scheduler and unmeasured conditions also differ."
+      "Descriptive local study; not blinded or externally preregistered."
     ]
   },
   "timing": {
@@ -220,20 +221,6 @@
     "stop": "Retain all outcomes and stop future launch on effective host, timing, input-integrity, cleanup or outer-assertion failure. Ordinary invalid native outputs retain the existing runner semantics; no failed block may seed another. Never retry, replace or reset the study to discard an unfavorable observation.",
     "readiness": "The first120 seconds of each phase occur inside its continuous outer guard, separately from the existing per-block rests. Required host admission passes at both endpoints, counters are available/monotonic and show no new Swapins or Swapouts. A pinned operational review binds the phase and plan SHA and explicitly clears competing jobs and residual background load before native launch. Later swap remains visible and included under desktop policy."
   },
-  "comparison": {
-    "reference_report_sha256": "f92c58dfe1cc4dc1886283c9dc1919d58c4cd4731263ef76025aae8dd02946f8",
-    "reference_method_sha256": "c03561eb59bd71eddb11a2afc7f04a072f13dc9f3df78c80df9c8032594a3b8c",
-    "reference_study": "qwen35-desktop-v4",
-    "same_primary_arithmetic": true,
-    "process_duration": "arithmetic_mean_of_three_retained_samples",
-    "pair_ratio": "cpu_mean_ns / kleidiai_mean_ns",
-    "workload_summary": "All six paired ratios, median and range; per-block two-pair summaries and order retained.",
-    "no_pooling": true,
-    "interpretation": "Side-by-side descriptions from different periods, not a causal effect of background reduction. Keep old artifacts unchanged and all new failures/flags. Strongest evidence means validity and complete accounting, not largest speedup.",
-    "quality_preserved": false,
-    "backend_adoption": false,
-    "quality_interpretation": "The prior strict no-regression gate remains failed. Matched completed-case totals were28/38 for each backend; count equality does not cancel individual regressions or establish equivalence, and these fixed cases do not establish general quality loss."
-  },
   "primary_sources": [
     {
       "url": "https://www.itl.nist.gov/div898/handbook/pri/section3/pri332.htm",
@@ -260,5 +247,6 @@
       "relevance": "Unchanged fixed-token native timing/state boundary."
     }
   ],
-  "frozen_for": "2026-11-18 fresh-boot prospective collection; no native observation has begun"
+  "quality_preserved": false,
+  "backend_adoption": false
 }

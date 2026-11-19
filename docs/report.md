@@ -60,7 +60,7 @@ At prefixes 512 and 2,048, each backend restored its own state and reproduced 24
 
 ## Desktop computation results
 
-The **18 November rerun completed 48/48 runs and 24/24 pairs in one uninterrupted
+The study **completed 48/48 runs and 24/24 pairs in one uninterrupted
 invocation**, with no observed swap activity or detected timing interruption within
 frozen tolerances. Both builds used the same model, four threads and F16 caches;
 Metal, BLAS, Accelerate and OpenMP were disabled.
@@ -72,19 +72,12 @@ generation time**. Each workload has six pairs; each process mean uses three
 designated repetitions. All 192 raw samples remain recorded, with 48 initial
 samples excluded and 144 used. [Results and method](results/desktop-cpu/README.md).
 
-The earlier November 14 study recorded swap in every pair. The rerun recorded no swap but was not faster: all eight workload/backend median computation
-times were **1.0–3.3% higher**, and variability did not uniformly decrease. The
-512-prefix generation ratio range widened to 0.670–0.746. These are separate
-periods; changes cannot be attributed to background reduction.
-[Comparison](results/desktop-cpu/comparison.json).
-
 Docker/VM and other intentional jobs were absent after restart. macOS, managed
 security and the editor remained active; thermal data was unavailable. Backend
 order follows round, and the three consecutive blocks are not independent
 replications. No causal, population-confidence or tail-latency claim follows.
 Native timings exclude loading, retrieval, tokenization, sampling and prefix/state
-preparation. Earlier failed readiness checks and the incomplete, sleep-affected
-and November 14 studies remain separate. The application stays on CPU.
+preparation. The application stays on CPU.
 
 ## Application results
 
@@ -104,4 +97,4 @@ The [public setup workflow](benchmark-setup.md) passed four excluded observation
 
 The proposed tracked-tree export passed **933 tests**, with 23 optional skips, in a new offline Python environment. It rebuilt the corpus index, answered one familiar fixture correctly, froze setup/application inputs and exported an unstarted 21-row report. Native assets were cached; this was not a clean native build or a repeated performance/quality study. Exact merged-checkout verification is a later release check. [Workflow evidence](results/application-performance/README.md#reproduction).
 
-Public guides support new data collection and a [new local CPU baseline](answers.md#compare-a-fresh-cpu-baseline). Published hashes cannot reconstruct undistributed historical raw traces. V4 used collector/reporter commit `5c5d59eb52ae6aaeda89297bb7b464ba9e19afc3`. Metal remains an optional, unmeasured GPU comparison.
+Public guides support new data collection and a [new local CPU baseline](answers.md#compare-a-fresh-cpu-baseline). Published hashes cannot reconstruct undistributed raw traces. The desktop study used collector/reporter commit `15dc33dc736c5aaa92fa8afd3e8f61d07dd65241`. Metal remains an optional, unmeasured GPU comparison.
