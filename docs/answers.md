@@ -49,7 +49,7 @@ uv run --locked --group build python scripts/check_answers.py --split validation
 
 Each run requires a new output directory. It saves the prompt and protocol, model/runtime hashes, attempted cases, individual outputs, failures and completion state. Interrupted attempts remain visible. These runs use the controlled CPU build by default; they are not speed comparisons.
 
-Add `--backend kleidiai` to check the second build. The optional `--baseline PATH` flag expects the local CPU run whose hashes appear in the published baseline. It requires one split and checks unchanged sources, prompt text, token IDs and settings. Those raw records stay local. Changed answers still need factual and citation review; verification time is not latency evidence. All 40 questions now serve as fixed backend regressions. The `ask` command continues to use CPU. See the separate [benchmark method](benchmarks.md) for performance checks.
+Add `--backend kleidiai` to check the second build. The optional `--baseline PATH` flag expects the local CPU run whose hashes appear in the published baseline. It requires one split and checks unchanged sources, prompt text, token IDs and settings. Those raw records stay local. Changed answers still need factual and citation review; verification time is not latency evidence. All 40 questions serve as fixed backend regression checks. The `ask` command uses CPU. See the separate [benchmark method](benchmarks.md) for performance checks.
 
 ### Compare a fresh CPU baseline
 
@@ -87,11 +87,11 @@ These local manifests and traces stay outside Git.
 | Split | Questions | Use |
 | --- | ---: | --- |
 | `development` | 14 | Model and prompt development. |
-| `regression` | 18 | Earlier retrieval-validation questions used to diagnose answer failures; now development regressions. |
-| `validation` | 8 | Fixed answer questions over the pinned source documents; now known evaluation cases. |
+| `regression` | 18 | Retrieval-validation questions that informed answer development, used as regression checks. |
+| `validation` | 8 | Fixed answer questions over the pinned source documents; known evaluation cases. |
 
 Use `--split all` to run all three in order. All 40 published questions are known; an unseen-question claim needs a new set kept separate from tuning. Facts, citation support, abstention, conflicts and document instructions require independent source review. The questions and reviews are agent-authored, not human validation. Structural checks alone are not an accuracy score. CPU completed all 40 cases, with 78/78 supported claims, 66/83 required facts and 30/40 complete answers. The [results](results/grounded-answers/README.md) retain review reuse, missing facts and retrieval gaps, with model-selection evidence kept separate.
 
-The answer model differs from the Q4_0 runtime probe. Its separate [KleidiAI checks](results/controlled-cpu/README.md) confirmed the intended kernel dispatch and completed all 40 questions, but lost two CPU facts and added one citation failure. CPU remains the application backend. The [desktop study](results/desktop-cpu/README.md) reports native computation times; [application results](results/application-performance/README.md) measure the buffered CPU command separately. Neither establishes a KleidiAI application speedup.
+The answer model differs from the Q4_0 runtime probe. Its separate [KleidiAI checks](results/controlled-cpu/README.md) confirmed the intended kernel dispatch and completed all 40 questions with the same number of complete answers as CPU. It lost two CPU facts and added one citation failure, so it does not pass the strict no-regression quality rule. CPU is the application backend. The [desktop study](results/desktop-cpu/README.md) reports native computation times; [application results](results/application-performance/README.md) measure the buffered CPU command separately. KleidiAI application performance was not measured; the [project report](report.md#kleidiai-estimate-for-this-application) gives an untested estimate that it would be slower for this application.
 
 The [application performance harness](application-performance.md) records buffered CLI latency, fixed-context request latency and separate process memory peaks. It uses public workloads and locally collected traces; no owner-private baseline is required.

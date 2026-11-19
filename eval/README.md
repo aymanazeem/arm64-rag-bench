@@ -2,7 +2,7 @@
 
 These are small development and evaluation sets, not a general quality benchmark. Cases are agent-authored and independently checked by another agent against the named sources. They have not been validated by humans.
 
-`retrieval-validation.json` adds 18 questions with separate families and evidence spans. They share the source documents. Its reviewed bytes were frozen in `configs/retrieval-comparison.json` before comparing retrieval methods; no retrieval settings were tuned to its results. Later answer failures informed model and prompt development, so these questions now serve as answer regressions. The earlier [retrieval comparison](../docs/embeddings.md) remains a separate experiment.
+`retrieval-validation.json` adds 18 questions with separate families and evidence spans. They share the source documents. Its reviewed bytes were frozen in `configs/retrieval-comparison.json` before comparing retrieval methods; no retrieval settings were tuned to its results. Answer failures on these questions informed model and prompt development, so they serve as answer regression checks. The [retrieval comparison](../docs/embeddings.md) is a separate experiment.
 
 `answers-protocol.json` defines local answer checks, citation structure, prompt budgets and independent review criteria. The answer model is a 9.53 GB third-party Qwen3.5-9B Q8_0 quantization with bounded thinking. [Published results](../docs/results/grounded-answers/README.md) separate supported claims, missing facts and retrieval gaps across all three sets. Model provenance, CPU settings, sampling limits and commands are in the [answer guide](../docs/answers.md).
 
@@ -42,8 +42,8 @@ The answer runner keeps three roles separate:
 | Split | Dataset | Questions | Role |
 | --- | --- | ---: | --- |
 | `development` | `development.json` | 14 | Model selection and prompt development. |
-| `regression` | `retrieval-validation.json` | 18 | Previously used answer questions; development regressions. |
-| `validation` | `answer-validation.json` | 8 | Fixed answer questions; now known evaluation cases. |
+| `regression` | `retrieval-validation.json` | 18 | Answer questions used during development, kept as regression checks. |
+| `validation` | `answer-validation.json` | 8 | Fixed answer questions; known evaluation cases. |
 
 All 40 published answer questions are known and share pinned documents. Their split names remain stable; current results do not test unseen questions or unseen-document generalization. Exact answers may reuse authenticated source reviews only after checking unchanged inputs and outputs; record that reuse separately from new source review.
 

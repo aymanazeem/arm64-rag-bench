@@ -2,7 +2,7 @@
 
 The CPU application completed **21/21 observations** on an M1 Max with 32 GB memory: 12 CLI commands and nine fixed-context replays. Timing, input identity, cleanup and answer review passed. No swap activity or timing interruption was observed.
 
-Each entry is the median (minimum–maximum) across three eligible observations. Times are seconds. These are known questions, not new accuracy evidence or a backend comparison.
+Each entry is the median (minimum–maximum) across three eligible observations. Times are seconds. These are known questions, not new accuracy evidence or a backend comparison. KleidiAI was not measured here; the [project report](../../report.md#kleidiai-estimate-for-this-application) gives an untested estimate for it.
 
 ## CLI
 
@@ -13,9 +13,9 @@ Each entry is the median (minimum–maximum) across three eligible observations.
 | `val-006`, 2,278 input tokens | 155.64 (154.80–156.38) | 14.16 (14.15–14.17) | 141.01 (139.88–141.73) |
 | Empty retrieval | 14.81 (14.62–15.74) | 14.30 (14.20–14.35) | No generation |
 
-Command time starts before ledger writing, worker creation and the ownership handshake. Buffered first output is **not model time to first token**, which remains unobserved. Initialization includes integrity checks and startup; complete request includes input validation.
+Command time starts before ledger writing, worker creation and the ownership handshake. Buffered first output is **not model time to first token**, which remains unobserved. Initialization includes integrity checks and startup; about 9.8 seconds of it runs from server launch to readiness. Complete request includes input validation.
 
-The generated cases produced 1,110, 1,239, 1,212 tokens respectively, including reasoning, in every repetition and stage. Empty retrieval starts a server but makes no generation request.
+The generated cases produced 1,110, 1,239, 1,212 tokens respectively, including reasoning, in every repetition and stage. Median generation time was about 89–102 seconds of each complete request. Empty retrieval starts a server but makes no generation request.
 
 ## Fixed context
 

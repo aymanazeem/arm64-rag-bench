@@ -2,14 +2,14 @@
 
 A local document question-answering application and an engineering investigation into CPU inference on Apple Silicon: standard Arm64 and KleidiAI-enabled Arm64.
 
-**Status:** local indexing, keyword and embedding search, and document answers with citations are available. CPU remains the application default. A valid citation location does not guarantee a correct answer.
+**Status:** local indexing, keyword and embedding search, and document answers with citations are available. CPU is the application default. A valid citation location does not guarantee a correct answer.
 
 ## Results
 
-The study completed **48 runs and 24 paired comparisons in one
-uninterrupted invocation**, with **no observed swap activity** or detected timing
-interruption. Both backends used Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB
-memory and four threads**.
+Both backends ran Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB memory and
+four threads**. The comparison completed **48 runs and 24 paired comparisons in
+one uninterrupted invocation**, with **no observed swap activity** or detected
+timing interruption.
 
 | Workload | KleidiAI computation time compared with CPU |
 | --- | ---: |
@@ -18,18 +18,23 @@ memory and four threads**.
 | Generate 128 tokens after a 512-token prefix | **43.0% more** |
 | Generate 128 tokens after a 2,048-token prefix | **42.1% more** |
 
-Percentages use the median of six paired CPU/KleidiAI mean-duration ratios.
-KleidiAI processed prompts faster but generated tokens slower. All observations
-are retained. [Full results and method](docs/results/desktop-cpu/README.md).
+Percentages use the median of six paired CPU/KleidiAI mean-duration ratios. All
+six pairs for each workload favor the same backend. CPU processed about 59–62
+prompt tokens per second and generated about 12; KleidiAI processed about 86–92
+and generated about 8.4–8.6. All observations are retained.
+[Full results and method](docs/results/desktop-cpu/README.md).
 
-Prompt processing and token generation do different work, so this trade-off makes
-technical sense. Its exact cause remains unprofiled. macOS, managed security and
-the controlling editor remained active; thermal readings were unavailable. These
-are descriptive results from one Mac, without CPU isolation.
+The cause of the slower generation is unknown and unprofiled; it may lie in the
+kernels or in how llama.cpp uses them. In two setup runs per backend, KleidiAI's
+peak memory was 17.3–17.4 GiB, against 15.2–16.7 GiB for CPU; this is not a
+controlled memory comparison. macOS, managed security and the controlling editor
+remained active, system load was high before and at the start of measurement,
+and thermal readings were unavailable. These are descriptive results from one
+Mac, without CPU isolation.
 
 ### Answer quality
 
-Both backends completed all **40 fixed questions** without execution or format
+Both backends answered all **40 fixed questions** without execution or format
 failures. All 80 cases remain in the reviewed results.
 
 | Backend | Valid format | Supported claims | Required facts | Complete cases |
@@ -38,27 +43,42 @@ failures. All 80 cases remain in the reviewed results.
 | KleidiAI | 40/40 | 80/81 | 67/83 | **30/40** |
 
 Complete cases pass every applicable review criterion. Supported claims agree
-with both the supplied text and their attached citations. KleidiAI gains three
-facts but loses two facts CPU supplied, and one claim contains an unsupported
-scheduling clause. **CPU remains the default:** a higher total cannot cancel
-specific regressions. [Quality results](docs/results/controlled-cpu/quality.md).
+with both the supplied text and their attached citations. Each backend had 30
+complete cases, 28 of them the same. KleidiAI supplied three facts CPU missed, missed
+two facts CPU supplied, and made one claim with an unsupported scheduling clause.
 
-These known questions were reviewed by project agents. The scores do not
-establish general accuracy or human validation. The pinned KleidiAI integration
-rounds model weights again during loading, so matching model files does not
-guarantee identical arithmetic.
+The project's frozen quality rule rejects a backend that loses any fact CPU
+supplied or adds an unsupported claim, whatever else it gains, so KleidiAI does
+not pass. The rule is deliberately strict and one-sided: applied the other way
+round, it would also reject CPU, which misses three facts KleidiAI supplied. Each
+question was answered once with seeded sampling at temperature 0.6. Small
+numerical differences between backends can change which tokens are sampled, so
+these differences do not show that either backend is more accurate.
+[Quality results](docs/results/controlled-cpu/quality.md).
+
+The pinned KleidiAI integration replaces Q8_0's one scale per 32 weights with
+one scale per weight row, and it quantizes activations per row too. KleidiAI
+therefore computes with coarser numbers than the standard CPU backend, even from
+the same model file. These records do not show whether this caused any answer
+difference. The questions are known and were reviewed by project agents, so the
+scores do not establish general accuracy or human validation.
 [Interpretation and limits](docs/report.md).
 
 ### Application measurements
 
 The CPU application completed **21/21 reviewed observations**, with no observed
-swap. Median buffered answer times were **113.74, 147.78 and 155.64 seconds**;
-empty retrieval took **14.81 seconds**. Native-child peak memory was about
-**16.81 GiB**.
+swap. Median times until the buffered answer appeared were **113.74, 147.78 and
+155.64 seconds**. A question with no matching passages took **14.81 seconds**,
+because the model server still starts. The model server's peak resident memory
+was about **16.81 GiB**. Median generation time, including reasoning, was 89–102
+seconds of each 99–141-second request.
 
-Native timings exclude loading and the full Q&A workflow. Application
-measurements use CPU only; **no KleidiAI application speedup has been measured**.
-[Application results](docs/results/application-performance/README.md).
+**KleidiAI application performance was not measured.** Applying the native
+results to these CPU timings suggests KleidiAI would be slower for this
+application: about 30–44% longer per answer, including about 16 seconds of extra
+startup for every question. This is an untested estimate.
+[Application results](docs/results/application-performance/README.md),
+[estimate](docs/report.md#kleidiai-estimate-for-this-application).
 
 ## Guides
 
@@ -78,7 +98,7 @@ measurements use CPU only; **no KleidiAI application speedup has been measured**
 
 ## Design
 
-A small Python application handles ingestion, retrieval, citations and evaluation. Pinned llama.cpp binaries handle local inference. CPU comparisons use the same model and settings, with evidence that the intended kernels actually ran. Metal remains an optional, unmeasured extension.
+A small Python application handles ingestion, retrieval, citations and evaluation. Pinned llama.cpp binaries handle local inference. CPU comparisons use the same model and settings, with evidence that the intended kernels actually ran. Metal is an optional, unmeasured extension.
 
 The application uses a command-line workflow and a small licensed technical corpus. Add complexity only when measurements or answer quality justify it. Model weights and private documents stay outside version control.
 

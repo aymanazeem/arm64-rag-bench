@@ -1,6 +1,6 @@
 # Embedding retrieval comparison
 
-Measured on the M1 Max. Keyword search remains the default. Hybrid search improves aggregate coverage, but loses one validation case that keyword search covers. Dense search alone performs worse on both sets.
+Measured on the M1 Max. Keyword search is the default. Hybrid search improves aggregate coverage, but loses one validation case that keyword search covers. Dense search alone performs worse on both sets.
 
 Each method uses the same 383 chunks, up to five selected passages and a 1,024-token BGE text budget. Questions and settings were frozen before the comparison. No settings were tuned to these results.
 
@@ -11,11 +11,11 @@ Each method uses the same 383 chunks, up to five selected passages and a 1,024-t
 | Development: evidence units covered | 11/16 | 9/16 | 12/16 |
 | Validation: evidence units covered | 17/22 | 17/22 | 20/22 |
 
-All six runs completed without execution failures. The development set also has one question without labelled evidence; it receives no retrieval correctness score.
+All six runs completed without execution failures. The development set also has one question without labelled evidence; it receives no retrieval correctness score. The 18 validation questions here form the answer `regression` split in the quality checks; the answer `validation` split is a separate set of eight.
 
 Against keyword search, hybrid gains one development case and loses none. On validation it gains `val-008`, `val-016` and `val-017`, but loses `val-006`, about starting a benchmark with an existing KV cache. The [per-case record](retrieval.json) preserves all wins, losses and selected source spans.
 
-The unbudgeted [keyword baseline](../lexical-baseline/README.md) had no text budget and covered 10/13 development questions. Its original results, scores and spans still match exactly. This comparison adds a shared budget; it does not replace that baseline.
+The unbudgeted [keyword baseline](../lexical-baseline/README.md) had no text budget and covered 10/13 development questions. Its results, scores and spans reproduce exactly. This comparison adds a shared budget; it does not replace that baseline.
 
 ## Compatibility and verification
 
