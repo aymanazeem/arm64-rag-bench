@@ -64,7 +64,7 @@ At prefixes 512 and 2,048, each backend restored its own state and reproduced 24
 
 The pinned KleidiAI integration converts each Q8_0 weight row to 8-bit values with a single scale, set by the row's largest value. Q8_0 stores one scale per 32 weights, and the standard CPU backend keeps those scales. Blocks of smaller values therefore lose precision, so KleidiAI computes with a coarser version of the same model. It also quantizes activations with one scale per row, where the standard path uses one scale per 32 values. These differences could contribute to answer differences, but these records do not establish the cause of any omission or unsupported claim. The comparison covers complete backend integrations, not kernels alone. [Pinned conversion code](https://github.com/ggml-org/llama.cpp/blob/8ca5a8008b57aa39f2601546c0d07912045080a5/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp#L1530-L1600).
 
-The weight conversion runs once while loading, outside the native computation timing, so its one-time cost cannot explain the slower generation; the converted format is used inside the timed work. The conversion does lengthen startup; see the [application estimate](#kleidiai-estimate-for-this-application). Operator profiling would be needed to find the generation bottleneck.
+The weight conversion runs once while loading, outside the native computation timing, so its one-time cost cannot explain the slower generation; the converted format is used inside the timed work. The conversion does lengthen startup; see the [application estimate](#kleidiai-estimate-for-this-application). [Kernel timings](results/kernel-analysis/README.md) trace the slower generation mainly to the single-token kernel itself.
 
 ## Desktop computation results
 
@@ -82,7 +82,7 @@ Each workload has six pairs; each process mean uses three designated
 repetitions. All 192 raw samples remain recorded, with 48 initial samples
 excluded and 144 used. [Results and method](results/desktop-cpu/README.md).
 
-Prompt processing evaluates many token positions together; generation adds one token at a time. Their different matrix shapes can favor different kernels, so faster prompts and slower generation are plausible. All six pairs per workload favor the same backend. Including initial samples or using medians instead of means does not reverse that direction. The cause of the slower generation is unknown; it may lie in the kernels or in how llama.cpp uses them.
+Prompt processing evaluates many token positions together; generation adds one token at a time, and each phase uses its own kernel in each backend. Separate [kernel timings](results/kernel-analysis/README.md) account for most of both differences. KleidiAI's prompt kernel kept the multiply units about 98% busy, against 60% for the CPU kernel, which restarts and rescales its totals every 32 weights. KleidiAI's single-token kernel on this M1 Max adds every product for a group of columns into one running total, so each multiply instruction waits for the previous one. At four threads it processed 73 billion weights per second, against 101 billion for the CPU kernel; in a diagnostic thread sweep, full-model generation tied at eight threads. All six pairs per workload favor the same backend. Including initial samples or using medians instead of means does not reverse that direction.
 
 No competing Docker, VM or project job was observed. macOS, managed security and the editor remained active, and thermal data was unavailable.
 

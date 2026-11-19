@@ -1,0 +1,31 @@
+bit-identical to kai: acc1 = yes
+bit-identical to kai: acc4 = yes
+bit-identical to kai: acc8 = yes
+
+cache  (1 MB), 1 thread(s): weight GB/s (higher is faster)
+  kai (KleidiAI asm)      19.4 GB/s  (19.4 weight bytes per ns per thread)
+  acc1 (same chain)       19.4 GB/s  (19.4 weight bytes per ns per thread)
+  acc4                    73.4 GB/s  (73.4 weight bytes per ns per thread)
+  acc8                    74.5 GB/s  (74.5 weight bytes per ns per thread)
+  ggml q8_0 4x4           68.2 GB/s  (68.2 weight bytes per ns per thread)
+
+memory (400 MB), 1 thread(s): weight GB/s (higher is faster)
+  kai (KleidiAI asm)      19.3 GB/s  (19.3 weight bytes per ns per thread)
+  acc1 (same chain)       19.3 GB/s  (19.3 weight bytes per ns per thread)
+  acc4                    58.4 GB/s  (58.4 weight bytes per ns per thread)
+  acc8                    55.9 GB/s  (55.9 weight bytes per ns per thread)
+  ggml q8_0 4x4           56.9 GB/s  (56.9 weight bytes per ns per thread)
+
+memory (400 MB), 4 thread(s): weight GB/s (higher is faster)
+  kai (KleidiAI asm)      72.8 GB/s  (18.2 weight bytes per ns per thread)
+  acc1 (same chain)       73.9 GB/s  (18.5 weight bytes per ns per thread)
+  acc4                   108.6 GB/s  (27.2 weight bytes per ns per thread)
+  acc8                   108.1 GB/s  (27.0 weight bytes per ns per thread)
+  ggml q8_0 4x4          107.5 GB/s  (26.9 weight bytes per ns per thread)
+
+memory (400 MB), 8 thread(s): weight GB/s (higher is faster)
+  kai (KleidiAI asm)     110.2 GB/s  (13.8 weight bytes per ns per thread)
+  acc1 (same chain)      106.9 GB/s  (13.4 weight bytes per ns per thread)
+  acc4                   114.0 GB/s  (14.2 weight bytes per ns per thread)
+  acc8                   110.4 GB/s  (13.8 weight bytes per ns per thread)
+  ggml q8_0 4x4          115.1 GB/s  (14.4 weight bytes per ns per thread)

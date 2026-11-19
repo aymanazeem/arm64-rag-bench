@@ -1,0 +1,2 @@
+1x4 (selected on M1, 1 accumulator)        cache 1T   19.5 | memory 1T   19.4 | 4T   73.7 | 8T  111.3 GB/s
+1x8 (selected with i8mm, 2 accumulators)   cache 1T   37.4 | memory 1T   36.1 | 4T  104.2 | 8T  106.2 GB/s
