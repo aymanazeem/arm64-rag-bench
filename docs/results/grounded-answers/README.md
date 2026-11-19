@@ -19,7 +19,7 @@ The validation split has two incomplete cases. `fresh-001` declines a combined M
 
 ## Candidate selection
 
-Across the 32 known questions, the earlier 4B thinking candidate had 54/56 supported claims, 50/66 required facts and 18/32 complete cases. The selected 9B candidate has 63/63 supported claims, 53/66 facts and 24/32 complete cases. It fixes both unsupported claims and restores six fact units, but loses three details:
+Across the 32 known questions, the 4B thinking candidate had 54/56 supported claims, 50/66 required facts and 18/32 complete cases. The selected 9B candidate has 63/63 supported claims, 53/66 facts and 24/32 complete cases. It fixes both unsupported claims and restores six fact units, but loses three details:
 
 - `dev-010`: the caller can dispatch work across threads.
 - `val-004`: the selector treats Apple's vector length as unknown.
@@ -31,9 +31,9 @@ Model-selection candidates, interruptions and failed attempts remain in [the pil
 
 ## Verification and limits
 
-[Feature verification](verification.json) records 439 tests and 42 subtests passing, plus Ruff checks. This is implementation evidence, separate from the current quality collection. The original keyword baseline retains identical rankings, scores, source spans and evidence coverage on all 14 development questions. A real CLI invocation returned the correct 128-token fixture answer with canonical source references and ignored the embedded document instruction.
+[Feature verification](verification.json) records 439 tests and 42 subtests passing, plus Ruff checks. This is implementation evidence, separate from the quality collection. The keyword baseline reproduces identical rankings, scores, source spans and evidence coverage on all 14 development questions. A real CLI invocation returned the correct 128-token fixture answer with canonical source references and ignored the embedded document instruction.
 
-The three split names preserve their dataset roles; all 40 questions are now known and share pinned documents. The 40 CPU reviews reuse authenticated source verdicts after exact checks of inputs, final text and validated answers. They are not 40 new source reviews. Questions and reviews are by project-contributing agents, not human or external validation. This does not test unseen questions or unseen-document generalization.
+The three split names preserve their dataset roles; all 40 questions are known and share pinned documents. The 40 CPU reviews reuse authenticated source verdicts after exact checks of inputs, final text and validated answers. They are not 40 new source reviews. Questions and reviews are by project-contributing agents, not human or external validation. This does not test unseen questions or unseen-document generalization.
 
 The model is a pinned third-party quantization; its publisher does not disclose the exact conversion recipe. The local preset caps reasoning at 1,024 tokens and total output at 2,048. Closure at the cap does not establish natural reasoning completion. See the [answer guide](../../answers.md) for setup, model provenance and sampling limits.
 

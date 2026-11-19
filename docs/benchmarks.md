@@ -2,11 +2,18 @@
 
 Compare standard CPU inference with KleidiAI on the same machine, model and
 settings. Build both runtimes using the [runtime guide](runtime.md). The answer
-application continues to use the standard CPU build.
+application uses the standard CPU build.
 
 The pinned KleidiAI integration [requantizes Q8 weights by row](https://github.com/ggml-org/llama.cpp/blob/8ca5a8008b57aa39f2601546c0d07912045080a5/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp#L1530-L1600).
-Matching model files therefore does not guarantee identical numerical results.
-This compares the complete CPU backends, including that conversion.
+Q8_0 stores one scale per 32 weights, and the standard CPU backend keeps those
+scales. KleidiAI replaces them with one scale per row, set by the row's largest
+value, so blocks of smaller values lose precision. It also quantizes activations
+with one scale per row, where the standard path uses one scale per 32 values.
+KleidiAI therefore computes with coarser numbers, and matching model files do
+not mean matching arithmetic.
+This compares the complete CPU backends, including that conversion. The
+conversion runs while loading, outside the timed computation, but it lengthens
+startup.
 
 ## Before measuring
 

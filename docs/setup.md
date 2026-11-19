@@ -4,7 +4,7 @@
 
 The repository was bootstrapped on `chore/project-bootstrap`. An empty commit was created on this branch, and `main` initially pointed to that empty commit. Project files were prepared on the setup branch for introduction through the first PR.
 
-Remote: [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), now public. Personal authentication is connected. Initial files entered `main` through [PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
+The remote, [aymanazeem/arm64-rag-bench](https://github.com/aymanazeem/arm64-rag-bench), is public. Personal authentication is connected. Initial files entered `main` through [PR #1](https://github.com/aymanazeem/arm64-rag-bench/pull/1).
 
 Initial setup checks passed, including 22 Git-hook cases. The [runtime guide](runtime.md) covers the current environment and tests.
 
@@ -67,4 +67,4 @@ Inventory checked on 2026-11-12:
 | CMake / Ninja | Not found on the current PATH |
 | Free disk | Approximately 700 GiB at inspection |
 
-The runtime environment now uses Python 3.12.15, CMake 4.4.4 and Ninja 1.13.2 through uv. System Python is unchanged. See the [current inventory](results/runtime-feasibility/hardware.json). No paid account or hosted model API is required.
+The runtime environment uses Python 3.12.15, CMake 4.4.4 and Ninja 1.13.2 through uv. System Python is unchanged. See the [hardware inventory](results/runtime-feasibility/hardware.json). No paid account or hosted model API is required.
