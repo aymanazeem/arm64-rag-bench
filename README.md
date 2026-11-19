@@ -24,14 +24,6 @@ prompt tokens per second and generated about 12; KleidiAI processed about 86–9
 and generated about 8.4–8.6. All observations are retained.
 [Full results and method](docs/results/desktop-cpu/README.md).
 
-The cause of the slower generation is unknown and unprofiled; it may lie in the
-kernels or in how llama.cpp uses them. In two setup runs per backend, KleidiAI's
-peak memory was 17.3–17.4 GiB, against 15.2–16.7 GiB for CPU; this is not a
-controlled memory comparison. macOS, managed security and the controlling editor
-remained active, system load was high before and at the start of measurement,
-and thermal readings were unavailable. These are descriptive results from one
-Mac, without CPU isolation.
-
 ### Answer quality
 
 Both backends answered all **40 fixed questions** without execution or format
@@ -63,22 +55,6 @@ the same model file. These records do not show whether this caused any answer
 difference. The questions are known and were reviewed by project agents, so the
 scores do not establish general accuracy or human validation.
 [Interpretation and limits](docs/report.md).
-
-### Application measurements
-
-The CPU application completed **21/21 reviewed observations**, with no observed
-swap. Median times until the buffered answer appeared were **113.74, 147.78 and
-155.64 seconds**. A question with no matching passages took **14.81 seconds**,
-because the model server still starts. The model server's peak resident memory
-was about **16.81 GiB**. Median generation time, including reasoning, was 89–102
-seconds of each 99–141-second request.
-
-**KleidiAI application performance was not measured.** Applying the native
-results to these CPU timings suggests KleidiAI would be slower for this
-application: about 30–44% longer per answer, including about 16 seconds of extra
-startup for every question. This is an untested estimate.
-[Application results](docs/results/application-performance/README.md),
-[estimate](docs/report.md#kleidiai-estimate-for-this-application).
 
 ## Guides
 
