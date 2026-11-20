@@ -1,65 +1,34 @@
 {
-  "schema_version": 1,
-  "kind": "application-compatibility-validation",
-  "study_id": "qwen35-cpu-application",
-  "status": "two_excluded_checks_passed",
-  "included_in_measurements": false,
-  "case_id": "val-015",
-  "counts": {
-    "planned": 2,
-    "attempted": 2,
-    "completed": 2,
-    "failed": 0,
-    "unattempted": 0,
-    "completed_answers": 2
-  },
-  "identity": {
-    "question_and_full_packed_inputs_equal": true,
-    "final_completion_bytes_equal": true,
-    "generated_token_ids_equal": true,
-    "validated_answers_equal": true,
-    "packed_input_sha256": "cec7251877ca0d199e454d57842275d30f08dd46b3ce857d6c48a2f195c2874f",
-    "final_content_sha256": "e500ee49867ce60f355d8918dc7f93723f6df53d8377ee41796d8d97ea861c26",
-    "validated_answer_sha256": "68d9d8751e14ebaf098fe2b42d344cfe97faea8ef8954394a16be547e8b0b620"
-  },
-  "quality": {
-    "supported_claims": 6,
-    "total_claims": 6,
-    "required_facts_passed": 4,
-    "required_fact_opportunities": 4,
-    "complete_answers": 2
-  },
-  "observations": [
+  "kind": "buffered-answer-compatibility-check",
+  "purpose": "excluded_compatibility",
+  "included_in_comparison": false,
+  "plan_sha256": "64362beaed93c1b66e5f996ba52e15a85826c04a9cb9cb9f0f9e0661d7abb16c",
+  "run_sha256": "c6595f114ee65e29b23134560e036feedbdec62c493e4c10ceef879ac26605f3",
+  "state": "completed",
+  "timing_valid": true,
+  "integrity_verified": true,
+  "rows": [
     {
-      "stage": "cli",
-      "status": "completed",
-      "raw_answer_record_sha256": "0e17d467664bab8a5e8d5f0a8c171d88da4af7cb459a6ed6966cc814eaa34df8",
-      "run_sha256": "d62dcfddad3d495b90b08deaade8eccf8f7910bcd1f1489a3f00a776a60ad06c",
-      "review_sha256": "b2be7aae34f3e3b2817837f8bc00f23f659302c40a3c0bbdc7d8d7b0ddbbc13c"
+      "id": "check-cpu",
+      "case_id": "val-015",
+      "backend": "cpu",
+      "outcome": "success",
+      "pipe_observed_answer_seconds": 155.191455166,
+      "server_initialization_seconds": 16.788785291,
+      "complete_request_seconds": 136.849097792,
+      "generated_tokens": 1239,
+      "matches_reviewed_answer": true
     },
     {
-      "stage": "fixed",
-      "status": "completed",
-      "raw_answer_record_sha256": "1a4d720f4c3eb5d64638efbdb4fdb5a7359629183b6a8cd8fdaca9e126d70074",
-      "run_sha256": "44733c45eb61c501409da4d8880f5597142d6cebf4ba471f645fac80b69a2b4c",
-      "review_sha256": "7ba4ddb393b341e72fef16bac2d6228460f4b9baa20df74813a5a9382a7edb5e"
+      "id": "check-kleidiai",
+      "case_id": "val-015",
+      "backend": "kleidiai",
+      "outcome": "success",
+      "pipe_observed_answer_seconds": 206.433059583,
+      "server_initialization_seconds": 31.365803875,
+      "complete_request_seconds": 174.396173791,
+      "generated_tokens": 1271,
+      "matches_reviewed_answer": true
     }
-  ],
-  "verification": {
-    "worker_and_native_cleanup_verified": true,
-    "internal_clock_guards_valid": true,
-    "covered_by_whole_collection_guard": true
-  },
-  "evidence_sha256": {
-    "plan": "a32d0b58254fcd165b90b5680f9ce5999954f044cbae401123b713c826cdcd42",
-    "compatibility_check": "fb76ba7a8e6cf0b909fb1c94321828d0284369ad512e3468644d05c91a468e48",
-    "independent_compatibility_review": "2554ef2cbe9d71cc07135b464d9bd52759428d27e8fec3c7ce673b44c6016216",
-    "whole_collection_review": "a861554ffc9b789b93242967812fb07d06e9b306982d3f47b13b08058a61151d",
-    "independent_whole_collection_review": "3a71d2d1eaf5cbd93a6ef5d88de391da163e945ece74b9e7a448587f7413d4bf"
-  },
-  "limits": [
-    "Excluded from all 21 measured observations and their quality totals.",
-    "One known question answered twice with authenticated agent-review reuse; no general accuracy or backend-speed claim.",
-    "Closed-stage pending limits are resolved by the separately pinned whole-collection audit; original review records remain unchanged."
   ]
 }

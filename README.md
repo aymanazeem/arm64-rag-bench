@@ -7,9 +7,9 @@ A local document question-answering application and an engineering investigation
 ## Results
 
 Both backends ran Qwen3.5-9B Q8_0 on an **Apple M1 Max with 32 GB memory and
-four threads**. The comparison completed **48 runs and 24 paired comparisons in
-one uninterrupted invocation**, with **no observed swap activity** or detected
-timing interruption.
+four threads**. The native comparison completed **48 runs and 24 paired
+comparisons in one uninterrupted invocation**, with **no observed swap activity**
+or detected timing interruption.
 
 | Workload | KleidiAI computation time compared with CPU |
 | --- | ---: |
@@ -32,6 +32,28 @@ restarts cost extra instructions. With one token, KleidiAI's kernel has a single
 total, so each multiply instruction waits about 3 cycles for the previous one;
 at four threads it processed 73 billion weights per second, against 101 billion
 for CPU. [Kernel timings](docs/results/kernel-analysis/README.md).
+
+### Whole application
+
+The unchanged `ask` command answered all 40 questions on each backend, in
+back-to-back pairs with balanced order. **All 88 observations succeeded**, and
+every answer matched its reviewed version exactly.
+
+| Measure | CPU | KleidiAI |
+| --- | ---: | ---: |
+| Total time, 40 answers | **85.9 min** | **125.1 min** (46% longer) |
+| Median answer time | 142 s | 196 s |
+| Median server start-up | 14.6 s | 30.5 s |
+| Prompt processing | 58 tokens/s | 82 tokens/s |
+| Generation | 84 ms/token | 120 ms/token |
+
+KleidiAI was slower on 38 of 40 questions. Generation takes most of the answer
+time: KleidiAI's faster prompts saved 6 minutes in total, but generation took 35
+minutes more, from the slower rate and 14% more generated tokens. Start-up added
+11 minutes: `ask` starts a server for every question, and KleidiAI's load-time
+weight conversion doubles start-up. On the 22 questions whose answers were within
+5% in length, KleidiAI still took 33% longer.
+[Application results](docs/results/application-performance/README.md).
 
 ### Answer quality
 
@@ -75,7 +97,7 @@ scores do not establish general accuracy or human validation.
 - [Runtime evidence and limits](docs/results/runtime-feasibility/README.md)
 - [CPU and KleidiAI quality and runtime checks](docs/results/controlled-cpu/README.md)
 - [Guarded desktop CPU results](docs/results/desktop-cpu/README.md)
-- [Buffered application results](docs/results/application-performance/README.md)
+- [CPU and KleidiAI application comparison](docs/results/application-performance/README.md)
 - [Prompt and generation kernel timings](docs/results/kernel-analysis/README.md)
 - [Project report](docs/report.md)
 - [CPU benchmark methods](docs/benchmarks.md)

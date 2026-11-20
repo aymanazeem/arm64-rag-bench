@@ -1,6 +1,6 @@
 # Local document Q&A and Arm64 inference
 
-The project works as a local document-answering CLI and a focused backend study on an Apple M1 Max with 32 GB memory. KleidiAI processes the tested prompts faster and generates tokens slower. Both backends answered all 40 fixed questions and each produced 30 complete answers, 28 of them on the same questions. **CPU is the application default.** KleidiAI does not pass the project's strict no-regression quality rule, and the native results suggest it would be slower for this generation-heavy application. KleidiAI application performance was not measured.
+The project works as a local document-answering CLI and a focused backend study on an Apple M1 Max with 32 GB memory. KleidiAI processes the tested prompts faster and generates tokens slower. Both backends answered all 40 fixed questions and each produced 30 complete answers, 28 of them on the same questions. **CPU is the application default.** KleidiAI does not pass the project's strict no-regression quality rule, and the whole application took 46% longer with it: generation takes most of the answer time, and every answer starts a server, which takes twice as long on KleidiAI.
 
 ## Design and use
 
@@ -64,7 +64,7 @@ At prefixes 512 and 2,048, each backend restored its own state and reproduced 24
 
 The pinned KleidiAI integration converts each Q8_0 weight row to 8-bit values with a single scale, set by the row's largest value. Q8_0 stores one scale per 32 weights, and the standard CPU backend keeps those scales. Blocks of smaller values therefore lose precision, so KleidiAI computes with a coarser version of the same model. It also quantizes activations with one scale per row, where the standard path uses one scale per 32 values. These differences could contribute to answer differences, but these records do not establish the cause of any omission or unsupported claim. The comparison covers complete backend integrations, not kernels alone. [Pinned conversion code](https://github.com/ggml-org/llama.cpp/blob/8ca5a8008b57aa39f2601546c0d07912045080a5/ggml/src/ggml-cpu/kleidiai/kleidiai.cpp#L1530-L1600).
 
-The weight conversion runs once while loading, outside the native computation timing, so its one-time cost cannot explain the slower generation; the converted format is used inside the timed work. The conversion does lengthen startup; see the [application estimate](#kleidiai-estimate-for-this-application). [Kernel timings](results/kernel-analysis/README.md) trace the slower generation mainly to the single-token kernel itself.
+The weight conversion runs once while loading, outside the native computation timing, so its one-time cost cannot explain the slower generation; the converted format is used inside the timed work. Start-up is about 16 seconds longer per server, mostly in this conversion; see the [application results](#application-results). [Kernel timings](results/kernel-analysis/README.md) trace the slower generation mainly to the single-token kernel itself.
 
 ## Desktop computation results
 
@@ -96,35 +96,31 @@ Native timings exclude loading, retrieval, tokenization, sampling and prefix/sta
 
 ## Application results
 
-The CPU application completed **21/21 reviewed observations**: 12 CLI commands and nine fixed-context replays, with three repetitions per case and stage. Median times until the buffered answer appeared were **113.74, 147.78 and 155.64 seconds** for 618, 1,807 and 2,278 input tokens. A question with no matching passages took **14.81 seconds**; it still started a server but generated nothing. Fixed-context complete-request medians were **98.86, 133.07 and 139.64 seconds**. [Full tables](results/application-performance/README.md).
+The unchanged `ask` command answered all 40 questions once on each backend, with only the server binary changed. Each question ran on both backends back to back, CPU first in 20 pairs and KleidiAI first in 20, after 120 idle seconds each. **All 88 observations succeeded** in one session with valid timing. Every question's inputs matched the published quality records, and all 80 answers matched the reviewed answers for their question and backend, text and token count. [Results](results/application-performance/README.md), [method](application-performance.md).
 
-The answers generated 1,110–1,239 tokens, including reasoning, at about 12 tokens per second. Across all 18 generated observations, request time was 7–19 milliseconds longer than the model’s reported prompt and generation time combined, which supports consistent timing.
+| Measure | CPU | KleidiAI |
+| --- | ---: | ---: |
+| Total answer time, 40 questions | 85.9 min | 125.1 min |
+| Median answer time (range), s | 142.1 (71.7–175.3) | 196.3 (94.8–213.4) |
+| Median server start-up, s | 14.6 | 30.5 |
+| Prompt processing, tokens/s | 58.1 | 82.3 |
+| Generation, ms/token | 83.7 | 119.7 |
+| Generated tokens, total | 39,522 | 45,009 |
 
-Median worker peaks were **36.12–39.08 MiB** and model-server peaks **16.806–16.808 GiB**. No swap activity was observed across 55 recorded host boundaries; thermal readings were unavailable.
+**KleidiAI took 46% longer in total** and was slower on 38 of 40 questions; the median per-question increase was 37%. Of its 2,352 extra seconds, generation added 2,076 and start-up 634, while faster prompts saved 363; retrieval and harness steps added 5. Generation took 64% of CPU's answer time and 72% of KleidiAI's.
 
-All 18 generated answers matched source-reviewed CPU outputs: **42/42 supported claims and 24/24 passed fact instances**. Three empty controls declined faithfully. These known questions and authenticated review transfers add no new accuracy evidence.
+The prompt and generation rates are close to the desktop study's. With the same inputs and seed, the backends' different arithmetic leads sampling to different tokens, so answer lengths differ by question. KleidiAI wrote 14% more tokens; CPU wrote at least twice as many on the only two questions where KleidiAI was faster. On the 22 questions whose answers were within 5% in length, KleidiAI took 33% longer and was slower on every one. Requests alone, without start-up, took 25% longer there.
 
-Answer times start before the harness writes its records and launches the command, so they include small harness overheads. The command prints its whole answer at once, so **model time to first token was not observed**. Server startup and request times are measured directly. Fresh processes do not mean cold caches, and stage medians cannot be subtracted to isolate retrieval cost. Worker and model-server memory peaks cover separate processes and must not be added.
+Model loading and context setup took 25.1–25.7 seconds on KleidiAI and 9.6–10.0 on CPU in every start. In a sampled start, KleidiAI's single-threaded weight conversion took 2.7 times as many samples as CPU's, most often in the scalar loops that give each row one scale. A question with no matching passages, run four times per backend, took 15.1 seconds on CPU and 30.9 on KleidiAI, almost all of it start-up.
 
-Collectors retain host observations, clock checks and sleep-prevention records. Native timings and these application measurements have different boundaries and answer different questions.
+Median model-server peak memory was 16.81 GiB on CPU and 17.20 GiB on KleidiAI. The longest request took 182 seconds on KleidiAI, within the 300-second limit. Prompt and generation rates differed by at most about 1.5% depending on which backend ran first. All 176 host checks found AC power and normal memory pressure. Before each observation, the median one-minute load average was 5.5 on CPU and 5.2 on KleidiAI; other applications stayed open. No memory was swapped out, and no sleep or clock jump was detected. Thermal readings were unavailable.
 
-### KleidiAI estimate for this application
-
-KleidiAI application performance was not measured. This estimate applies the native results to the CPU application timings and is untested.
-
-- **Generation dominates.** Median generation time, including reasoning, was 89–102 seconds of each 99–141-second CPU request; median prompt processing took 10–39 seconds. Generation is the workload where KleidiAI is slower.
-- **Startup recurs.** The application starts a model server for every question. In the desktop study, subtracting the timed samples and llama-bench's untimed warmup or prefix run from each process's wall time leaves about 26 seconds per KleidiAI process, against about 10 for CPU. This suggests KleidiAI takes about 16 seconds longer to load, consistent with its weight conversion. The CPU figure is close to the application's measured 9.8 seconds from server launch to readiness.
-- **Estimated effect.** Dividing the CPU prompt and generation times by the native ratios gives about 133–171 seconds per KleidiAI request. With the extra startup, complete answers would take about 163–202 seconds, against 114–156 seconds on CPU: about 30–44% longer.
-- **Less deadline margin.** At the native rates, a 2,278-token prompt with the full 2,048-token output allowance would take about 270 seconds on KleidiAI, close to the 300-second request limit, against about 210 seconds on CPU. Both figures are probably slightly low, because generation slows as context grows beyond the measured 2,048-token prefix.
-
-The estimate applies the 2,048-token-prefix generation ratio to answers that run at longer contexts and assumes equal answer lengths on both backends. It also assumes the llama-bench startup difference carries over to the application's server, which uses the same batch, cache and attention settings.
+The command prints its whole answer at once, so **time to the first token was not observed**. Answer times include small harness steps before the command starts. Fresh processes do not mean cold file caches. Each question was answered once per backend with one seed, and other seeds could give other answer lengths. The questions are known and the answers repeat reviewed records, so they add no new accuracy evidence. Load logs and samples from diagnostic starts of the measured binaries show each build's weight layout and kernels. [Runtime evidence](results/application-performance/runtime.txt).
 
 ## Reproduction and remaining work
 
-The working tree at `51f14dfce85651cb2b374eeaf424f2d378081089` passed **956 tests and 42 subtests**, with Ruff checks and formatting for 85 files. All 96 retrieval case records reproduced their rankings, scores, source spans and coverage. Eighteen embedding reference checks passed, and 29 cached model/runtime/configuration assets matched their frozen hashes. These checks used the existing environment and cached assets; they do not establish a fresh installation or clean native build. [Verification scope](results/application-performance/verification.json).
+With the optional upstream, embedding and real-model checks enabled, the code published with these results passed **958 tests and 42 subtests**, with Ruff checks and formatting for 86 files. The application comparison froze 35 source files, both builds, the model and the reviewed answer records; the published sources match those hashes. These checks used the existing environment and cached assets; they do not establish a fresh installation or clean native build.
 
 Four setup-only observations through the unchanged public API completed with no observed swap. The exported 600-second candidate has status `pending_review`; a separate review approved that calibration for the desktop study. These setup observations are excluded from performance summaries and make no separate command-line execution claim. [Validation](results/public-setup/README.md).
 
-Collection reviews and publication checks have separate evidence. This preparation record makes no merged-checkout verification claim.
-
-Public guides support new data collection and a [new local CPU baseline](answers.md#compare-a-fresh-cpu-baseline). Published hashes cannot reconstruct undistributed raw traces. The desktop study used collector/reporter commit `15dc33dc736c5aaa92fa8afd3e8f61d07dd65241`. Answers with several different seeds per question on each backend would show whether answer differences exceed sampling variation. A measured KleidiAI application run would test the estimate above. Operator profiling, human answer review and an optional Metal comparison would extend these findings.
+Public guides support new data collection and a [new local CPU baseline](answers.md#compare-a-fresh-cpu-baseline). Published hashes cannot reconstruct undistributed raw traces. The desktop study used collector/reporter commit `15dc33dc736c5aaa92fa8afd3e8f61d07dd65241`. Answers with several different seeds per question on each backend would show whether answer differences exceed sampling variation. A long-running server, other thread counts and chips with I8MM or SME would extend the application comparison. Operator profiling, human answer review and an optional Metal comparison would extend these findings.

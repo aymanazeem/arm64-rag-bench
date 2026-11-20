@@ -1,58 +1,135 @@
-# Buffered application performance
+# CPU and KleidiAI application comparison
 
-The CPU application completed **21/21 observations** on an M1 Max with 32 GB memory: 12 CLI commands and nine fixed-context replays. Timing, input identity, cleanup and answer review passed. No swap activity or timing interruption was observed.
+The unchanged `arm64-rag ask` command answered all 40 fixed questions once on each
+backend, on an Apple M1 Max with 32 GB memory and four threads. Only the server
+binary differed. **All 88 observations succeeded** in one session, with valid
+timing and identical inputs for each question. Every answer matched the reviewed
+answer for its question and backend, text and token count.
 
-Each entry is the median (minimum–maximum) across three eligible observations. Times are seconds. These are known questions, not new accuracy evidence or a backend comparison. KleidiAI was not measured here; the [project report](../../report.md#kleidiai-estimate-for-this-application) gives an untested estimate for it.
+**KleidiAI took 46% longer in total: 125.1 minutes against 85.9 for CPU.** It was
+slower on 38 of 40 questions, and the median per-question increase was 37%.
 
-## CLI
-
-| Case | Buffered first output | Server initialization | Complete request |
-| --- | ---: | ---: | ---: |
-| `dev-014`, 618 input tokens | 113.74 (112.95–116.51) | 14.28 (14.18–14.46) | 98.98 (98.29–101.59) |
-| `val-015`, 1,807 input tokens | 147.78 (147.05–150.17) | 14.20 (14.17–14.26) | 132.99 (132.36–135.45) |
-| `val-006`, 2,278 input tokens | 155.64 (154.80–156.38) | 14.16 (14.15–14.17) | 141.01 (139.88–141.73) |
-| Empty retrieval | 14.81 (14.62–15.74) | 14.30 (14.20–14.35) | No generation |
-
-Command time starts before ledger writing, worker creation and the ownership handshake. Buffered first output is **not model time to first token**, which remains unobserved. Initialization includes integrity checks and startup; about 9.8 seconds of it runs from server launch to readiness. Complete request includes input validation.
-
-The generated cases produced 1,110, 1,239, 1,212 tokens respectively, including reasoning, in every repetition and stage. Median generation time was about 89–102 seconds of each complete request. Empty retrieval starts a server but makes no generation request.
-
-## Fixed context
-
-Each replay uses its question's first planned CLI input, with a fresh server and unchanged settings.
-
-| Case | Fixed workflow return | Server initialization | Complete request |
-| --- | ---: | ---: | ---: |
-| `dev-014` | 113.49 (113.46–114.96) | 14.20 (14.13–14.24) | 98.86 (98.84–100.21) |
-| `val-015` | 147.74 (146.75–150.42) | 14.22 (14.13–14.35) | 133.07 (132.18–134.43) |
-| `val-006` | 154.46 (154.24–154.53) | 14.18 (14.18–14.24) | 139.64 (139.59–139.91) |
-
-Fixed workflow return ends at application return, before observer export. It differs from the CLI first-byte receipt boundary. Do not subtract stage medians to estimate retrieval cost or infer a speedup. Fresh processes do not imply cold caches.
-
-## Memory and quality
-
-| Stage / case | Worker peak RSS, MiB | Native-child peak RSS, GiB |
+| Per question, median (range) | CPU | KleidiAI |
 | --- | ---: | ---: |
-| CLI `dev-014` | 37.61 (37.50–37.77) | 16.806 (16.806–16.806) |
-| CLI `val-015` | 39.08 (38.61–39.17) | 16.808 (16.806–16.808) |
-| CLI `val-006` | 38.47 (38.33–38.83) | 16.806 (16.806–16.808) |
-| CLI empty retrieval | 36.73 (36.73–36.98) | 16.806 (16.806–16.808) |
-| Fixed `dev-014` | 36.12 (35.97–36.19) | 16.808 (16.806–16.808) |
-| Fixed `val-015` | 36.33 (36.31–37.03) | 16.808 (16.808–16.808) |
-| Fixed `val-006` | 36.61 (36.58–36.69) | 16.808 (16.807–16.808) |
+| Answer time, s | 142.1 (71.7–175.3) | 196.3 (94.8–213.4) |
+| Server start-up, s | 14.6 (14.4–15.7) | 30.5 (29.9–32.2) |
+| Complete request, s | 126.5 (56.5–159.8) | 165.1 (63.9–181.9) |
+| Generated tokens | 1,158 (326–1,266) | 1,170 (369–1,345) |
 
-These are separate process-lifetime peaks and must not be added. MiB and GiB use powers of 1,024; the [report](report.json) retains bytes and all observations.
+Answer time runs until the command's buffered answer arrives. Start-up includes
+about 4.5 seconds, on both backends, spent mainly hashing the model and binaries
+before the server launches. Complete request covers prompt processing and
+generation. Prompts had 618–2,278 tokens and were the same on both backends.
 
-Across 18 generated answers, **42/42 claims had supplied-source and attached-citation support, and 24/24 required fact instances passed**. The three empty controls declined faithfully. These repeated known answers do not extend the [40-case quality check](../grounded-answers/README.md). Reviews were reused only where inputs and final answers matched exactly. Empty controls were checked against the observed no-generation path. Reviews are by project-contributing agents, not human or external validation. [Quality evidence](quality.json).
+## Where the time goes
 
-## Conditions and scope
+| Total over 40 questions, s | CPU | KleidiAI | Difference |
+| --- | ---: | ---: | ---: |
+| Answer time | 5,155 | 7,508 | **+2,352** |
+| Server start-up | 588 | 1,221 | +634 |
+| Prompt processing | 1,233 | 871 | −363 |
+| Generation | 3,310 | 5,386 | +2,076 |
+| Retrieval, checks and harness steps | 24 | 30 | +5 |
 
-All measured observations are retained. Across 55 recorded host boundaries, swap counters did not increase. macOS, managed security and the controlling editor remained active; thermal readings were unavailable. These boundary readings do not establish CPU isolation or constant temperatures.
+Differences use unrounded totals.
 
-One bounded outer guard and AC-only sleep assertion covered readiness and all three stages. The two excluded compatibility checks passed. Collection-owned workers, native children and assertions were released and verified. No services or persistent power settings changed. [Execution](execution.json), [compatibility](compatibility.json).
+- **Prompts:** KleidiAI processed 82.3 prompt tokens per second against 58.1, using
+  29% less prompt time.
+- **Generation:** KleidiAI took 119.7 ms per token against 83.7 ms, 43% more. Per
+  question, its time per token was 1.18–1.49 times CPU's (median 1.44).
+- **Answer length:** KleidiAI generated 45,009 tokens, 14% more than CPU's 39,522.
+  With the same inputs and seed, the backends' different arithmetic leads sampling
+  to different tokens, so lengths differ by question. CPU wrote at least twice as
+  many tokens on `val-006` and `val-017`, the only questions where KleidiAI was
+  faster. KleidiAI wrote at least twice as many on five questions.
+- **Start-up:** `ask` starts a server for each question. Model loading and context
+  setup took 25.1–25.7 seconds on KleidiAI and 9.6–10.0 on CPU across all 44
+  starts per backend. While loading, each build converts the 8,041 MiB of Q8_0
+  matrix weights into its own layout on one thread. In a sampled start, KleidiAI's
+  conversion took 2.7 times as many samples as CPU's: 73% in llama.cpp's KleidiAI
+  integration code, most often in two scalar loops that give each weight row a
+  single scale, and 26% in KleidiAI's packing step.
 
-The unmodified report retains pending semantic-review labels; companions supply that review. Its CPU source hashes identify frozen collection references, which may differ from current quality presentation hashes. [Method](../../application-performance.md), [project report](../../report.md).
+The prompt and generation rates are close to the
+[desktop study](../desktop-cpu/README.md), and the
+[kernel timings](../kernel-analysis/README.md) account for most of the
+differences.
 
-## Reproduction
+## Similar-length answers
 
-The recorded base working tree passed **956 tests and 42 subtests**, plus Ruff checks and formatting for 85 files. All 96 retrieval records matched their frozen rankings, scores, spans and coverage; 18 embedding checks and 29 asset-pin checks passed. The existing environment and cached assets were used. These checks do not establish a fresh installation, clean native build or exact merged checkout. [Verification scope](verification.json).
+On the 22 questions whose two answers were within 5% in length (25,793 and 25,796
+tokens in total), **KleidiAI took 33% longer** (median 33%, range 13–47%) and was
+slower on all 22. Requests alone, without start-up, took 25% longer. Faster prompts
+do not make up for slower generation.
+
+## Checks and conditions
+
+- **Pairs and order:** each question ran on both backends back to back, CPU first
+  in 20 pairs and KleidiAI first in 20. Seed 42 fixed the order. Prompt and
+  generation rates differed by at most about 1.5% depending on which backend ran
+  first.
+- **Inputs:** every question's passages and prompt matched the published quality
+  records, and each question's inputs were identical on both backends.
+- **No matching passages:** a question with no matching passages ran four times
+  per backend and started a server without generating. It took 15.1 seconds on
+  CPU and 30.9 on KleidiAI (medians), so start-up costs about 16 seconds more per
+  command.
+- **Memory:** median peak resident memory of the model server was 16.81 GiB on CPU
+  and 17.20 GiB on KleidiAI over the question runs.
+- **Deadlines:** the longest request took 182 seconds on KleidiAI and 160 on CPU,
+  against a 300-second limit.
+- **Host:** 120 idle seconds preceded every observation. All 176 host checks found
+  AC power and normal memory pressure. Before each observation, the median
+  one-minute load average was 5.5 on CPU and 5.2 on KleidiAI; other applications
+  stayed open. No memory was swapped out, and swap-ins totalled 37 MiB from the
+  first host check to the last. No sleep or clock jump was detected. Thermal
+  readings were unavailable.
+- **Excluded check:** one compatibility pair (`val-015` on each server) ran before
+  collection. Both answers matched their reviewed records. It is not part of the
+  results.
+
+## Answers
+
+All 80 generated answers matched the reviewed answers exactly, so the
+[quality comparison](../controlled-cpu/quality.md) describes them: 30 complete
+answers on each backend, and KleidiAI does not pass the strict no-regression rule.
+The eight no-match commands declined without generating. The questions are known
+and the answers repeat reviewed records, so they add no new accuracy evidence.
+
+## Runtime evidence
+
+The measured CPU build loads weights into `CPU_REPACK` and repacks 249 tensors as
+`q8_0_4x4`. The KleidiAI build loads them into `CPU_KLEIDIAI`, with DotProd
+kernels and SME disabled. In a sampled request, CPU ran `ggml_gemm_q8_0_4x4_q8_0`
+and `ggml_gemv_q8_0_4x4_q8_0`. KleidiAI ran
+`kai_run_matmul_clamp_f32_qai8dxp4x4_qsi8cxp4x4_16x4_neon_dotprod` and
+`kai_kernel_matmul_clamp_f32_qai8dxp1x4_qsi8cxp4x4_1x4_neon_dotprod`, its
+prompt and single-token kernels. These diagnostic starts of the measured binaries
+ran after collection with the application's server arguments plus `-v`.
+[Load logs and samples](runtime.txt).
+
+## Limits
+
+- One machine, four threads and one model. Chips with I8MM or SME use other
+  KleidiAI kernels. In the kernel study's thread sweep, generation tied at eight
+  threads; the application was not tested there.
+- Each question was answered once per backend with seed 42. Other seeds could give
+  other answer lengths.
+- The command prints its whole answer at once, so time to the first token was not
+  observed.
+- Fresh processes do not mean cold file caches: model verification reads the file.
+- KleidiAI's extra start-up cost comes mostly from this pinned integration's Q8_0
+  conversion. Other weight types and a long-running server were not tested.
+
+## Files
+
+| File | Contents |
+| --- | --- |
+| [report.json](report.json) | Plan and source hashes, all 88 observations, host readings and the comparison |
+| [compatibility.json](compatibility.json) | The excluded compatibility pair |
+| [runtime.txt](runtime.txt) | Load-log lines, start-up timings and sampled kernels |
+
+Raw traces contain source passages and model reasoning and stay local. The
+[method](../../application-performance.md) describes the design and how to rerun
+it. The generated report leaves its interpretation label pending; this page gives
+the interpretation.

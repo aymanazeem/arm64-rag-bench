@@ -7,9 +7,9 @@ was retried or replaced. No swap activity was observed across the measured perio
 
 KleidiAI processed prompts faster but generated tokens slower. CPU is the
 application default: KleidiAI does not pass the separate
-[answer-quality rule](../controlled-cpu/quality.md), and its slower generation is
-[estimated](../../report.md#kleidiai-estimate-for-this-application) to make this
-application slower.
+[answer-quality rule](../controlled-cpu/quality.md), and the whole application
+took 46% longer with it in the
+[application comparison](../application-performance/README.md).
 
 | Workload | Median CPU/KleidiAI ratio | Pair range | Pairs |
 | --- | ---: | ---: | ---: |
