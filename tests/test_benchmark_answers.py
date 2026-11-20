@@ -118,7 +118,22 @@ def test_schedule_pairs_every_question_once_per_backend_in_balanced_order():
     assert app.schedule() == rows
 
 
-def test_reviewed_records_cover_both_backends_with_shared_inputs():
+def published_builds():
+    return {
+        backend: (
+            None,
+            json.loads(
+                (
+                    ROOT / f"docs/results/runtime-feasibility/{backend}-build.json"
+                ).read_text()
+            ),
+        )
+        for backend in app.BACKENDS
+    }
+
+
+def test_reviewed_records_cover_both_backends_with_shared_inputs(monkeypatch):
+    monkeypatch.setattr(app, "builds", published_builds)
     records = app.reviewed_records()
     assert sorted(records) == sorted(app.CASES)
     tokens = {
@@ -130,6 +145,21 @@ def test_reviewed_records_cover_both_backends_with_shared_inputs():
     }
     assert tokens == {"cpu": 39522, "kleidiai": 45009}
     assert records["val-006"]["published_prompt"]["prompt_tokens"] == 2278
+
+
+def test_reviewed_records_reject_answers_from_another_server(monkeypatch):
+    def swapped():
+        records = published_builds()
+        servers = {
+            backend: build["targets"]["llama-server"]
+            for backend, (_, build) in records.items()
+        }
+        records["cpu"][1]["targets"]["llama-server"] = servers["kleidiai"]
+        return records
+
+    monkeypatch.setattr(app, "builds", swapped)
+    with pytest.raises(ValueError, match="another server"):
+        app.reviewed_records()
 
 
 def test_portable_input_identity_ignores_only_local_generation(case_record):
