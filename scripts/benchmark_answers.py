@@ -1,4 +1,4 @@
-"""Measure the buffered CPU application and replay its exact request inputs."""
+"""Compare the buffered answer command on the CPU and KleidiAI servers."""
 
 import argparse
 import hashlib
@@ -18,30 +18,47 @@ import benchmark as common
 import benchmark_report as public
 
 ROOT = Path(__file__).resolve().parents[1]
-KIND = "buffered-answer-performance-v1"
-SELECTED = ("dev-014", "val-015", "val-006")
+KIND = "buffered-answer-comparison-v1"
+BACKENDS = ("cpu", "kleidiai")
+DATASETS = {
+    "development.json": "development",
+    "retrieval-validation.json": "regression",
+    "answer-validation.json": "validation",
+}
+REVIEWED = {
+    "cpu": "docs/results/grounded-answers/{}.json",
+    "kleidiai": "docs/results/controlled-cpu/quality-{}.json",
+}
+CASES = (
+    *(f"dev-{number:03}" for number in range(1, 15)),
+    *(f"val-{number:03}" for number in range(1, 19)),
+    *(f"fresh-{number:03}" for number in range(1, 9)),
+)
 COMPATIBILITY_CASE = "val-015"
 EMPTY_ID = "empty-retrieval"
 EMPTY_QUERY = "applicationbenchmarkemptyretrieval9fa83b2c"
-DATASETS = ("development.json", "retrieval-validation.json", "answer-validation.json")
-STAGES = ("cli", "fixed")
+SIMILAR_LENGTH = 0.05
 SETTINGS = {
-    "blocks": 3,
+    "blocks": 4,
     "seed": 42,
     "idle_seconds": 120,
     "worker_timeout_seconds": 600,
     "startup_timeout_seconds": 120,
     "request_timeout_seconds": 300,
     "output_mode": "plain_stdout_pipe_with_explicit_post_return_flush",
-    "backend": "cpu",
+    "backends": list(BACKENDS),
+    "pairing": "adjacent_backends_balanced_order",
+    "empty_controls_per_block": 1,
     "retrieval_method": "lexical",
-    "fixed_input_selection": "first_planned_cli_observation_per_case",
+    "similar_length_tolerance": SIMILAR_LENGTH,
 }
 LIMITS = [
-    "These are known regression questions, not fresh accuracy evaluation.",
+    "These are known questions, not fresh accuracy evaluation.",
     "The application buffers its answer. Model time to first token is unobserved.",
     "Fresh processes do not imply cold file caches. Model verification reads the file.",
-    "The stages are descriptive observations, not paired speed comparisons.",
+    "Each backend answers each question once with the application's fixed seed.",
+    "Answers differ between backends, so answer length is part of the result.",
+    "Both servers use the application's four threads; other settings are untested.",
     "Boundary host observations do not establish constant conditions between checks.",
     "Missing thermal telemetry is unavailable, not evidence of normal temperature.",
     "Resource peaks are separate process lifetimes, not additive memory usage.",
@@ -56,7 +73,6 @@ RAW_FILES = {
     "stderr.txt",
     "answer.json",
     "answer.server.log",
-    "answer.json.server.log",
     "observation.json",
     "observer-end.json",
 }
@@ -106,31 +122,106 @@ def input_identity(record):
     }
 
 
-def schedule(stage, *, compatibility=False):
-    require(stage in STAGES, "Unknown measurement stage.")
+def schedule(*, compatibility=False):
+    """Pair both backends on each case, with each order used equally often."""
     if compatibility:
         return [
             {
-                "id": f"check-{stage}-{COMPATIBILITY_CASE}",
+                "id": f"check-{backend}",
                 "block": 1,
+                "pair": "check",
                 "case_id": COMPATIBILITY_CASE,
+                "backend": backend,
                 "state": "planned",
             }
+            for backend in BACKENDS
         ]
-    rng, rows = random.Random(SETTINGS["seed"]), []
-    for block in range(1, SETTINGS["blocks"] + 1):
-        cases = list(SELECTED) + ([EMPTY_ID] if stage == "cli" else [])
-        rng.shuffle(cases)
-        rows.extend(
-            {
-                "id": f"{stage}-{block}-{number}",
-                "block": block,
-                "case_id": case,
-                "state": "planned",
-            }
-            for number, case in enumerate(cases, 1)
-        )
+    rng, blocks = random.Random(SETTINGS["seed"]), SETTINGS["blocks"]
+    cases = list(CASES)
+    rng.shuffle(cases)
+    size = len(cases) // blocks
+    empty_orders = [BACKENDS, BACKENDS[::-1]] * (blocks // 2)
+    rng.shuffle(empty_orders)
+    rows = []
+    for block in range(1, blocks + 1):
+        orders = [BACKENDS, BACKENDS[::-1]] * (size // 2)
+        rng.shuffle(orders)
+        planned = [
+            *zip(cases[(block - 1) * size : block * size], orders),
+            (EMPTY_ID, empty_orders[block - 1]),
+        ]
+        rng.shuffle(planned)
+        for number, (case, order) in enumerate(planned, 1):
+            pair = f"b{block}-p{number:02}"
+            rows.extend(
+                {
+                    "id": f"{pair}-{backend}",
+                    "block": block,
+                    "pair": pair,
+                    "case_id": case,
+                    "backend": backend,
+                    "state": "planned",
+                }
+                for backend in order
+            )
     return rows
+
+
+def reviewed_answer(case):
+    generation = case["generation"]
+    require(
+        case["attempt_state"] == "completed"
+        and generation["tokens_predicted"] > 0
+        and isinstance(case["final_content_hash"]["sha256"], str)
+        and isinstance(case["raw_completion_content_hash"]["sha256"], str),
+        "A reviewed answer record is incomplete.",
+    )
+    return {
+        "final_content_sha256": case["final_content_hash"]["sha256"],
+        "raw_content_sha256": case["raw_completion_content_hash"]["sha256"],
+        "generated_tokens": generation["tokens_predicted"],
+    }
+
+
+def reviewed_records():
+    """Return each question's shared input and both reviewed answer identities."""
+    model = common.read_json(ROOT / "configs/answer-model.json")["model"]["sha256"]
+    servers = {
+        backend: build["targets"]["llama-server"]
+        for backend, (_, build) in builds().items()
+    }
+    cases = {}
+    for role in DATASETS.values():
+        for backend, pattern in REVIEWED.items():
+            reviewed = common.read_json(ROOT / pattern.format(role))
+            runtime = reviewed["runtime"]
+            require(
+                runtime["binary_sha256"] == servers[backend]
+                and runtime["model_sha256"] == model
+                and runtime["threads"] == 4,
+                "A reviewed answer came from another server, model or thread count.",
+            )
+            for case in reviewed["cases"]:
+                require(case["id"] in CASES, "A reviewed answer has no question.")
+                item = cases.setdefault(
+                    case["id"],
+                    {"published_prompt": case["prompt"], "reviewed_answers": {}},
+                )
+                require(
+                    item["published_prompt"] == case["prompt"],
+                    "Reviewed backends used different inputs.",
+                )
+                answers = item["reviewed_answers"]
+                require(backend not in answers, "A reviewed answer is repeated.")
+                answers[backend] = reviewed_answer(case)
+    require(
+        sorted(cases) == sorted(CASES)
+        and all(
+            set(item["reviewed_answers"]) == set(BACKENDS) for item in cases.values()
+        ),
+        "A reviewed answer record is missing.",
+    )
+    return cases
 
 
 def public_workloads(index_path):
@@ -160,23 +251,18 @@ def public_workloads(index_path):
         dataset = common.read_json(path)
         _validate_contract(dataset, manifest, inventory)
         for case in dataset["cases"]:
-            if case["id"] in SELECTED:
-                cases[case["id"]] = {
-                    "id": case["id"],
-                    "question": case["question"],
-                    "source_ids": scopes[case["corpus_id"]],
-                    "dataset": "eval/" + name,
-                    "required_facts": case["required_facts"],
-                    "unacceptable_claims": case["unacceptable_claims"],
-                }
-    require(set(cases) == set(SELECTED), "Public workloads are missing.")
-    for role in ("development", "regression"):
-        path = ROOT / "docs/results/grounded-answers" / f"{role}.json"
-        for case in common.read_json(path)["cases"]:
-            if case["id"] in cases:
-                cases[case["id"]]["published_prompt"] = case["prompt"]
-    for case in cases.values():
-        require("published_prompt" in case, "Published prompt identity is missing.")
+            require(case["id"] not in cases, "A question ID is repeated.")
+            cases[case["id"]] = {
+                "id": case["id"],
+                "question": case["question"],
+                "source_ids": scopes[case["corpus_id"]],
+                "dataset": "eval/" + name,
+                "required_facts": case["required_facts"],
+                "unacceptable_claims": case["unacceptable_claims"],
+            }
+    require(sorted(cases) == sorted(CASES), "The fixed question set changed.")
+    for case_id, reviewed in reviewed_records().items():
+        cases[case_id].update(reviewed)
     require(
         not search_index(index_path, EMPTY_QUERY, limit=20)["results"],
         "The empty-retrieval control unexpectedly matches a source.",
@@ -188,6 +274,7 @@ def public_workloads(index_path):
         "required_facts": [],
         "unacceptable_claims": [],
         "published_prompt": None,
+        "reviewed_answers": None,
     }
     return cases, {key: inventory[key] for key in ("generation", "fingerprint")}
 
@@ -214,75 +301,102 @@ def source_paths():
         ROOT / "eval/answers-protocol.json",
         ROOT / "data/manifests/corpus.json",
         *(ROOT / "eval" / name for name in DATASETS),
-        ROOT / "docs/results/grounded-answers/development.json",
-        ROOT / "docs/results/grounded-answers/regression.json",
+        *(
+            ROOT / pattern.format(role)
+            for pattern in REVIEWED.values()
+            for role in DATASETS.values()
+        ),
     ]
 
 
-def cpu_build():
-    build_path = ROOT / "artifacts/feasibility/cpu/build.json"
-    build = common.read_json(build_path)
+def builds():
+    """Return the pinned server builds, which may differ only in KleidiAI."""
     runtime = common.read_json(ROOT / "configs/runtime.json")
-    flags = {**runtime["cmake"], "GGML_CPU_KLEIDIAI": "OFF"}
-    require(
-        build["backend"] == "cpu"
-        and build["source"] == runtime["llama_cpp"]
-        and build["flags"] == flags
-        and build["kleidiai"] is None
-        and build["backends"] == ["ggml-cpu"],
-        "Use the pinned CPU-only build.",
-    )
-    require(
-        all(
-            flags.get(key) == value
-            for key, value in {
-                "GGML_CPU": "ON",
-                "GGML_CPU_REPACK": "ON",
-                "GGML_METAL": "OFF",
-                "GGML_BLAS": "OFF",
-                "GGML_ACCELERATE": "OFF",
-                "GGML_OPENMP": "OFF",
-            }.items()
-        ),
-        "CPU build acceleration settings changed.",
-    )
-    common.runtime.checked_cache(build_path.with_name("CMakeCache.txt"), flags)
-    return build_path, build
+    records = {}
+    for backend in BACKENDS:
+        build_path = ROOT / "artifacts/feasibility" / backend / "build.json"
+        build = common.read_json(build_path)
+        flags = {
+            **runtime["cmake"],
+            "GGML_CPU_KLEIDIAI": "ON" if backend == "kleidiai" else "OFF",
+        }
+        require(
+            build["backend"] == backend
+            and build["source"] == runtime["llama_cpp"]
+            and build["flags"] == flags
+            and build["kleidiai"]
+            == (runtime["kleidiai"] if backend == "kleidiai" else None)
+            and build["backends"] == ["ggml-cpu"],
+            "Use the pinned CPU-only builds.",
+        )
+        require(
+            all(
+                flags.get(key) == value
+                for key, value in {
+                    "GGML_CPU": "ON",
+                    "GGML_CPU_REPACK": "ON",
+                    "GGML_METAL": "OFF",
+                    "GGML_BLAS": "OFF",
+                    "GGML_ACCELERATE": "OFF",
+                    "GGML_OPENMP": "OFF",
+                }.items()
+            ),
+            "Build acceleration settings changed.",
+        )
+        common.runtime.checked_cache(build_path.with_name("CMakeCache.txt"), flags)
+        records[backend] = build_path, build
+    for key in ("compiler_flags", "compilers", "tools", "system"):
+        require(
+            records["cpu"][1][key] == records["kleidiai"][1][key],
+            f"Paired build {key} differ.",
+        )
+    return records
+
+
+def server_path(backend):
+    return ROOT / "build" / backend / "bin/llama-server"
 
 
 def runtime_assets():
     config = common.read_json(ROOT / "configs/answer-model.json")
-    build_path, build = cpu_build()
-    binary = ROOT / "build/cpu/bin/llama-server"
     model = ROOT / config["directory"] / config["model"]["filename"]
-    assets = {"binary": common.asset(binary), "model": common.asset(model)}
+    result = {"model": common.asset(model), "backends": {}}
     require(
-        assets["binary"]["sha256"] == build["targets"]["llama-server"]
-        and assets["model"]["sha256"] == config["model"]["sha256"]
-        and assets["model"]["size"] == config["model"]["size"],
-        "CPU server or model differs from its pin.",
+        result["model"]["sha256"] == config["model"]["sha256"]
+        and result["model"]["size"] == config["model"]["size"],
+        "Model differs from its pin.",
     )
-    libraries = common.libraries(binary)
-    require(set(libraries) == set(build["libraries"]), "Library inventory changed.")
-    assets["libraries"] = {name: common.asset(path) for name, path in libraries.items()}
-    require(
-        all(
-            item["sha256"] == build["libraries"][name]
-            for name, item in assets["libraries"].items()
-        ),
-        "CPU library differs from its build record.",
-    )
-    assets["build"] = common.asset(build_path)
-    for name, filename in (
-        ("cache", "CMakeCache.txt"),
-        ("compile_commands", "compile_commands.json"),
-    ):
-        assets[name] = common.asset(build_path.with_name(filename))
+    for backend, (build_path, build) in builds().items():
+        binary = server_path(backend)
+        assets = {"binary": common.asset(binary)}
         require(
-            assets[name]["sha256"] == build[name + "_sha256"],
-            "Build metadata pin differs.",
+            assets["binary"]["sha256"] == build["targets"]["llama-server"],
+            "Server differs from its build record.",
         )
-    return assets
+        libraries = common.libraries(binary)
+        require(set(libraries) == set(build["libraries"]), "Library inventory changed.")
+        assets["libraries"] = {
+            name: common.asset(path) for name, path in libraries.items()
+        }
+        require(
+            all(
+                item["sha256"] == build["libraries"][name]
+                for name, item in assets["libraries"].items()
+            ),
+            "Library differs from its build record.",
+        )
+        assets["build"] = common.asset(build_path)
+        for name, filename in (
+            ("cache", "CMakeCache.txt"),
+            ("compile_commands", "compile_commands.json"),
+        ):
+            assets[name] = common.asset(build_path.with_name(filename))
+            require(
+                assets[name]["sha256"] == build[name + "_sha256"],
+                "Build metadata pin differs.",
+            )
+        result["backends"][backend] = assets
+    return result
 
 
 def freeze(index_path, destination):
@@ -293,7 +407,7 @@ def freeze(index_path, destination):
         "kind": KIND,
         "settings": SETTINGS,
         "workloads": cases,
-        "schedules": {stage: schedule(stage) for stage in STAGES},
+        "schedule": schedule(),
         "index": {"path": str(index_path.resolve()), **index},
         "sources": {
             str(path.relative_to(ROOT)): common.asset(path) for path in source_paths()
@@ -315,10 +429,7 @@ def check_plan(plan, *, verify_model=True):
     from arm64_rag.index import index_inventory
 
     require(plan["kind"] == KIND and plan["settings"] == SETTINGS, "Plan changed.")
-    require(
-        plan["schedules"] == {stage: schedule(stage) for stage in STAGES},
-        "Measurement schedule changed.",
-    )
+    require(plan["schedule"] == schedule(), "Measurement schedule changed.")
     common.timing.check_policy(plan["timing_policy"])
     common.host.check_policy(plan["host_policy"])
     require(
@@ -341,53 +452,60 @@ def check_plan(plan, *, verify_model=True):
             Path(item["path"]).resolve() == (ROOT / name).resolve(), "Source moved."
         )
         common.verify_asset(item)
-    assets = plan["runtime"]
     config = common.read_json(ROOT / "configs/answer-model.json")
-    build_path, build = cpu_build()
+    model = plan["runtime"]["model"]
     require(
-        Path(assets["binary"]["path"]).resolve()
-        == (ROOT / "build/cpu/bin/llama-server").resolve()
-        and Path(assets["model"]["path"]).resolve()
+        Path(model["path"]).resolve()
         == (ROOT / config["directory"] / config["model"]["filename"]).resolve()
-        and assets["binary"]["sha256"] == build["targets"]["llama-server"]
-        and assets["model"]["sha256"] == config["model"]["sha256"]
-        and assets["model"]["size"] == config["model"]["size"]
-        and Path(assets["build"]["path"]).resolve() == build_path.resolve(),
-        "Frozen runtime is not the pinned CPU build and answer model.",
+        and model["sha256"] == config["model"]["sha256"]
+        and model["size"] == config["model"]["size"],
+        "Frozen model is not the pinned answer model.",
     )
+    records = builds()
     require(
-        set(common.libraries(Path(assets["binary"]["path"])))
-        == set(assets["libraries"])
-        == set(build["libraries"]),
-        "CPU library inventory changed.",
+        set(plan["runtime"]["backends"]) == set(BACKENDS), "Frozen backends changed."
     )
-    require(
-        all(
-            item["sha256"] == build["libraries"][name]
-            for name, item in assets["libraries"].items()
-        ),
-        "CPU library pin differs.",
-    )
-    for name, filename in (
-        ("cache", "CMakeCache.txt"),
-        ("compile_commands", "compile_commands.json"),
-    ):
+    for backend, (build_path, build) in records.items():
+        assets = plan["runtime"]["backends"][backend]
         require(
-            assets[name]["sha256"] == build[name + "_sha256"]
-            and Path(assets[name]["path"]).resolve()
-            == build_path.with_name(filename).resolve(),
-            "Frozen build metadata differs.",
+            Path(assets["binary"]["path"]).resolve() == server_path(backend).resolve()
+            and assets["binary"]["sha256"] == build["targets"]["llama-server"]
+            and Path(assets["build"]["path"]).resolve() == build_path.resolve(),
+            "Frozen server is not its pinned build.",
         )
-    for item in (
-        assets["binary"],
-        assets["build"],
-        assets["cache"],
-        assets["compile_commands"],
-        *assets["libraries"].values(),
-    ):
-        common.verify_asset(item)
+        require(
+            set(common.libraries(Path(assets["binary"]["path"])))
+            == set(assets["libraries"])
+            == set(build["libraries"]),
+            "Library inventory changed.",
+        )
+        require(
+            all(
+                item["sha256"] == build["libraries"][name]
+                for name, item in assets["libraries"].items()
+            ),
+            "Library pin differs.",
+        )
+        for name, filename in (
+            ("cache", "CMakeCache.txt"),
+            ("compile_commands", "compile_commands.json"),
+        ):
+            require(
+                assets[name]["sha256"] == build[name + "_sha256"]
+                and Path(assets[name]["path"]).resolve()
+                == build_path.with_name(filename).resolve(),
+                "Frozen build metadata differs.",
+            )
+        for item in (
+            assets["binary"],
+            assets["build"],
+            assets["cache"],
+            assets["compile_commands"],
+            *assets["libraries"].values(),
+        ):
+            common.verify_asset(item)
     if verify_model:
-        common.verify_asset(assets["model"])
+        common.verify_asset(model)
     inventory = index_inventory(Path(plan["index"]["path"]))
     require(
         all(
@@ -409,18 +527,19 @@ def file_stamp(path):
 def collection_identity(plan, plan_path, additional=()):
     from arm64_rag.index import index_inventory
 
-    runtime = plan["runtime"]
     files = [
         plan_path,
         *(Path(item["path"]) for item in plan["sources"].values()),
-        *(
-            Path(runtime[name]["path"])
-            for name in ("binary", "model", "build", "cache", "compile_commands")
-        ),
-        *(Path(item["path"]) for item in runtime["libraries"].values()),
-        *common.libraries(Path(runtime["binary"]["path"])).values(),
+        Path(plan["runtime"]["model"]["path"]),
         *additional,
     ]
+    for backend in plan["runtime"]["backends"].values():
+        files.extend(
+            Path(backend[name]["path"])
+            for name in ("binary", "build", "cache", "compile_commands")
+        )
+        files.extend(Path(item["path"]) for item in backend["libraries"].values())
+        files.extend(common.libraries(Path(backend["binary"]["path"])).values())
     database = Path(plan["index"]["path"])
     stamps = {str(path): file_stamp(path) for path in files}
     stamps[str(database)] = file_stamp(database)
@@ -446,6 +565,7 @@ def native_metrics(record):
     return {
         "generated_tokens": raw.get("tokens_predicted"),
         "cache_reused_tokens": cached,
+        "prompt_n": timings.get("prompt_n"),
         "prompt_ms": timings.get("prompt_ms"),
         "predicted_ms": timings.get("predicted_ms"),
         "predicted_n": timings.get("predicted_n"),
@@ -476,7 +596,7 @@ def check_record(record, case, protocol):
             identity["prompt_sha256"] == expected["prompt_sha256"]
             and identity["prompt_tokens"] == expected["prompt_tokens"]
             and identity["max_output_tokens"] == expected["max_output_tokens"],
-            "Packed input differs from the public CPU workload.",
+            "Packed input differs from the public workload.",
         )
         require(
             validate_answer(
@@ -506,7 +626,7 @@ def worker(payload):
 
     plan, row = payload["plan"], payload["row"]
     case = plan["workloads"][row["case_id"]]
-    protocol = common.read_json(ROOT / "eval/answers-protocol.json")
+    binary = plan["runtime"]["backends"][row["backend"]]["binary"]["path"]
     directory = Path(payload["directory"])
     observation = {"events": {}, "native_launches": 0, "failure": None}
     events = observation["events"]
@@ -583,80 +703,26 @@ def worker(payload):
     inference.LocalServer, answers.answer_question = ObservedServer, observed_answer
     exit_code = 0
     try:
-        if payload["stage"] == "cli":
-            sys.argv = [
-                "arm64-rag",
-                "ask",
-                case["question"],
-                "--db",
-                plan["index"]["path"],
-                "--method",
-                "lexical",
-                "--server-binary",
-                plan["runtime"]["binary"]["path"],
-                "--answer-model-config",
-                str(ROOT / "configs/answer-model.json"),
-                "--protocol",
-                str(ROOT / "eval/answers-protocol.json"),
-                "--trace",
-                str(directory / "answer.json"),
-            ]
-            for source in case["source_ids"]:
-                sys.argv.extend(["--source", source])
-            cli.main()
-        else:
-            baseline = common.read_json(Path(payload["replay"]["path"]))
-            common.verify_asset(payload["replay"])
-            check_record(baseline, case, protocol)
-            packed = baseline["packed"]
-            with ObservedServer(
-                Path(plan["runtime"]["binary"]["path"]),
-                Path(plan["runtime"]["model"]["path"]),
-                context_size=protocol["settings"]["context_size"],
-                startup_timeout=120,
-                request_timeout=300,
-                reasoning_budget_tokens=protocol["settings"]["reasoning_budget_tokens"],
-                log_path=directory / "answer.json.server.log",
-            ) as server:
-                record = {
-                    key: baseline[key] for key in ("question", "retrieval", "packed")
-                }
-                record.update(
-                    runtime=server.info(),
-                    raw_completion=None,
-                    answer=None,
-                    failure=None,
-                )
-                try:
-                    response = server.complete(
-                        packed["token_ids"],
-                        packed["max_output_tokens"],
-                        json_schema=protocol["model_output_schema"],
-                        messages=answers._messages(
-                            case["question"],
-                            packed["sources"],
-                            protocol["model_output_schema"],
-                        ),
-                    )
-                    record["raw_completion"] = response
-                    events["validation_start_ns"] = continuous_ns()
-                    record["answer"] = answers.validate_answer(
-                        response["content"], packed["sources"]
-                    )
-                    events["validation_end_ns"] = continuous_ns()
-                except (
-                    OSError,
-                    ValueError,
-                    RuntimeError,
-                    KeyError,
-                    TypeError,
-                ) as error:
-                    record["failure"] = str(error)
-                    if getattr(error, "response", None) is not None:
-                        record["raw_completion"] = error.response
-                common.save_json(directory / "answer.json", record, create=True)
-                print(answers.render_answer(record))
-                exit_code = int(record["failure"] is not None)
+        sys.argv = [
+            "arm64-rag",
+            "ask",
+            case["question"],
+            "--db",
+            plan["index"]["path"],
+            "--method",
+            "lexical",
+            "--server-binary",
+            binary,
+            "--answer-model-config",
+            str(ROOT / "configs/answer-model.json"),
+            "--protocol",
+            str(ROOT / "eval/answers-protocol.json"),
+            "--trace",
+            str(directory / "answer.json"),
+        ]
+        for source in case["source_ids"]:
+            sys.argv.extend(["--source", source])
+        cli.main()
     except SystemExit as error:
         exit_code = (
             error.code if type(error.code) is int else int(error.code is not None)
@@ -766,60 +832,17 @@ def safe_failure(error):
     return {"type": type(error).__name__, "message_sha256": digest(str(error).encode())}
 
 
-def replay_inputs(plan, cli_path, *, compatibility=False, evidence=None):
-    evidence = evidence or public.Evidence()
-    run = load_run(
-        plan, cli_path, "cli", compatibility=compatibility, evidence=evidence
-    )
-    require(
-        run["state"] == "completed" and run["timing_valid"],
-        "Fixed-context replay requires a complete valid CLI stage.",
-    )
-    selected, identities = {}, {}
-    for row in run["rows"]:
-        if row["case_id"] == EMPTY_ID:
-            continue
-        path = Path(row["files"]["answer.json"]["path"])
-        record, _ = evidence.document(
-            path, expected=row["files"]["answer.json"]["sha256"]
-        )
-        identity = input_identity(record)
-        case_id = row["case_id"]
-        require(
-            case_id not in identities or identities[case_id] == identity,
-            "CLI repeats have different packed inputs.",
-        )
-        identities[case_id] = identity
-        selected.setdefault(case_id, row["files"]["answer.json"])
-    require(
-        set(selected) == ({COMPATIBILITY_CASE} if compatibility else set(SELECTED)),
-        "Replay inputs are incomplete.",
-    )
-    evidence.check()
-    return selected
-
-
 def check_observer_intervals(events, row, exported):
-    intervals = {
-        "Observer export": [
-            events.get("observer_export_start_ns"),
-            exported.get("export_end_ns"),
-            row.get("exit_observed_ns"),
-        ]
-    }
-    if row["stage"] == "fixed":
-        intervals["Fixed answer validation"] = [
-            events.get("complete_end_ns"),
-            events.get("validation_start_ns"),
-            events.get("validation_end_ns"),
-            events.get("application_return_ns"),
-        ]
-    for label, stamps in intervals.items():
-        require(
-            all(type(value) is int and value >= 0 for value in stamps)
-            and stamps == sorted(stamps),
-            f"{label} boundaries are inconsistent.",
-        )
+    stamps = [
+        events.get("observer_export_start_ns"),
+        exported.get("export_end_ns"),
+        row.get("exit_observed_ns"),
+    ]
+    require(
+        all(type(value) is int and value >= 0 for value in stamps)
+        and stamps == sorted(stamps),
+        "Observer export boundaries are inconsistent.",
+    )
 
 
 def check_observation(observation, row, record, plan, exported):
@@ -863,30 +886,30 @@ def check_observation(observation, row, record, plan, exported):
         row["started_ns"] <= row["first_stdout_ns"] <= row["exit_observed_ns"],
         "The answer was not observed before worker exit.",
     )
-    if row["stage"] == "cli":
-        require(
-            events["server_ready_ns"]
-            <= events["answer_start_ns"]
-            <= events["answer_end_ns"]
-            <= events["application_return_ns"],
-            "Ready-server answer boundaries changed.",
-        )
+    require(
+        events["server_ready_ns"]
+        <= events["answer_start_ns"]
+        <= events["answer_end_ns"]
+        <= events["application_return_ns"],
+        "Ready-server answer boundaries changed.",
+    )
     if row["case_id"] == EMPTY_ID:
         require("complete_start_ns" not in events, "The empty control generated text.")
     runtime = record["runtime"]
+    backend = plan["runtime"]["backends"][row["backend"]]
     require(
         runtime["model_sha256"] == plan["runtime"]["model"]["sha256"]
-        and runtime["binary_sha256"] == plan["runtime"]["binary"]["sha256"],
-        "Observed model or server differs from the frozen CPU runtime.",
+        and runtime["binary_sha256"] == backend["binary"]["sha256"],
+        "Observed model or server differs from the frozen runtime.",
     )
-    if "libraries" in plan["runtime"]:
+    if "libraries" in backend:
         libraries = {
             Path(item["path"]).resolve().name: item["sha256"]
-            for item in plan["runtime"]["libraries"].values()
+            for item in backend["libraries"].values()
         }
         require(
             runtime["sibling_libraries_sha256"] == libraries,
-            "Observed CPU libraries differ from the frozen build.",
+            "Observed libraries differ from the frozen build.",
         )
         protocol = common.read_json(ROOT / "eval/answers-protocol.json")
         require(
@@ -900,14 +923,7 @@ def check_observation(observation, row, record, plan, exported):
 
 
 def execute_row(plan, row, directory, guard, persist, *, owner_factory):
-    payload = {
-        "plan": plan,
-        "row": row,
-        "stage": row["stage"],
-        "directory": str(directory),
-    }
-    if "replay" in row:
-        payload["replay"] = row["replay"]
+    payload = {"plan": plan, "row": row, "directory": str(directory)}
     common.save_json(directory / "input.json", payload, create=True)
     owner, stdout, sample = None, directory / "stdout.txt", None
     row.update(
@@ -975,12 +991,6 @@ def execute_row(plan, row, directory, guard, persist, *, owner_factory):
             stdout.read_text() == render_answer(record) + "\n",
             "Captured output differs from the original answer renderer.",
         )
-        if "replay" in row:
-            expected = common.read_json(Path(row["replay"]["path"]))
-            require(
-                input_identity(record) == input_identity(expected),
-                "Replay inputs changed.",
-            )
         row["outcome"] = "success"
     except BaseException as error:
         if owner is None and getattr(error, "record", None) is not None:
@@ -1029,9 +1039,7 @@ def execute_row(plan, row, directory, guard, persist, *, owner_factory):
     return row["outcome"] == "success"
 
 
-def run_stage(
-    plan_path, stage, output, *, cli_path=None, owner_factory=None, compatibility=False
-):
+def run_collection(plan_path, output, *, owner_factory=None, compatibility=False):
     if owner_factory is None:
         from answer_benchmark_owner import OwnedWorker
 
@@ -1045,32 +1053,16 @@ def run_stage(
         collection_identity(plan, plan_path) == identity,
         "Inputs changed during authentication.",
     )
-    require(stage in STAGES, "Unknown stage.")
-    require(
-        (stage == "fixed") == (cli_path is not None), "Fixed replay needs its CLI run."
-    )
-    replay_evidence = public.Evidence()
-    replay = (
-        replay_inputs(
-            plan, cli_path, compatibility=compatibility, evidence=replay_evidence
-        )
-        if stage == "fixed"
-        else {}
-    )
-    replay_stamps = {
-        str(path): list(stamp) for path, stamp in replay_evidence.seen.items()
-    }
     require(
         not output.exists(), "Use a new directory to preserve earlier observations."
     )
     claim_path = plan_path.with_name(
-        plan_path.name + (".check-" if compatibility else ".run-") + stage + ".json"
+        plan_path.name + (".check" if compatibility else ".run") + ".json"
     )
     common.save_json(
         claim_path,
         {
             "plan_sha256": digest(plan_raw),
-            "stage": stage,
             "purpose": "excluded_compatibility" if compatibility else "measurement",
             "output": str(output.resolve()),
         },
@@ -1080,25 +1072,18 @@ def run_stage(
     common.save_bytes(output / "plan.json", plan_raw, create=True)
     run = {
         "kind": KIND,
-        "stage": stage,
         "state": "planned",
         "purpose": "excluded_compatibility" if compatibility else "measurement",
         "launch_claim": common.asset(claim_path),
         "plan_sha256": digest(plan_raw),
-        "rows": schedule(stage, compatibility=compatibility),
-        "cli_run": common.asset(cli_path) if cli_path else None,
+        "rows": schedule(compatibility=compatibility),
         "timing_guard": None,
         "timing_valid": False,
         "failure": None,
         "integrity_verified": False,
         "input_identity": identity,
-        "replay_stamps": replay_stamps,
         "source_snapshot": {"complete": False, "files": {}},
     }
-    for row in run["rows"]:
-        row["stage"] = stage
-        if stage == "fixed":
-            row["replay"] = replay[row["case_id"]]
 
     def persist():
         common.save_json(output / "run.json", run)
@@ -1114,10 +1099,6 @@ def run_stage(
         require(
             collection_identity(plan, plan_path) == identity,
             "Frozen source, runtime or index changed during collection.",
-        )
-        require(
-            all(file_stamp(path) == stamp for path, stamp in replay_stamps.items()),
-            "A fixed-context input changed during collection.",
         )
 
     try:
@@ -1151,7 +1132,7 @@ def run_stage(
                     key = row["case_id"]
                     require(
                         key not in seen_inputs or seen_inputs[key] == actual,
-                        "Repeated CLI inputs changed during collection.",
+                        "Inputs for the same question differ between observations.",
                     )
                     seen_inputs[key] = actual
                 row["inputs_unchanged"] = True
@@ -1195,7 +1176,7 @@ def run_stage(
             check_plan(plan, verify_model=False)
             require(
                 plan_path.read_bytes() == plan_raw,
-                "Frozen plan changed during the stage.",
+                "Frozen plan changed during collection.",
             )
             verify_inputs()
             verify_source_snapshot(plan, output, run["source_snapshot"])
@@ -1205,7 +1186,7 @@ def run_stage(
         finally:
             try:
                 if guard.evidence["first_failure"] is None:
-                    guard.check("stage:verified")
+                    guard.check("collection:verified")
             except BaseException as error:
                 run["final_timing_failure"] = safe_failure(error)
             finally:
@@ -1217,31 +1198,28 @@ def run_stage(
     return run
 
 
-def load_run(plan, path, stage, *, compatibility=False, evidence=None):
+def load_run(plan, path, *, compatibility=False, evidence=None):
     evidence = evidence or public.Evidence()
     run, _ = evidence.document(path)
     archived_plan = path.parent / "plan.json"
     actual_plan, _ = evidence.document(archived_plan, expected=run["plan_sha256"])
     require(actual_plan == plan, "Run plan differs.")
-    require(
-        run["kind"] == KIND and run["stage"] == stage, "Run belongs to another stage."
-    )
+    require(run["kind"] == KIND, "Run belongs to another study.")
     require(
         run.get("purpose")
         == ("excluded_compatibility" if compatibility else "measurement"),
-        "Compatibility observations cannot be used as measured-stage inputs.",
+        "Compatibility observations cannot be used as measurements.",
     )
     claim, _ = evidence.document(
         run["launch_claim"]["path"], expected=run["launch_claim"]["sha256"]
     )
     require(
         claim["plan_sha256"] == run["plan_sha256"]
-        and claim["stage"] == stage
         and claim["purpose"] == run["purpose"]
         and Path(claim["output"]).resolve() == path.parent.resolve(),
         "Run differs from its create-only launch claim.",
     )
-    expected = schedule(stage, compatibility=compatibility)
+    expected = schedule(compatibility=compatibility)
     require(len(run["rows"]) == len(expected), "Planned observations were removed.")
     verify_source_snapshot(
         plan,
@@ -1266,7 +1244,7 @@ def load_run(plan, path, stage, *, compatibility=False, evidence=None):
         "session:end",
         "session:closed",
         "session:cleanup",
-        "stage:verified",
+        "collection:verified",
     }
     phases.update(
         row["id"] + suffix
@@ -1302,12 +1280,14 @@ def load_run(plan, path, stage, *, compatibility=False, evidence=None):
     require(
         run["timing_valid"] == passed, "Timing status contradicts the guard evidence."
     )
-    stopped, previous_host = False, None
+    stopped, previous_host, inputs = False, None, {}
     protocol, _ = evidence.document(ROOT / "eval/answers-protocol.json")
     for row, planned in zip(run["rows"], expected, strict=True):
         require(
-            all(row[key] == planned[key] for key in ("id", "block", "case_id"))
-            and row["stage"] == stage,
+            all(
+                row[key] == planned[key]
+                for key in ("id", "block", "pair", "case_id", "backend")
+            ),
             "Row identity or order changed.",
         )
         require(
@@ -1399,6 +1379,11 @@ def load_run(plan, path, stage, *, compatibility=False, evidence=None):
             )
             check_record(record, plan["workloads"][row["case_id"]], protocol)
             check_observation(observation, row, record, plan, exported)
+            identity = input_identity(record)
+            require(
+                inputs.setdefault(row["case_id"], identity) == identity,
+                "Saved inputs for one question differ between observations.",
+            )
             require(
                 row["started_ns"]
                 == checkpoints[row["id"] + ":start"]["continuous_before_ns"]
@@ -1420,14 +1405,6 @@ def load_run(plan, path, stage, *, compatibility=False, evidence=None):
                 stdout.decode() == render_answer(record) + "\n",
                 "Captured output differs from the original renderer.",
             )
-            if stage == "fixed":
-                replay, _ = evidence.document(
-                    row["replay"]["path"], expected=row["replay"]["sha256"]
-                )
-                require(
-                    input_identity(record) == input_identity(replay),
-                    "Saved fixed-context inputs changed.",
-                )
         else:
             stopped = True
         if violations or after is None:
@@ -1467,14 +1444,7 @@ def metrics(row):
         ),
         "application_return_seconds": seconds(
             row["started_ns"], event["application_return_ns"]
-        )
-        if row["stage"] == "cli"
-        else None,
-        "fixed_workflow_return_seconds": seconds(
-            row["started_ns"], event["application_return_ns"]
-        )
-        if row["stage"] == "fixed"
-        else None,
+        ),
         "worker_exit_observed_seconds": seconds(
             row["started_ns"], row["exit_observed_ns"]
         ),
@@ -1499,9 +1469,6 @@ def metrics(row):
         "complete_request_seconds": seconds(
             event.get("complete_start_ns"), event.get("complete_end_ns")
         ),
-        "answer_validation_seconds": seconds(
-            event.get("validation_start_ns"), event.get("validation_end_ns")
-        ),
         "worker_peak_rss_bytes": observation["worker_peak_rss_bytes"],
         "native_peak_rss_bytes": observation["native_peak_rss_bytes"],
         "model_time_to_first_token_seconds": None,
@@ -1515,7 +1482,17 @@ def metrics(row):
         ),
         "Invalid native diagnostic number.",
     )
-    return result, native, input_identity(record), digest(encoded(record["answer"]))
+    raw = record["raw_completion"]
+    answer = (
+        None
+        if raw is None
+        else {
+            "final_content_sha256": digest(raw["content"].encode()),
+            "raw_content_sha256": digest(raw["raw_content"].encode()),
+            "generated_tokens": raw["tokens_predicted"],
+        }
+    )
+    return result, native, input_identity(record), answer
 
 
 def failed_observation(row):
@@ -1574,41 +1551,203 @@ def failed_observation(row):
     }
 
 
-def make_report(plan_path, cli_path=None, fixed_path=None):
+def distribution(values):
+    return {
+        "observations": len(values),
+        "median": statistics.median(values),
+        "minimum": min(values),
+        "maximum": max(values),
+    }
+
+
+def compare(rows):
+    """Apply the analysis fixed before collection to one complete valid run."""
+    sides, first = {}, {}
+    for item in rows:
+        sides.setdefault(item["case_id"], {})[item["backend"]] = item
+        first.setdefault(item["case_id"], item["backend"])
+    require(
+        set(sides) == {*CASES, EMPTY_ID}
+        and all(set(value) == set(BACKENDS) for value in sides.values()),
+        "Comparison needs every question on both backends.",
+    )
+    pairs = []
+    for case_id in CASES:
+        item = {"case_id": case_id, "first_backend": first[case_id]}
+        for key, source, scale in (
+            ("answer_seconds", "pipe_observed_answer_seconds", 1),
+            ("server_initialization_seconds", "server_initialization_seconds", 1),
+            ("native_spawn_to_ready_seconds", "native_spawn_to_ready_seconds", 1),
+            ("complete_request_seconds", "complete_request_seconds", 1),
+            ("prompt_seconds", "prompt_ms", 1e-3),
+            ("generation_seconds", "predicted_ms", 1e-3),
+            ("prompt_tokens", "prompt_n", 1),
+            ("timed_generated_tokens", "predicted_n", 1),
+            ("generated_tokens", "generated_tokens", 1),
+            ("native_peak_rss_bytes", "native_peak_rss_bytes", 1),
+        ):
+            item[key] = {}
+            for backend in BACKENDS:
+                observed = sides[case_id][backend]
+                value = {**observed["native_diagnostics"], **observed["metrics"]}[
+                    source
+                ]
+                require(
+                    type(value) in (int, float) and value > 0,
+                    "A comparison value is unavailable.",
+                )
+                item[key][backend] = value * scale
+        item["matches_reviewed_answer"] = {
+            backend: sides[case_id][backend]["matches_reviewed_answer"]
+            for backend in BACKENDS
+        }
+        item["kleidiai_over_cpu"] = (
+            item["answer_seconds"]["kleidiai"] / item["answer_seconds"]["cpu"]
+        )
+        pairs.append(item)
+
+    def total(selected, key, backend):
+        return sum(pair[key][backend] for pair in selected)
+
+    def summary(selected):
+        if not selected:
+            return {"questions": 0}
+        totals = {
+            backend: total(selected, "answer_seconds", backend) for backend in BACKENDS
+        }
+        return {
+            "questions": len(selected),
+            "answer_seconds_total": totals,
+            "kleidiai_over_cpu_total": totals["kleidiai"] / totals["cpu"],
+            "kleidiai_over_cpu_per_question": distribution(
+                [pair["kleidiai_over_cpu"] for pair in selected]
+            ),
+            "kleidiai_slower_questions": sum(
+                pair["kleidiai_over_cpu"] > 1 for pair in selected
+            ),
+            "component_seconds_total": {
+                key: {backend: total(selected, key, backend) for backend in BACKENDS}
+                for key in (
+                    "server_initialization_seconds",
+                    "native_spawn_to_ready_seconds",
+                    "complete_request_seconds",
+                    "prompt_seconds",
+                    "generation_seconds",
+                )
+            },
+            "generated_tokens_total": {
+                backend: total(selected, "generated_tokens", backend)
+                for backend in BACKENDS
+            },
+            "prompt_tokens_per_second": {
+                backend: total(selected, "prompt_tokens", backend)
+                / total(selected, "prompt_seconds", backend)
+                for backend in BACKENDS
+            },
+            "generation_ms_per_token": {
+                backend: 1000
+                * total(selected, "generation_seconds", backend)
+                / total(selected, "timed_generated_tokens", backend)
+                for backend in BACKENDS
+            },
+        }
+
+    similar = [
+        pair
+        for pair in pairs
+        if abs(
+            pair["generated_tokens"]["kleidiai"] / pair["generated_tokens"]["cpu"] - 1
+        )
+        <= SIMILAR_LENGTH
+    ]
+    empty = {
+        backend: {
+            key: distribution(
+                [
+                    item["metrics"][key]
+                    for item in rows
+                    if item["case_id"] == EMPTY_ID and item["backend"] == backend
+                ]
+            )
+            for key in (
+                "pipe_observed_answer_seconds",
+                "server_initialization_seconds",
+            )
+        }
+        for backend in BACKENDS
+    }
+    return {
+        "definition": (
+            "Answer seconds are the pipe-observed buffered answer times. Ratios divide "
+            "KleidiAI by CPU. Token rates pool native prompt and generation timings."
+        ),
+        "pairs": pairs,
+        "all_questions": summary(pairs),
+        "similar_length": {
+            "tolerance": SIMILAR_LENGTH,
+            **summary(similar),
+        },
+        "by_first_backend": {
+            backend: summary(
+                [pair for pair in pairs if pair["first_backend"] == backend]
+            )
+            for backend in BACKENDS
+        },
+        "empty_retrieval": empty,
+        "native_peak_rss_bytes": {
+            backend: distribution(
+                [pair["native_peak_rss_bytes"][backend] for pair in pairs]
+            )
+            for backend in BACKENDS
+        },
+        "reviewed_answer_matches": {
+            backend: sum(pair["matches_reviewed_answer"][backend] for pair in pairs)
+            for backend in BACKENDS
+        },
+    }
+
+
+def make_report(plan_path, run_path=None):
     evidence = public.Evidence()
     plan, _ = evidence.document(plan_path)
     for item in plan["sources"].values():
         evidence.file(item["path"], expected=item["sha256"])
-    for name in ("binary", "build", "cache", "compile_commands"):
-        item = plan["runtime"].get(name)
-        if item is not None and "path" in item:
+    for backend in plan["runtime"].get("backends", {}).values():
+        for name in ("binary", "build", "cache", "compile_commands"):
+            item = backend.get(name)
+            if item is not None and "path" in item:
+                evidence.file(item["path"], expected=item["sha256"])
+        for item in backend.get("libraries", {}).values():
             evidence.file(item["path"], expected=item["sha256"])
-    for item in plan["runtime"].get("libraries", {}).values():
-        evidence.file(item["path"], expected=item["sha256"])
     if plan.get("index"):
         database = Path(plan["index"]["path"]).resolve()
         evidence.seen[database] = public.signature(database)
     check_plan(plan, verify_model=False)
+    planned = schedule()
     report = {
         "kind": KIND,
         "plan_sha256": digest(plan_path.read_bytes()),
         "settings": SETTINGS,
         "limits": LIMITS,
         "model_sha256": plan["runtime"]["model"]["sha256"],
-        "binary_sha256": plan["runtime"]["binary"]["sha256"],
-        "build": public.public_asset(plan["runtime"]["build"])
-        if "build" in plan["runtime"]
-        else None,
-        "libraries": {
-            name: public.public_asset(item)
-            for name, item in plan["runtime"].get("libraries", {}).items()
+        "backends": {
+            name: {
+                "binary_sha256": backend["binary"]["sha256"],
+                "build": public.public_asset(backend["build"])
+                if "build" in backend
+                else None,
+                "libraries": {
+                    library: public.public_asset(item)
+                    for library, item in backend.get("libraries", {}).items()
+                },
+            }
+            for name, backend in plan["runtime"].get("backends", {}).items()
         },
         "index_fingerprint": plan.get("index", {}).get("fingerprint"),
         "sources": {
             name: public.public_asset(item) for name, item in plan["sources"].items()
         },
-        "stages": {},
-        "planned": 21,
+        "planned": len(planned),
         "successes": 0,
         "failed": 0,
         "unresolved": 0,
@@ -1618,119 +1757,97 @@ def make_report(plan_path, cli_path=None, fixed_path=None):
         "quality_review": "pending",
         "study_interpretation_review": "pending",
         "backend_adoption": False,
-        "portable_inputs": dict.fromkeys((*SELECTED, EMPTY_ID)),
+        "portable_inputs": dict.fromkeys((*CASES, EMPTY_ID)),
+        "collection": None,
+        "comparison": None,
     }
-    paths = {"cli": cli_path, "fixed": fixed_path}
-    require(
-        fixed_path is None or cli_path is not None,
-        "Replay report requires its CLI evidence.",
-    )
-    for stage in STAGES:
-        path = paths[stage]
-        if path is None:
-            report["unobserved"] += len(schedule(stage))
-            report["stages"][stage] = {
-                "state": "unobserved",
-                "planned": len(schedule(stage)),
-                "rows": [{**row, "state": "unobserved"} for row in schedule(stage)],
-            }
-            continue
-        run = load_run(plan, path, stage, evidence=evidence)
-        if stage == "fixed":
-            require(
-                run["cli_run"]["sha256"] == digest(cli_path.read_bytes()),
-                "Replay CLI run differs.",
-            )
-            expected = replay_inputs(plan, cli_path, evidence=evidence)
-            for row in run["rows"]:
-                require(
-                    row["replay"] == expected[row["case_id"]],
-                    "Replay selection differs.",
-                )
-        rows, grouped = [], {}
-        for row in run["rows"]:
-            item = {key: row[key] for key in ("id", "block", "case_id", "state")}
-            item["outcome"] = row.get("outcome")
-            item["host_before"] = public.public_host(row.get("host_before") or {})
-            item["host_after"] = public.public_host(row.get("host_after") or {})
-            item["host_violations"] = row.get("host_violations", [])
-            item["raw_files"] = {
-                name: public.public_asset(pin)
-                for name, pin in row.get("files", {}).items()
-            }
-            item["failure_sha256"] = (
-                digest(encoded(row["failure"])) if row.get("failure") else None
-            )
-            item["host_observation_failure_sha256"] = (
-                digest(encoded(row["host_observation_failure"]))
-                if row.get("host_observation_failure")
-                else None
-            )
-            if row["state"] == "planned":
-                report["unattempted"] += 1
-            elif row["state"] == "attempted":
-                report["unresolved"] += 1
-                item["available_failure_evidence"] = failed_observation(row)
-            elif row["outcome"] != "success":
-                report["failed"] += 1
-                item["available_failure_evidence"] = failed_observation(row)
-            else:
-                report["successes"] += 1
-                values, native, inputs, answer_hash = metrics(row)
-                item.update(
-                    metrics=values,
-                    native_diagnostics=native,
-                    inputs=inputs,
-                    answer_sha256=answer_hash,
-                    timing_valid=run["timing_valid"]
-                    and run["integrity_verified"]
-                    and not row["host_violations"]
-                    and row.get("host_after") is not None
-                    and not row.get("host_observation_failure"),
-                )
-                if stage == "cli" and report["portable_inputs"][row["case_id"]] is None:
-                    report["portable_inputs"][row["case_id"]] = inputs
-                if item["timing_valid"]:
-                    grouped.setdefault(row["case_id"], []).append(values)
-            rows.append(item)
-        summary = {}
-        for case_id, values in grouped.items():
-            summary[case_id] = {
-                key: {
-                    "observations": len(numbers),
-                    "median": statistics.median(numbers),
-                    "minimum": min(numbers),
-                    "maximum": max(numbers),
-                }
-                for key in values[0]
-                if (
-                    numbers := [
-                        value[key] for value in values if value[key] is not None
-                    ]
-                )
-            }
-        report["stages"][stage] = {
-            "state": run["state"],
-            "run_sha256": digest(path.read_bytes()),
-            "launch_claim": public.public_asset(run["launch_claim"]),
-            "source_snapshot": {
-                "complete": run["source_snapshot"]["complete"],
-                "files": {
-                    name: public.public_asset(item)
-                    for name, item in run["source_snapshot"]["files"].items()
-                },
-            },
-            "timing_valid": run["timing_valid"],
-            "integrity_verified": run["integrity_verified"],
-            "timing": public.public_timing(run["timing_guard"], run["timing_valid"])
-            if run["timing_guard"] is not None
-            else None,
-            "rows": rows,
-            "descriptive_summaries": summary,
+    if run_path is None:
+        report["unobserved"] = len(planned)
+        report["collection"] = {
+            "state": "unobserved",
+            "rows": [{**row, "state": "unobserved"} for row in planned],
         }
-    report["protocol_complete"] = all(
-        report["stages"][stage]["state"] == "completed" for stage in STAGES
-    )
+        check_plan(plan, verify_model=False)
+        evidence.check()
+        return report
+    run = load_run(plan, run_path, evidence=evidence)
+    rows, valid = [], []
+    for row in run["rows"]:
+        item = {
+            key: row[key]
+            for key in ("id", "block", "pair", "case_id", "backend", "state")
+        }
+        item["outcome"] = row.get("outcome")
+        item["host_before"] = public.public_host(row.get("host_before") or {})
+        item["host_after"] = public.public_host(row.get("host_after") or {})
+        item["host_violations"] = row.get("host_violations", [])
+        item["raw_files"] = {
+            name: public.public_asset(pin) for name, pin in row.get("files", {}).items()
+        }
+        item["failure_sha256"] = (
+            digest(encoded(row["failure"])) if row.get("failure") else None
+        )
+        item["host_observation_failure_sha256"] = (
+            digest(encoded(row["host_observation_failure"]))
+            if row.get("host_observation_failure")
+            else None
+        )
+        if row["state"] == "planned":
+            report["unattempted"] += 1
+        elif row["state"] == "attempted":
+            report["unresolved"] += 1
+            item["available_failure_evidence"] = failed_observation(row)
+        elif row["outcome"] != "success":
+            report["failed"] += 1
+            item["available_failure_evidence"] = failed_observation(row)
+        else:
+            report["successes"] += 1
+            values, native, inputs, answer = metrics(row)
+            reviewed = plan["workloads"][row["case_id"]]["reviewed_answers"]
+            item.update(
+                metrics=values,
+                native_diagnostics=native,
+                inputs=inputs,
+                answer=answer,
+                matches_reviewed_answer=None
+                if answer is None
+                else answer == reviewed[row["backend"]],
+                timing_valid=run["timing_valid"]
+                and run["integrity_verified"]
+                and not row["host_violations"]
+                and row.get("host_after") is not None
+                and not row.get("host_observation_failure"),
+            )
+            if report["portable_inputs"][row["case_id"]] is None:
+                report["portable_inputs"][row["case_id"]] = inputs
+            if item["timing_valid"]:
+                valid.append(item)
+        rows.append(item)
+    report["collection"] = {
+        "state": run["state"],
+        "run_sha256": digest(run_path.read_bytes()),
+        "launch_claim": public.public_asset(run["launch_claim"]),
+        "source_snapshot": {
+            "complete": run["source_snapshot"]["complete"],
+            "files": {
+                name: public.public_asset(item)
+                for name, item in run["source_snapshot"]["files"].items()
+            },
+        },
+        "timing_valid": run["timing_valid"],
+        "integrity_verified": run["integrity_verified"],
+        "timing": public.public_timing(run["timing_guard"], run["timing_valid"])
+        if run["timing_guard"] is not None
+        else None,
+        "rows": rows,
+    }
+    report["protocol_complete"] = run["state"] == "completed"
+    if report["protocol_complete"] and len(valid) == len(planned):
+        report["comparison"] = compare(valid)
+        if report["comparison"]["reviewed_answer_matches"] == dict.fromkeys(
+            BACKENDS, len(CASES)
+        ):
+            report["quality_review"] = "every_answer_matches_its_reviewed_record"
     require(
         sum(
             report[key]
@@ -1742,7 +1859,7 @@ def make_report(plan_path, cli_path=None, fixed_path=None):
                 "unobserved",
             )
         )
-        == 21,
+        == len(planned),
         "Observation accounting changed.",
     )
     check_plan(plan, verify_model=False)
@@ -1750,75 +1867,28 @@ def make_report(plan_path, cli_path=None, fixed_path=None):
     return report
 
 
-def run_compatibility(plan_path, output):
-    output.mkdir(parents=True, exist_ok=False)
-    record = {
-        "kind": KIND,
-        "purpose": "excluded_compatibility",
-        "plan_sha256": digest(plan_path.read_bytes()),
-        "state": "planned",
-        "case_id": COMPATIBILITY_CASE,
-        "planned": 2,
-        "stages": [{"stage": stage, "state": "planned"} for stage in STAGES],
-        "included_in_measurements": False,
-    }
-    common.save_json(output / "check.json", record)
-    for entry in record["stages"]:
-        entry["state"] = "attempted"
-        common.save_json(output / "check.json", record)
-        try:
-            stage = entry["stage"]
-            result = run_stage(
-                plan_path,
-                stage,
-                output / stage,
-                compatibility=True,
-                cli_path=output / "cli/run.json" if stage == "fixed" else None,
-            )
-            entry.update(
-                state=result["state"], run=common.asset(output / stage / "run.json")
-            )
-            if result["state"] != "completed":
-                record["state"] = "stopped"
-                break
-        except BaseException as error:
-            entry.update(state="failed", failure=safe_failure(error))
-            record["state"] = "stopped"
-            break
-        finally:
-            common.save_json(output / "check.json", record)
-    else:
-        record["state"] = "completed"
-    common.save_json(output / "check.json", record)
-    return record
-
-
 def main():
     parser = argparse.ArgumentParser(
-        description="Measure the existing buffered CPU answer path."
+        description="Compare the buffered answer command on CPU and KleidiAI."
     )
     commands = parser.add_subparsers(dest="command", required=True)
     prepare = commands.add_parser(
-        "prepare", help="Freeze public inputs and local CPU/host pins."
+        "prepare", help="Freeze public inputs and local server and host pins."
     )
     prepare.add_argument("--db", type=Path, required=True)
     prepare.add_argument("--output", type=Path, required=True)
-    check = commands.add_parser(
-        "check", help="Run two excluded compatibility observations."
-    )
-    check.add_argument("--plan", type=Path, required=True)
-    check.add_argument("--output", type=Path, required=True)
-    run = commands.add_parser("run", help="Run one declared stage without retries.")
-    run.add_argument("--plan", type=Path, required=True)
-    run.add_argument("--stage", choices=STAGES, required=True)
-    run.add_argument("--cli-run", type=Path)
-    run.add_argument("--output", type=Path, required=True)
+    for name, text in (
+        ("check", "Run one excluded compatibility pair."),
+        ("run", "Run the paired comparison without retries."),
+    ):
+        command = commands.add_parser(name, help=text)
+        command.add_argument("--plan", type=Path, required=True)
+        command.add_argument("--output", type=Path, required=True)
     report = commands.add_parser(
-        "report", help="Export allowlisted descriptive records."
+        "report", help="Export allowlisted records and the fixed comparison."
     )
     report.add_argument("--plan", type=Path, required=True)
-    report.add_argument("--cli-run", type=Path)
-    report.add_argument("--fixed-run", type=Path)
+    report.add_argument("--run", type=Path)
     report.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "prepare":
@@ -1833,21 +1903,17 @@ def main():
         previous = signal.signal(signal.SIGTERM, interrupted)
         try:
             with common.exclusive_lock(lock):
-                result = (
-                    run_compatibility(args.plan, args.output)
-                    if args.command == "check"
-                    else run_stage(
-                        args.plan, args.stage, args.output, cli_path=args.cli_run
-                    )
+                result = run_collection(
+                    args.plan, args.output, compatibility=args.command == "check"
                 )
         finally:
             signal.signal(signal.SIGTERM, previous)
         if result["state"] != "completed":
             parser.exit(
-                1, "The stage stopped. Retained records explain the incomplete run.\n"
+                1, "Collection stopped. Retained records explain the incomplete run.\n"
             )
     else:
-        value = make_report(args.plan, args.cli_run, args.fixed_run)
+        value = make_report(args.plan, args.run)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         common.save_json(args.output, value, create=True)
 
